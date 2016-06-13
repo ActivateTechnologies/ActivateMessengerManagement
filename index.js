@@ -31,9 +31,19 @@ app.post('/webhook/', function (req, res) {
     messaging_events.forEach(function(event){
 
       let sender = event.sender.id
+
       if (event.message && event.message.text) {
           let text = event.message.text
-          sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+
+          switch(text){
+            case ("Play" || "play" ):
+            send_play(sender);
+            break;
+
+            default:
+            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+          }
+
       }
 
     })
@@ -50,6 +60,25 @@ app.listen(app.get('port'), function() {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function send_play(sender) {
+    let messageData = { text: "When do you want to play?" }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:VERIFICATION_TOKEN},
