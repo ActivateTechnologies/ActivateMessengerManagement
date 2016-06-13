@@ -35,8 +35,8 @@ app.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
           let text = event.message.text
 
-          switch(text){
-            case ("Play" || "play" ):
+          switch(text.toLowerCase()){
+            case ("play" ):
             send_play(sender);
             break;
 
@@ -60,6 +60,7 @@ app.listen(app.get('port'), function() {
 
 function sendTextMessage(sender, text) {
     let messageData = { text:text }
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:VERIFICATION_TOKEN},
@@ -78,7 +79,33 @@ function sendTextMessage(sender, text) {
 }
 
 function send_play(sender) {
-    let messageData = { text: "When do you want to play?" }
+    let messageData = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": "When do you want to play?",
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Today",
+              "payload": "Today"
+            },
+            {
+              "type": "postback",
+              "title": "Tomorrow",
+              "payload": "Today"
+            },
+            {
+              "type": "postback",
+              "title": "Soon",
+              "payload": "Today"
+            }
+          ]
+        }
+      }
+    }
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:VERIFICATION_TOKEN},
