@@ -36,8 +36,12 @@ app.post('/webhook/', function (req, res) {
           let text = event.message.text
 
           switch(text.toLowerCase()){
-            case ("play" ):
+            case("play"):
             send_play(sender);
+            break;
+
+            case("today"):
+            send_today(sender);
             break;
 
             default:
