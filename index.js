@@ -294,7 +294,7 @@ function send_stats(sender){
   let attended = 13;
   let stars = 5
 
-  send_text(sender, "Here are your personal stats: ");
-  send_text(sender, "Games attended: " +  attended);
-  send_text(sender, "Star Player votes: " + stars);
+  send_text(sender, "Here are your personal stats: \n
+                      Games attended: " + attended + "\n" +
+                      "Star Player votes: " + stars);
 }
