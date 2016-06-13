@@ -161,9 +161,10 @@ function send_today(sender){
             }
         }
     }
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
+        qs: {access_token:VERIFICATION_TOKEN},
         method: 'POST',
         json: {
             recipient: {id:sender},
