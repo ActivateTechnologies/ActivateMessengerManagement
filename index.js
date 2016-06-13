@@ -25,6 +25,9 @@ app.get('/webhook', function (req, res) {
 });
 
 
+
+
+
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging
 
@@ -33,21 +36,38 @@ app.post('/webhook/', function (req, res) {
       let sender = event.sender.id
 
       if (event.message && event.message.text) {
-          let text = event.message.text
+        let text = event.message.text
 
-          switch(text.toLowerCase()){
-            case("play"):
-            send_play(sender);
-            break;
+        switch(text.toLowerCase()){
+          case("play"):
+          send_play(sender);
+          break;
 
-            case("today"):
-            send_today(sender);
-            break;
+          case("today"):
+          send_today(sender);
+          break;
 
-            default:
-            send_text(sender, "Text received, echo: " + text.substring(0, 200))
-          }
+          default:
+          send_text(sender, "Text received, echo: " + text.substring(0, 200));
+        }
+      }
 
+      else if (event.postback) {
+        send_text(sender, "Got a post back");
+        let text = event.postback.payload;
+
+        switch(text.toLowerCase()){
+          case("play"):
+          send_play(sender);
+          break;
+
+          case("today"):
+          send_today(sender);
+          break;
+
+          default:
+          send_text(sender, "Text received, echo: " + text.substring(0, 200));
+        }
       }
 
     })
@@ -59,6 +79,8 @@ app.post('/webhook/', function (req, res) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
+
+
 
 //Sending messages
 
