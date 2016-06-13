@@ -26,7 +26,8 @@ app.get('/webhook', function (req, res) {
   }
 });
 
-
+//add button for stats
+//add form for finding players
 
 
 app.post('/webhook/', function (req, res) {
@@ -48,8 +49,20 @@ app.post('/webhook/', function (req, res) {
           send_today(sender);
           break;
 
+          case("help"):
+          send_intro(sender);
+          break;
+
+          case('stats'):
+          send_stats(sender);
+          break;
+
+          case("find players"):
+          send_find_players(sender);
+          break;
+
           default:
-          send_text(sender, "Type 'play' to find games");
+          send_text(sender, "Type 'play' to find games or 'help' for more options.");
         }
       }
 
@@ -67,6 +80,14 @@ app.post('/webhook/', function (req, res) {
 
           case("yep"):
           send_intro(sender);
+          break;
+
+          case("stats"):
+          send_stats(sender);
+          break;
+
+          case("find players"):
+          send_find_players(sender);
           break;
 
           default:
@@ -87,6 +108,51 @@ app.listen(app.get('port'), function() {
 
 
 //Sending messages
+
+function send_intro(sender) {
+    let messageData = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": "How can I help you?",
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Play Football",
+              "payload": "play"
+            },
+            {
+              "type": "postback",
+              "title": "Find Players",
+              "payload": "find players"
+            },
+            {
+              "type": "postback",
+              "title": "Personal Stats",
+              "payload": "stats"
+            }
+          ]
+        }
+      }
+    }
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
 
 function send_text(sender, text) {
     let messageData = { text: text }
@@ -214,42 +280,21 @@ function send_soon(sender){
 }
 
 
-function send_intro(sender) {
-    let messageData = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": "How can I help you?",
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Play Football",
-              "payload": "play"
-            },
-            {
-              "type": "postback",
-              "title": "Find Players",
-              "payload": "find players"
-            }
-          ]
-        }
-      }
-    }
 
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
+function send_find_players(sender){
+  send_text("under construction");
+}
+
+
+function send_stats(sender){
+
+  //retrieve data
+
+
+  let attended = 13;
+  let stars = 5
+
+  send_text("Here are your personal stats: ");
+  send_text("Games attended: " +  attended);
+  send_text("Star Player votes: " + stars);
 }
