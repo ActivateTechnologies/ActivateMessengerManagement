@@ -282,7 +282,7 @@ function send_soon(sender){
 
 
 function send_find_players(sender){
-  send_text("under construction");
+  send_text(sender, "under construction");
 }
 
 
@@ -294,7 +294,7 @@ function send_stats(sender){
   let attended = 13;
   let stars = 5
 
-  send_text("Here are your personal stats: ");
-  send_text("Games attended: " +  attended);
-  send_text("Star Player votes: " + stars);
+  send_text(sender, "Here are your personal stats: ");
+  send_text(sender, "Games attended: " +  attended);
+  send_text(sender, "Star Player votes: " + stars);
 }
