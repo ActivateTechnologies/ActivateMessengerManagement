@@ -49,7 +49,7 @@ app.post('/webhook/', function (req, res) {
           break;
 
           default:
-          send_text(sender, "Text received, echo: " + text.substring(0, 200));
+          send_text(sender, "Type 'play' to find games");
         }
       }
 
@@ -89,7 +89,7 @@ app.listen(app.get('port'), function() {
 //Sending messages
 
 function send_text(sender, text) {
-    let messageData = { text:"Type 'play' to find games" }
+    let messageData = { text: text }
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
