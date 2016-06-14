@@ -29,8 +29,15 @@ app.post('/input', function(req, res){
   today_data_generator.push(element);
   today_data = generate_card(today_data_generator);
   console.log(today_data);
-  
 })
+
+app.post('/clearall', function(req, res){
+  today_data = [];
+  console.log("Cleared today data")
+})
+
+
+
 
 // for Facebook verification
 app.get('/webhook', function (req, res) {

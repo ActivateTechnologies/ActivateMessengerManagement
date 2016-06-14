@@ -48,6 +48,10 @@
 
     </div>
 
+    <div class="container">
+      <button class="btn" id="clearall">Clear All</button>
+    </div>
+
     <script type="text/javascript">
       $("#today").submit(function(event){
         event.preventDefault();
@@ -76,6 +80,17 @@
         })
 
         Materialize.toast('Game added to today', 4000);
+      });
+
+      $("#clearall").click(function(){
+        $.ajax({
+          type: "POST",
+          url: "/clearall",
+          data: {},
+          success: function(result){
+            console.log("cleared");
+          }
+        })
       })
     </script>
 
