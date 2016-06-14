@@ -76,12 +76,12 @@ module.exports = {
               {
                 "type": "postback",
                 "title": "Tomorrow",
-                "payload": "Today"
+                "payload": "Tomorrow"
               },
               {
                 "type": "postback",
                 "title": "Soon",
-                "payload": "Today"
+                "payload": "Soon"
               }
             ]
           }

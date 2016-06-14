@@ -76,6 +76,9 @@ app.post('/webhook/', function (req, res) {
           case("yep"):
           send.default(sender);
           break;
+
+          default:
+          send.default(sender);
         }
       }
 
