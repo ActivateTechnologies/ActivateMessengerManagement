@@ -105,6 +105,7 @@ app.post('/webhook/', function (req, res) {
 
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
+    console.log(today_data)
 })
 
 
@@ -357,7 +358,7 @@ function generate_card(array){
         }
     }
 
-  return elements;
+  return template;
 }
 
 
