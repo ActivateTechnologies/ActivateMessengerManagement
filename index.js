@@ -209,8 +209,8 @@ function send_today(sender){
 
   send_text(sender, "Awesome, here are my options for today. Tap the card to get directions.");
 
-  address = "Corams Fields, 93 Guilford St, London WC1N 1DN"
-  payload = "Book" + "http://maps.google.com/?q=" + address
+  address = "Corams Fields, 93 Guilford St, London WC1N 1DN";
+  payload = "Book" + "http://maps.google.com/?q=";
 
   let messageData = {
         "attachment": {
@@ -225,7 +225,7 @@ function send_today(sender){
                       "buttons": [{
                           "type": "postback",
                           "title": "Book",
-                          "payload": payload,
+                          "payload": "Book",
                       }],
                   },
                   {
@@ -235,7 +235,7 @@ function send_today(sender){
                       "buttons": [{
                           "type": "postback",
                           "title": "Book",
-                          "payload": payload,
+                          "payload": "Book",
                       }],
                   }
                 ]
