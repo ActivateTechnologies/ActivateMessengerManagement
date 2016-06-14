@@ -69,25 +69,27 @@ app.post('/webhook/', function (req, res) {
           send_text(sender, text.substring(4));
         }
 
-        switch(text.toLowerCase()){
-          case("play"):
-          send_play(sender);
-          break;
+        else {
+          switch(text.toLowerCase()){
+            case("play"):
+            send_play(sender);
+            break;
 
-          case("today"):
-          send_today(sender, today_data);
-          break;
+            case("today"):
+            send_today(sender, today_data);
+            break;
 
-          case("tomorrow"):
-          send_tomorrow(sender, tomorrow_data);
-          break;
+            case("tomorrow"):
+            send_tomorrow(sender, tomorrow_data);
+            break;
 
-          case("soon"):
-          send_soon(sender, soon_data);
-          break;
+            case("soon"):
+            send_soon(sender, soon_data);
+            break;
 
-          default:
-          send_default(sender);
+            default:
+            send_default(sender);
+          }
         }
       }
 
@@ -233,7 +235,7 @@ function send_tomorrow(sender, tomorrow_data){
 }
 
 function send_soon(sender, soon_data){
-  
+
 }
 
 
@@ -253,7 +255,7 @@ var today_data = {
                     "buttons": [{
                         "type": "postback",
                         "title": "Book",
-                        "payload": "Book",
+                        "payload": "Bookhttp://maps.google.com/?q=Whitfield Pl, Kings Cross, London W1T 5JX",
                     }],
                 },
                 {
@@ -263,7 +265,7 @@ var today_data = {
                     "buttons": [{
                         "type": "postback",
                         "title": "Book",
-                        "payload": "Book",
+                        "payload": "Bookhttp://maps.google.com/?q=Corams Fields, 93 Guilford St, London WC1N 1DN",
                     }],
                 }
               ]
