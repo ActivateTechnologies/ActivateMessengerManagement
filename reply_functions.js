@@ -155,11 +155,11 @@ module.exports = {
   },
 
   tomorrow(sender){
-    send_today(sender);
+
   },
 
   soon(sender){
-    send_today(sender);
+
   }
 
 }

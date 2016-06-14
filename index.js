@@ -40,26 +40,28 @@ app.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
         let text = event.message.text
 
-        switch(text.toLowerCase()){
-          case("play"):
-          send.play(sender);
-          break;
+        sendTextMessage(sender, "Received");
 
-          case("today"):
-          send.today(sender);
-          break;
-
-          case("tomorrow"):
-          send.tomorrow(sender);
-          break;
-
-          case("soon"):
-          send.soon(sender);
-          break;
-
-          default:
-          send.default(sender);
-        }
+        // switch(text.toLowerCase()){
+        //   case("play"):
+        //   send.play(sender);
+        //   break;
+        //
+        //   case("today"):
+        //   send.today(sender);
+        //   break;
+        //
+        //   case("tomorrow"):
+        //   send.tomorrow(sender);
+        //   break;
+        //
+        //   case("soon"):
+        //   send.soon(sender);
+        //   break;
+        //
+        //   default:
+        //   send.default(sender);
+        // }
       }
 
       else if (event.postback) {
@@ -73,9 +75,6 @@ app.post('/webhook/', function (req, res) {
           case("today"):
           send.today(sender);
           break;
-
-          default:
-          send.default(sender);
         }
       }
 
@@ -86,5 +85,24 @@ app.post('/webhook/', function (req, res) {
 
 
 app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
+    console.log('running on port', app.get('port'));
 })
+
+function sendTextMessage(sender, text) {
+    let messageData = { text:text }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
