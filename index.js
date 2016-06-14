@@ -48,12 +48,16 @@ app.post('/webhook/', function (req, res) {
           send_today(sender);
           break;
 
-          case("help"):
-          send_default(sender);
+          case("tomorrow"):
+          send_tomorrow(sender);
+          break;
+
+          case("soon"):
+          send_soon(sender);
           break;
 
           default:
-          send_text(sender, "Type 'play' to find games or 'help' for more options.");
+          send_default(sender);
         }
       }
 
@@ -69,8 +73,12 @@ app.post('/webhook/', function (req, res) {
           send_today(sender);
           break;
 
-          case("yep"):
-          send_default(sender);
+          case("tomorrow"):
+          send_tomorrow(sender);
+          break;
+
+          case("soon"):
+          send_soon(sender);
           break;
 
           default:
@@ -163,12 +171,12 @@ function send_play(sender) {
             {
               "type": "postback",
               "title": "Tomorrow",
-              "payload": "Today"
+              "payload": "Tomorrow"
             },
             {
               "type": "postback",
               "title": "Soon",
-              "payload": "Today"
+              "payload": "Soon"
             }
           ]
         }
@@ -245,9 +253,9 @@ function send_today(sender){
 }
 
 function send_tomorrow(sender){
-  send_today(sender);
+
 }
 
 function send_soon(sender){
-  send_today(sender);
+
 }
