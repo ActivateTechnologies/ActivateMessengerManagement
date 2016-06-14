@@ -119,6 +119,11 @@ app.listen(app.get('port'), function() {
 
 
 
+
+
+
+
+
 //Sending messages
 
 function send_text(sender, text) {
@@ -259,11 +264,10 @@ function send_directions(sender, val){
 }
 
 
-//////////// Data for sending
 
-////////////////
-// Need Payload to be formatted as "Address" + "|" + "latlong"
-///////////////
+
+
+//////////// Data for sending
 
 function generate_card_element(name, address, image_url, latlong){
 
@@ -304,11 +308,11 @@ function generate_card(array){
 }
 
 
+
 //example
+// ["13:00-1400, 5-Aside, Free", "Whitfield Pl, Kings Cross, London W1T 5JX", "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg", "51.524850, -0.132202"],
+// ["16:00-17:30, 11-Aside, £5", "Corams Fields, 93 Guilford St, London WC1N 1DN", "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg", "51.524281, -0.119884"]
 
-let today_data_generator = [
-  ["13:00-1400, 5-Aside, Free", "Whitfield Pl, Kings Cross, London W1T 5JX", "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg", "51.524850, -0.132202"],
-  ["16:00-17:30, 11-Aside, £5", "Corams Fields, 93 Guilford St, London WC1N 1DN", "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg", "51.524281, -0.119884"]
-]
 
-var today_data = generate_card(today_data_generator);
+let today_data_generator = []
+let today_data = generate_card(today_data_generator);
