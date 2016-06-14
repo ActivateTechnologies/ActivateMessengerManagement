@@ -40,32 +40,32 @@ app.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
         let text = event.message.text
 
-        sendTextMessage(sender, "Received");
+        switch(text.toLowerCase()){
+          case("play"):
+          send.play(sender);
+          break;
 
-        // switch(text.toLowerCase()){
-        //   case("play"):
-        //   send.play(sender);
-        //   break;
-        //
-        //   case("today"):
-        //   send.today(sender);
-        //   break;
-        //
-        //   case("tomorrow"):
-        //   send.tomorrow(sender);
-        //   break;
-        //
-        //   case("soon"):
-        //   send.soon(sender);
-        //   break;
-        //
-        //   default:
-        //   send.default(sender);
-        // }
+          case("today"):
+          send.today(sender);
+          break;
+
+          case("tomorrow"):
+          send.tomorrow(sender);
+          break;
+
+          case("soon"):
+          send.soon(sender);
+          break;
+
+          default:
+          send.default(sender);
+        }
       }
 
       else if (event.postback) {
         let text = event.postback.payload;
+
+        sendTextMessage(sender, "postback");
 
         switch(text.toLowerCase()){
           case("play"):
