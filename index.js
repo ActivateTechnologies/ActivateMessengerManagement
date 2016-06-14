@@ -65,7 +65,6 @@ app.post('/webhook/', function (req, res) {
         let text = event.postback.payload;
 
         if(text.substring(0, 4) == "Book"){
-          send_text(sender, "Thanks for booking. Here are the directions to the place.")
           send_directions(sender, text.substring(4));
         }
 
@@ -239,21 +238,35 @@ function send_soon(sender, soon_data){
 }
 
 
-function send_directions(sender, address){
+function send_directions(sender, val){
+
+  let arr = val.split("|")
+  let address = arr[0]
+  let latlong = arr[1]
+
+  let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
+                      "&zoom=15&size=300x300&markers=" + latlong
+
+  let directions_link = "http://maps.google.com/?q=" + address
+
   let messageData = {
     "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": "Here is the game location.",
-        "buttons": [
-          {
-            "type": "web_url",
-            "title": "Directions",
-            "url": address,
-          }
-        ]
-      }
+        "type": "template",
+        "payload": {
+            "template_type": "generic",
+            "elements": [
+                {
+                  "title": "Thanks for booking. Here are your directions",
+                  "image_url": image_link,
+                  "item_url": directions_link,
+                  "buttons": [{
+                      "type": "web_url",
+                      "title": "Directions",
+                      "url": directions_link,
+                  }],
+              }
+            ]
+        }
     }
   }
 
@@ -277,6 +290,10 @@ function send_directions(sender, address){
 
 //////////// Data for sending
 
+////////////////
+// Need Payload to be formatted as "Address" + "|" + "latlong"
+///////////////
+
 var today_data = {
       "attachment": {
           "type": "template",
@@ -290,7 +307,7 @@ var today_data = {
                     "buttons": [{
                         "type": "postback",
                         "title": "Book",
-                        "payload": "Bookhttp://maps.google.com/?q=Whitfield Pl, Kings Cross, London W1T 5JX",
+                        "payload": "BookWhitfield Pl, Kings Cross, London W1T 5JX|51.524850, -0.132202",
                     }],
                 },
                 {
@@ -300,7 +317,7 @@ var today_data = {
                     "buttons": [{
                         "type": "postback",
                         "title": "Book",
-                        "payload": "Bookhttp://maps.google.com/?q=Corams Fields, 93 Guilford St, London WC1N 1DN",
+                        "payload": "BookCorams Fields, 93 Guilford St, London WC1N 1DN|51.524281, -0.119884",
                     }],
                 }
               ]
