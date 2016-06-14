@@ -264,6 +264,8 @@ function send_today(sender){
 
   send_text(sender, "Awesome, here are my options for today. Tap the card to get directions.");
 
+  test_payload = "Book" + "http://maps.google.com/?q=" + "Corams Fields, 93 Guilford St, London WC1N 1DN";
+
   let messageData = {
         "attachment": {
             "type": "template",
