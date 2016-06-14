@@ -66,7 +66,7 @@ app.post('/webhook/', function (req, res) {
 
         if(text.substring(0, 4) == "Book"){
           send_text(sender, "Thanks for booking. Here are the directions to the place.")
-          send_text(sender, text.substring(4));
+          send_directions(sender, text.substring(4));
         }
 
         else {
@@ -238,6 +238,41 @@ function send_soon(sender, soon_data){
 
 }
 
+
+function send_directions(sender, address){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Here is the game location.",
+        "buttons": [
+          {
+            "type": "web_url",
+            "title": "Directions",
+            "url": address,
+          }
+        ]
+      }
+    }
+  }
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+      }
+  })
+}
 
 
 //////////// Data for sending
