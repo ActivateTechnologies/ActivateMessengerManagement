@@ -32,7 +32,7 @@
           </div>
           <div class="input-field">
             <input id="image_url" type="text" class="validate">
-            <label for="image_url">Inage URL</label>
+            <label for="image_url">Image URL</label>
           </div>
           <div class="input-field">
             <input id="latlong" type="text" class="validate">
@@ -56,6 +56,24 @@
         var address = $('#address').val();
         var image_url = $("#image_url").val();
         var latlong = $("#latlong").val();
+
+        var data = {
+          name: name,
+          address: address,
+          image_url: image_url,
+          latlong: latlong
+        }
+
+        console.log(data);
+
+        $.ajax({
+          type: "POST",
+          url: "/input",
+          data: data,
+          success: function(result){
+            console.log("result");
+          }
+        })
 
         Materialize.toast('Game added to today', 4000);
       })

@@ -24,6 +24,14 @@ app.get('/input', function(req, res){
   res.render('input');
 })
 
+app.post('/input', function(req, res){
+  let element = [req.body.name, req.body.address, req.body.image_url, req.body.latlong];
+  today_data_generator.push(element);
+  today_data = generate_card(today_data_generator);
+  console.log(today_data);
+  
+})
+
 // for Facebook verification
 app.get('/webhook', function (req, res) {
   if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
