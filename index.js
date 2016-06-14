@@ -45,10 +45,6 @@ app.post('/webhook/', function (req, res) {
         let text = event.message.text
 
         switch(text.toLowerCase()){
-          case("play"):
-          send_play(sender);
-          break;
-
           case("today"):
           send_today(sender, today_data);
           break;
@@ -62,7 +58,7 @@ app.post('/webhook/', function (req, res) {
           break;
 
           default:
-          send_default(sender);
+          send_play(sender);
         }
       }
 
@@ -75,9 +71,6 @@ app.post('/webhook/', function (req, res) {
 
         else {
           switch(text.toLowerCase()){
-            case("play"):
-            send_play(sender);
-            break;
 
             case("today"):
             send_today(sender, today_data);
@@ -92,7 +85,7 @@ app.post('/webhook/', function (req, res) {
             break;
 
             default:
-            send_default(sender);
+            send_play(sender);
           }
         }
       }
@@ -105,47 +98,11 @@ app.post('/webhook/', function (req, res) {
 
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
-    console.log(today_data)
 })
 
 
 
 //Sending messages
-
-function send_default(sender) {
-    let messageData = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": "How can I help you?",
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Play Football",
-              "payload": "play"
-            }
-          ]
-        }
-      }
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
 
 function send_text(sender, text) {
     let messageData = { text: text }
@@ -290,38 +247,6 @@ function send_directions(sender, val){
 ////////////////
 // Need Payload to be formatted as "Address" + "|" + "latlong"
 ///////////////
-
-// var today_data = {
-//       "attachment": {
-//           "type": "template",
-//           "payload": {
-//               "template_type": "generic",
-//               "elements": [
-//                   {
-//                     "title": "13:00-1400, 5-Aside, Free",
-//                     "subtitle": "Whitfield Pl, Kings Cross, London W1T 5JX",
-//                     "image_url": "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg",
-//                     "buttons": [{
-//                         "type": "postback",
-//                         "title": "Book",
-//                         "payload": "BookWhitfield Pl, Kings Cross, London W1T 5JX|51.524850, -0.132202",
-//                     }],
-//                 },
-//                 {
-//                     "title": "16:00-17:30, 11-Aside, £5",
-//                     "subtitle": "Corams Fields, 93 Guilford St, London WC1N 1DN",
-//                     "image_url": "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg",
-//                     "buttons": [{
-//                         "type": "postback",
-//                         "title": "Book",
-//                         "payload": "BookCorams Fields, 93 Guilford St, London WC1N 1DN|51.524281, -0.119884",
-//                     }],
-//                 }
-//               ]
-//           }
-//       }
-//   }
-
 
 function generate_card_element(name, address, image_url, latlong){
 
