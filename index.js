@@ -26,8 +26,7 @@ app.get('/webhook', function (req, res) {
   }
 });
 
-//add button for stats
-//add form for finding players
+
 
 
 app.post('/webhook/', function (req, res) {
@@ -50,15 +49,7 @@ app.post('/webhook/', function (req, res) {
           break;
 
           case("help"):
-          send_intro(sender);
-          break;
-
-          case('stats'):
-          send_stats(sender);
-          break;
-
-          case("find players"):
-          send_find_players(sender);
+          send_default(sender);
           break;
 
           default:
@@ -79,19 +70,11 @@ app.post('/webhook/', function (req, res) {
           break;
 
           case("yep"):
-          send_intro(sender);
-          break;
-
-          case("stats"):
-          send_stats(sender);
-          break;
-
-          case("find players"):
-          send_find_players(sender);
+          send_default(sender);
           break;
 
           default:
-          send_text(sender, text);
+          send_default(sender);
         }
       }
 
@@ -109,7 +92,7 @@ app.listen(app.get('port'), function() {
 
 //Sending messages
 
-function send_intro(sender) {
+function send_default(sender) {
     let messageData = {
       "attachment": {
         "type": "template",
@@ -121,16 +104,6 @@ function send_intro(sender) {
               "type": "postback",
               "title": "Play Football",
               "payload": "play"
-            },
-            {
-              "type": "postback",
-              "title": "Find Players",
-              "payload": "find players"
-            },
-            {
-              "type": "postback",
-              "title": "Personal Stats",
-              "payload": "stats"
             }
           ]
         }
@@ -277,24 +250,4 @@ function send_tomorrow(sender){
 
 function send_soon(sender){
   send_today(sender);
-}
-
-
-
-function send_find_players(sender){
-  send_text(sender, "under construction");
-}
-
-
-function send_stats(sender){
-
-  //retrieve data
-
-
-  let attended = 13;
-  let stars = 5
-
-  send_text(sender, "Here are your personal stats: " + "\n" +
-                      "Games attended: " + attended + "\n" +
-                      "Star Player votes: " + stars);
 }
