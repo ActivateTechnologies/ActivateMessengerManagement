@@ -64,6 +64,11 @@ app.post('/webhook/', function (req, res) {
       else if (event.postback) {
         let text = event.postback.payload;
 
+        if(text.substring(0, 4) == "Book"){
+          send_text(sender, "Thanks for booking. Here are the directions to the place.")
+          send_text(sender, text.substring(4));
+        }
+
         switch(text.toLowerCase()){
           case("play"):
           send_play(sender);
@@ -204,6 +209,8 @@ function send_today(sender){
 
   send_text(sender, "Awesome, here are my options for today. Tap the card to get directions.");
 
+  address = "Corams Fields, 93 Guilford St, London WC1N 1DN"
+
   let messageData = {
         "attachment": {
             "type": "template",
@@ -217,7 +224,7 @@ function send_today(sender){
                       "buttons": [{
                           "type": "postback",
                           "title": "Book",
-                          "payload": "Book",
+                          "payload": "Book"
                       }],
                   },
                   {
@@ -227,7 +234,7 @@ function send_today(sender){
                       "buttons": [{
                           "type": "postback",
                           "title": "Book",
-                          "payload": "Book",
+                          "payload": "Book" + "http://maps.google.com/?q=" + address
                       }],
                   }
                 ]
