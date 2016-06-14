@@ -9,12 +9,17 @@ const PAGE_ID = "245261069180348"
 
 
 app.set('port', (process.env.PORT || 3000))
+app.set('view-engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 
 app.get('/', function (req, res) {
     res.send("Hi, I'm the Kickabout chat bot")
+})
+
+app.get('/input', function(req, res){
+  res.render('index');
 })
 
 // for Facebook verification
@@ -229,15 +234,6 @@ function send_today(sender, today_data){
     })
 }
 
-function send_tomorrow(sender, tomorrow_data){
-
-}
-
-function send_soon(sender, soon_data){
-
-}
-
-
 function send_directions(sender, val){
 
   let arr = val.split("|")
@@ -294,33 +290,82 @@ function send_directions(sender, val){
 // Need Payload to be formatted as "Address" + "|" + "latlong"
 ///////////////
 
-var today_data = {
-      "attachment": {
-          "type": "template",
-          "payload": {
-              "template_type": "generic",
-              "elements": [
-                  {
-                    "title": "13:00-1400, 5-Aside, Free",
-                    "subtitle": "Whitfield Pl, Kings Cross, London W1T 5JX",
-                    "image_url": "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Book",
-                        "payload": "BookWhitfield Pl, Kings Cross, London W1T 5JX|51.524850, -0.132202",
-                    }],
-                },
-                {
-                    "title": "16:00-17:30, 11-Aside, £5",
-                    "subtitle": "Corams Fields, 93 Guilford St, London WC1N 1DN",
-                    "image_url": "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Book",
-                        "payload": "BookCorams Fields, 93 Guilford St, London WC1N 1DN|51.524281, -0.119884",
-                    }],
-                }
-              ]
-          }
-      }
+// var today_data = {
+//       "attachment": {
+//           "type": "template",
+//           "payload": {
+//               "template_type": "generic",
+//               "elements": [
+//                   {
+//                     "title": "13:00-1400, 5-Aside, Free",
+//                     "subtitle": "Whitfield Pl, Kings Cross, London W1T 5JX",
+//                     "image_url": "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg",
+//                     "buttons": [{
+//                         "type": "postback",
+//                         "title": "Book",
+//                         "payload": "BookWhitfield Pl, Kings Cross, London W1T 5JX|51.524850, -0.132202",
+//                     }],
+//                 },
+//                 {
+//                     "title": "16:00-17:30, 11-Aside, £5",
+//                     "subtitle": "Corams Fields, 93 Guilford St, London WC1N 1DN",
+//                     "image_url": "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg",
+//                     "buttons": [{
+//                         "type": "postback",
+//                         "title": "Book",
+//                         "payload": "BookCorams Fields, 93 Guilford St, London WC1N 1DN|51.524281, -0.119884",
+//                     }],
+//                 }
+//               ]
+//           }
+//       }
+//   }
+
+
+function generate_card_element(name, address, image_url, latlong){
+
+  let pl = "Book" + address + "|" + latlong;
+
+  var template = {
+    "title": name,
+    "subtitle": address,
+    "image_url": image_url,
+    "buttons": [{
+        "type": "postback",
+        "title": "Book",
+        "payload": pl,
+    }],
   }
+
+  return template;
+}
+
+function generate_card(array){
+  elements = [];
+  array.forEach(item){
+    //name, address, image_url, latlong
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3]));
+  }
+
+  var template = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": elements
+            }
+        }
+    }
+
+  return elements;
+}
+
+
+//example
+
+let today_data_generator = [
+  ["13:00-1400, 5-Aside, Free", "Whitfield Pl, Kings Cross, London W1T 5JX", "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg", "51.524850, -0.132202"],
+  ["16:00-17:30, 11-Aside, £5", "Corams Fields, 93 Guilford St, London WC1N 1DN", "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg", "51.524281, -0.119884"]
+]
+
+var today_data = generate_card(today_data_generator);
