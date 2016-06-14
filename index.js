@@ -75,6 +75,10 @@ app.post('/webhook/', function (req, res) {
           case("today"):
           send.today(sender);
           break;
+
+          case("yep"):
+          send.default(sender);
+          break;
         }
       }
 
@@ -92,7 +96,7 @@ function sendTextMessage(sender, text) {
     let messageData = { text:text }
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
+        qs: {access_token: VERIFICATION_TOKEN},
         method: 'POST',
         json: {
             recipient: {id:sender},
