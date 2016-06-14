@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
@@ -9,9 +10,10 @@ const PAGE_ID = "245261069180348"
 
 
 app.set('port', (process.env.PORT || 3000))
-app.set('view-engine', 'ejs')
+app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', function (req, res) {
@@ -19,7 +21,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/input', function(req, res){
-  res.render('index');
+  res.render('input');
 })
 
 // for Facebook verification
