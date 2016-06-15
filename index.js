@@ -123,18 +123,14 @@ app.post('/webhook/', function (req, res) {
             let result = "";
             let check = "";
 
-            let get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+            var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
-            // request.get({url:get_url, oauth:oauth, qs: {access_token:VERIFICATION_TOKEN}, json:true}, function (e, r, user) {
-            //   send_text(sender, e);
-            //   send_text(sender, r);
-            //   send_text(sender, user);
-            // })
-
-            app.get(get_url, function(req, res){
-              result = JSON.stringify(res);
-              check = "reached here";
-            })
+            request.get(get_url)
+              .on('response', function(response){
+                result = JSON.stringify(response);
+                check = "reached"
+              })
+              .pipe()
 
             send_text(sender, sender);
             send_text(sender, result);
