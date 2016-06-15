@@ -118,6 +118,17 @@ app.post('/webhook/', function (req, res) {
             send_soon(sender, soon_data);
             break;
 
+            case("yep"):
+            send_play(sender);
+
+            request
+              .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + PAGE_ID)
+              .on('response', function(res){
+                send_text(sender, JSON.stringify(res));
+              })
+
+            break;
+
             default:
             send_play(sender);
           }
