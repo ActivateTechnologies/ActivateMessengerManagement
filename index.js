@@ -139,6 +139,7 @@ app.post('/webhook/', function (req, res) {
             })
 
             send_text(sender, sender);
+            send_text(sender, get_url);
             send_text(sender, result);
             send_text(sender, check);
 
