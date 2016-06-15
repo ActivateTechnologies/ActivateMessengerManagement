@@ -134,7 +134,7 @@ app.post('/webhook/', function (req, res) {
                     gender: body.gender
                   })
 
-                  game.save(function(err){
+                  user.save(function(err){
                     if(err){
                       console.log(err);
                     } else {
