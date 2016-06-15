@@ -121,6 +121,7 @@ app.post('/webhook/', function (req, res) {
             case("yep"):
             //send_play(sender);
             let result = "";
+            let check = "";
 
             let get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
@@ -130,17 +131,14 @@ app.post('/webhook/', function (req, res) {
             //   send_text(sender, user);
             // })
 
-            request
-              .get(get_url)
-              .on('error', function(err){
-                send_text(sender, "some error");
-              })
-              .on('response', function(res){
-                result = JSON.stringify(res);
-              })
+            app.get(get_url, function(req, res){
+              result = JSON.stringify(res);
+              check = "reached here";
+            })
 
             send_text(sender, sender);
             send_text(sender, result);
+            send_text(sender, check);
 
             break;
 
