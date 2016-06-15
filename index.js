@@ -125,7 +125,7 @@ app.post('/webhook/', function (req, res) {
             request
               .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + PAGE_ID)
               .on('response', function(res){
-                result = JSON.stringify(res));
+                result = JSON.stringify(res);
               })
             send_text(sender, sender);
             send_text(sender, result);
