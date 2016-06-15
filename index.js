@@ -119,15 +119,28 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("yep"):
-            //send_play(sender);
-            var result = "";
+            send_play(sender);
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
             request(get_url, function (error, response, body) {
-                send_text(sender, "here");
                 if (!error && response.statusCode == 200) {
-                  send_text(sender, body);
+                  let user = M.User({
+                    userId: sender,
+                    firstname: body.first_name,
+                    lastname: body.last_name,
+                    profile_pic: body.profile_pic,
+                    locale: body.locale,
+                    gender: body.gender
+                  })
+
+                  game.save(function(err){
+                    if(err){
+                      console.log(err);
+                    } else {
+                      console.log("saved it!");
+                    }
+                  })
                 }
             });
 
