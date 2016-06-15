@@ -26,10 +26,6 @@ app.get('/input', function(req, res){
 })
 
 app.post('/input', function(req, res){
-  let element = [req.body.name, req.body.address, req.body.image_url, req.body.latlong];
-  today_data_generator.push(element);
-  today_data = generate_card(today_data_generator);
-  console.log(today_data);
 
   let game = M.Game({
     name: req.body.name,
@@ -46,9 +42,24 @@ app.post('/input', function(req, res){
     }
   })
 
+  today_data_generator = []
+
+  M.Game.find({}, function(err, result){
+    result.forEach(function(item){
+      let temp = [item.name, item.address, item.image_url, item.latlong];
+      today_data_generator.push(temp);
+    })
+  })
+
+  today_data = generate_card(today_data_generator);
 });
 
 app.post('/clearall', function(req, res){
+  M.Game.remove({}, function(err, result){
+    if(err){
+      console.log(err);
+    }
+  })
   today_data = [];
   console.log("Cleared today data");
 })
@@ -360,4 +371,4 @@ function generate_card(array){
 
 
 let today_data_generator = []
-let today_data = generate_card(today_data_generator);
+let today_data = [];
