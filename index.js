@@ -123,7 +123,7 @@ app.post('/webhook/', function (req, res) {
             let result = ""
 
             request
-              .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + PAGE_ID)
+              .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN)
               .on('response', function(res){
                 result = JSON.stringify(res);
               })
