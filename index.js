@@ -119,7 +119,7 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("yep"):
-            send_play(sender);
+            //send_play(sender);
             let result = ""
 
             request
@@ -131,8 +131,8 @@ app.post('/webhook/', function (req, res) {
                 result = JSON.stringify(res);
               })
 
-            send_text("default");
-            //send_text(sender, result);
+            send_text(sender, "default");
+            send_text(sender, result);
 
             break;
 
