@@ -5,6 +5,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
+const M = require('./schemas.js')
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 const PAGE_ID = "245261069180348"
 
@@ -29,11 +30,27 @@ app.post('/input', function(req, res){
   today_data_generator.push(element);
   today_data = generate_card(today_data_generator);
   console.log(today_data);
-})
+
+  let game = M.Game({
+    name: req.body.name,
+    address: req.body.address,
+    image_url: req.body.image_url,
+    latlong: req.body.latlong
+  });
+
+  game.save(function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log("saved it!");
+    }
+  })
+
+});
 
 app.post('/clearall', function(req, res){
   today_data = [];
-  console.log("Cleared today data")
+  console.log("Cleared today data");
 })
 
 
