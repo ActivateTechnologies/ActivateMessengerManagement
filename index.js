@@ -120,18 +120,18 @@ app.post('/webhook/', function (req, res) {
 
             case("yep"):
             //send_play(sender);
-            let result = ""
+            let result = "";
 
             request
               .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN)
               .on('error', function(err){
-                send_text(sender, sender);
+                send_text(sender, "some error");
               })
               .on('response', function(res){
                 result = JSON.stringify(res);
               })
 
-            send_text(sender, "default");
+            send_text(sender, sender);
             send_text(sender, result);
 
             break;
