@@ -128,9 +128,8 @@ app.post('/webhook/', function (req, res) {
             request.get(get_url)
               .on('response', function(response){
                 result = JSON.stringify(response);
-                check = "reached"
+                check = "reached";
               })
-              .pipe()
 
             send_text(sender, sender);
             send_text(sender, result);
