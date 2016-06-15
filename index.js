@@ -125,12 +125,7 @@ app.post('/webhook/', function (req, res) {
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
-            request('http://www.google.com', function (error, response, body) {
-              check = "rewritten"
-              if (!error && response.statusCode == 200) {
-                result = JSON.stringify(body);
-              }
-            })
+            result = get_info(get_url, check)
 
             send_text(sender, sender);
             send_text(sender, result);
@@ -159,7 +154,16 @@ app.listen(app.get('port'), function() {
 
 
 
-
+function get_info(get_url, check){
+  var result = ""
+  request(get_url, function (error, response, body) {
+    check = "rewritten"
+    if (!error && response.statusCode == 200) {
+      result = JSON.stringify(body);
+    }
+  })
+  return result;
+}
 
 //Sending messages
 
