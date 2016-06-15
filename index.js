@@ -120,16 +120,17 @@ app.post('/webhook/', function (req, res) {
 
             case("yep"):
             //send_play(sender);
-            let result = "";
-            let check = "";
+            var result = "";
+            var check = "something";
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
-            request.get(get_url)
-              .on('response', function(response){
-                result = JSON.stringify(response);
-                check = "reached";
-              })
+            request('http://www.google.com', function (error, response, body) {
+              check = "rewritten"
+              if (!error && response.statusCode == 200) {
+                result = JSON.stringify(body);
+              }
+            })
 
             send_text(sender, sender);
             send_text(sender, result);
