@@ -37,21 +37,18 @@ app.post('/input', function(req, res){
   game.save(function(err){
     if(err){
       console.log(err);
-    } else {
-      console.log("saved it!");
+    }
+    else {
+      today_data_generator = []
+      M.Game.find({}, function(err, result){
+        result.forEach((i) => {
+          let temp = [i.name, i.address, i.image_url, i.latlong];
+          today_data_generator.push(temp);
+        })
+        today_data = generate_card(today_data_generator);
+      })
     }
   })
-
-  today_data_generator = []
-
-  M.Game.find({}, function(err, result){
-    result.forEach(function(item){
-      let temp = [item.name, item.address, item.image_url, item.latlong];
-      today_data_generator.push(temp);
-    })
-  })
-
-  today_data = generate_card(today_data_generator);
 });
 
 app.post('/clearall', function(req, res){
