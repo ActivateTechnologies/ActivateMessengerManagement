@@ -124,11 +124,15 @@ app.post('/webhook/', function (req, res) {
 
             request
               .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN)
+              .on('error', function(err){
+                send_text(sender, sender);
+              })
               .on('response', function(res){
                 result = JSON.stringify(res);
               })
-            send_text(sender, sender);
-            send_text(sender, result);
+
+            send_text("default");
+            //send_text(sender, result);
 
             break;
 
