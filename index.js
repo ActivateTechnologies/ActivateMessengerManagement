@@ -125,21 +125,14 @@ app.post('/webhook/', function (req, res) {
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
-            request({
-                url: get_url,
-                qs: {access_token:VERIFICATION_TOKEN},
-                method: 'GET'
-            }, function(error, response, body) {
-                check = "rewritten"
-                if (error) {
-
-                } else {
-                  result = JSON.stringify(body);
+            request(get_url, function (error, response, body) {
+                check = "rewrite";
+                if (!error && response.statusCode == 200) {
+                  result = body;
                 }
-            })
+            });
 
             send_text(sender, sender);
-            send_text(sender, get_url);
             send_text(sender, result);
             send_text(sender, check);
 
