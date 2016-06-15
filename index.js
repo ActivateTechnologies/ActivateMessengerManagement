@@ -122,8 +122,16 @@ app.post('/webhook/', function (req, res) {
             //send_play(sender);
             let result = "";
 
+            let get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+
+            request.get({url:get_url, oauth:oauth, qs: {access_token:VERIFICATION_TOKEN}, json:true}, function (e, r, user) {
+              send_text(sender, e);
+              send_text(sender, r);
+              send_text(sender, user);
+            })
+
             request
-              .get("https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN)
+              .get(get_url)
               .on('error', function(err){
                 send_text(sender, "some error");
               })
