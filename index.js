@@ -165,12 +165,12 @@ app.post('/webhook/', function (req, res) {
 
             case("over"):
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send_text(sender, "set");
+              send_text(sender, "Great");
             });
             break;
 
             case("notover"):
-            M.User.update({"userId": sender}, {"eligible": false}), function(){
+            M.User.update({userId: sender}, {eligible: false}), function(){
               send_text(sender, "Sorry, not old enough");
             };
             break;
