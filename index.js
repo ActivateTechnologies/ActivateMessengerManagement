@@ -127,7 +127,6 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("yep"):
-            send_play(sender);
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
 
@@ -149,12 +148,20 @@ app.post('/webhook/', function (req, res) {
                     if(err){
                       console.log(err);
                     } else {
+                      intro_questions(sender);
                       console.log("saved it!");
                     }
                   })
                 }
             });
+            break;
 
+            case("over"):
+            User.update({"userId": sender}, {"eligible": true});
+            break;
+
+            case("notover"):
+            User.update({"userId": sender}, {"eligible": false});
             break;
 
             default:
@@ -178,6 +185,47 @@ app.listen(app.get('port'), function() {
 
 
 //Sending messages
+
+function intro_questions(sender){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Are you over 16?",
+        "buttons": [
+          {
+            "type": "postback",
+            "title": "Yes",
+            "payload": "over"
+          },
+          {
+            "type": "postback",
+            "title": "No",
+            "payload": "notover"
+          }
+        ]
+      }
+    }
+  }
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+      }
+  })
+}
+
 
 function send_text(sender, text) {
     let messageData = { text: text }
@@ -361,11 +409,7 @@ function generate_card(array){
 }
 
 
-
-//example
-// ["13:00-1400, 5-Aside, Free", "Whitfield Pl, Kings Cross, London W1T 5JX", "https://www.openplay.co.uk/uploads/Cv6mBb44YbRSpaSA-500x_.jpg", "51.524850, -0.132202"],
-// ["16:00-17:30, 11-Aside, £5", "Corams Fields, 93 Guilford St, London WC1N 1DN", "https://www.openplay.co.uk/uploads/356_538f7d4165ba1-500x_.jpg", "51.524281, -0.119884"]
-
+// arrays for handling the games
 
 let today_data_generator = []
 let today_data = [];

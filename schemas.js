@@ -12,7 +12,7 @@ let userSchema = new Schema({
   profile_pic: String,
   locale: String,
   gender: String,
-  age: Number,
+  eligible: Boolean,
   university: String
 })
 
