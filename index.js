@@ -25,13 +25,14 @@ app.get('/input', function(req, res){
   res.render('input');
 })
 
-app.post('/input', function(req, res){
+app.post('/inputsoon', function(req, res){
 
   let game = M.Game({
     name: req.body.name,
     address: req.body.address,
     image_url: req.body.image_url,
-    latlong: req.body.latlong
+    latlong: req.body.latlong,
+    when: "soon"
   });
 
   game.save(function(err){
@@ -39,26 +40,64 @@ app.post('/input', function(req, res){
       console.log(err);
     }
     else {
-      today_data_generator = []
-      M.Game.find({}, function(err, result){
+      soon_data_generator = []
+      M.Game.find({when:"soon"}, function(err, result){
         result.forEach((i) => {
           let temp = [i.name, i.address, i.image_url, i.latlong];
-          today_data_generator.push(temp);
+          soon_data_generator.push(temp);
         })
-        today_data = generate_card(today_data_generator);
+        soon_data = generate_card(soon_data_generator);
       })
     }
   })
 });
 
-app.post('/clearall', function(req, res){
-  M.Game.remove({}, function(err, result){
+app.post('/inputtomorrow', function(req, res){
+
+  let game = M.Game({
+    name: req.body.name,
+    address: req.body.address,
+    image_url: req.body.image_url,
+    latlong: req.body.latlong,
+    when: "tomorrow"
+  });
+
+  game.save(function(err){
+    if(err){
+      console.log(err);
+    }
+    else {
+      tomorrow_data_generator = []
+      M.Game.find({when:"tomorrow"}, function(err, result){
+        result.forEach((i) => {
+          let temp = [i.name, i.address, i.image_url, i.latlong];
+          tomorrow_data_generator.push(temp);
+        })
+        tomorrow_data = generate_card(tomorrow_data_generator);
+      })
+    }
+  })
+});
+
+app.post('/clearallsoon', function(req, res){
+  M.Game.remove({when:"soon"}, function(err, result){
     if(err){
       console.log(err);
     }
   })
-  today_data = [];
-  console.log("Cleared today data");
+  soon_data = [];
+  console.log("Cleared soon data");
+})
+
+app.post('/shiftall', function(req, res){
+  M.Game.update({when:"tomorrow"}, {when: "today"}, function(err, result){
+    if(err){
+      console.log(err);
+    }
+  })
+  today_data = tomorrow_data;
+  tomorrow_data = []
+  console.log("Shifted games");
 })
 
 
@@ -166,7 +205,7 @@ app.post('/webhook/', function (req, res) {
 
             case("over"):
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send_text(sender, "Great, now to set your location. Type 'l:' followed by the region you want to see games in");
+              send_text(sender, "Great, now type the area where you want to see the games");
             });
             break;
 
@@ -424,3 +463,9 @@ function generate_card(array){
 
 let today_data_generator = []
 let today_data = [];
+
+let tomorrow_data_generator = []
+let tomorrow_data = [];
+
+let soon_data_generator = []
+let soon_data = [];
