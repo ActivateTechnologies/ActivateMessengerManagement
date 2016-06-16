@@ -170,9 +170,9 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("notover"):
-            M.User.update({userId: sender}, {eligible: false}), function(){
+            M.User.update({userId: sender}, {eligible: false}, function(){
               send_text(sender, "Sorry, not old enough");
-            };
+            });
             break;
 
             default:
