@@ -130,15 +130,15 @@ app.post('/webhook/', function (req, res) {
 
             switch(text.toLowerCase()){
               case("today"):
-              send_today(sender, today_data);
+              send_cards(sender, today_data, "today");
               break;
 
               case("tomorrow"):
-              send_tomorrow(sender, tomorrow_data);
+              send_cards(sender, tomorrow_data, "tomorrow");
               break;
 
               case("soon"):
-              send_soon(sender), soon_data;
+              send_cards(sender, soon_data, "soon");
               break;
 
               default:
@@ -162,15 +162,15 @@ app.post('/webhook/', function (req, res) {
           switch(text.toLowerCase()){
 
             case("today"):
-            send_today(sender, today_data);
+            send_cards(sender, today_data, "today");
             break;
 
             case("tomorrow"):
-            send_tomorrow(sender, tomorrow_data);
+            send_cards(sender, tomorrow_data, "tomorrow");
             break;
 
             case("soon"):
-            send_soon(sender, soon_data);
+            send_cards(sender, soon_data, "soon");
             break;
 
             case("yep"):
@@ -342,9 +342,9 @@ function send_play(sender) {
     })
 }
 
-function send_today(sender, today_data){
+function send_cards(sender, today_data, day){
 
-  send_text(sender, "Awesome, here are my options for today. Tap the card to get directions.");
+  send_text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
 
   let messageData = today_data;
 
