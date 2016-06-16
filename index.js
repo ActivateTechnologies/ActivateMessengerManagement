@@ -90,7 +90,9 @@ app.post('/webhook/', function (req, res) {
             let text = event.message.text
 
             if(text.substring(0, 2) == "l:"){
-              M.User.update({userId: sender}, {location: text.substring(2)});
+              M.User.update({userId: sender}, {location: text.substring(2)}, function(err, result){
+                send_text(sender, "Great your location has been set. Type 'play' to find games");
+              });
             }
             else {
               switch(text.toLowerCase()){
