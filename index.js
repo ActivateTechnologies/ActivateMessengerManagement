@@ -84,23 +84,29 @@ app.post('/webhook/', function (req, res) {
       let sender = event.sender.id
 
       if (event.message && event.message.text) {
-        let text = event.message.text
+        let currentUser = M.User.find({userId: sender})
+        if(currentUser[0].eligible){
+          let text = event.message.text
 
-        switch(text.toLowerCase()){
-          case("today"):
-          send_today(sender, today_data);
-          break;
+          switch(text.toLowerCase()){
+            case("today"):
+            send_today(sender, today_data);
+            break;
 
-          case("tomorrow"):
-          send_tomorrow(sender, tomorrow_data);
-          break;
+            case("tomorrow"):
+            send_tomorrow(sender, tomorrow_data);
+            break;
 
-          case("soon"):
-          send_soon(sender), soon_data;
-          break;
+            case("soon"):
+            send_soon(sender), soon_data;
+            break;
 
-          default:
-          send_play(sender);
+            default:
+            send_play(sender);
+          }
+        }
+        else {
+          send_text(sender, "Sorry, you're not old enough to play");
         }
       }
 
@@ -148,7 +154,7 @@ app.post('/webhook/', function (req, res) {
                     if(err){
                       console.log(err);
                     } else {
-                      intro_questions(sender);
+                      send_age(sender);
                       console.log("saved it!");
                     }
                   })
@@ -163,7 +169,9 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("notover"):
-            M.User.update({"userId": sender}, {"eligible": false});
+            M.User.update({"userId": sender}, {"eligible": false}), function(){
+              send_text(sender, "Sorry, not old enough");
+            };
             break;
 
             default:
@@ -188,7 +196,7 @@ app.listen(app.get('port'), function() {
 
 //Sending messages
 
-function intro_questions(sender){
+function send_age(sender){
   let messageData = {
     "attachment": {
       "type": "template",
@@ -226,6 +234,10 @@ function intro_questions(sender){
           console.log('Error: ', response.body.error)
       }
   })
+}
+
+function send_location(sender, text){
+
 }
 
 
