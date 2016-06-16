@@ -12,8 +12,7 @@ let userSchema = new Schema({
   profile_pic: String,
   locale: String,
   gender: String,
-  eligible: Boolean,
-  location: String
+  eligible: Boolean
 })
 
 let User = mongoose.model('User', userSchema);

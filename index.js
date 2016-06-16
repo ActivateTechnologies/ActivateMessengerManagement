@@ -89,28 +89,21 @@ app.post('/webhook/', function (req, res) {
           if(result[0].eligible){
             let text = event.message.text
 
-            if(text.substring(0, 2) == "l:"){
-              M.User.update({userId: sender}, {location: text.substring(2)}, function(err, result){
-                send_text(sender, "Great your location has been set. Type 'play' to find games");
-              });
-            }
-            else {
-              switch(text.toLowerCase()){
-                case("today"):
-                send_today(sender, today_data);
-                break;
+            switch(text.toLowerCase()){
+              case("today"):
+              send_today(sender, today_data);
+              break;
 
-                case("tomorrow"):
-                send_tomorrow(sender, tomorrow_data);
-                break;
+              case("tomorrow"):
+              send_tomorrow(sender, tomorrow_data);
+              break;
 
-                case("soon"):
-                send_soon(sender), soon_data;
-                break;
+              case("soon"):
+              send_soon(sender), soon_data;
+              break;
 
-                default:
-                send_play(sender);
-              }
+              default:
+              send_play(sender);
             }
           }
           else {
