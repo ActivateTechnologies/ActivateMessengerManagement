@@ -84,30 +84,31 @@ app.post('/webhook/', function (req, res) {
       let sender = event.sender.id
 
       if (event.message && event.message.text) {
-        let currentUser = M.User.find({userId: sender})
-        if(currentUser[0].eligible){
-          let text = event.message.text
+        M.User.find({userId: sender}, function(err, result){
+          if(result[0].eligible){
+            let text = event.message.text
 
-          switch(text.toLowerCase()){
-            case("today"):
-            send_today(sender, today_data);
-            break;
+            switch(text.toLowerCase()){
+              case("today"):
+              send_today(sender, today_data);
+              break;
 
-            case("tomorrow"):
-            send_tomorrow(sender, tomorrow_data);
-            break;
+              case("tomorrow"):
+              send_tomorrow(sender, tomorrow_data);
+              break;
 
-            case("soon"):
-            send_soon(sender), soon_data;
-            break;
+              case("soon"):
+              send_soon(sender), soon_data;
+              break;
 
-            default:
-            send_play(sender);
+              default:
+              send_play(sender);
+            }
           }
-        }
-        else {
-          send_text(sender, "Sorry, you're not old enough to play");
-        }
+          else {
+            send_text(sender, "Sorry, you're not old enough to play");
+          }
+        })
       }
 
       else if (event.postback) {
