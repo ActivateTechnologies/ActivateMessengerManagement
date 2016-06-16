@@ -13,7 +13,7 @@ let userSchema = new Schema({
   locale: String,
   gender: String,
   eligible: Boolean,
-  university: String
+  location: String
 })
 
 let User = mongoose.model('User', userSchema);

@@ -85,24 +85,30 @@ app.post('/webhook/', function (req, res) {
 
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
+
           if(result[0].eligible){
             let text = event.message.text
 
-            switch(text.toLowerCase()){
-              case("today"):
-              send_today(sender, today_data);
-              break;
+            if(text.substring(0, 2) == "l:"){
+              M.User.update({userId: sender}, {location: text.substring(2)});
+            }
+            else {
+              switch(text.toLowerCase()){
+                case("today"):
+                send_today(sender, today_data);
+                break;
 
-              case("tomorrow"):
-              send_tomorrow(sender, tomorrow_data);
-              break;
+                case("tomorrow"):
+                send_tomorrow(sender, tomorrow_data);
+                break;
 
-              case("soon"):
-              send_soon(sender), soon_data;
-              break;
+                case("soon"):
+                send_soon(sender), soon_data;
+                break;
 
-              default:
-              send_play(sender);
+                default:
+                send_play(sender);
+              }
             }
           }
           else {
@@ -165,7 +171,7 @@ app.post('/webhook/', function (req, res) {
 
             case("over"):
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send_text(sender, "Great");
+              send_text(sender, "Great, now to set your location. Type 'l:' followed by the region you want to see games in");
             });
             break;
 
@@ -236,11 +242,6 @@ function send_age(sender){
       }
   })
 }
-
-function send_location(sender, text){
-
-}
-
 
 function send_text(sender, text) {
     let messageData = { text: text }
