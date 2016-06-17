@@ -235,13 +235,6 @@ app.listen(app.get('port'), function() {
 
 
 
-//Sending messages
-
-
-
-
-
-
 //////////// Data for sending
 
 function generate_card_element(name, address, image_url, latlong){
