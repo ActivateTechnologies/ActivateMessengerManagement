@@ -111,7 +111,7 @@ function play(sender) {
 
 function cards(sender, today_data, day){
 
-  send_text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
+  text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
 
   let messageData = today_data;
 
