@@ -5,10 +5,10 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
 const app = express()
-const M = require('./schemas.js')
-const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
-const PAGE_ID = "245261069180348"
+const M = require('./server/schemas.js')
+const send = require('./server/send.js')
 
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
@@ -130,23 +130,23 @@ app.post('/webhook/', function (req, res) {
 
             switch(text.toLowerCase()){
               case("today"):
-              send_cards(sender, today_data, "today");
+              send.cards(sender, today_data, "today");
               break;
 
               case("tomorrow"):
-              send_cards(sender, tomorrow_data, "tomorrow");
+              send.cards(sender, tomorrow_data, "tomorrow");
               break;
 
               case("soon"):
-              send_cards(sender, soon_data, "soon");
+              send.cards(sender, soon_data, "soon");
               break;
 
               default:
-              send_play(sender);
+              send.play(sender);
             }
           }
           else {
-            send_text(sender, "Sorry, you're not old enough to play");
+            send.text(sender, "Sorry, you're not old enough to play");
           }
         })
       }
@@ -155,22 +155,22 @@ app.post('/webhook/', function (req, res) {
         let text = event.postback.payload;
 
         if(text.substring(0, 4) == "Book"){
-          send_directions(sender, text.substring(4));
+          send.directions(sender, text.substring(4));
         }
 
         else {
           switch(text.toLowerCase()){
 
             case("today"):
-            send_cards(sender, today_data, "today");
+            send.cards(sender, today_data, "today");
             break;
 
             case("tomorrow"):
-            send_cards(sender, tomorrow_data, "tomorrow");
+            send.cards(sender, tomorrow_data, "tomorrow");
             break;
 
             case("soon"):
-            send_cards(sender, soon_data, "soon");
+            send.cards(sender, soon_data, "soon");
             break;
 
             case("yep"):
@@ -195,7 +195,7 @@ app.post('/webhook/', function (req, res) {
                     if(err){
                       console.log(err);
                     } else {
-                      send_age(sender);
+                      send.age(sender);
                       console.log("saved it!");
                     }
                   })
@@ -205,18 +205,18 @@ app.post('/webhook/', function (req, res) {
 
             case("over"):
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send_text(sender, "Great, now type the area where you want to see the games");
+              send.text(sender, "Great, now type the area where you want to see the games");
             });
             break;
 
             case("notover"):
             M.User.update({userId: sender}, {eligible: false}, function(){
-              send_text(sender, "Sorry, not old enough");
+              send.text(sender, "Sorry, not old enough");
             });
             break;
 
             default:
-            send_play(sender);
+            send.play(sender);
           }
         }
       }
@@ -237,182 +237,6 @@ app.listen(app.get('port'), function() {
 
 //Sending messages
 
-function send_age(sender){
-  let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": "Are you over 16?",
-        "buttons": [
-          {
-            "type": "postback",
-            "title": "Yes",
-            "payload": "over"
-          },
-          {
-            "type": "postback",
-            "title": "No",
-            "payload": "notover"
-          }
-        ]
-      }
-    }
-  }
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-      }
-  })
-}
-
-function send_text(sender, text) {
-    let messageData = { text: text }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
-function send_play(sender) {
-    let messageData = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": "When do you want to play?",
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Today",
-              "payload": "Today"
-            },
-            {
-              "type": "postback",
-              "title": "Tomorrow",
-              "payload": "Tomorrow"
-            },
-            {
-              "type": "postback",
-              "title": "Soon",
-              "payload": "Soon"
-            }
-          ]
-        }
-      }
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
-function send_cards(sender, today_data, day){
-
-  send_text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
-
-  let messageData = today_data;
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
-function send_directions(sender, val){
-
-  let arr = val.split("|")
-  let address = arr[0]
-  let latlong = arr[1]
-
-  let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
-                      "&zoom=15&size=300x300&markers=" + latlong
-
-  let directions_link = "http://maps.google.com/?q=" + address
-
-  let messageData = {
-    "attachment": {
-        "type": "template",
-        "payload": {
-            "template_type": "generic",
-            "elements": [
-                {
-                  "title": "Thanks for booking. Here are your directions",
-                  "image_url": image_link,
-                  "item_url": directions_link,
-                  "buttons": [{
-                      "type": "web_url",
-                      "title": "Directions",
-                      "url": directions_link,
-                  }],
-              }
-            ]
-        }
-    }
-  }
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-      }
-  })
-}
 
 
 
