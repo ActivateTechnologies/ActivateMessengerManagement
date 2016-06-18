@@ -89,6 +89,16 @@ app.post('/clearallsoon', function(req, res){
   console.log("Cleared soon data");
 })
 
+app.post('/clearalltoday', function(req, res){
+  M.Game.remove({when:"today"}, function(err, result){
+    if(err){
+      console.log(err);
+    }
+  })
+  today_data = [];
+  console.log("Cleared soon data");
+})
+
 app.post('/shiftall', function(req, res){
   M.Game.update({when:"tomorrow"}, {when: "today"}, function(err, result){
     if(err){
@@ -98,6 +108,18 @@ app.post('/shiftall', function(req, res){
   today_data = tomorrow_data;
   tomorrow_data = []
   console.log("Shifted games");
+})
+
+
+app.get('/games', function(req, res){
+  M.Game.find({}, function(err, result){
+    if(err){
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+
 })
 
 
