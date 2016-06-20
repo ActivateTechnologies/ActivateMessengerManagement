@@ -84,23 +84,7 @@ app.post('/webhook/', function (req, res) {
 
           if(result[0].eligible){
             let text = event.message.text
-
-            switch(text.toLowerCase()){
-              case("today"):
-              send.cards(sender, today_data, "today");
-              break;
-
-              case("tomorrow"):
-              send.cards(sender, tomorrow_data, "tomorrow");
-              break;
-
-              case("soon"):
-              send.cards(sender, soon_data, "soon");
-              break;
-
-              default:
-              send.play(sender);
-            }
+            send.play(sender);
           }
           else {
             send.text(sender, "Sorry, you're not old enough to play");
@@ -125,7 +109,7 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23);
 
-            M.Game.find({}, function(err, result){
+            M.Game.find({when:{$gte:now, $lt:tomorrow}}, function(err, result){
               let today_data = [];
               result.forEach(function(item){
                 today_data.push([item.name, item.address, item.image_url, item.latlong]);
