@@ -131,7 +131,7 @@ app.post('/webhook/', function (req, res) {
                 today_data.push([item.name, item.address, item.image_url, item.latlong]);
               })
               today_data = generate_card(today_data);
-              send.text(sender, today_data);
+              send.text(sender, JSON.stringify(today_data));
               send.cards(sender, today_data, "today");
             })
             break;
