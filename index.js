@@ -265,7 +265,7 @@ function generate_card(array){
   let elements = [];
   array.forEach(function(item){
     //name, address, image_url, latlong
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3]));
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4]));
   });
 
   var template = {
