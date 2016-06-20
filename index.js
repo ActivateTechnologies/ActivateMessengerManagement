@@ -109,10 +109,9 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23);
 
-            M.Game.find({when:{$gte:now, $lt:tomorrow}}, function(err, result){
+            M.Game.find({when:{$gte:now.toISOString(), $lt:tomorrow.toISOString()}}, function(err, result){
 
-              send.text(sender, now.toString());
-              send.text(sender, tomorrow.toString());
+              send.text(sender, "reched here");
 
               if(err){
                 send.text(sender, "error");
@@ -123,6 +122,10 @@ app.post('/webhook/', function (req, res) {
               result.forEach(function(item){
                 today_data.push([item.name, item.address, item.image_url, item.latlong]);
               })
+
+              if(result === []){
+                send.text(sender, "result is null");
+              }
 
               send.text(sender, today_data.toString());
               send.text(sender, result.toString());
