@@ -32,7 +32,7 @@ app.post('/inputsoon', function(req, res){
     address: req.body.address,
     image_url: req.body.image_url,
     latlong: req.body.latlong,
-    when: "soon"
+    when: req.body.when
   });
 
   game.save(function(err){
@@ -40,75 +40,10 @@ app.post('/inputsoon', function(req, res){
       console.log(err);
     }
     else {
-      soon_data_generator = []
-      M.Game.find({when:"soon"}, function(err, result){
-        result.forEach((i) => {
-          let temp = [i.name, i.address, i.image_url, i.latlong];
-          soon_data_generator.push(temp);
-        })
-        soon_data = generate_card(soon_data_generator);
-      })
+
     }
   })
 });
-
-app.post('/inputtomorrow', function(req, res){
-
-  let game = M.Game({
-    name: req.body.name,
-    address: req.body.address,
-    image_url: req.body.image_url,
-    latlong: req.body.latlong,
-    when: "tomorrow"
-  });
-
-  game.save(function(err){
-    if(err){
-      console.log(err);
-    }
-    else {
-      tomorrow_data_generator = []
-      M.Game.find({when:"tomorrow"}, function(err, result){
-        result.forEach((i) => {
-          let temp = [i.name, i.address, i.image_url, i.latlong];
-          tomorrow_data_generator.push(temp);
-        })
-        tomorrow_data = generate_card(tomorrow_data_generator);
-      })
-    }
-  })
-});
-
-app.post('/clearallsoon', function(req, res){
-  M.Game.remove({when:"soon"}, function(err, result){
-    if(err){
-      console.log(err);
-    }
-  })
-  soon_data = [];
-  console.log("Cleared soon data");
-})
-
-app.post('/clearalltoday', function(req, res){
-  M.Game.remove({when:"today"}, function(err, result){
-    if(err){
-      console.log(err);
-    }
-  })
-  today_data = [];
-  console.log("Cleared soon data");
-})
-
-app.post('/shiftall', function(req, res){
-  M.Game.update({when:"tomorrow"}, {when: "today"}, function(err, result){
-    if(err){
-      console.log(err);
-    }
-  })
-  today_data = tomorrow_data;
-  tomorrow_data = []
-  console.log("Shifted games");
-})
 
 
 app.get('/games', function(req, res){
@@ -296,15 +231,3 @@ function generate_card(array){
 
   return template;
 }
-
-
-// arrays for handling the games
-
-let today_data_generator = []
-let today_data = [];
-
-let tomorrow_data_generator = []
-let tomorrow_data = [];
-
-let soon_data_generator = []
-let soon_data = [];

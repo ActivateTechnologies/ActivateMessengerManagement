@@ -23,7 +23,7 @@ let gameSchema = new Schema({
   address: String,
   image_url: String,
   latlong: String,
-  when: String
+  when: Date
 })
 
 let Game = mongoose.model('Game', gameSchema);

@@ -27,7 +27,7 @@
       <div class="card">
         <form id="soon">
 
-          <h5>Add a game for soon</h5>
+          <h5>Add a game</h5>
           <div class="input-field">
             <input id="name" type="text" class="validate">
             <label for="name">Name</label>
@@ -44,48 +44,14 @@
             <input id="latlong" type="text" class="validate">
             <label for="latlong">Latitude & Longitude (latitude,longitude)</label>
           </div>
-
-          <input type="submit" class="btn" value="Submit"/>
-
-        </form>
-      </div>
-    </div>
-
-    <div class="container">
-      <button class="btn" id="clearallsoon">Clear All Soon</button>
-    </div>
-
-    <div class="container">
-      <div class="card">
-        <form id="tomorrow">
-
-          <h5>Add a game for tomorrow</h5>
           <div class="input-field">
-            <input id="tomorrow_name" type="text" class="validate">
-            <label for="tomorrow_name">Name</label>
-          </div>
-          <div class="input-field">
-            <input id="tomorrow_address" type="text" class="validate">
-            <label for="tomorrow_address">Address</label>
-          </div>
-          <div class="input-field">
-            <input id="tomorrow_image_url" type="text" class="validate">
-            <label for="tomorrow_image_url">Image URL</label>
-          </div>
-          <div class="input-field">
-            <input id="tomorrow_latlong" type="text" class="validate">
-            <label for="tomorrow_latlong">Latitude & Longitude (latitude,longitude)</label>
+            <input id="when" type="date" class="validate">
           </div>
 
           <input type="submit" class="btn" value="Submit"/>
 
         </form>
       </div>
-    </div>
-
-    <div class="container">
-      <button class="btn" id="shiftall">Shift All</button>
-      <button class="btn" id="clearalltoday">Clear All Today</button>
     </div>
 
     <script type="text/javascript">
@@ -110,12 +76,16 @@
         var address = $('#address').val();
         var image_url = $("#image_url").val();
         var latlong = $("#latlong").val();
+        var when = $('#when').val();
+
+        console.log(when);
 
         var data = {
           name: name,
           address: address,
           image_url: image_url,
-          latlong: latlong
+          latlong: latlong,
+          when: when
         }
 
         console.log(data);
@@ -132,73 +102,6 @@
         Materialize.toast('Game added to soon', 4000);
       });
 
-      $("#clearallsoon").click(function(){
-        $.ajax({
-          type: "POST",
-          url: "/clearallsoon",
-          data: {},
-          success: function(result){
-            console.log("cleared");
-          }
-        })
-
-        Materialize.toast('Cleared all the data for soon', 4000);
-      })
-
-      $("#tomorrow").submit(function(event){
-        event.preventDefault();
-
-        var name = $('#tomorrow_name').val();
-        var address = $('#tomorrow_address').val();
-        var image_url = $("#tomorrow_image_url").val();
-        var latlong = $("#tomorrow_latlong").val();
-
-        var data = {
-          name: name,
-          address: address,
-          image_url: image_url,
-          latlong: latlong
-        }
-
-        console.log(data);
-
-        $.ajax({
-          type: "POST",
-          url: "/inputtomorrow",
-          data: data,
-          success: function(result){
-            console.log("result");
-          }
-        })
-
-        Materialize.toast('Game added to tomorrow', 4000);
-      });
-
-      $("#shiftall").click(function(){
-        $.ajax({
-          type: "POST",
-          url: "/shiftall",
-          data: {},
-          success: function(result){
-            console.log("shifted");
-          }
-        })
-
-        Materialize.toast('Shifted all the data from tomorrow to today', 4000);
-      })
-
-      $("#clearalltoday").click(function(){
-        $.ajax({
-          type: "POST",
-          url: "/clearalltoday",
-          data: {},
-          success: function(result){
-            console.log("cleared");
-          }
-        })
-
-        Materialize.toast('Cleared all the data for today', 4000);
-      })
     </script>
 
   </body>
