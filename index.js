@@ -98,10 +98,12 @@ app.post('/webhook/', function (req, res) {
         if(text.substring(0, 4) == "Book"){
 
           let rest = text.substring(4);
+          send.text(sender, rest);
           let arr = rest.split('|');
           let gameId = arr[2];
 
           M.Game.update({_id:gameID}, {$push: {joined: sender}}, function(err, result){
+            send.text("reached inside update");
             send.directions(sender, rest);
           });
         }
