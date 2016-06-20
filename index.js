@@ -126,7 +126,7 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setHours(23);
 
             M.Game.find({}, function(err, result){
-              let today_data = [['Already', 'some address', 'some url', '51, 0']];
+              let today_data = [];
               result.forEach(function(item){
                 today_data.push([item.name, item.address, item.image_url, item.latlong]);
               })
