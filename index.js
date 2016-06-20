@@ -121,7 +121,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
               })
 
               today_data = generate_card(today_data);
@@ -144,7 +144,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
               })
 
               today_data = generate_card(today_data);
@@ -167,7 +167,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
               })
 
               today_data = generate_card(today_data);
@@ -241,19 +241,13 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong, gameId){
+function generate_card_element(name, address, image_url, latlong, gameId, attending){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
-  send.text("1103399343063413", "inside")
-
-  M.Game.find({_id:gameId}, function(err, result){
-    let attending = result[0].joined;
-
-    if(attending.length > 0){
-      address = address + " (" + attending.length + " attending)";
-    }
-  })
+  if (attending > 0){
+    address = address + " (" + attending + " attending)";
+  }
 
   var template = {
     "title": name,
@@ -273,7 +267,7 @@ function generate_card(array){
   let elements = [];
   array.forEach(function(item){
     //name, address, image_url, latlong
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4]));
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5]));
   });
 
   var template = {
