@@ -119,7 +119,21 @@ app.post('/webhook/', function (req, res) {
           switch(text.toLowerCase()){
 
             case("today"):
-            send.cards(sender, today_data, "today");
+            let now = new Date();
+            now.setHours(0);
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(23);
+
+            M.Game.find({when:{$gte: now, $lt: tomorrow}}, function(err, result){
+              let today_data = []
+              result.forEach(function(item){
+                let temp = []
+                temp.push([item.name, item.address, item.image_url, item.latlong]);
+                today_data.push(temp);
+              })
+              send.cards(sender, today_data, "today");
+            })
             break;
 
             case("tomorrow"):
