@@ -250,20 +250,20 @@ function generate_card_element(name, address, image_url, latlong, gameId){
     if(attending.length > 0){
       address = address + " (" + attending.length + " attending)";
     }
+
+    var template = {
+      "title": name,
+      "subtitle": address,
+      "image_url": image_url,
+      "buttons": [{
+          "type": "postback",
+          "title": "Book",
+          "payload": pl,
+      }],
+    }
+
+    return template;
   })
-
-  var template = {
-    "title": name,
-    "subtitle": address,
-    "image_url": image_url,
-    "buttons": [{
-        "type": "postback",
-        "title": "Book",
-        "payload": pl,
-    }],
-  }
-
-  return template;
 }
 
 function generate_card(array){
