@@ -245,7 +245,7 @@ function generate_card_element(name, address, image_url, latlong, gameId){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
-  M.Game.findOne(gameId, function(err, result){
+  M.Game.find({id:gameId}, function(err, result){
     let attending = result.joined;
     if(attending.length > 0){
       address = address + " (" + attending.length + " attending)";
