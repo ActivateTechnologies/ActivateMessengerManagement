@@ -127,9 +127,11 @@ app.post('/webhook/', function (req, res) {
 
             M.Game.find({}, function(err, result){
               let today_data = [['Already', 'some address', 'some url', '51, 0']]
+              send.text(today_data);
               result.forEach(function(item){
                 let temp = []
                 temp.push([item.name, item.address, item.image_url, item.latlong]);
+                send.text(temp);
                 today_data.push(temp);
               })
               today_data = generate_card(today_data);

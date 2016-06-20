@@ -112,7 +112,6 @@ function play(sender) {
 function cards(sender, today_data, day){
 
   text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
-  text(sender, "at" + JSON.stringify(today_data));
   let messageData = today_data;
 
     request({
