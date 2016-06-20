@@ -133,8 +133,8 @@ app.post('/webhook/', function (req, res) {
                 send.text(sender, temp.toString());
                 today_data.push(temp);
               })
-              send.text(sender, today_data.toString());
               today_data = generate_card(today_data);
+              send.text(sender, today_data);
               send.cards(sender, today_data, "today");
             })
             break;
