@@ -102,7 +102,7 @@ app.post('/webhook/', function (req, res) {
           let arr = rest.split('|');
           let gameId = arr[2];
 
-          M.Game.update({id:gameID}, {$push: {joined: sender}}, function(err, result){
+          M.Game.update({id:gameID}, {$push: {joined: sender}}, function(){
             send.text("reached inside update");
             send.directions(sender, rest);
           });
