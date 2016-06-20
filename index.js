@@ -83,7 +83,8 @@ app.post('/webhook/', function (req, res) {
         M.User.find({userId: sender}, function(err, result){
 
           if(result[0].eligible){
-            let text = event.message.text
+            let text = event.message.text;
+            send.text(sender, event);
             send.play(sender);
           }
           else {
