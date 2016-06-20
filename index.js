@@ -125,7 +125,7 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23);
 
-            M.Game.find({when:{$gte: now, $lt: tomorrow}}, function(err, result){
+            M.Game.find({}, function(err, result){
               let today_data = []
               result.forEach(function(item){
                 let temp = []
