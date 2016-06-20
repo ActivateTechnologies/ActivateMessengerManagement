@@ -110,11 +110,18 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setHours(23);
 
             M.Game.find({when:{$gte:now, $lt:tomorrow}}, function(err, result){
+              if(err){
+                send.text(sender, "error");
+                send.text(sender, err);
+              }
               let today_data = [];
               result.forEach(function(item){
                 today_data.push([item.name, item.address, item.image_url, item.latlong]);
               })
+
               send.text(sender, today_data.toString());
+              send.text(sender, result.toString());
+
               today_data = generate_card(today_data);
               send.cards(sender, today_data, "today");
             })
