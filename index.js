@@ -245,8 +245,11 @@ function generate_card_element(name, address, image_url, latlong, gameId){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
+  send.text("1103399343063413", "inside")
+
   M.Game.find({id:gameId}, function(err, result){
     let attending = result.joined;
+    send.text("1103399343063413", attending.length);
     if(attending.length > 0){
       address = address + " (" + attending.length + " attending)";
     }
