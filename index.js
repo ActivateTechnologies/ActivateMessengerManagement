@@ -104,10 +104,6 @@ app.post('/webhook/', function (req, res) {
 
             case("today"):
             let now = new Date();
-            now.setHours(0);
-            let tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(23);
 
             M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
 
@@ -129,11 +125,49 @@ app.post('/webhook/', function (req, res) {
             break;
 
             case("tomorrow"):
-            send.cards(sender, tomorrow_data, "tomorrow");
+            let now2 = new Date();
+            now2.setDate(now2.getDate()+1);
+
+            M.Game.find({when:{$gt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - 1), $lt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate()+1)}}, function(err, result){
+
+              if(err){
+                send.text(sender, "error");
+                send.text(sender, err);
+              }
+
+              let today_data = [];
+              result.forEach(function(item){
+                today_data.push([item.name, item.address, item.image_url, item.latlong]);
+              })
+
+              today_data = generate_card(today_data);
+              send.cards(sender, today_data, "today");
+
+              send.text(sender, result);
+            })
             break;
 
             case("soon"):
-            send.cards(sender, soon_data, "soon");
+            let now3 = new Date();
+            now3.setDate(now3.getDate()+2);
+
+            M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
+
+              if(err){
+                send.text(sender, "error");
+                send.text(sender, err);
+              }
+
+              let today_data = [];
+              result.forEach(function(item){
+                today_data.push([item.name, item.address, item.image_url, item.latlong]);
+              })
+
+              today_data = generate_card(today_data);
+              send.cards(sender, today_data, "today");
+
+              send.text(sender, result);
+            })
             break;
 
             case("yep"):
