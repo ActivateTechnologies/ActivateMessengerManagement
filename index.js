@@ -109,7 +109,7 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23);
 
-            M.Game.find({when:{}}, function(err, result){
+            M.Game.find({}, function(err, result){
 
               if(err){
                 send.text(sender, "error");
