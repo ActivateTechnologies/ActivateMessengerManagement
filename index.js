@@ -126,14 +126,14 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setHours(23);
 
             M.Game.find({}, function(err, result){
-              let today_data = [['Already', 'some address', 'some url', '51, 0']]
-              send.text(sender, today_data);
+              let today_data = [['Already', 'some address', 'some url', '51, 0']];
               result.forEach(function(item){
-                let temp = []
+                let temp = [];
                 temp.push([item.name, item.address, item.image_url, item.latlong]);
-                send.text(sender, temp);
+                send.text(sender, temp.toString());
                 today_data.push(temp);
               })
+              send.text(sender, today_data.toString());
               today_data = generate_card(today_data);
               send.cards(sender, today_data, "today");
             })
