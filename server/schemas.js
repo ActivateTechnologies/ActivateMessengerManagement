@@ -25,8 +25,7 @@ let gameSchema = new Schema({
   latlong: String,
   when: Date,
   joined: [{
-    userId: String,
-    name: String
+    userId: String
   }]
 })
 
