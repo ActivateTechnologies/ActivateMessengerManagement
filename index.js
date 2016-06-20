@@ -96,7 +96,14 @@ app.post('/webhook/', function (req, res) {
         let text = event.postback.payload;
 
         if(text.substring(0, 4) == "Book"){
-          send.directions(sender, text.substring(4));
+
+          let rest = text.substring(4);
+          let arr = rest.split('|');
+          let gameId = arr[2];
+
+          M.Game.update({_id:gameID}, {$push: {joined: sender}});
+
+          send.directions(sender, rest);
         }
 
         else {
@@ -114,7 +121,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id]);
               })
 
               today_data = generate_card(today_data);
@@ -137,7 +144,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id]);
               })
 
               today_data = generate_card(today_data);
@@ -160,7 +167,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id]);
               })
 
               today_data = generate_card(today_data);
@@ -234,9 +241,9 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong){
+function generate_card_element(name, address, image_url, latlong, gameId){
 
-  let pl = "Book" + address + "|" + latlong;
+  let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
   var template = {
     "title": name,
