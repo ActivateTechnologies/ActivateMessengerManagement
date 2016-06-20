@@ -25,7 +25,7 @@
 
 
       <div class="card">
-        <form id="soon">
+        <form id="addgame">
 
           <h5>Add a game</h5>
           <div class="input-field">
@@ -68,7 +68,7 @@
         })
       })
 
-      $("#soon").submit(function(event){
+      $("#addgame").submit(function(event){
         event.preventDefault();
 
         var name = $('#name').val();
@@ -85,8 +85,6 @@
           when: when
         }
 
-        console.log(data);
-
         $.ajax({
           type: "POST",
           url: "/input",
@@ -95,8 +93,7 @@
             console.log("result");
           }
         })
-
-        Materialize.toast('Game added to soon', 4000);
+        Materialize.toast('Game added', 4000);
       });
 
     </script>
