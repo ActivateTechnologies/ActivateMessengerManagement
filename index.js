@@ -109,7 +109,7 @@ app.post('/webhook/', function (req, res) {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23);
 
-            M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(2016, 7, 14)}}, function(err, result){
+            M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
 
               if(err){
                 send.text(sender, "error");
