@@ -84,9 +84,6 @@ app.post('/webhook/', function (req, res) {
 
           if(result[0].eligible){
             let text = event.message.text;
-            if(text === ⚽){
-              send.text(sender, "football");
-            }
             send.play(sender);
           }
           else {
