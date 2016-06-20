@@ -64,7 +64,6 @@
             $('#games').append("<p>" + item.image_url + "</p>");
             $('#games').append("<p>" + item.latlong + "</p>");
             $('#games').append("<p>" + item.when + "</p>");
-
           })
         })
       })
@@ -78,8 +77,6 @@
         var latlong = $("#latlong").val();
         var when = $('#when').val();
 
-        console.log(when);
-
         var data = {
           name: name,
           address: address,
@@ -92,7 +89,7 @@
 
         $.ajax({
           type: "POST",
-          url: "/inputsoon",
+          url: "/input",
           data: data,
           success: function(result){
             console.log("result");

@@ -25,7 +25,7 @@ app.get('/input', function(req, res){
   res.render('input');
 })
 
-app.post('/inputsoon', function(req, res){
+app.post('/input', function(req, res){
 
   let game = M.Game({
     name: req.body.name,
