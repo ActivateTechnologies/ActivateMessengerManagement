@@ -101,9 +101,9 @@ app.post('/webhook/', function (req, res) {
           let arr = rest.split('|');
           let gameId = arr[2];
 
-          M.Game.update({_id:gameID}, {$push: {joined: sender}});
-
-          send.directions(sender, rest);
+          M.Game.update({_id:gameID}, {$push: {joined: sender}}, function(err, result){
+            send.directions(sender, rest);
+          });
         }
 
         else {

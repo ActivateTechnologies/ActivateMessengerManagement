@@ -134,8 +134,8 @@ function cards(sender, today_data, day){
 function directions(sender, val){
 
   let arr = val.split("|")
-  let address = arr[0]
-  let latlong = arr[1]
+  let address = arr[0];
+  let latlong = arr[1];
 
   let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
                       "&zoom=15&size=300x300&markers=" + latlong
