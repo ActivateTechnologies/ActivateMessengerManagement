@@ -248,13 +248,7 @@ function generate_card_element(name, address, image_url, latlong, gameId){
   send.text("1103399343063413", "inside")
 
   M.Game.find({_id:gameId}, function(err, result){
-    if(err){
-      send.text("1103399343063413", "some error");
-      send.text("1103399343063413", err);
-    }
-    send.text("1103399343063413", "inside callback");
     let attending = result[0].joined;
-    send.text("1103399343063413", attending.length);
 
     if(attending.length > 0){
       address = address + " (" + attending.length + " attending)";
