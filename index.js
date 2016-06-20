@@ -84,7 +84,8 @@ app.post('/webhook/', function (req, res) {
 
           if(result[0].eligible){
             let text = event.message.text;
-            send.text(sender, event);
+            send.text(sender, JSON.stringify(event));
+            send.text(sender, "test");
             send.play(sender);
           }
           else {
