@@ -138,7 +138,7 @@ app.post('/webhook/', function (req, res) {
           let arr = rest.split('|');
           let gameId = arr[2];
 
-          M.Game.findOneAndUpdate(gameId, {$push: {joined: sender}}, function(){
+          M.Game.findOneAndUpdate(gameId, {$push: {joined: {userId: sender}}}, function(){
             send.directions(sender, rest);
           });
         }
