@@ -115,7 +115,6 @@ app.post('/webhook/', function (req, res) {
 
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
-
           if(result[0].eligible){
             let text = event.message.text;
             send.play(sender);
@@ -164,7 +163,11 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
+                let booked = false;
+                if(item.joined.indexOf(sender) !== -1){
+                  booked = true;
+                }
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
@@ -191,7 +194,11 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
+                let booked = false;
+                if(item.joined.indexOf(sender) !== -1){
+                  booked = true;
+                }
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
@@ -218,7 +225,11 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
+                let booked = false;
+                if(item.joined.indexOf(sender) !== -1){
+                  booked = true;
+                }
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
@@ -302,12 +313,15 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, joined){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
   if(attending == capacity){
     address = address + " (fully booked)";
+    if(joined){
+      address += " (You're going)";
+    }
     let template = {
       "title": name,
       "subtitle": address,
@@ -321,6 +335,10 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       address = address + " (" + attending + " attending)";
     }
 
+    if(joined){
+      address += " (You're going)";
+    }
+
     let template = {
       "title": name,
       "subtitle": address,
@@ -331,6 +349,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
           "payload": pl,
       }],
     }
+
     return template;
   }
 }
@@ -339,7 +358,7 @@ function generate_card(array){
   let elements = [];
   array.forEach(function(item){
     //name, address, image_url, latlong
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6]));
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]));
   });
 
   var template = {
