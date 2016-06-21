@@ -168,15 +168,12 @@ app.post('/webhook/', function (req, res) {
 
                 send.text(sender, JSON.stringify(item));
 
-                send.text(sender, join);
-                send.text(sender, join.toString());
-                if(join.indexOf({userId: sender}) !== -1){
-                  send.text(sender, "if true");
-                  booked = true;
-                }
-                else {
-                  send.text(sender, "else");
-                }
+                send.text(sender, JSON.stringify(join));
+                join.forEach(function(i){
+                  if(i.userId === sender){
+                    booked = true;
+                  }
+                });
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
