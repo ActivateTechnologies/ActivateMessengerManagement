@@ -47,7 +47,8 @@ app.post('/input', function(req, res){
 
 
 app.get('/games', function(req, res){
-  M.Game.find({}, function(err, result){
+  let now = new Date();
+  M.Game.find({when: {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate())}}, function(err, result){
     if(err){
       console.log(err);
     } else {
