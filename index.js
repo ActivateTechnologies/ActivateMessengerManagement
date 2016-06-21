@@ -7,7 +7,6 @@ const request = require('request')
 const app = express()
 const M = require('./server/schemas.js')
 const send = require('./server/send.js')
-const emoji = require('node-emoji');
 
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 
@@ -85,7 +84,6 @@ app.post('/webhook/', function (req, res) {
 
           if(result[0].eligible){
             let text = event.message.text;
-            send.text(sender, emoji.get('soccer'));
             send.play(sender);
           }
           else {
@@ -112,7 +110,12 @@ app.post('/webhook/', function (req, res) {
           switch(text.toLowerCase()){
 
             case("today"):
+
             let now = new Date();
+
+            M.Button.update({name:"Today"}, {$push: {activity: {userId:sender, time: now}}}, {upsert: true}, function(err){
+              send.text(sender, "reached");
+            })
 
             M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
 
@@ -234,8 +237,7 @@ app.post('/webhook/', function (req, res) {
 
 
 app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
-    console.log(emoji.get('soccer'));
+    console.log('running on port', app.get('port'));
 })
 
 
