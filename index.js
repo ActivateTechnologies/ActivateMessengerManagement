@@ -312,12 +312,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   var template = {
     "title": name,
     "subtitle": address,
-    "image_url": image_url,
-    "buttons": [{
-        "type": "postback",
-        "title": "Book",
-        "payload": pl,
-    }],
+    "image_url": image_url
   }
 
   return template;
