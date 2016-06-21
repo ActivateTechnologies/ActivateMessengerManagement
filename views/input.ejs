@@ -41,6 +41,10 @@
             <input id="when" type="date" class="validate">
           </div>
           <div class="input-field">
+            <input id="capacity" type="text" class="validate">
+            <label for="capacity">Capacity</label>
+          </div>
+          <div class="input-field">
             <input id="id" type="text" class="validate">
             <label for="id">Id (only for editing the event)</label>
           </div>
@@ -80,6 +84,7 @@
             $('#today').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
             $('#today').append("<p>" + "<b>When: </b>" + item.when + "</p>");
             $('#today').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
+            $('#today').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
             $('#today').append("<p>" + "<b>id: </b>" + item._id + "</p>");
           })
         })
@@ -92,6 +97,7 @@
             $('#tomorrow').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
             $('#tomorrow').append("<p>" + "<b>When: </b>" + item.when + "</p>");
             $('#tomorrow').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
+            $('#tomorrow').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
             $('#tomorrow').append("<p>" + "<b>id: </b>" + item._id + "</p>");
           })
         })
@@ -104,6 +110,7 @@
             $('#soon').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
             $('#soon').append("<p>" + "<b>When: </b>" + item.when + "</p>");
             $('#soon').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
+            $('#soon').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
             $('#soon').append("<p>" + "<b>id: </b>" + item._id + "</p>");
           })
         })
@@ -118,6 +125,7 @@
         var latlong = $("#latlong").val();
         var when = $('#when').val();
         var id = $('#id').val();
+        var capacity = $('#capacity').val();
 
         var data = {
           name: name,
@@ -125,6 +133,7 @@
           image_url: image_url,
           latlong: latlong,
           when: when,
+          capacity: capacity,
           id: id
         }
 

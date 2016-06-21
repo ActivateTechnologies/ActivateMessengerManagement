@@ -26,7 +26,8 @@ let gameSchema = new Schema({
   when: Date,
   joined: [{
     userId: String
-  }]
+  }],
+  capacity: Number
 })
 
 let Game = mongoose.model('Game', gameSchema);

@@ -32,7 +32,8 @@ app.post('/input', function(req, res){
     address: req.body.address,
     image_url: req.body.image_url,
     latlong: req.body.latlong,
-    when: req.body.when
+    when: req.body.when,
+    capacity: req.body.capacity
   };
 
   if(req.body.id){
@@ -163,7 +164,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
               })
 
               today_data = generate_card(today_data);
@@ -190,7 +191,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
               })
 
               today_data = generate_card(today_data);
@@ -217,7 +218,7 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity]);
               })
 
               today_data = generate_card(today_data);
@@ -301,28 +302,44 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
-  if (attending > 0){
-    address = address + " (" + attending + " attending)";
+  if(attending == capacity){
+    address = address + " (fully booked)";
+    let template = {
+      "title": name,
+      "subtitle": address,
+      "image_url": image_url
+    }
+    return template;
   }
+  else {
 
-  var template = {
-    "title": name,
-    "subtitle": address,
-    "image_url": image_url
+    if (attending > 0){
+      address = address + " (" + attending + " attending)";
+    }
+
+    let template = {
+      "title": name,
+      "subtitle": address,
+      "image_url": image_url,
+      "buttons": [{
+          "type": "postback",
+          "title": "Book",
+          "payload": pl,
+      }],
+    }
+    return template;
   }
-
-  return template;
 }
 
 function generate_card(array){
   let elements = [];
   array.forEach(function(item){
     //name, address, image_url, latlong
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5]));
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6]));
   });
 
   var template = {
