@@ -17,7 +17,6 @@
     <div class="container">
       <h2>Input Games</h2>
 
-
       <div class="card">
         <form id="addgame">
 
@@ -64,12 +63,12 @@
       $(document).ready(function(){
         $.get('/games', function(data, status){
           data.forEach(function(item){
-            $('#games').append("<h5>" + item.name + "</h5>");
-            $('#games').append("<p>" + item.address + "</p>");
-            $('#games').append("<p>" + item.image_url + "</p>");
-            $('#games').append("<p>" + item.latlong + "</p>");
-            $('#games').append("<p>" + item.when + "</p>");
-            $('#games').append("<p>" + item._id + "</p>");
+            $('#games').append("<h5>" + "<b>Title: </b>" + item.name + "</h5>");
+            $('#games').append("<p>" + "<b>Address: </b>" + item.address + "</p>");
+            $('#games').append("<p>" + "<b>Image Link: </b>" + item.image_url + "</p>");
+            $('#games').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
+            $('#games').append("<p>" + "<b>When: </b>" + item.when + "</p>");
+            $('#games').append("<p>" + "<b>id: </b>" + item._id + "</p>");
           })
         })
       })
