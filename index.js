@@ -165,10 +165,12 @@ app.post('/webhook/', function (req, res) {
               result.forEach(function(item){
                 let booked = false;
                 let join = item.joined;
+
                 send.text(sender, JSON.stringify(item));
+
                 send.text(sender, join);
                 send.text(sender, join.toString());
-                if(join.indexOf(sender.toString()) !== -1){
+                if(join.indexOf({userId: sender}) !== -1){
                   send.text(sender, "if true");
                   booked = true;
                 }
