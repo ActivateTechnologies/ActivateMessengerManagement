@@ -97,6 +97,10 @@ app.post('/webhook/', function (req, res) {
 
         if(text.substring(0, 4) == "Book"){
 
+          M.Button.update({name:"Book"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
+
+          })
+
           let rest = text.substring(4);
           let arr = rest.split('|');
           let gameId = arr[2];
