@@ -163,10 +163,14 @@ app.post('/webhook/', function (req, res) {
 
               let today_data = [];
               result.forEach(function(item){
-                let booked = true;
-                if(item.joined.indexOf(sender) !== -1){
+                let booked = false;
+                let join = item.joined;
+                if(join.indexOf(sender) !== -1){
                   send.text(sender, "reached here");
                   booked = true;
+                }
+                else {
+                  send.text(sender, join.toString());
                 }
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
