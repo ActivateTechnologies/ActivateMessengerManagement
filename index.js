@@ -170,6 +170,7 @@ app.post('/webhook/', function (req, res) {
                   booked = true;
                 }
                 else {
+                  send.text(sender, "else");
                   send.text(sender, join.toString());
                 }
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
