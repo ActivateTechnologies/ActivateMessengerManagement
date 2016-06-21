@@ -166,7 +166,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
@@ -196,7 +196,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
@@ -226,7 +226,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
               })
 
               today_data = generate_card(today_data);
