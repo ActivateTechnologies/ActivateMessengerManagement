@@ -27,22 +27,31 @@ app.get('/input', function(req, res){
 
 app.post('/input', function(req, res){
 
-  let game = M.Game({
+  let data = {
     name: req.body.name,
     address: req.body.address,
     image_url: req.body.image_url,
     latlong: req.body.latlong,
     when: req.body.when
-  });
+  };
 
-  game.save(function(err){
-    if(err){
-      console.log(err);
-    }
-    else {
+  if(req.body.id){
+    M.Game.findOneAndUpdate(req.body.id, data, function(err){
+      if(err){
+        console.log(err);
+      }
+    })
+  }
 
-    }
-  })
+  else {
+    let game = M.Game(data);
+
+    game.save(function(err){
+      if(err){
+        console.log(err);
+      }
+    })
+  }
 });
 
 

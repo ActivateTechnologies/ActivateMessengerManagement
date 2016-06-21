@@ -41,6 +41,10 @@
           <div class="input-field">
             <input id="when" type="date" class="validate">
           </div>
+          <div class="input-field">
+            <input id="id" type="text" class="validate">
+            <label for="id">Id (only for editing the event)</label>
+          </div>
 
           <input type="submit" class="btn" value="Submit"/>
 
@@ -78,13 +82,15 @@
         var image_url = $("#image_url").val();
         var latlong = $("#latlong").val();
         var when = $('#when').val();
+        var id = $('#id').val();
 
         var data = {
           name: name,
           address: address,
           image_url: image_url,
           latlong: latlong,
-          when: when
+          when: when,
+          id: id
         }
 
         $.ajax({
