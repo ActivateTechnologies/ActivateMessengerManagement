@@ -165,6 +165,7 @@ app.post('/webhook/', function (req, res) {
               result.forEach(function(item){
                 let booked = false;
                 if(item.joined.indexOf(sender) !== -1){
+                  send.text(sender, "reached here");
                   booked = true;
                 }
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
@@ -313,13 +314,13 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, joined){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked){
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
   if(attending == capacity){
     address = address + " (fully booked)";
-    if(joined){
+    if(booked){
       address += " (You're going)";
     }
     let template = {
@@ -335,7 +336,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       address = address + " (" + attending + " attending)";
     }
 
-    if(joined){
+    if(booked){
       address += " (You're going)";
     }
 
