@@ -156,19 +156,11 @@ app.post('/webhook/', function (req, res) {
 
             M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
 
-              if(err){
-                send.text(sender, "error");
-                send.text(sender, err);
-              }
-
               let today_data = [];
               result.forEach(function(item){
                 let booked = false;
                 let join = item.joined;
 
-                send.text(sender, JSON.stringify(item));
-
-                send.text(sender, JSON.stringify(join));
                 join.forEach(function(i){
                   if(i.userId === sender){
                     booked = true;
@@ -194,17 +186,16 @@ app.post('/webhook/', function (req, res) {
 
             M.Game.find({when:{$gt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - 1), $lt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate()+1)}}, function(err, result){
 
-              if(err){
-                send.text(sender, "error");
-                send.text(sender, err);
-              }
-
               let today_data = [];
               result.forEach(function(item){
                 let booked = false;
-                if(item.joined.indexOf(sender) !== -1){
-                  booked = true;
-                }
+                let join = item.joined;
+
+                join.forEach(function(i){
+                  if(i.userId === sender){
+                    booked = true;
+                  }
+                });
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
@@ -225,17 +216,16 @@ app.post('/webhook/', function (req, res) {
 
             M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
 
-              if(err){
-                send.text(sender, "error");
-                send.text(sender, err);
-              }
-
               let today_data = [];
               result.forEach(function(item){
                 let booked = false;
-                if(item.joined.indexOf(sender) !== -1){
-                  booked = true;
-                }
+                let join = item.joined;
+
+                join.forEach(function(i){
+                  if(i.userId === sender){
+                    booked = true;
+                  }
+                });
                 today_data.push([item.name, item.address, item.image_url, item.latlong, item.id, item.joined.length, item.capacity, booked]);
               })
 
