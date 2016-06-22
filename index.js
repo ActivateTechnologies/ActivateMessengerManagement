@@ -131,7 +131,7 @@ app.post('/webhook/', function (req, res) {
         if(text.substring(0, 4) == "Book"){
 
           M.Button.update({name:"Book"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+            console.log(err);
           })
 
           let rest = text.substring(4);
@@ -151,7 +151,7 @@ app.post('/webhook/', function (req, res) {
             let now = new Date();
 
             M.Button.update({name:"Today"}, {$push: {activity: {userId:sender, time: now}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
 
             M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
@@ -181,7 +181,7 @@ app.post('/webhook/', function (req, res) {
             now2.setDate(now2.getDate()+1);
 
             M.Button.update({name:"Tomorrow"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
 
             M.Game.find({when:{$gt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - 1), $lt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate()+1)}}, function(err, result){
@@ -211,7 +211,7 @@ app.post('/webhook/', function (req, res) {
             now3.setDate(now3.getDate()+2);
 
             M.Button.update({name:"Soon"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
 
             M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
@@ -239,7 +239,7 @@ app.post('/webhook/', function (req, res) {
             case("yep"):
 
             M.Button.update({name:"Yep"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
 
             var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
@@ -272,7 +272,7 @@ app.post('/webhook/', function (req, res) {
 
             case("over"):
             M.Button.update({name:"Eligible"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
             M.User.update({userId: sender}, {eligible: true}, function(){
               send.text(sender, "Great, now type the area where you want to see the games");
@@ -281,7 +281,7 @@ app.post('/webhook/', function (req, res) {
 
             case("notover"):
             M.Button.update({name:"Not Eligible"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-
+              console.log(err);
             })
             M.User.update({userId: sender}, {eligible: false}, function(){
               send.text(sender, "Sorry, not old enough");
