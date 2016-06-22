@@ -301,7 +301,7 @@ app.post('/webhook/', function (req, res) {
 
 
 app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'));
+  console.log('running on port', app.get('port'));
 })
 
 
@@ -352,7 +352,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 function generate_card(array){
   let elements = [];
   array.forEach(function(item){
-    //name, address, image_url, latlong
+    //name, address, image_url, latlong, gameId, attending, capacity, booked
     elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]));
   });
 

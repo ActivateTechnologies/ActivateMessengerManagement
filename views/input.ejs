@@ -55,63 +55,57 @@
       </div>
     </div>
 
-    <div class="current">
+    <div class="current container">
       <h2>Current Games</h2>
-      <div class="row">
-        <div class="col s4" id="today">
-          <h4>Today</h4>
+      <div id="today">
+        <h4>Today</h4>
 
-        </div>
-        <div class="col s4" id="tomorrow">
-          <h4>Tomorrow</h4>
+      </div>
+      <div id="tomorrow">
+        <h4>Tomorrow</h4>
 
-        </div>
-        <div class="col s4" id="soon">
-          <h4>Soon</h4>
+      </div>
+      <div id="soon">
+        <h4>Soon</h4>
 
-        </div>
       </div>
     </div>
 
     <script type="text/javascript">
 
+      var getCard = function(item){
+        var data = '<div class="card">'
+                + "<span class='card-title'>" + item.name + "</span>"
+                + "<p>" + "<b>Address: </b>" + item.address + "</p>"
+                + "<p>" + "<b>Image Link: </b>" + item.image_url + "</p>"
+                + "<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>"
+                + "<p>" + "<b>When: </b>" + item.when + "</p>"
+                + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
+                + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
+                + "<p>" + "<b>id: </b>" + item._id + "</p>"
+                + '</div>'
+        return data;
+      }
+
       $(document).ready(function(){
         $.get('/today', function(data, status){
           data.forEach(function(item){
-            $('#today').append("<h5>" + item.name + "</h5>");
-            $('#today').append("<p>" + "<b>Address: </b>" + item.address + "</p>");
-            $('#today').append("<p>" + "<b>Image Link: </b>" + item.image_url + "</p>");
-            $('#today').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
-            $('#today').append("<p>" + "<b>When: </b>" + item.when + "</p>");
-            $('#today').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
-            $('#today').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
-            $('#today').append("<p>" + "<b>id: </b>" + item._id + "</p>");
+            var data = getCard(item);
+            $('#today').append(data);
           })
         })
 
         $.get('/tomorrow', function(data, status){
           data.forEach(function(item){
-            $('#tomorrow').append("<h5>" + item.name + "</h5>");
-            $('#tomorrow').append("<p>" + "<b>Address: </b>" + item.address + "</p>");
-            $('#tomorrow').append("<p>" + "<b>Image Link: </b>" + item.image_url + "</p>");
-            $('#tomorrow').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
-            $('#tomorrow').append("<p>" + "<b>When: </b>" + item.when + "</p>");
-            $('#tomorrow').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
-            $('#tomorrow').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
-            $('#tomorrow').append("<p>" + "<b>id: </b>" + item._id + "</p>");
+            var data = getCard(item);
+            $('#tomorrow').append(data);
           })
         })
 
         $.get('/soon', function(data, status){
           data.forEach(function(item){
-            $('#soon').append("<h5>" + item.name + "</h5>");
-            $('#soon').append("<p>" + "<b>Address: </b>" + item.address + "</p>");
-            $('#soon').append("<p>" + "<b>Image Link: </b>" + item.image_url + "</p>");
-            $('#soon').append("<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>");
-            $('#soon').append("<p>" + "<b>When: </b>" + item.when + "</p>");
-            $('#soon').append("<p>" + "<b>Joined: </b>" + item.joined.length + "</p>");
-            $('#soon').append("<p>" + "<b>Capacity: </b>" + item.capacity + "</p>");
-            $('#soon').append("<p>" + "<b>id: </b>" + item._id + "</p>");
+            var data = getCard(item);
+            $('#soon').append(data);
           })
         })
       })
