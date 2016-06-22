@@ -284,7 +284,7 @@ app.post('/webhook/', function (req, res) {
               console.log(err);
             })
             M.User.update({userId: sender}, {eligible: false}, function(){
-              send.text(sender, "Sorry, not old enough");
+              send.text(sender, "Sorry, you're not old enough");
             });
             break;
 
