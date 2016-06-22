@@ -328,7 +328,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
     let template = {
       "title": name,
       "subtitle": address,
-      "image_url": image_url
+      "image_url": image_url,
+      "item_url": image_url,
     }
     return template;
   }
@@ -338,6 +339,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "title": name,
       "subtitle": address,
       "image_url": image_url,
+      "item_url": image_url,
       "buttons": [{
           "type": "postback",
           "title": "Book",
