@@ -314,6 +314,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
   let pl = "Book" + address + "|" + latlong + "|" + gameId;
 
+  let directions_link = "http://maps.google.com/?q=" + address;
+
   if (attending > 0){
     address = address + " (" + attending + " attending)";
   }
@@ -329,7 +331,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "title": name,
       "subtitle": address,
       "image_url": image_url,
-      "item_url": image_url,
+      "item_url": directions_link,
     }
     return template;
   }
@@ -339,7 +341,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "title": name,
       "subtitle": address,
       "image_url": image_url,
-      "item_url": image_url,
+      "item_url": directions_link,
       "buttons": [{
           "type": "postback",
           "title": "Book",
