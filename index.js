@@ -37,7 +37,7 @@ app.post('/input', function(req, res){
   };
 
   if(req.body.id){
-    M.Game.findOneAndUpdate(req.body.id, data, function(err){
+    M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
       if(err){
         console.log(err);
       }
@@ -138,7 +138,7 @@ app.post('/webhook/', function (req, res) {
           let arr = rest.split('|');
           let gameId = arr[2];
 
-          M.Game.findOneAndUpdate(gameId, {$push: {joined: {userId: sender}}}, function(){
+          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
             send.directions(sender, rest);
           });
         }
