@@ -7,11 +7,11 @@ const request = require('request')
 const app = express()
 const M = require('./server/schemas.js')
 const send = require('./server/send.js')
-let multer = require('multer');
-let AWS = require('aws-sdk');
+const multer = require('multer');
+const AWS = require('aws-sdk');
 
-let accessKeyId =  process.env.AWS_ACCESS_KEY || "xxxxxx";
-let secretAccessKey = process.env.AWS_SECRET_KEY || "+xxxxxx+B+xxxxxxx";
+const accessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
+const secretAccessKey = "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";
 
 AWS.config.update({
     accessKeyId: accessKeyId,
@@ -27,6 +27,33 @@ app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(multer({
+  dest: './public/uploads/',
+  limits : { fileSize:100000 },
+  rename: function (fieldname, filename) {
+    var time = new Date().getTime();
+    return filename.replace(/\W+/g, '-').toLowerCase() + time;
+  },
+  onFileUploadData: function (file, data, req, res) {
+    var params = {
+      Bucket: creds.awsBucket,
+      Key: file.name,
+      Body: data,
+      ACL: 'public-read'
+    };
+
+    var s3 = new aws.S3()
+    s3.putObject(params, function (perr, pres) {
+      if (perr) {
+        console.log("Error uploading data: ", perr);
+      } else {
+        console.log("Successfully uploaded data", pres);
+      }
+    });
+  }
+}));
+
 
 
 app.get('/', function (req, res) {
