@@ -115,11 +115,12 @@
 
         var name = $('#name').val();
         var address = $('#address').val();
-        var image_url = $("#image_url").val();
         var latlong = $("#latlong").val();
         var when = $('#when').val();
         var id = $('#id').val();
         var capacity = $('#capacity').val();
+
+        var image = $('#image').prop('files')[0];
 
         var data = {
           name: name,

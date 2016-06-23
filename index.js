@@ -7,9 +7,8 @@ const request = require('request')
 const app = express()
 const M = require('./server/schemas.js')
 const send = require('./server/send.js')
-const multer = require('multer');
 const AWS = require('aws-sdk');
-
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 const accessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
 const secretAccessKey = "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";
 
@@ -20,39 +19,12 @@ AWS.config.update({
 
 let s3 = new AWS.S3();
 
-const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(multer({
-  dest: './public/uploads/',
-  limits : { fileSize:100000 },
-  rename: function (fieldname, filename) {
-    var time = new Date().getTime();
-    return filename.replace(/\W+/g, '-').toLowerCase() + time;
-  },
-  onFileUploadData: function (file, data, req, res) {
-    var params = {
-      Bucket: creds.awsBucket,
-      Key: file.name,
-      Body: data,
-      ACL: 'public-read'
-    };
-
-    var s3 = new aws.S3()
-    s3.putObject(params, function (perr, pres) {
-      if (perr) {
-        console.log("Error uploading data: ", perr);
-      } else {
-        console.log("Successfully uploaded data", pres);
-      }
-    });
-  }
-}));
 
 
 
@@ -66,10 +38,35 @@ app.get('/input', function(req, res){
 
 app.post('/input', function(req, res){
 
+  let file = //define the file from res.file
+  let now = new Date()
+  let imagename = //define for key
+  //use the imagename for call
+
+
+  var params = {
+    Bucket: 'kickabout-messenger',
+    Key: // imagename,
+    Body: // imagefile
+  };
+
+  s3.putObject(params, function (perr, pres) {
+    if (perr) {
+      console.log("Error uploading data: ", perr);
+    } else {
+      console.log("Successfully uploaded data to myBucket/myKey");
+    }
+  });
+
+  let urlParams = {Bucket: 'kickabout-messenger', Key: imagename};
+  let image_url = s3.getSignedUrl('getObject', urlParams);
+
+  console.log(image_url);
+
   let data = {
     name: req.body.name,
     address: req.body.address,
-    image_url: req.body.image_url,
+    image_url: image_url,
     latlong: req.body.latlong,
     when: req.body.when,
     capacity: req.body.capacity
