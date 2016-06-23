@@ -7,6 +7,18 @@ const request = require('request')
 const app = express()
 const M = require('./server/schemas.js')
 const send = require('./server/send.js')
+let multer = require('multer');
+let AWS = require('aws-sdk');
+
+let accessKeyId =  process.env.AWS_ACCESS_KEY || "xxxxxx";
+let secretAccessKey = process.env.AWS_SECRET_KEY || "+xxxxxx+B+xxxxxxx";
+
+AWS.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
+});
+
+let s3 = new AWS.S3();
 
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
 

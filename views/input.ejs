@@ -18,7 +18,7 @@
       <h2>Input Games</h2>
 
       <div class="card">
-        <form id="addgame">
+        <form id="addgame" enctype="multipart/form-data">
 
           <h5>Add a game</h5>
           <div class="input-field">
@@ -30,8 +30,8 @@
             <label for="address">Address</label>
           </div>
           <div class="input-field">
-            <input id="image_url" type="text" class="validate">
-            <label for="image_url">Image URL</label>
+            <label for="image">Image Upload</label>
+            <input type="file" name="image" id="image">
           </div>
           <div class="input-field">
             <input id="latlong" type="text" class="validate">
