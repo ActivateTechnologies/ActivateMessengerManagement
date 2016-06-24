@@ -60,45 +60,45 @@ app.post('/input', upload.single('image'), function(req, res){
   s3.putObject(params, function (perr, pres) {
     if (perr) {
       console.log("Error uploading data: ", perr);
-    } else {
+    }
+    else {
       console.log("Successfully uploaded data to myBucket/myKey");
+      let urlParams = {Bucket: 'kickabout-messenger', Key: imagename};
+      let image_url = s3.getSignedUrl('getObject', urlParams);
+
+      console.log(image_url);
+
+      let data = {
+        name: req.body.title,
+        address: req.body.address,
+        image_url: image_url,
+        image_name: imagename,
+        latlong: req.body.latlong,
+        when: req.body.when,
+        capacity: req.body.capacity
+      };
+
+      if(req.body.id){
+        M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
+          if(err){
+            console.log(err);
+          }
+        })
+      }
+
+      else {
+        let game = M.Game(data);
+
+        game.save(function(err){
+          if(err){
+            console.log(err);
+          }
+        })
+      }
     }
   });
 
-  let urlParams = {Bucket: 'kickabout-messenger', Key: imagename};
-  let image_url = s3.getSignedUrl('getObject', urlParams);
-
-  console.log(image_url);
-
-  let data = {
-    name: req.body.title,
-    address: req.body.address,
-    image_url: image_url,
-    image_name: imagename,
-    latlong: req.body.latlong,
-    when: req.body.when,
-    capacity: req.body.capacity
-  };
-
-  if(req.body.id){
-    M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
-      if(err){
-        console.log(err);
-      }
-    })
-  }
-
-  else {
-    let game = M.Game(data);
-
-    game.save(function(err){
-      if(err){
-        console.log(err);
-      }
-    })
-  }
-
-
+  res.render('input');
 });
 
 
