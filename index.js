@@ -4,7 +4,11 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
+const multer = require('multer')
+const fs = require('fs')
 const app = express()
+
+
 const M = require('./server/schemas.js')
 const send = require('./server/send.js')
 const AWS = require('aws-sdk');
@@ -19,13 +23,14 @@ AWS.config.update({
 
 let s3 = new AWS.S3();
 
+let upload = multer({dest:'uploads/'});
+
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 app.get('/', function (req, res) {
@@ -36,18 +41,20 @@ app.get('/input', function(req, res){
   res.render('input');
 })
 
-app.post('/input', function(req, res){
+app.post('/input', upload.single('image'), function(req, res){
 
-  let file = //define the file from res.file
-  let now = new Date()
-  let imagename = //define for key
-  //use the imagename for call
+  console.log(req.file);
+  console.log(req.body.title);
+  console.log(req.body.address);
+
+  let file = req.file
+  let imagename = file.filename;
 
 
   var params = {
     Bucket: 'kickabout-messenger',
-    Key: // imagename,
-    Body: // imagefile
+    Key: imagename,
+    Body: fs.createReadStream(file.path)
   };
 
   s3.putObject(params, function (perr, pres) {
@@ -64,9 +71,10 @@ app.post('/input', function(req, res){
   console.log(image_url);
 
   let data = {
-    name: req.body.name,
+    name: req.body.title,
     address: req.body.address,
     image_url: image_url,
+    image_name: imagename,
     latlong: req.body.latlong,
     when: req.body.when,
     capacity: req.body.capacity
@@ -89,6 +97,8 @@ app.post('/input', function(req, res){
       }
     })
   }
+
+
 });
 
 

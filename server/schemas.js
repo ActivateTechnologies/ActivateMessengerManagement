@@ -21,6 +21,7 @@ let User = mongoose.model('User', userSchema);
 let gameSchema = new Schema({
   name: String,
   address: String,
+  image_name: String,
   image_url: String,
   latlong: String,
   when: Date,

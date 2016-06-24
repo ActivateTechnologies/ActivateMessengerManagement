@@ -18,34 +18,33 @@
       <h2>Input Games</h2>
 
       <div class="card">
-        <form id="addgame" enctype="multipart/form-data">
+        <form id="addgame" method="POST" action="/input" enctype="multipart/form-data">
 
           <h5>Add a game</h5>
           <div class="input-field">
-            <input id="name" type="text" class="validate">
-            <label for="name">Name</label>
+            <input name="title" type="text" class="validate">
+            <label for="title">Name</label>
           </div>
           <div class="input-field">
-            <input id="address" type="text" class="validate">
+            <input name="address" type="text" class="validate">
             <label for="address">Address</label>
           </div>
           <div class="input-field">
-            <label for="image">Image Upload</label>
             <input type="file" name="image" id="image">
           </div>
           <div class="input-field">
-            <input id="latlong" type="text" class="validate">
+            <input name="latlong" type="text" class="validate">
             <label for="latlong">Latitude & Longitude (latitude,longitude)</label>
           </div>
           <div class="input-field">
-            <input id="when" type="date" class="validate">
+            <input name="when" type="date" class="validate">
           </div>
           <div class="input-field">
-            <input id="capacity" type="text" class="validate">
+            <input name="capacity" type="text" class="validate">
             <label for="capacity">Capacity</label>
           </div>
           <div class="input-field">
-            <input id="id" type="text" class="validate">
+            <input name="id" type="text" class="validate">
             <label for="id">Id (only for editing the event)</label>
           </div>
 
@@ -110,38 +109,10 @@
         })
       })
 
-      $("#addgame").submit(function(event){
-        event.preventDefault();
-
-        var name = $('#name').val();
-        var address = $('#address').val();
-        var latlong = $("#latlong").val();
-        var when = $('#when').val();
-        var id = $('#id').val();
-        var capacity = $('#capacity').val();
-
-        var image = $('#image').prop('files')[0];
-
-        var data = {
-          name: name,
-          address: address,
-          image_url: image_url,
-          latlong: latlong,
-          when: when,
-          capacity: capacity,
-          id: id
-        }
-
-        $.ajax({
-          type: "POST",
-          url: "/input",
-          data: data,
-          success: function(result){
-            console.log("result");
-          }
-        })
-        Materialize.toast('Game added', 4000);
-      });
+      // $("#addgame").submit(function(event){
+      //   event.preventDefault();
+      //   Materialize.toast('Game added', 4000);
+      // });
 
     </script>
 
