@@ -22,9 +22,7 @@ AWS.config.update({
 });
 
 let s3 = new AWS.S3();
-
 let upload = multer({dest:'uploads/'});
-
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
@@ -38,8 +36,115 @@ app.get('/', function (req, res) {
 })
 
 app.get('/analytics', function(req, res){
-  res.render('visualize');
+  Promise.all([getUsers(), getBookHits(), getYepHits(), getTodayHits(), getTomorrowHits(), getSoonHits()])
+  .then(function(answers){
+    res.render('visualize', {
+      users: answers[0],
+      book: answers[1],
+      yep: answers[2],
+      today: answers[3],
+      tomorrow: answers[4],
+      soon: answers[5]
+    })
+  })
+  .catch(function(err){
+    console.log(err);
+  })
 })
+
+function getUsers(){
+  return new Promise(function(resolve, reject){
+    M.User.find({}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      resolve(result.length);
+    })
+  })
+}
+
+function getBookHits(){
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Book"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      if(result.length === 0){
+        resolve(0)
+      }
+      else{
+        resolve(result[0].activity.length);
+      }
+    })
+  })
+}
+
+function getYepHits(){
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Yep"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      if(result.length === 0){
+        resolve(0)
+      }
+      else{
+        resolve(result[0].activity.length);
+      }
+    })
+  })
+}
+
+function getTodayHits(){
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Today"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      if(result.length === 0){
+        resolve(0)
+      }
+      else{
+        resolve(result[0].activity.length);
+      }
+    })
+  })
+}
+
+function getTomorrowHits(){
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Tomorrow"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      if(result.length === 0){
+        resolve(0)
+      }
+      else{
+        resolve(result[0].activity.length);
+      }
+    })
+  })
+}
+
+function getSoonHits(){
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Soon"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      if(result.length === 0){
+        resolve(0)
+      }
+      else{
+        resolve(result[0].activity.length);
+      }
+    })
+  })
+}
+
+
+
 
 app.get('/input', function(req, res){
   res.render('input');
