@@ -37,6 +37,10 @@ app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
+app.get('/analytics', function(req, res){
+  res.render('visualize');
+})
+
 app.get('/input', function(req, res){
   res.render('input');
 })
