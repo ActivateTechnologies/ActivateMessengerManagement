@@ -318,7 +318,7 @@ app.post('/webhook/', function (req, res) {
               console.log(err);
             })
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send.text(sender, "Great, now type the area where you want to see the games");
+              send.play(sender);
             });
             break;
 
