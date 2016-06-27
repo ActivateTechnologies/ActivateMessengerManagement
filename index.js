@@ -44,17 +44,14 @@ app.get('/input', function(req, res){
 app.post('/input', upload.single('image'), function(req, res){
 
   console.log(req.file);
-  console.log(req.body.title);
-  console.log(req.body.address);
 
   let file = req.file
   let imagename = file.filename;
 
-
   var params = {
     Bucket: 'kickabout-messenger',
     Key: imagename,
-    Body: fs.createReadStream(file.path)
+    Body: fs.readFileSync(file.path)
   };
 
   s3.putObject(params, function (perr, pres) {
