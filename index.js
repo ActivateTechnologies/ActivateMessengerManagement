@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', function (req, res) {
-    res.send("Hi, I'm the Kickabout chat bot")
+  res.send("Hi, I'm the Kickabout chat bot")
 })
 
 app.get('/input', function(req, res){
