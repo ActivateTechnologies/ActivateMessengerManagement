@@ -60,7 +60,7 @@ app.post('/input', upload.single('image'), function(req, res){
     }
     else {
       console.log("Successfully uploaded data to myBucket/myKey");
-      let urlParams = {Bucket: 'kickabout-messenger', Key: imagename};
+      let urlParams = {Bucket: 'kickabout-messenger', Key: imagename, Expires: 30000000};
       let image_url = s3.getSignedUrl('getObject', urlParams);
 
       console.log(image_url);
