@@ -36,9 +36,9 @@ app.get('/', function (req, res) {
 })
 
 app.get('/analytics', function(req, res){
-  Promise.all([getUsers(), getBookHits(), getYepHits(), getTodayHits(), getTomorrowHits(), getSoonHits()])
+  Promise.all([getNewUsers(), getBookHits(), getYepHits(), getTodayHits(), getTomorrowHits(), getSoonHits()])
   .then(function(answers){
-    res.render('visualize', {
+    res.render('analytics', {
       users: answers[0],
       book: answers[1],
       yep: answers[2],
@@ -52,13 +52,22 @@ app.get('/analytics', function(req, res){
   })
 })
 
-function getUsers(){
+function getNewUsers(){
+
+  let now = new Date();
+
   return new Promise(function(resolve, reject){
-    M.User.find({}, function(err, result){
+    M.Button.find({name:"Yep"}, function(err, result){
       if(err){
         reject(err);
       }
-      resolve(result.length);
+      let count = 0;
+      result[0].activity.forEach(function(item){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)){
+          count++;
+        }
+      })
+      resolve(count);
     })
   })
 }
