@@ -39,12 +39,13 @@ app.get('/', function (req, res) {
 app.get('/visualize', function (req, res) {
   let now = new Date();
   let currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  Promise.all([A.getNewUsersWeekly(currentDate), A.getButtonHitsWeekly(currentDate), A.getNewUsersMonthly(currentDate)])
+  Promise.all([A.getNewUsersWeekly(currentDate), A.getButtonHitsWeekly(currentDate), A.getNewUsersMonthly(currentDate), A.getButtonHitsMonthly(currentDate)])
   .then(function(answers){
     res.render('visualize', {
       newUsersWeekly: answers[0].join(),
       buttonHitsWeekly: answers[1].join(),
-      newUsersMonthly: answers[2].join()
+      newUsersMonthly: answers[2].join(),
+      buttonHitsMonthly: answers[3].join()
     });
   })
   .catch(function(err){

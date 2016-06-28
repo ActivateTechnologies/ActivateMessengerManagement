@@ -14,16 +14,24 @@
   <body>
     <div class="container">
       <h1>Visualize</h1>
+
       <h3>New Users per week</h3>
       <div id="newusersperweek">
 
       </div>
+
       <h3>Button hits per week</h3>
       <div id="buttonHitsWeekly">
 
       </div>
+
       <h3>New Users per Month</h3>
       <div id="newuserspermonth">
+
+      </div>
+
+      <h3>Button hits per Month</h3>
+      <div id="buttonHitsMonthly">
 
       </div>
     </div>
@@ -98,6 +106,12 @@
       var arr3 = s.split(',').map(i => parseInt(i))
 
       plot("#newuserspermonth", arr3)
+
+      console.log('<%= buttonHitsMonthly %>');
+      s = '<%= buttonHitsMonthly %>'
+      var arr3 = s.split(',').map(i => parseInt(i))
+
+      plot("#buttonHitsMonthly", arr3)
     </script>
   </body>
 </html>

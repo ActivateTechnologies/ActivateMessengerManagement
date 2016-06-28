@@ -98,6 +98,34 @@ function getButtonHitsWeekly(currentDate){
   })
 }
 
+function getButtonHitsMonthly(currentDate){
+
+  return new Promise(function(resolve, reject){
+    M.Button.find({}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      let count = 0;
+      let weekArray = []
+      for(let i = 0; i < 12; i++){
+
+        result.forEach(function(button){
+          button.activity.forEach(function(item){
+            if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth() - i) &&
+                item.time < new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1)){
+              count++;
+            }
+          })
+        })
+
+        weekArray.push(count);
+        count = 0;
+      }
+      resolve(weekArray.reverse());
+    })
+  })
+}
+
 function getNewBookHits(){
 
   let now = new Date();
@@ -188,5 +216,6 @@ module.exports = {
   getNewSoonHits: getNewSoonHits,
   getNewUsersWeekly: getNewUsersWeekly,
   getButtonHitsWeekly: getButtonHitsWeekly,
-  getNewUsersMonthly: getNewUsersMonthly
+  getNewUsersMonthly: getNewUsersMonthly,
+  getButtonHitsMonthly: getButtonHitsMonthly
 }
