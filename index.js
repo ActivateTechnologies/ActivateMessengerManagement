@@ -36,15 +36,14 @@ app.get('/', function (req, res) {
 })
 
 app.get('/analytics', function(req, res){
-  Promise.all([getNewUsers(), getBookHits(), getYepHits(), getTodayHits(), getTomorrowHits(), getSoonHits()])
+  Promise.all([getNewUsers(), getNewBookHits(), getNewTodayHits(), getNewTomorrowHits(), getNewSoonHits()])
   .then(function(answers){
     res.render('analytics', {
       users: answers[0],
       book: answers[1],
-      yep: answers[2],
-      today: answers[3],
-      tomorrow: answers[4],
-      soon: answers[5]
+      today: answers[2],
+      tomorrow: answers[3],
+      soon: answers[4]
     })
   })
   .catch(function(err){
@@ -62,10 +61,8 @@ function getNewUsers(){
         reject(err);
       }
       let count = 0;
-      console.log(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
       result[0].activity.forEach(function(item){
         if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          console.log(item.time);
           count++;
         }
       })
@@ -74,86 +71,85 @@ function getNewUsers(){
   })
 }
 
-function getBookHits(){
+function getNewBookHits(){
+
+  let now = new Date();
+
   return new Promise(function(resolve, reject){
     M.Button.find({name:"Book"}, function(err, result){
       if(err){
         reject(err);
       }
-      if(result.length === 0){
-        resolve(0)
-      }
-      else{
-        resolve(result[0].activity.length);
-      }
+      let count = 0;
+      result[0].activity.forEach(function(item){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+          count++;
+        }
+      })
+      resolve(count);
     })
   })
 }
 
-function getYepHits(){
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Yep"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      if(result.length === 0){
-        resolve(0)
-      }
-      else{
-        resolve(result[0].activity.length);
-      }
-    })
-  })
-}
+function getNewTodayHits(){
 
-function getTodayHits(){
+  let now = new Date();
+
   return new Promise(function(resolve, reject){
     M.Button.find({name:"Today"}, function(err, result){
       if(err){
         reject(err);
       }
-      if(result.length === 0){
-        resolve(0)
-      }
-      else{
-        resolve(result[0].activity.length);
-      }
+      let count = 0;
+      result[0].activity.forEach(function(item){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+          count++;
+        }
+      })
+      resolve(count);
     })
   })
 }
 
-function getTomorrowHits(){
+function getNewTomorrowHits(){
+
+  let now = new Date();
+
   return new Promise(function(resolve, reject){
     M.Button.find({name:"Tomorrow"}, function(err, result){
       if(err){
         reject(err);
       }
-      if(result.length === 0){
-        resolve(0)
-      }
-      else{
-        resolve(result[0].activity.length);
-      }
+      let count = 0;
+      result[0].activity.forEach(function(item){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+          count++;
+        }
+      })
+      resolve(count);
     })
   })
 }
 
-function getSoonHits(){
+function getNewSoonHits(){
+
+  let now = new Date();
+
   return new Promise(function(resolve, reject){
     M.Button.find({name:"Soon"}, function(err, result){
       if(err){
         reject(err);
       }
-      if(result.length === 0){
-        resolve(0)
-      }
-      else{
-        resolve(result[0].activity.length);
-      }
+      let count = 0;
+      result[0].activity.forEach(function(item){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+          count++;
+        }
+      })
+      resolve(count);
     })
   })
 }
-
 
 
 
