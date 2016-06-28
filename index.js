@@ -62,8 +62,10 @@ function getNewUsers(){
         reject(err);
       }
       let count = 0;
+      console.log(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
       result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)){
+        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+          console.log(item.time);
           count++;
         }
       })
