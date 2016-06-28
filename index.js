@@ -10,6 +10,7 @@ const app = express()
 
 
 const M = require('./server/schemas.js')
+const A = require('./server/analytics.js')
 const send = require('./server/send.js')
 const AWS = require('aws-sdk');
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
@@ -39,9 +40,8 @@ app.get('/visualize', function (req, res) {
   res.render('visualize');
 })
 
-
 app.get('/analytics', function(req, res){
-  Promise.all([getNewUsers(), getNewBookHits(), getNewTodayHits(), getNewTomorrowHits(), getNewSoonHits()])
+  Promise.all([A.getNewUsers(), A.getNewBookHits(), A.getNewTodayHits(), A.getNewTomorrowHits(), A.getNewSoonHits()])
   .then(function(answers){
     res.render('analytics', {
       users: answers[0],
@@ -55,108 +55,6 @@ app.get('/analytics', function(req, res){
     console.log(err);
   })
 })
-
-function getNewUsers(){
-
-  let now = new Date();
-
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Yep"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
-    })
-  })
-}
-
-function getNewBookHits(){
-
-  let now = new Date();
-
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Book"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
-    })
-  })
-}
-
-function getNewTodayHits(){
-
-  let now = new Date();
-
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Today"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
-    })
-  })
-}
-
-function getNewTomorrowHits(){
-
-  let now = new Date();
-
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Tomorrow"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
-    })
-  })
-}
-
-function getNewSoonHits(){
-
-  let now = new Date();
-
-  return new Promise(function(resolve, reject){
-    M.Button.find({name:"Soon"}, function(err, result){
-      if(err){
-        reject(err);
-      }
-      let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
-    })
-  })
-}
-
-
 
 app.get('/input', function(req, res){
   res.render('input');
