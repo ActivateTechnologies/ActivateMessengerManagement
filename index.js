@@ -37,7 +37,15 @@ app.get('/', function (req, res) {
 })
 
 app.get('/visualize', function (req, res) {
-  res.render('visualize');
+  let now = new Date();
+  A.getNewUsersWeekly(new Date(now.getFullYear(), now.getMonth(), now.getDate()))
+  .then(function(week){
+    console.log(week.join());
+    res.render('visualize', {newUsersWeekly:week.join()});
+  })
+  .catch(function(err){
+    console.log(err);
+  })
 })
 
 app.get('/analytics', function(req, res){
