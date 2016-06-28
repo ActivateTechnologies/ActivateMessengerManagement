@@ -46,6 +46,58 @@ function getNewUsersWeekly(currentDate){
   })
 }
 
+function getNewUsersMonthly(currentDate){
+
+  return new Promise(function(resolve, reject){
+    M.Button.find({name:"Yep"}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      let count = 0;
+      let weekArray = []
+      console.log(new Date(currentDate.getFullYear(), currentDate.getMonth()));
+      for(let i = 0; i < 12; i++){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth() - i) &&
+              item.time < new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1)){
+            count++;
+          }
+        })
+        weekArray.push(count);
+        count = 0;
+      }
+      resolve(weekArray.reverse());
+    })
+  })
+}
+
+function getButtonHitsWeekly(currentDate){
+
+  return new Promise(function(resolve, reject){
+    M.Button.find({}, function(err, result){
+      if(err){
+        reject(err);
+      }
+      let count = 0;
+      let weekArray = []
+      for(let i = 0; i < 7; i++){
+        result.forEach(function(button){
+          button.activity.forEach(function(item){
+            if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i) &&
+                item.time < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i + 1)){
+              count++;
+            }
+          })
+        })
+
+        weekArray.push(count);
+        count = 0;
+      }
+      resolve(weekArray.reverse());
+    })
+  })
+}
+
 function getNewBookHits(){
 
   let now = new Date();
@@ -134,5 +186,7 @@ module.exports = {
   getNewTodayHits: getNewTodayHits,
   getNewTomorrowHits: getNewTomorrowHits,
   getNewSoonHits: getNewSoonHits,
-  getNewUsersWeekly: getNewUsersWeekly
+  getNewUsersWeekly: getNewUsersWeekly,
+  getButtonHitsWeekly: getButtonHitsWeekly,
+  getNewUsersMonthly: getNewUsersMonthly
 }

@@ -38,10 +38,14 @@ app.get('/', function (req, res) {
 
 app.get('/visualize', function (req, res) {
   let now = new Date();
-  A.getNewUsersWeekly(new Date(now.getFullYear(), now.getMonth(), now.getDate()))
-  .then(function(week){
-    console.log(week.join());
-    res.render('visualize', {newUsersWeekly:week.join()});
+  let currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  Promise.all([A.getNewUsersWeekly(currentDate), A.getButtonHitsWeekly(currentDate), A.getNewUsersMonthly(currentDate)])
+  .then(function(answers){
+    res.render('visualize', {
+      newUsersWeekly: answers[0].join(),
+      buttonHitsWeekly: answers[1].join(),
+      newUsersMonthly: answers[2].join()
+    });
   })
   .catch(function(err){
     console.log(err);
