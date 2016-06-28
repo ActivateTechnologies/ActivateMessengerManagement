@@ -35,6 +35,11 @@ app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
+app.get('/visualize', function (req, res) {
+  res.render('visualize');
+})
+
+
 app.get('/analytics', function(req, res){
   Promise.all([getNewUsers(), getNewBookHits(), getNewTodayHits(), getNewTomorrowHits(), getNewSoonHits()])
   .then(function(answers){
