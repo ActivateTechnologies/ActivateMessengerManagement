@@ -44,6 +44,41 @@ function age(sender){
   })
 }
 
+function booked(sender){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Thanks for booking. Do you want to continue looking?",
+        "buttons": [
+          {
+            "type": "postback",
+            "title": "Yes",
+            "payload": "continue"
+          }
+        ]
+      }
+    }
+  }
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+      }
+  })
+}
+
 function text(sender, text) {
     let messageData = { text: text }
 
@@ -274,6 +309,7 @@ function generate_card(array){
 
 module.exports = {
   age: age,
+  booked: booked,
   text: text,
   play: play,
   cards: cards,
