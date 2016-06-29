@@ -218,8 +218,8 @@ app.post('/webhook/', function (req, res) {
             if(result.length > 0){
               result[0].joined.forEach(function(i){
                 if(i.userId === sender){
-                  check = false
-                  send.text("You've already booked the game.");
+                  check = false;
+                  send.text(sender, "You've already booked the game.");
                 }
               })
               if(check){
