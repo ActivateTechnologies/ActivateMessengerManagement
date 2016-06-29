@@ -242,11 +242,12 @@ app.post('/webhook/', function (req, res) {
           console.log(rest);
 
           let arr = rest.split('|');
-          let name = arr[2];
-          let address = arr[3];
-          let latlong = arr[4];
-          let gameId = arr[5];
-          let description = arr[6];
+          let name = arr[1];
+          let address = arr[2];
+          let latlong = arr[3];
+          let gameId = arr[4];
+          let description = arr[5];
+
           console.log(arr);
           console.log("desc");
           console.log(description);
@@ -469,8 +470,6 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 function generate_card_for_booking(gameId, description){
 
   let pl = "Book" + "|" + gameId;
-  console.log(description)
-  console.log(typeof(description));
 
   let template = {
                     "attachment": {
