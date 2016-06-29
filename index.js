@@ -103,6 +103,7 @@ app.post('/input', upload.single('image'), function(req, res){
         image_url: image_url,
         image_name: imagename,
         latlong: req.body.latlong,
+        description: req.body.description,
         when: req.body.when,
         capacity: req.body.capacity
       };
