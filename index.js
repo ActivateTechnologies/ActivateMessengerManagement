@@ -434,7 +434,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
     address = address + " (" + attending + " attending)";
   }
 
-  if(attending == capacity || booked){a
+  if(attending == capacity || booked){
     if(attending == capacity){
       address = address + " (fully booked)";
     }
