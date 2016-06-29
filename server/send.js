@@ -134,11 +134,7 @@ function cards(sender, today_data, day){
     })
 }
 
-function directions(sender, val){
-
-  let arr = val.split("|")
-  let address = arr[0];
-  let latlong = arr[1];
+function directions(sender, address, latlong){
 
   let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
                       "&zoom=15&size=300x300&markers=" + latlong
@@ -152,7 +148,7 @@ function directions(sender, val){
             "template_type": "generic",
             "elements": [
                 {
-                  "title": "Thanks for booking. Here are your directions",
+                  "title": "Directions",
                   "image_url": image_link,
                   "item_url": directions_link,
                   "buttons": [{

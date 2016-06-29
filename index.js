@@ -103,7 +103,7 @@ app.post('/input', upload.single('image'), function(req, res){
         image_url: image_url,
         image_name: imagename,
         latlong: req.body.latlong,
-        description: req.body.description,
+        desc: req.body.desc,
         when: req.body.when,
         capacity: req.body.capacity
       };
@@ -239,15 +239,18 @@ app.post('/webhook/', function (req, res) {
           })
 
           let rest = text.substring(9);
+          console.log(rest);
+
           let arr = rest.split('|');
           let name = arr[2];
           let address = arr[3];
           let latlong = arr[4];
           let gameId = arr[5];
           let description = arr[6];
-          console.log(rest);
 
-          send.cards(sender, generate_card_for_booking(name, address, latlong, gameId, description))
+          send.directions(sender, address, latlong);
+
+          send.cards(sender, generate_card_for_booking(name, latlong, gameId, description))
         }
 
         else {
@@ -273,7 +276,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
               })
 
               today_data = generate_card(today_data);
@@ -303,7 +306,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
               })
 
               today_data = generate_card(today_data);
@@ -333,7 +336,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
               })
 
               today_data = generate_card(today_data);
@@ -460,11 +463,9 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function generate_card_for_booking(name, address, latlong, gameId, description){
+function generate_card_for_booking(name, latlong, gameId, description){
 
   let pl = "Book" + "|" + gameId;
-
-  let directions_link = "http://maps.google.com/?q=" + address;
 
   let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
                       "&zoom=15&size=300x300&markers=" + latlong
@@ -478,7 +479,6 @@ function generate_card_for_booking(name, address, latlong, gameId, description){
                             "title": name,
                             "subtitle": description,
                             "image_url": image_link,
-                            "item_url": directions_link,
                             "buttons": [
                               {
                                 "type": "postback",
