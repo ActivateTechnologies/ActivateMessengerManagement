@@ -245,6 +245,7 @@ app.post('/webhook/', function (req, res) {
           let latlong = arr[4];
           let gameId = arr[5];
           let description = arr[6];
+          console.log(rest);
 
           send.cards(sender, generate_card_for_booking(name, address, latlong, gameId, description))
         }
@@ -468,31 +469,29 @@ function generate_card_for_booking(name, address, latlong, gameId, description){
   let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
                       "&zoom=15&size=300x300&markers=" + latlong
 
-  let element = {
-    "title": name,
-    "subtitle": description,
-    "image_url": image_url,
-    "item_url": directions_link,
-    "buttons": [
-      {
-        "type": "postback",
-        "title": "Book",
-        "payload": pl,
-      },
-      {
-          "type": "postback",
-          "title": "No, thanks",
-          "payload": "No, thanks",
-      }
-    ],
-  }
-
   let template = {
                     "attachment": {
                       "type": "template",
                       "payload": {
                           "template_type": "generic",
-                          "elements": element
+                          "elements": {
+                            "title": name,
+                            "subtitle": description,
+                            "image_url": image_link,
+                            "item_url": directions_link,
+                            "buttons": [
+                              {
+                                "type": "postback",
+                                "title": "Book",
+                                "payload": pl,
+                              },
+                              {
+                                  "type": "postback",
+                                  "title": "No, thanks",
+                                  "payload": "No, thanks",
+                              }
+                            ],
+                          },
                       }
                     }
                   }
