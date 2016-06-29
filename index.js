@@ -244,9 +244,13 @@ app.post('/webhook/', function (req, res) {
           console.log("desc");
           console.log(description);
 
-          send.directions(sender, address, latlong);
-
-          send.cards(sender, send.generate_card_for_booking(gameId, description))
+          send.directions(sender, address, latlong)
+          .then(function(success){
+            send.cards(sender, send.generate_card_for_booking(gameId, description));
+          })
+          .catch(function(err){
+            console.log(err);
+          })
         }
 
         else {
