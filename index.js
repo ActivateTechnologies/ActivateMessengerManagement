@@ -250,7 +250,7 @@ app.post('/webhook/', function (req, res) {
 
           send.directions(sender, address, latlong);
 
-          send.cards(sender, generate_card_for_booking(name, latlong, gameId, description))
+          send.cards(sender, generate_card_for_booking(gameId, description))
         }
 
         else {
@@ -463,23 +463,17 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function generate_card_for_booking(name, latlong, gameId, description){
+function generate_card_for_booking(gameId, description){
 
   let pl = "Book" + "|" + gameId;
-
-  let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
-                      "&zoom=15&size=300x300&markers=" + latlong
 
   let template = {
                     "attachment": {
                       "type": "template",
                       "payload": {
-                          "template_type": "generic",
-                          "elements": {
-                            "title": name,
-                            "subtitle": description,
-                            "image_url": image_link,
-                            "buttons": [
+                          "template_type": "button",
+                          "text": description,
+                          "buttons": [
                               {
                                 "type": "postback",
                                 "title": "Book",
@@ -491,9 +485,8 @@ function generate_card_for_booking(name, latlong, gameId, description){
                                   "payload": "No, thanks",
                               }
                             ],
-                          },
+                          }
                       }
-                    }
                   }
 
   return template;
