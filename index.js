@@ -213,9 +213,22 @@ app.post('/webhook/', function (req, res) {
           let arr = rest.split('|');
           let gameId = arr[2];
 
-          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-            send.directions(sender, rest);
-          });
+          M.Game.find({_id:gameId}, function(err, result){
+            let check = true;
+            if(result.length > 0){
+              result[0].joined.forEach(function(i){
+                if(i.userId === sender){
+                  check = false
+                  send.text("You've already booked the game.");
+                }
+              })
+              if(check){
+                M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
+                  send.directions(sender, rest);
+                });
+              }
+            }
+          })
         }
 
         else {
