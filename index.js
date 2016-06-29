@@ -503,7 +503,7 @@ function generate_card(array){
   let elements = [];
   array.forEach(function(item){
     //name, address, image_url, latlong, gameId, attending, capacity, booked
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]));
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8]));
   });
 
   var template = {
