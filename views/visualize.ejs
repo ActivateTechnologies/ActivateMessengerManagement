@@ -60,7 +60,10 @@
     <script>
       var plot = function(elementid, bardata){
         console.log(bardata);
-        var height = 400, width = 600, barWidth = 50, barOffset = 5;
+        var margin = {top: 20, right: 30, bottom: 30, left: 40},
+        width = 800 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
         var colors = d3.scale.linear()
               .domain([0, d3.max(bardata)])
               .range(['#ffb832', '#c61c6f']);
@@ -73,11 +76,22 @@
              .domain(d3.range(0, bardata.length))
              .rangeBands([0, width]);
 
-        var svg = d3.select(elementid).append('svg')
-            .attr('width', width)
-            .attr('height', height)
+       var xAxis = d3.svg.axis()
+             .scale(xScale)
+             .orient("bottom");
 
-        var g = svg.append('g')
+       var yAxis = d3.svg.axis()
+           .scale(d3.scale.linear()
+                 .domain([d3.max(bardata), 0])
+                 .range([0, height]))
+           .orient("left");
+
+        var svg = d3.select(elementid).append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        var rect = svg
             .selectAll('rect').data(bardata)
             .enter().append('rect')
               .style('fill', colors)
@@ -93,8 +107,23 @@
             .on('mouseout', function(d){
               d3.select(this).style('opacity', 1);
             })
-            
-          g.transition()
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Number");
+
+          rect.transition()
             .attr('height', function(d){
               return yScale(d);
             })

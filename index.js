@@ -323,8 +323,8 @@ app.post('/webhook/', function (req, res) {
 
             M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
 
-              let today_data = [];
-              result.forEach(function(item){
+            let today_data = [];
+            result.forEach(function(item){
                 let booked = false;
                 let join = item.joined;
 
