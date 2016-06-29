@@ -212,7 +212,7 @@ app.post('/webhook/', function (req, res) {
 
           let rest = text.substring(4);
           let arr = rest.split('|');
-          let gameId = arr[2];
+          let gameId = arr[1];
 
           M.Game.find({_id:gameId}, function(err, result){
             let check = true;
@@ -225,11 +225,28 @@ app.post('/webhook/', function (req, res) {
               })
               if(check){
                 M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-                  send.directions(sender, rest);
+                  send.text(sender, "Thanks for booking");
+                  send.play(sender);
                 });
               }
             }
           })
+        }
+
+        else if(text.substring(0, 9) == "More Info"){
+          M.Button.update({name:"More Info"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
+            console.log(err);
+          })
+
+          let rest = text.substring(9);
+          let arr = rest.split('|');
+          let name = arr[2];
+          let address = arr[3];
+          let latlong = arr[4];
+          let gameId = arr[5];
+          let description = arr[6];
+
+          send.cards(sender, generate_card_for_booking(name, address, latlong, gameId, description))
         }
 
         else {
@@ -255,7 +272,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
               })
 
               today_data = generate_card(today_data);
@@ -285,7 +302,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
               })
 
               today_data = generate_card(today_data);
@@ -315,7 +332,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.description]);
               })
 
               today_data = generate_card(today_data);
@@ -399,9 +416,9 @@ app.listen(app.get('port'), function() {
 
 //////////// Data for sending
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description){
 
-  let pl = "Book" + address + "|" + latlong + "|" + gameId;
+  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description;
 
   let directions_link = "http://maps.google.com/?q=" + address;
 
@@ -433,13 +450,54 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "item_url": directions_link,
       "buttons": [{
           "type": "postback",
-          "title": "Book",
+          "title": "More Info",
           "payload": pl,
       }],
     }
 
     return template;
   }
+}
+
+function generate_card_for_booking(name, address, latlong, gameId, description){
+
+  let pl = "Book" + "|" + gameId;
+
+  let directions_link = "http://maps.google.com/?q=" + address;
+
+  let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
+                      "&zoom=15&size=300x300&markers=" + latlong
+
+  let element = {
+    "title": name,
+    "subtitle": description,
+    "image_url": image_url,
+    "item_url": directions_link,
+    "buttons": [
+      {
+        "type": "postback",
+        "title": "Book",
+        "payload": pl,
+      },
+      {
+          "type": "postback",
+          "title": "No, thanks",
+          "payload": "No, thanks",
+      }
+    ],
+  }
+
+  let template = {
+                    "attachment": {
+                      "type": "template",
+                      "payload": {
+                          "template_type": "generic",
+                          "elements": element
+                      }
+                    }
+                  }
+
+  return template;
 }
 
 function generate_card(array){

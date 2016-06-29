@@ -111,7 +111,9 @@ function play(sender) {
 
 function cards(sender, today_data, day){
 
-  text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
+  if(day){
+    text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
+  }
   let messageData = today_data;
 
     request({
@@ -129,55 +131,6 @@ function cards(sender, today_data, day){
             console.log('Error: ', response.body.error)
         }
     })
-}
-
-function directions(sender, val){
-
-  let arr = val.split("|")
-  let address = arr[0];
-  let latlong = arr[1];
-
-  let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
-                      "&zoom=15&size=300x300&markers=" + latlong
-
-  let directions_link = "http://maps.google.com/?q=" + address
-
-  let messageData = {
-    "attachment": {
-        "type": "template",
-        "payload": {
-            "template_type": "generic",
-            "elements": [
-                {
-                  "title": "Thanks for booking. Here are your directions",
-                  "image_url": image_link,
-                  "item_url": directions_link,
-                  "buttons": [{
-                      "type": "web_url",
-                      "title": "Directions",
-                      "url": directions_link,
-                  }],
-              }
-            ]
-        }
-    }
-  }
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-      }
-  })
 }
 
 module.exports = {
