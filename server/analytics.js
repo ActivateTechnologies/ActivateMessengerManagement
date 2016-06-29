@@ -12,12 +12,17 @@ function getNewUsers(){
         reject(err);
       }
       let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
+      if(result.length > 0){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+            count++;
+          }
+        })
+        resolve(count);
+      }
+      else {
+        resolve(0);
+      }
     })
   })
 }
@@ -31,6 +36,9 @@ function getNewUsersWeekly(currentDate){
       }
       let count = 0;
       let weekArray = []
+      if(result.length < 1){
+        resolve(0);
+      }
       for(let i = 0; i < 7; i++){
         result[0].activity.forEach(function(item){
           if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i) &&
@@ -56,6 +64,9 @@ function getNewUsersMonthly(currentDate){
       let count = 0;
       let weekArray = []
       console.log(new Date(currentDate.getFullYear(), currentDate.getMonth()));
+      if(result.length < 1){
+        resolve(0);
+      }
       for(let i = 0; i < 12; i++){
         result[0].activity.forEach(function(item){
           if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth() - i) &&
@@ -136,12 +147,17 @@ function getNewBookHits(){
         reject(err);
       }
       let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
+      if(result.length > 0){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+            count++;
+          }
+        })
+        resolve(count);
+      }
+      else {
+        resolve(0);
+      }
     })
   })
 }
@@ -156,12 +172,17 @@ function getNewTodayHits(){
         reject(err);
       }
       let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
+      if(result.length > 0){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+            count++;
+          }
+        })
+        resolve(count);
+      }
+      else {
+        resolve(0);
+      }
     })
   })
 }
@@ -176,12 +197,17 @@ function getNewTomorrowHits(){
         reject(err);
       }
       let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
+      if(result.length > 0){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+            count++;
+          }
+        })
+        resolve(count);
+      }
+      else {
+        resolve(0);
+      }
     })
   })
 }
@@ -196,12 +222,17 @@ function getNewSoonHits(){
         reject(err);
       }
       let count = 0;
-      result[0].activity.forEach(function(item){
-        if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
-          count++;
-        }
-      })
-      resolve(count);
+      if(result.length > 0){
+        result[0].activity.forEach(function(item){
+          if(item.time > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+            count++;
+          }
+        })
+        resolve(count);
+      }
+      else {
+        resolve(0);
+      }
     })
   })
 }
