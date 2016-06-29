@@ -218,7 +218,7 @@ app.post('/webhook/', function (req, res) {
               })
               if(check){
                 M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-                  send.booked();
+                  send.booked(sender);
                 });
               }
             }
