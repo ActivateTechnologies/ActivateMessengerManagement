@@ -36,20 +36,22 @@ function getNewUsersWeekly(currentDate){
       }
       let count = 0;
       let weekArray = []
-      if(result.length < 1){
-        resolve(0);
+      if(result.length > 0){
+        for(let i = 0; i < 7; i++){
+          result[0].activity.forEach(function(item){
+            if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i) &&
+                item.time < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i + 1)){
+              count++;
+            }
+          })
+          weekArray.push(count);
+          count = 0;
+        }
+        resolve(weekArray.reverse().join());
       }
-      for(let i = 0; i < 7; i++){
-        result[0].activity.forEach(function(item){
-          if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i) &&
-              item.time < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - i + 1)){
-            count++;
-          }
-        })
-        weekArray.push(count);
-        count = 0;
+      else {
+        resolve(0)
       }
-      resolve(weekArray.reverse());
     })
   })
 }
@@ -64,20 +66,22 @@ function getNewUsersMonthly(currentDate){
       let count = 0;
       let weekArray = []
       console.log(new Date(currentDate.getFullYear(), currentDate.getMonth()));
-      if(result.length < 1){
-        resolve(0);
+      if(result.length > 0){
+        for(let i = 0; i < 12; i++){
+          result[0].activity.forEach(function(item){
+            if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth() - i) &&
+                item.time < new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1)){
+              count++;
+            }
+          })
+          weekArray.push(count);
+          count = 0;
+        }
+        resolve(weekArray.reverse().join());
       }
-      for(let i = 0; i < 12; i++){
-        result[0].activity.forEach(function(item){
-          if(item.time > new Date(currentDate.getFullYear(), currentDate.getMonth() - i) &&
-              item.time < new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1)){
-            count++;
-          }
-        })
-        weekArray.push(count);
-        count = 0;
+      else {
+        resolve(0)
       }
-      resolve(weekArray.reverse());
     })
   })
 }
@@ -104,7 +108,7 @@ function getButtonHitsWeekly(currentDate){
         weekArray.push(count);
         count = 0;
       }
-      resolve(weekArray.reverse());
+      resolve(weekArray.reverse().join());
     })
   })
 }
@@ -132,7 +136,7 @@ function getButtonHitsMonthly(currentDate){
         weekArray.push(count);
         count = 0;
       }
-      resolve(weekArray.reverse());
+      resolve(weekArray.reverse().join());
     })
   })
 }

@@ -42,10 +42,10 @@ app.get('/visualize', function (req, res) {
   Promise.all([A.getNewUsersWeekly(currentDate), A.getButtonHitsWeekly(currentDate), A.getNewUsersMonthly(currentDate), A.getButtonHitsMonthly(currentDate)])
   .then(function(answers){
     res.render('visualize', {
-      newUsersWeekly: answers[0].join(),
-      buttonHitsWeekly: answers[1].join(),
-      newUsersMonthly: answers[2].join(),
-      buttonHitsMonthly: answers[3].join()
+      newUsersWeekly: answers[0],
+      buttonHitsWeekly: answers[1],
+      newUsersMonthly: answers[2],
+      buttonHitsMonthly: answers[3]
     });
   })
   .catch(function(err){
@@ -426,7 +426,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
     address = address + " (" + attending + " attending)";
   }
 
-  if(attending == capacity || booked){
+  if(attending == capacity || booked){a
     if(attending == capacity){
       address = address + " (fully booked)";
     }
