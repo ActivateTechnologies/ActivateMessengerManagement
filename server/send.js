@@ -115,7 +115,7 @@ function cards(sender, today_data, day){
     text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
   }
 
-  let messageData = today_data;
+  let messageData = JSON.stringify(today_data);
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
