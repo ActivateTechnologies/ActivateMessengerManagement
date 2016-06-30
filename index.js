@@ -256,95 +256,95 @@ app.post('/webhook/', function (req, res) {
         else {
           switch(text.toLowerCase()){
 
-            case("today"):
-
-            let now = new Date();
-
-            M.Button.update({name:"Today"}, {$push: {activity: {userId:sender, time: now}}}, {upsert: true}, function(err){
-              console.log(err);
-            })
-
-            M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
-
-              let today_data = [];
-              result.forEach(function(item){
-                let booked = false;
-                let join = item.joined;
-
-                join.forEach(function(i){
-                  if(i.userId === sender){
-                    booked = true;
-                  }
-                });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
-              })
-
-              today_data = send.generate_card(today_data);
-              send.cards(sender, today_data, "today");
-
-              send.text(sender, result);
-            })
-            break;
-
-            case("tomorrow"):
-            let now2 = new Date();
-            now2.setDate(now2.getDate()+1);
-
-            M.Button.update({name:"Tomorrow"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-              console.log(err);
-            })
-
-            M.Game.find({when:{$gt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - 1), $lt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate()+1)}}, function(err, result){
-
-              let today_data = [];
-              result.forEach(function(item){
-                let booked = false;
-                let join = item.joined;
-
-                join.forEach(function(i){
-                  if(i.userId === sender){
-                    booked = true;
-                  }
-                });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
-              })
-
-              today_data = send.generate_card(today_data);
-              send.cards(sender, today_data, "today");
-
-              send.text(sender, result);
-            })
-            break;
-
-            case("soon"):
-            let now3 = new Date();
-            now3.setDate(now3.getDate()+2);
-
-            M.Button.update({name:"Soon"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-              console.log(err);
-            })
-
-            M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
-
-            let today_data = [];
-            result.forEach(function(item){
-                let booked = false;
-                let join = item.joined;
-
-                join.forEach(function(i){
-                  if(i.userId === sender){
-                    booked = true;
-                  }
-                });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
-              })
-
-              today_data = send.generate_card(today_data);
-              send.cards(sender, today_data, "today");
-
-              send.text(sender, result);
-            })
-            break;
+            // case("today"):
+            //
+            // let now = new Date();
+            //
+            // M.Button.update({name:"Today"}, {$push: {activity: {userId:sender, time: now}}}, {upsert: true}, function(err){
+            //   console.log(err);
+            // })
+            //
+            // M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
+            //
+            //   let today_data = [];
+            //   result.forEach(function(item){
+            //     let booked = false;
+            //     let join = item.joined;
+            //
+            //     join.forEach(function(i){
+            //       if(i.userId === sender){
+            //         booked = true;
+            //       }
+            //     });
+            //     today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+            //   })
+            //
+            //   today_data = send.generate_card(today_data);
+            //   send.cards(sender, today_data, "today");
+            //
+            //   send.text(sender, result);
+            // })
+            // break;
+            //
+            // case("tomorrow"):
+            // let now2 = new Date();
+            // now2.setDate(now2.getDate()+1);
+            //
+            // M.Button.update({name:"Tomorrow"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
+            //   console.log(err);
+            // })
+            //
+            // M.Game.find({when:{$gt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate() - 1), $lt: new Date(now2.getFullYear(), now2.getMonth(), now2.getDate()+1)}}, function(err, result){
+            //
+            //   let today_data = [];
+            //   result.forEach(function(item){
+            //     let booked = false;
+            //     let join = item.joined;
+            //
+            //     join.forEach(function(i){
+            //       if(i.userId === sender){
+            //         booked = true;
+            //       }
+            //     });
+            //     today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
+            //   })
+            //
+            //   today_data = send.generate_card(today_data);
+            //   send.cards(sender, today_data, "today");
+            //
+            //   send.text(sender, result);
+            // })
+            // break;
+            //
+            // case("soon"):
+            // let now3 = new Date();
+            // now3.setDate(now3.getDate()+2);
+            //
+            // M.Button.update({name:"Soon"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
+            //   console.log(err);
+            // })
+            //
+            // M.Game.find({when:{$gt: new Date(now3.getFullYear(), now3.getMonth(), now3.getDate() - 1)}}, function(err, result){
+            //
+            // let today_data = [];
+            // result.forEach(function(item){
+            //     let booked = false;
+            //     let join = item.joined;
+            //
+            //     join.forEach(function(i){
+            //       if(i.userId === sender){
+            //         booked = true;
+            //       }
+            //     });
+            //     today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
+            //   })
+            //
+            //   today_data = send.generate_card(today_data);
+            //   send.cards(sender, today_data, "today");
+            //
+            //   send.text(sender, result);
+            // })
+            // break;
 
             case("yep"):
 
@@ -399,7 +399,28 @@ app.post('/webhook/', function (req, res) {
             break;
 
             default:
-            send.play(sender);
+            // send.play(sender);
+            let now = new Date();
+
+            M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+
+              let today_data = [];
+              result.forEach(function(item){
+                let booked = false;
+                let join = item.joined;
+
+                join.forEach(function(i){
+                  if(i.userId === sender){
+                    booked = true;
+                  }
+                });
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+              })
+
+              today_data = send.generate_card(today_data);
+              send.cards(sender, today_data, "today");
+            })
+
           }
         }
       }
