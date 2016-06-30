@@ -401,7 +401,27 @@ app.post('/webhook/', function (req, res) {
               console.log(err);
             })
             M.User.update({userId: sender}, {eligible: true}, function(){
-              send.play(sender);
+              // send.play(sender);
+              let now = new Date();
+
+              M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+
+                let today_data = [];
+                result.forEach(function(item){
+                  let booked = false;
+                  let join = item.joined;
+
+                  join.forEach(function(i){
+                    if(i.userId === sender){
+                      booked = true;
+                    }
+                  });
+                  today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+                })
+
+                today_data = send.generate_card(today_data);
+                send.cards(sender, today_data, "today");
+              })
             });
             break;
 
