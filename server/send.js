@@ -220,7 +220,7 @@ function directions(sender, address, latlong){
   })
 }
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description, when){
 
   let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description;
 
@@ -229,6 +229,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   if (attending > 0){
     address = address + " (" + attending + " attending)";
   }
+
+  address = when + " " + address;
 
   if(attending == capacity || booked){
     if(attending == capacity){
@@ -295,8 +297,8 @@ function generate_card_for_booking(gameId, description){
 function generate_card(array){
   let elements = [];
   array.forEach(function(item){
-    //name, address, image_url, latlong, gameId, attending, capacity, booked
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8]));
+    //name, address, image_url, latlong, gameId, attending, capacity, booked, description, when
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9]));
   });
 
   var template = {

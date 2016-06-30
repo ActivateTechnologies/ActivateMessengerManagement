@@ -82,7 +82,7 @@
                 + "<p>" + "<b>Address: </b>" + item.address + "</p>"
                 + "<p>" + "<b>Image Link: </b>" + item.image_url + "</p>"
                 + "<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>"
-                + "<p>" + "<b>When: </b>" + item.when + "</p>"
+                + "<p>" + "<b>When: </b>" + item.when.substring(8, 10) + "/" + item.when.substring(5,7) + "/" + item.when.substring(0, 4) + "</p>"
                 + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
                 + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
                 + "<p>" + "<b>id: </b>" + item._id + "</p>"
