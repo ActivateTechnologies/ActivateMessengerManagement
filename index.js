@@ -276,7 +276,7 @@ app.post('/webhook/', function (req, res) {
                     booked = true;
                   }
                 });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc]);
+                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
               })
 
               today_data = send.generate_card(today_data);
