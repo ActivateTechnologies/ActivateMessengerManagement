@@ -230,7 +230,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
     address = address + " (" + attending + " attending)";
   }
 
-  address = when + " " + address;
+  address = when.substring(0, 10) + "\n" + address;
 
   if(attending == capacity || booked){
     if(attending == capacity){
