@@ -303,8 +303,6 @@ app.post('/webhook/', function (req, res) {
             //
             //   today_data = send.generate_card(today_data);
             //   send.cards(sender, today_data, "today");
-            //
-            //   send.text(sender, result);
             // })
             // break;
             //
@@ -333,8 +331,6 @@ app.post('/webhook/', function (req, res) {
             //
             //   today_data = send.generate_card(today_data);
             //   send.cards(sender, today_data, "today");
-            //
-            //   send.text(sender, result);
             // })
             // break;
             //
@@ -363,8 +359,6 @@ app.post('/webhook/', function (req, res) {
             //
             //   today_data = send.generate_card(today_data);
             //   send.cards(sender, today_data, "today");
-            //
-            //   send.text(sender, result);
             // })
             // break;
 
@@ -453,6 +447,8 @@ app.post('/webhook/', function (req, res) {
 })
 
 
-app.listen(app.get('port'), function() {
+let server = app.listen(app.get('port'), function() {
   console.log('running on port', app.get('port'));
 })
+
+module.exports = server;

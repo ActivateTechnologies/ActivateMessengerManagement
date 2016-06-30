@@ -65,7 +65,6 @@ function getNewUsersMonthly(currentDate){
       }
       let count = 0;
       let weekArray = []
-      console.log(new Date(currentDate.getFullYear(), currentDate.getMonth()));
       if(result.length > 0){
         for(let i = 0; i < 12; i++){
           result[0].activity.forEach(function(item){
