@@ -151,7 +151,7 @@ function cards(sender, today_data, day){
   // }
 
   if(day){
-    text(sender, "Here are some upcoming games. Tap the card to get directions.");
+    text(sender, "Here are some upcoming games. Tap the card for directions or 'More Info' to book.");
   }
 
   let messageData = today_data;
@@ -282,12 +282,12 @@ function generate_card_for_booking(gameId, description){
                           "buttons": [
                               {
                                 "type": "postback",
-                                "title": "Book",
+                                "title": "BOOK",
                                 "payload": pl,
                               },
                               {
                                   "type": "postback",
-                                  "title": "No, thanks",
+                                  "title": "Keep Looking",
                                   "payload": "No, thanks",
                               }
                             ],
