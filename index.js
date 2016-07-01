@@ -73,6 +73,10 @@ app.get('/input', function(req, res){
   res.render('input');
 })
 
+app.get('/policy', function(req, res){
+  res.render('policy');
+})
+
 app.post('/input', upload.single('image'), function(req, res){
 
   console.log(req.file);
