@@ -1,7 +1,7 @@
 var plot = function(elementid, bardata){
   console.log(bardata);
   var margin = {top: 20, right: 30, bottom: 30, left: 40},
-  width = 480 - margin.left - margin.right,
+  width = 420 - margin.left - margin.right,
   height = 300 - margin.top - margin.bottom;
 
   var colors = d3.scale.linear()

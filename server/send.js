@@ -151,7 +151,7 @@ function cards(sender, today_data, day){
   // }
 
   if(day){
-    text(sender, "Here are some upcoming games. Tap the card for directions or 'More Info' to book.");
+    text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
   }
 
   let messageData = today_data;
