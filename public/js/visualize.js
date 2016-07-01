@@ -1,8 +1,8 @@
 var plot = function(elementid, bardata){
   console.log(bardata);
   var margin = {top: 20, right: 30, bottom: 30, left: 40},
-  width = 800 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
+  width = 480 - margin.left - margin.right,
+  height = 300 - margin.top - margin.bottom;
 
   var colors = d3.scale.linear()
         .domain([0, d3.max(bardata)])
@@ -24,7 +24,8 @@ var plot = function(elementid, bardata){
      .scale(d3.scale.linear()
            .domain([d3.max(bardata), 0])
            .range([0, height]))
-     .orient("left");
+     .orient("left")
+     .ticks(5);
 
   var svg = d3.select(elementid).append('svg')
       .attr('width', width + margin.left + margin.right)
@@ -48,10 +49,10 @@ var plot = function(elementid, bardata){
         d3.select(this).style('opacity', 1);
       })
 
-// svg.append("g")
-//     .attr("class", "x axis")
-//     .attr("transform", "translate(0," + height + ")")
-//     .call(xAxis);
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
 svg.append("g")
     .attr("class", "y axis")

@@ -12,6 +12,31 @@
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
     <style media="screen">
+
+    body {
+      background: #626C76;
+      background: -webkit-linear-gradient(#626C76, #3D435D); /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient(#626C76, #3D435D); /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient(#626C76, #3D435D); /* For Firefox 3.6 to 15 */
+      background: linear-gradient(#626C76, #3D435D); /* Standard syntax */
+    }
+
+    .card {
+      background: #F0EFED;
+    }
+
+    h1 {
+      text-align: center;
+      color: #dddddd;
+    }
+
+    h3 {
+      text-align: center;
+      padding-top: 20px;
+      color: #766F62;
+      font-size: 20px;
+    }
+
     .bar {
       fill: steelblue;
     }
@@ -23,7 +48,7 @@
     .axis path,
     .axis line {
       fill: none;
-      stroke: #000;
+      stroke: #333;
       shape-rendering: crispEdges;
     }
 
@@ -36,24 +61,34 @@
     <div class="container">
       <h1>Visualize</h1>
 
-      <h3>New Users per week</h3>
-      <div id="newusersperweek">
-
+      <div class="row">
+        <div class="col l6">
+          <div class="card z-depth-3">
+            <h3>New Users Last Week</h3>
+            <div id="newusersperweek"></div>
+          </div>
+        </div>
+        <div class="col l6">
+          <div class="card z-depth-3">
+            <h3>Button Hit Last Week</h3>
+            <div id="buttonHitsWeekly"></div>
+          </div>
+        </div>
       </div>
 
-      <h3>Button hits per week</h3>
-      <div id="buttonHitsWeekly">
-
-      </div>
-
-      <h3>New Users per Month</h3>
-      <div id="newuserspermonth">
-
-      </div>
-
-      <h3>Button hits per Month</h3>
-      <div id="buttonHitsMonthly">
-
+      <div class="row">
+        <div class="col l6">
+          <div class="card z-depth-3">
+            <h3>New Users Per Month</h3>
+            <div id="newuserspermonth"></div>
+          </div>
+        </div>
+        <div class="col l6">
+          <div class="card z-depth-3">
+            <h3>Button Hits Per Month</h3>
+            <div id="buttonHitsMonthly"></div>
+          </div>
+        </div>
       </div>
     </div>
 
