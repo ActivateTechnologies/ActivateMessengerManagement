@@ -400,29 +400,40 @@ app.post('/webhook/', function (req, res) {
             M.Button.update({name:"Eligible"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
               console.log(err);
             })
-            M.User.update({userId: sender}, {eligible: true}, function(){
-              // send.play(sender);
-              let now = new Date();
+            M.User.find({userId:sender}, function(e, res){
+              if(e){
+                console.log(e);
+              }
+              if('eligible' in res[0]){
+                send.text(sender, "Mwhahaha!")
+              }
+              else {
+                M.User.update({userId: sender}, {eligible: true}, function(){
+                  // send.play(sender);
+                  let now = new Date();
 
-              M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+                  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
 
-                let today_data = [];
-                result.forEach(function(item){
-                  let booked = false;
-                  let join = item.joined;
+                    let today_data = [];
+                    result.forEach(function(item){
+                      let booked = false;
+                      let join = item.joined;
 
-                  join.forEach(function(i){
-                    if(i.userId === sender){
-                      booked = true;
-                    }
-                  });
-                  today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
-                })
+                      join.forEach(function(i){
+                        if(i.userId === sender){
+                          booked = true;
+                        }
+                      });
+                      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+                    })
 
-                today_data = send.generate_card(today_data);
-                send.cards(sender, today_data, "today");
-              })
-            });
+                    today_data = send.generate_card(today_data);
+                    send.cards(sender, today_data, "today");
+                  })
+                });
+              }
+            })
+
             break;
 
             case("notover"):
