@@ -405,7 +405,7 @@ app.post('/webhook/', function (req, res) {
                 console.log(e);
               }
               if('eligible' in res[0]){
-                // send.text(sender, "Mwhahaha!")
+                send.text(sender, "Mwhahaha!")
               }
               else {
                 M.User.update({userId: sender}, {eligible: true}, function(){
