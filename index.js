@@ -13,7 +13,7 @@ const M = require('./server/schemas.js')
 const A = require('./server/analytics.js')
 const send = require('./server/send.js')
 const AWS = require('aws-sdk');
-const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBAI4WvkwZBurwvsandFrq7finnhpWWmYRgaYfXqPWG2rbYO3nkyA0T8lXNlktZCBH4hjtdNlXz92phKIFov4jwZAG45k4FGuPuH16rwuK7DYXiyLMu5QG8v2HRwlaOboPw33ZBYe2ZCqkYkZBdk996CtnWZAXqJb4wZDZD"
 const accessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
 const secretAccessKey = "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";
 
