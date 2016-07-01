@@ -2,7 +2,7 @@
 
 const request = require('request')
 
-const VERIFICATION_TOKEN = "EAACDZA59ohMoBABJdOkXYV0Q7MYE7ZA2U6eXbpCiOZBWytmh66xQ8Sg2yD8hcj61FtqQO4AnsFsZBRZCgXdE1a7eFKQ44v2OjCZC9JYXVbWhuosM5OGdEiZBT4FcdGfd9VZClBljY42ByWbiRxEH0y52RvPVeAo6c4JZBzJDVXcHQoAZDZD"
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBAI4WvkwZBurwvsandFrq7finnhpWWmYRgaYfXqPWG2rbYO3nkyA0T8lXNlktZCBH4hjtdNlXz92phKIFov4jwZAG45k4FGuPuH16rwuK7DYXiyLMu5QG8v2HRwlaOboPw33ZBYe2ZCqkYkZBdk996CtnWZAXqJb4wZDZD"
 
 function age(sender){
   let messageData = {
@@ -21,6 +21,41 @@ function age(sender){
             "type": "postback",
             "title": "No",
             "payload": "notover"
+          }
+        ]
+      }
+    }
+  }
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+      }
+  })
+}
+
+function start(sender){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+        "buttons": [
+          {
+            "type": "postback",
+            "title": "Yep",
+            "payload": "yep"
           }
         ]
       }
@@ -320,6 +355,7 @@ function generate_card(array){
 
 
 module.exports = {
+  start: start,
   age: age,
   booked: booked,
   text: text,
