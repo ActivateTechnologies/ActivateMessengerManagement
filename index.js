@@ -266,7 +266,7 @@ app.post('/webhook/', function (req, res) {
           console.log("desc");
           console.log(description);
 
-          send.directions(sender, address, latlong)
+          send.directions(sender, name, address, latlong)
           .then(function(success){
             send.cards(sender, send.generate_card_for_booking(gameId, description));
           })

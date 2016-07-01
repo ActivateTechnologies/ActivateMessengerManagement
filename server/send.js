@@ -173,7 +173,7 @@ function cards(sender, today_data, day){
     })
 }
 
-function directions(sender, address, latlong){
+function directions(sender, name, address, latlong){
 
   return new Promise(function(resolve, reject){
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
@@ -188,7 +188,7 @@ function directions(sender, address, latlong){
               "template_type": "generic",
               "elements": [
                   {
-                    "title": "Directions",
+                    "title": name,
                     "image_url": image_link,
                     "item_url": directions_link,
                     "buttons": [{
