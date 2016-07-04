@@ -36,9 +36,44 @@ passport.use(new FacebookStrategy({
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:3000/visualize"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
+  function(accessToken, refreshToken, profile, done) {
+
+    User.findOne({facebookID: profile.id }, function(err, user) {
+      if (err)
+        return done(err);
+
+      // if the user is found, then log them in
+      if (user) {
+        return done(null, user); // user found, return that user
+      }
+      else {
+        // if there is no user found with that facebook id, create them
+        var newUser = new User();
+
+        let user = M.User({
+          facebookID: profile.id,
+          facebookAccessToken: accessToken,
+          firstname: profile.name.givenName,
+          lastname: profile.name.familyName,
+          email: profile.emails[0].value
+        })
+
+        user.save(function(err){
+          if(err){
+            console.log(err);
+          } else {
+            send.age(sender);
+            console.log("saved it!");
+          }
+        })
+        // save our user to the database
+        newUser.save(function(err) {
+          if (err)
+            throw err;
+
+          return done(null, user);
+        });
+      }
     });
   }
 ));
