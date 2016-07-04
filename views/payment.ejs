@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Book the game</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="card">
+        <form id="pay" method="POST" action="/pay">
+          <div class="input-field" style="display:none">
+            <input name="gameId" type="text" class="validate" value="<%=gameId%>">
+          </div>
+          <div class="input-field">
+            <input name="number" type="text" class="validate" required>
+            <label for="number">Number</label>
+          </div>
+          <div class="input-field">
+            <input name="month" type="text" class="validate" required>
+            <label for="month">Expiry Month</label>
+          </div>
+          <div class="input-field">
+            <input name="year" type="text" class="validate" required>
+            <label for="year">Expiry Year</label>
+          </div>
+          <div class="input-field">
+            <input name="cvc" type="text" class="validate" required>
+            <label for="cvc">CVC</label>
+          </div>
+          <input type="submit" class="btn" value="Submit"/>
+        </form>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $('#pay').submit(function(event){
+        event.preventDefault();
+        var name = $('#name').val();
+        var address = $('#address').val();
+        var image_url = $("#image_url").val();
+        var latlong = $("#latlong").val();
+        var when = $('#when').val();
+        var data = {
+          name: name,
+          address: address,
+          image_url: image_url,
+          latlong: latlong,
+          when: when
+        }
+        $.ajax({
+          type: "POST",
+          url: "/input",
+          data: data,
+          success: function(result){
+            console.log("result");
+          }
+        })
+      })
+    </script>
+
+  </body>
+</html>
