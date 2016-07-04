@@ -48,8 +48,6 @@ passport.use(new FacebookStrategy({
       }
       else {
         // if there is no user found with that facebook id, create them
-        var newUser = new User();
-
         let user = M.User({
           facebookID: profile.id,
           facebookAccessToken: accessToken,
@@ -62,17 +60,9 @@ passport.use(new FacebookStrategy({
           if(err){
             console.log(err);
           } else {
-            send.age(sender);
-            console.log("saved it!");
+            done(null, user);
           }
         })
-        // save our user to the database
-        newUser.save(function(err) {
-          if (err)
-            throw err;
-
-          return done(null, user);
-        });
       }
     });
   }
@@ -95,7 +85,17 @@ app.get('/login',
     // Successful authentication, redirect home.
     console.log(req.user);
     res.redirect('/');
+});
+
+app.get('/pay:gameId', function(req, res){
+  res.render('/payment', {
+    gameId: req.params.version
   });
+})
+
+app.post('/pay', function(req, res){
+
+})
 
 app.get('/visualize', function (req, res) {
   let now = new Date();
@@ -130,12 +130,12 @@ app.get('/analytics', function(req, res){
   })
 })
 
-app.get('/input', function(req, res){
-  res.render('input');
-})
-
 app.get('/policy', function(req, res){
   res.render('policy');
+})
+
+app.get('/input', function(req, res){
+  res.render('input');
 })
 
 app.post('/input', upload.single('image'), function(req, res){
@@ -196,7 +196,6 @@ app.post('/input', upload.single('image'), function(req, res){
   res.render('input');
 });
 
-
 app.get('/today', function(req, res){
   let now = new Date();
   M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), $lt: new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)}}, function(err, result){
@@ -250,8 +249,6 @@ app.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result[0].eligible){
-            // let text = event.message.text;
-            // send.play(sender);
 
             let now = new Date();
 

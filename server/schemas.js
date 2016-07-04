@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
 
 let userSchema = new Schema({
-  messengerID: String,
+  userID: String, //messenger user ID
   facebookID: String,
   facebookAccessToken: String,
   email: String,
