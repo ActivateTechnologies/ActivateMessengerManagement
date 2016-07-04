@@ -2,7 +2,7 @@
 
 const request = require('request')
 
-const VERIFICATION_TOKEN = "EAACDZA59ohMoBAI4WvkwZBurwvsandFrq7finnhpWWmYRgaYfXqPWG2rbYO3nkyA0T8lXNlktZCBH4hjtdNlXz92phKIFov4jwZAG45k4FGuPuH16rwuK7DYXiyLMu5QG8v2HRwlaOboPw33ZBYe2ZCqkYkZBdk996CtnWZAXqJb4wZDZD"
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
 
 function age(sender){
   let messageData = {
