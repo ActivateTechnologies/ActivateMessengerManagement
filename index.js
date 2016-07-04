@@ -6,6 +6,8 @@ const bodyParser = require('body-parser')
 const request = require('request')
 const multer = require('multer')
 const fs = require('fs')
+const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy
 const app = express()
 
 
@@ -14,6 +16,10 @@ const A = require('./server/analytics.js')
 const send = require('./server/send.js')
 const AWS = require('aws-sdk');
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
+
+const FACEBOOK_APP_ID = "144481079297226"
+const FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d"
+
 const accessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
 const secretAccessKey = "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";
 
@@ -25,6 +31,18 @@ AWS.config.update({
 let s3 = new AWS.S3();
 let upload = multer({dest:'uploads/'});
 
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/visualize"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
@@ -35,6 +53,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
+
+app.get('/login',
+  passport.authenticate('facebook', { failureRedirect: '/analytics' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    console.log(req.user);
+    res.redirect('/');
+  });
 
 app.get('/visualize', function (req, res) {
   let now = new Date();
