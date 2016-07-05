@@ -269,8 +269,6 @@ app.post('/webhook/', function (req, res) {
 
       let sender = event.sender.id;
       console.log(sender);
-      console.log(typeof(sender));
-      console.log("Here's the sender id");
 
       if (event.message && event.message.text) {
 
