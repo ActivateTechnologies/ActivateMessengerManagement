@@ -44,9 +44,7 @@ app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
-app.use(session({ secret: 'keyboard cat' }))
 app.use(passport.initialize());
-app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 passport.use(new FacebookStrategy({
@@ -56,67 +54,60 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName', 'email', 'birthday']
   },
   function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function(){
+      var birthday = new Date(profile._json.birthday);
+      var now = new Date();
 
-    M.User.findOne({facebookID: profile.id }, function(err, user) {
-      if (err)
-        return done(err);
+      if(now.getFullYear() - birthday.getFullYear() > 16){
+        M.User.find({facebookID: profile.id}, function(e, result){
+          if(e)
+            console.log(e);
 
-      // if the user is found, then log them in
-      if (user) {
-        return done(null, user); // user found, return that user
+          if(result.length < 1){
+            let user = M.User({
+              facebookID: profile.id,
+              name: profile.displayName,
+              email: profile.emails[0].value
+            })
+
+            user.save(function(err){
+              if(err){
+                console.log(err);
+                done(err);
+              } else {
+                console.log("saved");
+                done(null, user);
+              }
+            })
+          }
+          else {
+            done(null, profile);
+          }
+        })
+
       }
       else {
-        // if there is no user found with that facebook id, create them
-
-        var birthday = new Date(profile._json.birthday);
-        var now = new Date();
-
-        if(now.getFullYear() - birthday.getFullYear() > 16){
-          // let user = M.User({
-          //   facebookID: profile.id,
-          //   name: profile.displayName,
-          //   email: profile.emails[0].value
-          // })
-
-          // user.save(function(err){
-          //   if(err){
-          //     console.log(err);
-          //   } else {
-          //     done(null, user);
-          //   }
-          // })
-        } else {
-          console.log("not old enough to use the app");
-        }
+        console.log("not old enough to use the app");
+        done(null, profile);
       }
-    });
-
-    done(null, profile);
+    })
   }
 ));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
 
 
 app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
-app.get('/facebook', passport.authenticate('facebook', { scope: ['email', 'user_birthday'] }));
+app.get('/facebook', passport.authenticate('facebook', { session: false, scope: ['email', 'user_birthday'] }));
 
 app.get('/callback', passport.authenticate('facebook', {
+  session: false,
   successRedirect: '/profile',
   failureRedirect: '/analytics'
 }));
 
 app.get('/profile', function(req, res){
-  console.log(req.user);
   res.send(req.user)
 })
 
