@@ -14,7 +14,7 @@ function link(sender){
           "title": "Welcome to Kickabout",
           "buttons": [{
             "type": "account_link",
-            "url": "http://kickabouttest.herokuapp.com/"
+            "url": "http://kickabouttest.herokuapp.com/facebook"
           }]
         }]
       }
