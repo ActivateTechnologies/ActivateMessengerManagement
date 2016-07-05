@@ -4,25 +4,19 @@ const request = require('request')
 
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
 
-function age(sender){
+function link(sender){
   let messageData = {
     "attachment": {
       "type": "template",
       "payload": {
-        "template_type": "button",
-        "text": "Are you over 16?",
-        "buttons": [
-          {
-            "type": "postback",
-            "title": "Yes",
-            "payload": "over"
-          },
-          {
-            "type": "postback",
-            "title": "No",
-            "payload": "notover"
-          }
-        ]
+        "template_type": "generic",
+        "elements": [{
+          "title": "Welcome to Kickabout",
+          "buttons": [{
+            "type": "account_link",
+            "url": "http://kickabouttest.herokuapp.com/"
+          }]
+        }]
       }
     }
   }

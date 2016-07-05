@@ -5,7 +5,6 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
 const multer = require('multer')
-const session = require('express-session')
 const fs = require('fs')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
@@ -50,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/callback",
+    callbackURL: "http://kickabouttest.herokuapp.com/callback",
     profileFields: ['id', 'displayName', 'email', 'birthday']
   },
   function(accessToken, refreshToken, profile, done) {
@@ -458,85 +457,8 @@ app.post('/webhook/', function (req, res) {
             M.Button.update({name:"Yep"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
               console.log(err);
             })
+            send.link(sender);
 
-            var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-
-            request(get_url, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-
-                  body = JSON.parse(body);
-
-                  let user = M.User({
-                    userId: sender,
-                    firstname: body.first_name,
-                    lastname: body.last_name,
-                    profile_pic: body.profile_pic,
-                    locale: body.locale,
-                    gender: body.gender
-                  })
-
-                  user.save(function(err){
-                    if(err){
-                      console.log(err);
-                    } else {
-                      send.age(sender);
-                      console.log("saved it!");
-                    }
-                  })
-                }
-            });
-            break;
-
-            case("over"):
-            M.Button.update({name:"Eligible"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-              console.log(err);
-            })
-            M.User.find({userId:sender}, function(e, res){
-              if(e){
-                console.log(e);
-              }
-              if('eligible' in res[0]){
-                console.log("This is true");
-                if(res[0].eligible === false){
-                  // send.text(sender, "Mwhahaha!")
-                }
-                else {
-                  M.User.update({userId: sender}, {eligible: true}, function(){
-                    // send.play(sender);
-                    let now = new Date();
-
-                    M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
-
-                      let today_data = [];
-                      result.forEach(function(item){
-                        let booked = false;
-                        let join = item.joined;
-
-                        join.forEach(function(i){
-                          if(i.userId === sender){
-                            booked = true;
-                          }
-                        });
-                        today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
-                      })
-
-                      today_data = send.generate_card(today_data);
-                      send.cards(sender, today_data, "today");
-                    })
-                  });
-                }
-              }
-            })
-
-            break;
-
-            case("notover"):
-            M.Button.update({name:"Not Eligible"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
-              console.log(err);
-            })
-            M.User.update({userId: sender}, {eligible: false}, function(){
-              send.text(sender, "Sorry, you're not old enough");
-            });
             break;
 
             default:
