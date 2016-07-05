@@ -346,8 +346,8 @@ app.post('/webhook/', function (req, res) {
             M.Button.update({name:"Yep"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
               console.log(err);
             })
-            send.text(sender, "some text");
-            send.link(sender);
+            send.text(sender.toString(), "some text");
+            send.link(sender.toString());
 
             break;
 
