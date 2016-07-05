@@ -350,7 +350,7 @@ function generate_card(array){
 
 module.exports = {
   start: start,
-  age: age,
+  link: link,
   booked: booked,
   text: text,
   play: play,
