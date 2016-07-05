@@ -267,7 +267,10 @@ app.post('/webhook/', function (req, res) {
 
     messaging_events.forEach(function(event){
 
-      let sender = event.sender.id
+      let sender = event.sender.id;
+      console.log(sender);
+      console.log(typeof(sender));
+      console.log("Here's the sender id");
 
       if (event.message && event.message.text) {
 
@@ -346,8 +349,8 @@ app.post('/webhook/', function (req, res) {
             M.Button.update({name:"Yep"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
               console.log(err);
             })
-            send.text(sender.toString(), "some text");
-            send.link(sender.toString());
+            send.text(sender, "some text");
+            send.link(sender);
 
             break;
 
