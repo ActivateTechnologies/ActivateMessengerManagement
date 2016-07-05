@@ -38,61 +38,73 @@ AWS.config.update({
 let s3 = new AWS.S3();
 let upload = multer({dest:'uploads/'});
 
-passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/visualize"
-  },
-  function(accessToken, refreshToken, profile, done) {
-
-    User.findOne({facebookID: profile.id }, function(err, user) {
-      if (err)
-        return done(err);
-
-      // if the user is found, then log them in
-      if (user) {
-        return done(null, user); // user found, return that user
-      }
-      else {
-        // if there is no user found with that facebook id, create them
-        let user = M.User({
-          facebookID: profile.id,
-          facebookAccessToken: accessToken,
-          firstname: profile.name.givenName,
-          lastname: profile.name.familyName,
-          email: profile.emails[0].value
-        })
-
-        user.save(function(err){
-          if(err){
-            console.log(err);
-          } else {
-            done(null, user);
-          }
-        })
-      }
-    });
-  }
-));
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+
+    // M.User.findOne({facebookID: profile.id }, function(err, user) {
+    //   if (err)
+    //     return done(err);
+    //
+    //   // if the user is found, then log them in
+    //   if (user) {
+    //     return done(null, user); // user found, return that user
+    //   }
+    //   else {
+    //     // if there is no user found with that facebook id, create them
+    //     let user = M.User({
+    //       facebookID: profile.id,
+    //       facebookAccessToken: accessToken,
+    //       firstname: profile.name.givenName,
+    //       lastname: profile.name.familyName,
+    //       email: profile.emails[0].value
+    //     })
+    //
+    //     user.save(function(err){
+    //       if(err){
+    //         console.log(err);
+    //       } else {
+    //         done(null, user);
+    //       }
+    //     })
+    //   }
+    // });
+
+    done(null, profile);
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 
 app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
-app.get('/login',
-  passport.authenticate('facebook', { failureRedirect: '/analytics' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    console.log(req.user);
-    res.redirect('/');
-});
+app.get('/facebook', passport.authenticate('facebook'));
+
+app.get('/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/analytics'
+}));
 
 app.get('/pay:gameId', function(req, res){
   res.render('/payment', {
