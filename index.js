@@ -280,35 +280,36 @@ app.post('/webhook/', function (req, res) {
       let sender = event.sender.id
 
       if (event.message && event.message.text) {
-        M.User.find({userId: sender}, function(err, result){
-          if(result[0].eligible){
-
-            let now = new Date();
-
-            M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
-
-              let today_data = [];
-              result.forEach(function(item){
-                let booked = false;
-                let join = item.joined;
-
-                join.forEach(function(i){
-                  if(i.userId === sender){
-                    booked = true;
-                  }
-                });
-                today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
-              })
-
-              today_data = send.generate_card(today_data);
-              send.cards(sender, today_data, "today");
-            })
-
-          }
-          else {
-            send.text(sender, "Sorry, you're not old enough to play");
-          }
-        })
+        // M.User.find({userId: sender}, function(err, result){
+        //   if(result[0].eligible){
+        //
+        //     let now = new Date();
+        //
+        //     M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+        //
+        //       let today_data = [];
+        //       result.forEach(function(item){
+        //         let booked = false;
+        //         let join = item.joined;
+        //
+        //         join.forEach(function(i){
+        //           if(i.userId === sender){
+        //             booked = true;
+        //           }
+        //         });
+        //         today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+        //       })
+        //
+        //       today_data = send.generate_card(today_data);
+        //       send.cards(sender, today_data, "today");
+        //     })
+        //
+        //   }
+        //   else {
+        //     send.text(sender, "Sorry, you're not old enough to play");
+        //   }
+        // })
+        send.text(sender, "Hi, there");
       }
 
       else if (event.postback) {
