@@ -5,6 +5,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const request = require('request')
 const multer = require('multer')
+const session = require('express-session')
 const fs = require('fs')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
@@ -43,6 +44,7 @@ app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(session({ secret: 'keyboard cat' }))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,37 +52,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/callback"
+    callbackURL: "http://localhost:3000/callback",
+    profileFields: ['id', 'displayName', 'email', 'birthday']
   },
   function(accessToken, refreshToken, profile, done) {
 
-    // M.User.findOne({facebookID: profile.id }, function(err, user) {
-    //   if (err)
-    //     return done(err);
-    //
-    //   // if the user is found, then log them in
-    //   if (user) {
-    //     return done(null, user); // user found, return that user
-    //   }
-    //   else {
-    //     // if there is no user found with that facebook id, create them
-    //     let user = M.User({
-    //       facebookID: profile.id,
-    //       facebookAccessToken: accessToken,
-    //       firstname: profile.name.givenName,
-    //       lastname: profile.name.familyName,
-    //       email: profile.emails[0].value
-    //     })
-    //
-    //     user.save(function(err){
-    //       if(err){
-    //         console.log(err);
-    //       } else {
-    //         done(null, user);
-    //       }
-    //     })
-    //   }
-    // });
+    M.User.findOne({facebookID: profile.id }, function(err, user) {
+      if (err)
+        return done(err);
+
+      // if the user is found, then log them in
+      if (user) {
+        return done(null, user); // user found, return that user
+      }
+      else {
+        // if there is no user found with that facebook id, create them
+
+        var birthday = new Date(profile._json.birthday);
+        var now = new Date();
+
+        if(now.getFullYear() - birthday.getFullYear() > 16){
+          // let user = M.User({
+          //   facebookID: profile.id,
+          //   name: profile.displayName,
+          //   email: profile.emails[0].value
+          // })
+
+          // user.save(function(err){
+          //   if(err){
+          //     console.log(err);
+          //   } else {
+          //     done(null, user);
+          //   }
+          // })
+        } else {
+          console.log("not old enough to use the app");
+        }
+      }
+    });
 
     done(null, profile);
   }
@@ -99,12 +108,17 @@ app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
-app.get('/facebook', passport.authenticate('facebook'));
+app.get('/facebook', passport.authenticate('facebook', { scope: ['email', 'user_birthday'] }));
 
 app.get('/callback', passport.authenticate('facebook', {
-  successRedirect: '/',
+  successRedirect: '/profile',
   failureRedirect: '/analytics'
 }));
+
+app.get('/profile', function(req, res){
+  console.log(req.user);
+  res.send(req.user)
+})
 
 app.get('/pay:gameId', function(req, res){
   res.render('/payment', {

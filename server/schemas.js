@@ -8,13 +8,8 @@ mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
 let userSchema = new Schema({
   userID: String, //messenger user ID
   facebookID: String,
-  facebookAccessToken: String,
   email: String,
-  firstname: String,
-  lastname: String,
-  profile_pic: String,
-  gender: String,
-  eligible: Boolean
+  name: String
 })
 
 let User = mongoose.model('User', userSchema);
