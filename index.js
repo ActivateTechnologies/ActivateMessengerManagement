@@ -271,6 +271,7 @@ app.post('/webhook/', function (req, res) {
       console.log(sender);
 
       if (event.message && event.message.text) {
+        console.log(JSON.stringify(event.message))
 
         //add check here to find if user exists
 
@@ -279,6 +280,7 @@ app.post('/webhook/', function (req, res) {
 
       else if (event.postback) {
         let text = event.postback.payload;
+        console.log(JSON.stringify(event.postback))
 
         if(text.substring(0, 4) == "Book"){
 
