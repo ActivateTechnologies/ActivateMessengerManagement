@@ -94,7 +94,7 @@ app.get('/pay:gameId', function(req, res){
 })
 
 app.post('/pay', function(req, res){
-
+  let gameId = req.body.gameId;
 })
 
 app.get('/visualize', function (req, res) {

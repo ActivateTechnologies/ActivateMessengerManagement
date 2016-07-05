@@ -38,31 +38,5 @@
       </div>
     </div>
 
-    <script type="text/javascript">
-      $('#pay').submit(function(event){
-        event.preventDefault();
-        var name = $('#name').val();
-        var address = $('#address').val();
-        var image_url = $("#image_url").val();
-        var latlong = $("#latlong").val();
-        var when = $('#when').val();
-        var data = {
-          name: name,
-          address: address,
-          image_url: image_url,
-          latlong: latlong,
-          when: when
-        }
-        $.ajax({
-          type: "POST",
-          url: "/input",
-          data: data,
-          success: function(result){
-            console.log("result");
-          }
-        })
-      })
-    </script>
-
   </body>
 </html>
