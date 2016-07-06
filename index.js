@@ -273,10 +273,10 @@ app.post('/webhook/', function (req, res) {
 
     messaging_events.forEach(function(event){
 
-      console.log(JSON.stringify(event));
+      // console.log(JSON.stringify(event));
 
       let sender = event.sender.id;
-      console.log(sender);
+      // console.log(sender);
 
       if (event.message && event.message.text) {
 
