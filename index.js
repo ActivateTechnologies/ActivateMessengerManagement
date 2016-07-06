@@ -433,6 +433,10 @@ app.post('/webhook/', function (req, res) {
             // })
             // break;
 
+            case('start'):
+            send.start(sender);
+            break;
+
             case("yep"):
 
             M.Button.update({name:"Yep"}, {$push: {activity: {userId:sender, time: new Date()}}}, {upsert: true}, function(err){
