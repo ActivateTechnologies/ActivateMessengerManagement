@@ -275,6 +275,11 @@ app.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
 
         //add check here to find if user exists
+        M.User.find({userId:sender}, function(err, result){
+          if(result.length === 0){
+            send.link(sender);
+          }
+        })
 
         send.text(sender, "Hi, there");
       }
@@ -350,7 +355,6 @@ app.post('/webhook/', function (req, res) {
               console.log(err);
             })
             send.text(sender, "some text");
-            send.link(sender);
 
             break;
 
