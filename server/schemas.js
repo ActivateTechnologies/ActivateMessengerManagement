@@ -4,27 +4,27 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // test db
-// mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
+mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
 
 //actual db
-mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
-
-// let userSchema = new Schema({
-//   userID: String, //messenger user ID
-//   facebookID: String,
-//   email: String,
-//   name: String
-// })
+// mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
 
 let userSchema = new Schema({
-  userId: String,
-  firstname: String,
-  lastname: String,
-  profile_pic: String,
-  locale: String,
-  gender: String,
-  eligible: Boolean
+  userID: String, //messenger user ID
+  facebookID: String,
+  email: String,
+  name: String
 })
+
+// let userSchema = new Schema({
+//   userId: String,
+//   firstname: String,
+//   lastname: String,
+//   profile_pic: String,
+//   locale: String,
+//   gender: String,
+//   eligible: Boolean
+// })
 
 let User = mongoose.model('User', userSchema);
 
