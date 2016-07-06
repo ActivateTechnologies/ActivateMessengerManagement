@@ -31,11 +31,11 @@ describe('testing routes', function(){
       .expect(200, done)
   })
 
-  it('responds to analytics', function(done){
-    request(server)
-      .get('/analytics')
-      .expect(200, done)
-  })
+  // it('responds to analytics', function(done){
+  //   request(server)
+  //     .get('/analytics')
+  //     .expect(200, done)
+  // })
 })
 
 describe('testing games for input', function(){
