@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const M = require('./../server/schemas.js')
 const send = require('./../server/send.js')
+const request = require('request')
 
 // For main Activate Messenger App
 const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
