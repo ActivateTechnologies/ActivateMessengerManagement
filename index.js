@@ -47,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('./routes/analytics'))
 app.use(require('./routes/visualize'))
 app.use(require('./routes/games'))
+app.use(require('./routes/webhook'))
 
 // passport.use(new FacebookStrategy({
 //     clientID: FACEBOOK_APP_ID,
