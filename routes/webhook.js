@@ -42,7 +42,7 @@ router.post('/webhook/', function (req, res) {
             }
           }
           else {
-            send.text(sender, "Sorry, you're not old enough to play");
+            send.text(sender, "User not found");
           }
         })
       }
