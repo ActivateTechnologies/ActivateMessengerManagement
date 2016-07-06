@@ -98,12 +98,13 @@ app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
-app.get('/facebook',
+app.get('/facebook', function(req, res, next){
   passport.authenticate('facebook',{
     callbackURL: (req.query.redirect_uri),
     session: false,
     scope: ['email', 'user_birthday']
-  }))
+  })(req, res, next);
+})
 
 app.get('/callback', function(req, res, next){
   passport.authenticate('facebook', {
