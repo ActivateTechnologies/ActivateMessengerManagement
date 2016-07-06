@@ -55,6 +55,7 @@ passport.use(new FacebookStrategy({
   },
   function(req, accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
+      console.log(req.query);
       var birthday = new Date(profile._json.birthday);
       var now = new Date();
 
@@ -100,18 +101,11 @@ app.get('/', function (req, res) {
 })
 
 app.get('/facebook', function(req, res, next){
-  console.log("params from /facebook");
-  console.log(req.params);
-  console.log(req.query);
-  passport.authenticate('facebook',{session: false, scope: ['email', 'user_birthday']}, { callbackURL: req.query.redirect_uri })(req, res, next);
+  passport.authenticate('facebook',
+  {session: false, scope: ['email', 'user_birthday']})(req, res, next);
 })
 
-//, { callbackURL: ('http://kickabouttest.herokuapp.com/callback' + '?account_linking_token=' + req.params.account_linking_token + '&authorization_code=' + req.params.) }
-
 app.get('/callback', function(req, res, next){
-  console.log("params from /callback");
-  console.log(req.params);
-  console.log(req.query.redirect_uri);
   passport.authenticate('facebook', {
     session: false,
     successRedirect: '/profile',
