@@ -50,9 +50,10 @@ passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: "http://kickabouttest.herokuapp.com/callback",
+    passReqToCallback: true,
     profileFields: ['id', 'displayName', 'email', 'birthday']
   },
-  function(accessToken, refreshToken, profile, done) {
+  function(req, accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
       var birthday = new Date(profile._json.birthday);
       var now = new Date();
@@ -98,7 +99,12 @@ app.get('/', function (req, res) {
   res.send("Hi, I'm the Kickabout chat bot")
 })
 
-app.get('/facebook', passport.authenticate('facebook', { session: false, scope: ['email', 'user_birthday'] }));
+app.get('/facebook', function(req, res, next){
+  console.log(req.params);
+  passport.authenticate('facebook',{session: false, scope: ['email', 'user_birthday']})(req, res, next);
+})
+
+//, { callbackURL: ('http://kickabouttest.herokuapp.com/callback' + '?account_linking_token=' + req.params.account_linking_token + '&authorization_code=' + req.params.) }
 
 app.get('/callback', passport.authenticate('facebook', {
   session: false,
