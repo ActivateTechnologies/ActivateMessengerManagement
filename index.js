@@ -478,7 +478,7 @@ app.post('/webhook/', function (req, res) {
               if('eligible' in res[0]){
                 console.log("This is true");
                 if(res[0].eligible === false){
-                  // send.text(sender, "Mwhahaha!")
+                  send.text("Sorry, you're not old enough")
                 }
                 else {
                   M.User.update({userId: sender}, {eligible: true}, function(){
@@ -669,3 +669,5 @@ function sendAllGames(sender){
 }
 
 module.exports = server;
+
+// heroku git:remote -a limitless-sierra-68694
