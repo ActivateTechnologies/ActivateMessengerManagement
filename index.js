@@ -100,17 +100,22 @@ app.get('/', function (req, res) {
 })
 
 app.get('/facebook', function(req, res, next){
+  console.log("params from /facebook");
   console.log(req.params);
   passport.authenticate('facebook',{session: false, scope: ['email', 'user_birthday']})(req, res, next);
 })
 
 //, { callbackURL: ('http://kickabouttest.herokuapp.com/callback' + '?account_linking_token=' + req.params.account_linking_token + '&authorization_code=' + req.params.) }
 
-app.get('/callback', passport.authenticate('facebook', {
-  session: false,
-  successRedirect: '/profile',
-  failureRedirect: '/analytics'
-}));
+app.get('/callback', function(req, res, next){
+  console.log("params from /callback");
+  console.log(req.params);
+  passport.authenticate('facebook', {
+    session: false,
+    successRedirect: '/profile',
+    failureRedirect: '/analytics'
+  })(req, res, next);
+})
 
 app.get('/profile', function(req, res){
   res.send(req.user)
