@@ -33,8 +33,13 @@ router.post('/webhook/', function (req, res) {
 
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
-          if(result[0].eligible){
-            sendAllGames(sender);
+          if(result.length > 0){
+            if(result[0].eligible){
+              sendAllGames(sender);
+            }
+            else {
+              send.text(sender, "Sorry, you're not old enough to play");
+            }
           }
           else {
             send.text(sender, "Sorry, you're not old enough to play");
