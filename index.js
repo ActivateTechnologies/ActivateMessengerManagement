@@ -101,6 +101,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/facebook', function(req, res, next){
+  console.log(req.query);
   passport.authenticate('facebook',
   {session: false, scope: ['email', 'user_birthday']})(req, res, next);
 })
