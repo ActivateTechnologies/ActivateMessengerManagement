@@ -97,6 +97,9 @@
 // const FacebookStrategy = require('passport-facebook').Strategy
 
 
+// app.use(passport.initialize());
+
+
 // passport.use(new FacebookStrategy({
 //     clientID: FACEBOOK_APP_ID,
 //     clientSecret: FACEBOOK_APP_SECRET,
