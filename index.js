@@ -86,7 +86,8 @@ app.post('/input', upload.single('image'), function(req, res){
         latlong: req.body.latlong,
         desc: req.body.desc,
         when: req.body.when,
-        capacity: req.body.capacity
+        capacity: req.body.capacity,
+        price: parseFloat(req.body.price)
       };
 
       if(req.body.id){

@@ -28,6 +28,7 @@ let gameSchema = new Schema({
   image_name: String,
   image_url: String,
   latlong: String,
+  price: Number,
   when: Date,
   desc: String,
   joined: [{

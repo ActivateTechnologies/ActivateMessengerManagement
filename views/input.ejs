@@ -48,6 +48,10 @@
             <label for="capacity">Capacity</label>
           </div>
           <div class="input-field">
+            <input name="price" type="text" class="validate" required>
+            <label for="price">Price (0 for free)</label>
+          </div>
+          <div class="input-field">
             <input name="id" type="text" class="validate">
             <label for="id">Id (only for editing the event)</label>
           </div>
@@ -85,6 +89,7 @@
                 + "<p>" + "<b>When: </b>" + item.when.substring(8, 10) + "/" + item.when.substring(5,7) + "/" + item.when.substring(0, 4) + "</p>"
                 + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
                 + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
+                + "<p>" + "<b>Priee: </b>" + item.price + "</p>"
                 + "<p>" + "<b>id: </b>" + item._id + "</p>"
                 + '</div>'
         return data;
