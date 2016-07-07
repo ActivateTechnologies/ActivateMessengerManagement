@@ -43,6 +43,7 @@ app.use(require('./routes/analytics'))
 app.use(require('./routes/visualize'))
 app.use(require('./routes/games'))
 app.use(require('./routes/webhook'))
+app.use(require('./routes/payment'))
 
 
 
