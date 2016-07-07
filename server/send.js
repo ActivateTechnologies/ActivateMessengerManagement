@@ -323,7 +323,7 @@ function generate_card_for_booking(sender, gameId, description, price){
                                 {
                                   "type": "web_url",
                                   "title": "BOOK",
-                                  "payload": payingLink,
+                                  "url": payingLink,
                                 },
                                 {
                                     "type": "postback",
