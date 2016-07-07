@@ -9,13 +9,6 @@ mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
 //actual db
 // mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
 
-// let userSchema = new Schema({
-//   userID: String, //messenger user ID
-//   facebookID: String,
-//   email: String,
-//   name: String
-// })
-
 let userSchema = new Schema({
   userId: String,
   firstname: String,

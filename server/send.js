@@ -8,40 +8,6 @@ const request = require('request')
 // test app
 const VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"
 
-function link(sender){
-  let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [{
-          "title": "Welcome to Kickabout",
-          "buttons": [{
-            "type": "account_link",
-            "url": "http://kickabouttest.herokuapp.com/facebook"
-          }]
-        }]
-      }
-    }
-  }
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-      }
-  })
-}
-
 function age(sender){
   let messageData = {
     "attachment": {
@@ -395,7 +361,6 @@ function generate_card(array){
 module.exports = {
   age: age,
   start: start,
-  link: link,
   booked: booked,
   text: text,
   play: play,
