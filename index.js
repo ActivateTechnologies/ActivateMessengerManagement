@@ -3,7 +3,6 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const request = require('request')
 const multer = require('multer')
 const fs = require('fs')
 const app = express()
