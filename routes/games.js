@@ -1,7 +1,7 @@
 'use strict'
 
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const M = require('./../server/schemas.js')
 
 router.get('/today', function(req, res){
