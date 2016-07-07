@@ -311,7 +311,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 function generate_card_for_booking(sender, gameId, description, price){
 
   if(parseFloat(price) > 0){
-    let payingLink = "kickabouttest.herokuapp.com/charge" + "?mid=" + sender + "&gid=" + gameId;
+    let payingLink = "kickabouttest.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
 
     let template = {
                       "attachment": {
