@@ -42,7 +42,7 @@ router.post('/webhook/', function (req, res) {
             }
           }
           else {
-            send.text(sender, "User not found");
+            yep(sender);
           }
         })
       }
@@ -66,17 +66,9 @@ router.post('/webhook/', function (req, res) {
           M.Game.find({_id:gameId}, function(err, result){
             let check = true;
             if(result.length > 0){
-              result[0].joined.forEach(function(i){
-                if(i.userId === sender){
-                  check = false;
-                  send.text(sender, "You've already booked the game.");
-                }
-              })
-              if(check){
-                M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-                  send.booked(sender);
-                });
-              }
+              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
+                send.booked(sender);
+              });
             }
           })
         }
@@ -97,10 +89,11 @@ router.post('/webhook/', function (req, res) {
           let latlong = arr[3];
           let gameId = arr[4];
           let description = arr[5];
+          let price = arr[6];
 
           send.directions(sender, name, address, latlong)
           .then(function(success){
-            send.cards(sender, send.generate_card_for_booking(gameId, description));
+            send.cards(sender, send.generate_card_for_booking(sender, gameId, description, price));
           })
           .catch(function(err){
             console.log(err);
@@ -154,7 +147,7 @@ function sendAllGames(sender){
           booked = true;
         }
       });
-      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when]);
+      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
     })
 
     today_data = send.generate_card(today_data);

@@ -263,9 +263,9 @@ function directions(sender, name, address, latlong){
   })
 }
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description, when){
+function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description, when, price){
 
-  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description;
+  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description + "|" + price;
 
   let directions_link = "http://maps.google.com/?q=" + address;
 
@@ -308,40 +308,69 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function generate_card_for_booking(gameId, description){
+function generate_card_for_booking(sender, gameId, description, price){
 
-  let pl = "Book" + "|" + gameId;
+  if(parseFloat(price) > 0){
+    let payingLink = "kickabouttest.herokuapp.com/charge" + "?mid=" + sender + "&gid=" + gameId;
 
-  let template = {
-                    "attachment": {
-                      "type": "template",
-                      "payload": {
-                          "template_type": "button",
-                          "text": description,
-                          "buttons": [
-                              {
-                                "type": "postback",
-                                "title": "BOOK",
-                                "payload": pl,
-                              },
-                              {
+    let template = {
+                      "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "button",
+                            "text": description,
+                            "buttons": [
+                                {
+                                  "type": "web_url",
+                                  "title": "BOOK",
+                                  "payload": payingLink,
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Keep Looking",
+                                    "payload": "No, thanks",
+                                }
+                              ],
+                            }
+                        }
+                    }
+
+    return template;
+  }
+  else {
+    let pl = "Book" + "|" + gameId;
+
+    let template = {
+                      "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "button",
+                            "text": description,
+                            "buttons": [
+                                {
                                   "type": "postback",
-                                  "title": "Keep Looking",
-                                  "payload": "No, thanks",
-                              }
-                            ],
-                          }
-                      }
-                  }
+                                  "title": "BOOK",
+                                  "payload": pl,
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Keep Looking",
+                                    "payload": "No, thanks",
+                                }
+                              ],
+                            }
+                        }
+                    }
 
-  return template;
+    return template;
+  }
 }
 
 function generate_card(array){
   let elements = [];
   array.forEach(function(item){
-    //name, address, image_url, latlong, gameId, attending, capacity, booked, description, when
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9]));
+    //name, address, image_url, latlong, gameId, attending, capacity, booked, description, when, price
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10]));
   });
 
   var template = {
