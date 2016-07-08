@@ -30,15 +30,12 @@ router.post('/webhook/', function (req, res) {
     messaging_events.forEach(function(event){
 
       let sender = event.sender.id
-
+      console.log('1');
       if (event.optin) {
         console.log("optin");
         console.log(event.optin.ref);
         send.text(sender, event.optin.ref);
       }
-
-      console.log('1');
-
       else if (event.message && event.message.text) {
         console.log('2');
         M.User.find({userId: sender}, function(err, result){
