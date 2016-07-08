@@ -28,29 +28,22 @@ router.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging
 
     messaging_events.forEach(function(event){
-
       let sender = event.sender.id
-      console.log('1');
       if (event.optin) {
         console.log("optin");
         console.log(event.optin.ref);
         send.text(sender, event.optin.ref);
       }
       else if (event.message && event.message.text) {
-        console.log('2');
         M.User.find({userId: sender}, function(err, result){
-          console.log('3');
           if(result.length > 0){
-            console.log('4');
             send.processReceivedMessage(event.message, sender);
           }
           else {
-            console.log('5');
             send.start(sender);
           }
         })
       }
-
       else if (event.postback) {
         let text = event.postback.payload;
 
