@@ -144,7 +144,7 @@ function play(sender) {
     })
 }
 
-function cards(sender, today_data, day){
+function cards(sender, data, day){
 
   // if(day){
   //   text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
@@ -154,7 +154,7 @@ function cards(sender, today_data, day){
     text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
   }
 
-  let messageData = today_data;
+  let messageData = data;
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -381,7 +381,7 @@ function allGames(sender){
 
   M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
 
-    let today_data = [];
+    let data = [];
     result.forEach(function(item){
       let booked = false;
       let join = item.joined;
@@ -391,11 +391,11 @@ function allGames(sender){
           booked = true;
         }
       });
-      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+      data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
     })
 
-    today_data = send.generate_card(today_data);
-    send.cards(sender, today_data, "today");
+    data = generate_card(data);
+    cards(sender, data, "today");
   })
 }
 
@@ -450,7 +450,7 @@ function book(sender, text){
     let check = true;
     if(result.length > 0){
       M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-        send.booked(sender);
+        booked(sender);
       });
     }
   })
@@ -466,6 +466,15 @@ function cancel_booking(sender, text){
 
   let arr = text.split('|');
   let gameId = arr[1];
+
+  M.Game.find({_id:gameId}, function(err, result){
+    let check = true;
+    if(result.length > 0){
+      M.Game.findOneAndUpdate({_id:gameId}, {$pull: {joined: {userId: sender}}}, function(){
+        text(sender, "Your booking has been cancelled");
+      });
+    }
+  })
 }
 
 function more_info(sender, text){
@@ -485,9 +494,9 @@ function more_info(sender, text){
   let price = arr[6];
   let booked = arr[7]
 
-  send.directions(sender, name, address, latlong)
+  directions(sender, name, address, latlong)
   .then(function(success){
-    send.cards(sender, send.generate_card_for_booking(sender, gameId, description, price, booked));
+    cards(sender, generate_card_for_booking(sender, gameId, description, price, booked));
   })
   .catch(function(err){
     console.log(err);
