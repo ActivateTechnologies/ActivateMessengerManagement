@@ -81,20 +81,58 @@ function booked(sender){
 
 function processReceivedMessage(message, sender) {
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
-  let play = ['play', 'play!', 'find me games', "find me games!"];
+  let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game',
+  'find me a game!'];
+  let help = ['help', 'help!', 'info', 'info!'];
   if (greetings.indexOf(message.text.trim().toLowerCase()) > -1) {
     text(sender, "Hello there! Feel like you could do with a game?" 
-      + " Just say 'Play' or 'Find me games'.");
+      + " Just say 'Play' or 'Find me games' to see upcoming games or help for more info.");
   } else if (play.indexOf(message.text.trim().toLowerCase()) > -1) {
     allGames(sender);
+  } else if (help.indexOf(message.text.trim().toLowerCase()) > -1) {
+    text(sender, "Call us on 07123456789");
   } else {
-    text(sender, "I didn't quite catch that. Say 'play' or "
-      + "'find me a game' to look for upcoming games");
+    textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
+      + "'find me a game' to look for upcoming games", [
+        {
+          "content_type":"text",
+          "title":"Play!",
+          "payload":"play"
+        },
+        {
+          "content_type":"text",
+          "title":"Help",
+          "payload":"help"
+        }
+      ]);
   }
 }
 
 function text(sender, text) {
     let messageData = { text: text }
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function textWithQuickReplies(sender, text, quickReplies) {
+    let messageData = { 
+      text: text,
+      quick_replies: quickReplies
+    }
 
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
