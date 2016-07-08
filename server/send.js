@@ -436,7 +436,7 @@ function yep(sender){
   });
 }
 
-function book(sender, text){
+function book(sender, rest){
   M.Button.update({name:"Book"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
@@ -444,7 +444,7 @@ function book(sender, text){
       console.log(err);
     })
 
-  let arr = text.split('|');
+  let arr = rest.split('|');
   let gameId = arr[1];
 
   M.Game.find({_id:gameId}, function(err, result){
@@ -457,7 +457,7 @@ function book(sender, text){
   })
 }
 
-function cancel_booking(sender, text){
+function cancel_booking(sender, rest){
   M.Button.update({name:"Cancel"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
@@ -465,7 +465,7 @@ function cancel_booking(sender, text){
       console.log(err);
     })
 
-  let arr = text.split('|');
+  let arr = rest.split('|');
   let gameId = arr[1];
 
   M.Game.find({_id:gameId}, function(err, result){
