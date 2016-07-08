@@ -34,9 +34,7 @@ router.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
-            console.log("-----------------------------------------------------")
-            console.log(JSON.stringify(results.length));
-            sendAllGames(sender);
+            processReceivedMessage(event.message, sender);
           }
           else {
             send.start(sender);
@@ -120,6 +118,16 @@ router.post('/webhook/', function (req, res) {
 
     res.sendStatus(200)
 })
+
+function processReceivedMessage(message, sender) {
+  let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
+  if (greetings.indexOf(message.trim().toLowerCase()) > -1) {
+    send.text("Hello there! Feel like you could do with a game?" 
+      + " Just say 'Play' or 'Find me games'.");
+  } else {
+    sendAllGames(sender);
+  }
+}
 
 function sendAllGames(sender){
   let now = new Date();
