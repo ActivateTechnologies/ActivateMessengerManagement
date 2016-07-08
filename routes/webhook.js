@@ -34,12 +34,7 @@ router.post('/webhook/', function (req, res) {
       if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
-            if(result[0].eligible){
-              sendAllGames(sender);
-            }
-            else {
-              send.text(sender, "Sorry, you're not old enough to play");
-            }
+            sendAllGames(sender);
           }
           else {
             yep(sender);
@@ -111,14 +106,6 @@ router.post('/webhook/', function (req, res) {
             yep(sender);
             break;
 
-            case("over"):
-            over(sender);
-            break;
-
-            case("notover"):
-            notover(sender);
-            break;
-
             default:
             // send.play(sender);
             sendAllGames(sender);
@@ -183,49 +170,11 @@ function yep(sender){
           if(err){
             console.log(err);
           } else {
-            send.age(sender);
+            sendAllGames(sender);
             console.log("saved it!");
           }
         })
       }
-  });
-}
-
-function over(sender){
-  M.Button.update({name:"Eligible"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
-    {upsert: true},
-    function(err){
-      console.log(err);
-    })
-  M.User.find({userId:sender}, function(e, res){
-    if(e)
-      console.log(e);
-
-    if('eligible' in res[0]){
-      if(res[0].eligible === false){
-        send.text("Sorry, you're not old enough")
-      }
-      else {
-        M.User.update({userId: sender}, {eligible: true}, function(){
-          // send.play(sender);
-          sendAllGames(sender);
-        });
-      }
-    }
-  })
-}
-
-function notover(sender){
-  M.Button.update({name:"Not Eligible"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
-    {upsert: true},
-    function(err){
-      console.log(err);
-    })
-
-  M.User.update({userId: sender}, {eligible: false}, function(){
-    send.text(sender, "Sorry, you're not old enough");
   });
 }
 
