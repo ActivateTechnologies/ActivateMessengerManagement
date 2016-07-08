@@ -81,11 +81,15 @@ function booked(sender){
 
 function processReceivedMessage(message, sender) {
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
+  let play = ['play', 'play!', 'find me games', "find me games!"];
   if (greetings.indexOf(message.text.trim().toLowerCase()) > -1) {
     text(sender, "Hello there! Feel like you could do with a game?" 
       + " Just say 'Play' or 'Find me games'.");
-  } else {
+  } else if (play.indexOf(message.text.trim().toLowerCase()) > -1) {
     allGames(sender);
+  } else {
+    text(sender, "I didn't quite catch that. Say 'play' or "
+      + "'find me a game' to look for upcoming games");
   }
 }
 
@@ -410,20 +414,15 @@ function allGames(sender){
 }
 
 function yep(sender){
-  console.log(1)
   M.Button.update({name:"Yep"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
     function(err){
       console.log(err);
     })
-  console.log(2)
   var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-  console.log(3)
   request(get_url, function (error, response, body) {
-    console.log(4)
       if (!error && response.statusCode == 200) {
-        console.log(5)
         body = JSON.parse(body);
 
         let user = M.User({
@@ -434,7 +433,6 @@ function yep(sender){
           locale: body.locale,
           gender: body.gender
         })
-        console.log(6)
         user.save(function(err){
           if(err){
             console.log(err);
