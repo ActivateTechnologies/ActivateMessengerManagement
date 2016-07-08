@@ -520,6 +520,7 @@ function more_info(sender, text){
 module.exports = {
   start: start,
   booked: booked,
+  processReceivedMessage: processReceivedMessage,
   text: text,
   play: play,
   cards: cards,
@@ -531,6 +532,5 @@ module.exports = {
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
-  more_info: more_info,
-  processReceivedMessage: processReceivedMessage
+  more_info: more_info
 }
