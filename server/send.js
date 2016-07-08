@@ -236,12 +236,13 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
   address = when.toString().substring(0, 10) + "\n" + address;
 
-  if(attending == capacity || booked){
+  if(booked){
+    address = address + " (You're going)";
+  }
+
+  if(attending == capacity){
     if(attending == capacity){
       address = address + " (fully booked)";
-    }
-    if(booked){
-      address = address + " (You're going)";
     }
     let template = {
       "title": name,
