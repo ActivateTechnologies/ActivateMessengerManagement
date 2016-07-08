@@ -16,7 +16,7 @@ router.get('/payment', function(req, res){
     function(err){
       console.log(err);
     })
-    
+
   console.log(gameId);
   M.Game.find({_id:gameId}, function(err, result){
     if(err){
@@ -47,7 +47,7 @@ router.post('/charge', function(req, res) {
 		amount: req.query.gameprice, // amount in cents, again
 		currency: "gbp",
 		card: stripeToken,
-		description: "payinguser@example.com",
+		description: "",
     metadata: {userId:sender, gameId: gameId}
 	}, function(err, charge) {
 		if (err && err.type === 'StripeCardError') {

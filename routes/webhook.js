@@ -31,7 +31,12 @@ router.post('/webhook/', function (req, res) {
 
       let sender = event.sender.id
 
-      if (event.message && event.message.text) {
+      if (event.optin) {
+        console.log("optin");
+        console.log(event.optin.ref);
+      }
+
+      else if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
             send.allGames(sender);
