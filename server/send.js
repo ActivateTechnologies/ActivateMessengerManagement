@@ -1,6 +1,7 @@
 'use strict'
 
 const request = require('request')
+const M = require('./schemas.js')
 
 // Kicabout
 // const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -225,7 +226,7 @@ function directions(sender, name, address, latlong){
 
 function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description, when, price){
 
-  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description + "|" + price;
+  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description + "|" + price + "|" + booked;
 
   let directions_link = "http://maps.google.com/?q=" + address;
 
@@ -268,7 +269,35 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function generate_card_for_booking(sender, gameId, description, price){
+function generate_card_for_booking(sender, gameId, description, price, booked){
+
+  if(booked === 'true'){
+    let pl = "Cancel" + "|" + gameId;
+
+    let template = {
+                      "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "button",
+                            "text": description,
+                            "buttons": [
+                                {
+                                  "type": "postback",
+                                  "title": "Cancel Booking",
+                                  "payload": pl,
+                                },
+                                {
+                                    "type": "postback",
+                                    "title": "Keep Looking",
+                                    "payload": "No, thanks",
+                                }
+                              ],
+                            }
+                        }
+                    }
+
+    return template;
+  }
 
   if(parseFloat(price) > 0){
     let payingLink = "kickabouttest.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
@@ -347,6 +376,125 @@ function generate_card(array){
 }
 
 
+function allGames(sender){
+  let now = new Date();
+
+  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+
+    let today_data = [];
+    result.forEach(function(item){
+      let booked = false;
+      let join = item.joined;
+
+      join.forEach(function(i){
+        if(i.userId === sender){
+          booked = true;
+        }
+      });
+      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+    })
+
+    today_data = send.generate_card(today_data);
+    send.cards(sender, today_data, "today");
+  })
+}
+
+function yep(sender){
+  M.Button.update({name:"Yep"},
+    {$push: {activity: {userId:sender, time: new Date()}}},
+    {upsert: true},
+    function(err){
+      console.log(err);
+    })
+
+  var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+
+  request(get_url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+
+        body = JSON.parse(body);
+
+        let user = M.User({
+          userId: sender,
+          firstname: body.first_name,
+          lastname: body.last_name,
+          profile_pic: body.profile_pic,
+          locale: body.locale,
+          gender: body.gender
+        })
+
+        user.save(function(err){
+          if(err){
+            console.log(err);
+          } else {
+            sendAllGames(sender);
+            console.log("saved it!");
+          }
+        })
+      }
+  });
+}
+
+function book(sender, text){
+  M.Button.update({name:"Book"},
+    {$push: {activity: {userId:sender, time: new Date()}}},
+    {upsert: true},
+    function(err){
+      console.log(err);
+    })
+
+  let arr = text.split('|');
+  let gameId = arr[1];
+
+  M.Game.find({_id:gameId}, function(err, result){
+    let check = true;
+    if(result.length > 0){
+      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
+        send.booked(sender);
+      });
+    }
+  })
+}
+
+function cancel_booking(sender, text){
+  M.Button.update({name:"Cancel"},
+    {$push: {activity: {userId:sender, time: new Date()}}},
+    {upsert: true},
+    function(err){
+      console.log(err);
+    })
+
+  let arr = text.split('|');
+  let gameId = arr[1];
+}
+
+function more_info(sender, text){
+  M.Button.update({name:"More Info"},
+    {$push: {activity: {userId:sender, time: new Date()}}},
+    {upsert: true},
+    function(err){
+      console.log(err);
+    })
+
+  let arr = text.split('|');
+  let name = arr[1];
+  let address = arr[2];
+  let latlong = arr[3];
+  let gameId = arr[4];
+  let description = arr[5];
+  let price = arr[6];
+  let booked = arr[7]
+
+  send.directions(sender, name, address, latlong)
+  .then(function(success){
+    send.cards(sender, send.generate_card_for_booking(sender, gameId, description, price, booked));
+  })
+  .catch(function(err){
+    console.log(err);
+  })
+}
+
+
 module.exports = {
   start: start,
   booked: booked,
@@ -356,5 +504,10 @@ module.exports = {
   directions: directions,
   generate_card_element: generate_card_element,
   generate_card: generate_card,
-  generate_card_for_booking: generate_card_for_booking
+  generate_card_for_booking: generate_card_for_booking,
+  allGames: allGames,
+  yep: yep,
+  book: book,
+  cancel_booking: cancel_booking,
+  more_info: more_info
 }
