@@ -121,7 +121,7 @@ router.post('/webhook/', function (req, res) {
 
 function processReceivedMessage(message, sender) {
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
-  if (greetings.indexOf(message.trim().toLowerCase()) > -1) {
+  if (greetings.indexOf(message.text.trim().toLowerCase()) > -1) {
     send.text("Hello there! Feel like you could do with a game?" 
       + " Just say 'Play' or 'Find me games'.");
   } else {
