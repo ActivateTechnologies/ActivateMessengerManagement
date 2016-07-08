@@ -85,7 +85,7 @@ function processReceivedMessage(message, sender) {
   console.log(2222);
   if (greetings.indexOf(message.text.trim().toLowerCase()) > -1) {
     console.log(3333);
-    send.text(sender, "Hello there! Feel like you could do with a game?" 
+    text(sender, "Hello there! Feel like you could do with a game?" 
       + " Just say 'Play' or 'Find me games'.");
   } else {
     console.log(4444);
