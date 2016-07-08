@@ -11,7 +11,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
   </head>
   <body>
-
+    <div class="container">
+      <h1>Continue Booking the Game</h1>
+      <p>
+        Using our secure gateway powered by Stripe.
+      </p>
+    </div>
     <div class="container">
       <form action="/charge?mid=<%=mid%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>" method="POST">
         <script
