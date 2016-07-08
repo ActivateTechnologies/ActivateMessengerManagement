@@ -31,10 +31,16 @@ router.post('/webhook/', function (req, res) {
 
       let sender = event.sender.id
 
-      if (event.message && event.message.text) {
+      if (event.optin) {
+        console.log("optin");
+        console.log(event.optin.ref);
+        send.text(sender, event.optin.ref);
+      }
+
+      else if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
-            processReceivedMessage(event.message, sender);
+            send.processReceivedMessage(event.message, sender);
           }
           else {
             send.start(sender);
@@ -46,53 +52,15 @@ router.post('/webhook/', function (req, res) {
         let text = event.postback.payload;
 
         if(text.substring(0, 4) == "Book"){
+          send.book(sender, text);
+        }
 
-          M.Button.update({name:"Book"},
-            {$push: {activity: {userId:sender, time: new Date()}}},
-            {upsert: true},
-            function(err){
-              console.log(err);
-            })
-
-          let rest = text.substring(4);
-          let arr = rest.split('|');
-          let gameId = arr[1];
-
-          M.Game.find({_id:gameId}, function(err, result){
-            let check = true;
-            if(result.length > 0){
-              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-                send.booked(sender);
-              });
-            }
-          })
+        if(text.substring(0, 6) == "Cancel"){
+          send.cancel_booking(sender, text);
         }
 
         else if(text.substring(0, 9) == "More Info"){
-          M.Button.update({name:"More Info"},
-            {$push: {activity: {userId:sender, time: new Date()}}},
-            {upsert: true},
-            function(err){
-              console.log(err);
-            })
-
-          let rest = text.substring(9);
-
-          let arr = rest.split('|');
-          let name = arr[1];
-          let address = arr[2];
-          let latlong = arr[3];
-          let gameId = arr[4];
-          let description = arr[5];
-          let price = arr[6];
-
-          send.directions(sender, name, address, latlong)
-          .then(function(success){
-            send.cards(sender, send.generate_card_for_booking(sender, gameId, description, price));
-          })
-          .catch(function(err){
-            console.log(err);
-          })
+          send.more_info(sender, text);
         }
 
         else {
@@ -103,12 +71,11 @@ router.post('/webhook/', function (req, res) {
             break;
 
             case("yep"):
-            yep(sender);
+            send.yep(sender);
             break;
 
             default:
-            // send.play(sender);
-            sendAllGames(sender);
+            send.allGames(sender);
 
           }
         }
@@ -118,78 +85,5 @@ router.post('/webhook/', function (req, res) {
 
     res.sendStatus(200)
 })
-
-function processReceivedMessage(message, sender) {
-  console.log(1111);
-  let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
-  console.log(2222);
-  if (greetings.indexOf(message.text.trim().toLowerCase()) > -1) {
-    console.log(3333);
-    send.text(sender, "Hello there! Feel like you could do with a game?" 
-      + " Just say 'Play' or 'Find me games'.");
-  } else {
-    console.log(4444);
-    sendAllGames(sender);
-  }
-}
-
-function sendAllGames(sender){
-  let now = new Date();
-
-  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
-
-    let today_data = [];
-    result.forEach(function(item){
-      let booked = false;
-      let join = item.joined;
-
-      join.forEach(function(i){
-        if(i.userId === sender){
-          booked = true;
-        }
-      });
-      today_data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
-    })
-
-    today_data = send.generate_card(today_data);
-    send.cards(sender, today_data, "today");
-  })
-}
-
-function yep(sender){
-  M.Button.update({name:"Yep"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
-    {upsert: true},
-    function(err){
-      console.log(err);
-    })
-
-  var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-
-  request(get_url, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-
-        body = JSON.parse(body);
-
-        let user = M.User({
-          userId: sender,
-          firstname: body.first_name,
-          lastname: body.last_name,
-          profile_pic: body.profile_pic,
-          locale: body.locale,
-          gender: body.gender
-        })
-
-        user.save(function(err){
-          if(err){
-            console.log(err);
-          } else {
-            sendAllGames(sender);
-            console.log("saved it!");
-          }
-        })
-      }
-  });
-}
 
 module.exports = router
