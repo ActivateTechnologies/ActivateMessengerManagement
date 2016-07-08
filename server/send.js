@@ -390,7 +390,6 @@ function generate_card(array){
   return template;
 }
 
-
 function allGames(sender){
   let now = new Date();
 
@@ -518,7 +517,6 @@ function more_info(sender, text){
   })
 }
 
-
 module.exports = {
   start: start,
   booked: booked,
@@ -534,5 +532,5 @@ module.exports = {
   book: book,
   cancel_booking: cancel_booking,
   more_info: more_info,
-  processReceivedMessage:processReceivedMessage
+  processReceivedMessage: processReceivedMessage
 }

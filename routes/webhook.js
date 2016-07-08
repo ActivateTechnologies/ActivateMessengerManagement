@@ -37,12 +37,18 @@ router.post('/webhook/', function (req, res) {
         send.text(sender, event.optin.ref);
       }
 
+      console.log('1');
+
       else if (event.message && event.message.text) {
+        console.log('2');
         M.User.find({userId: sender}, function(err, result){
+          console.log('3');
           if(result.length > 0){
+            console.log('4');
             send.processReceivedMessage(event.message, sender);
           }
           else {
+            console.log('5');
             send.start(sender);
           }
         })
