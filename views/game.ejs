@@ -26,13 +26,6 @@
 
     <script>
 
-    $(document).ready(function(){
-      $('#clicker').click(function(){
-        console.log("I'm Game");
-        $('#text').html("Go check messenger now")
-      })
-    })
-
       window.fbAsyncInit = function() {
         FB.init({
           appId: "159289771143437",
@@ -48,7 +41,26 @@
          js = d.createElement(s); js.id = id;
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
+         js.addEventListener('click', function(){
+           console.log("should work");
+         })
       }(document, 'script', 'facebook-jssdk'));
+
+      var myConfObj = {
+        iframeMouseOver : false
+      }
+      window.addEventListener('blur',function(){
+        if(myConfObj.iframeMouseOver){
+          window.location.href = "http://m.me/245261069180348";
+        }
+      });
+
+      document.getElementById('clicker').addEventListener('mouseover',function(){
+         myConfObj.iframeMouseOver = true;
+      });
+      document.getElementById('clicker').addEventListener('mouseout',function(){
+          myConfObj.iframeMouseOver = false;
+      });
 
     </script>
   </body>
