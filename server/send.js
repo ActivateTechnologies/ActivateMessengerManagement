@@ -92,7 +92,7 @@ function processReceivedMessage(message, sender) {
     allGames(sender);
   }
   else if (help.indexOf(message.toLowerCase()) > -1) {
-    text(sender, "Call us on 07123456789");
+    text(sender, "Call us on 07825542533");
   }
   else {
     textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
