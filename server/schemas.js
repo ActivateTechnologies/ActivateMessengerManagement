@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //actual db
-mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
+// mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
 
 // test db
-// mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
+mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
 
 let userSchema = new Schema({
   userId: String,
