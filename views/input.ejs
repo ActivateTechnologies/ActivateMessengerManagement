@@ -89,7 +89,7 @@
                 + "<p>" + "<b>When: </b>" + item.when.substring(8, 10) + "/" + item.when.substring(5,7) + "/" + item.when.substring(0, 4) + "</p>"
                 + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
                 + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
-                + "<p>" + "<b>Priee: </b>£" + Math.round(item.price*100)/100 + "</p>"
+                + "<p>" + "<b>Priee: </b>£" + (Math.round(item.price*100)/100).toFixed(2) + "</p>"
                 + "<p>" + "<b>Shareable Link: </b>" + "http://kickabouttest.herokuapp.com/game?gid="+ item._id + "</p>"
                 + "<p>" + "<b>id: </b>" + item._id + "</p>"
                 + '</div>'
