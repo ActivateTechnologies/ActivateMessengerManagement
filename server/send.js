@@ -99,7 +99,7 @@ function processReceivedMessage(message, sender) {
       + "'find me a game' to look for upcoming games.", [
         {
           "content_type":"text",
-          "title":"Play!",
+          "title":"Play",
           "payload":"play"
         },
         {
