@@ -81,34 +81,35 @@ function booked(sender){
 
 function processReceivedMessage(message, sender) {
   console.log(message);
-  let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
-  let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
-  let help = ['help', 'help!', 'info', 'info!'];
-  if (greetings.indexOf(message.toLowerCase()) > -1) {
-    text(sender, "Hello there! Feel like you could do with a game?"
-      + " Just say 'Play' or 'Find me games' to see upcoming games or help for more info.");
-  }
-  else if (play.indexOf(message.toLowerCase()) > -1) {
-    allGames(sender);
-  }
-  else if (help.indexOf(message.toLowerCase()) > -1) {
-    text(sender, "Call us on 07123456789");
-  }
-  else {
-    textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
-      + "'find me a game' to look for upcoming games", [
-        {
-          "content_type":"text",
-          "title":"Play!",
-          "payload":"play"
-        },
-        {
-          "content_type":"text",
-          "title":"Help",
-          "payload":"help"
-        }
-      ]);
-  }
+  // let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
+  // let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
+  // let help = ['help', 'help!', 'info', 'info!'];
+  // if (greetings.indexOf(message.toLowerCase()) > -1) {
+  //   text(sender, "Hello there! Feel like you could do with a game?"
+  //     + " Just say 'Play' or 'Find me games' to see upcoming games or help for more info.");
+  // }
+  // else if (play.indexOf(message.toLowerCase()) > -1) {
+  //   allGames(sender);
+  // }
+  // else if (help.indexOf(message.toLowerCase()) > -1) {
+  //   text(sender, "Call us on 07123456789");
+  // }
+  // else {
+  //   textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
+  //     + "'find me a game' to look for upcoming games", [
+  //       {
+  //         "content_type":"text",
+  //         "title":"Play!",
+  //         "payload":"play"
+  //       },
+  //       {
+  //         "content_type":"text",
+  //         "title":"Help",
+  //         "payload":"help"
+  //       }
+  //     ]);
+  // }
+  text(sender, "hi");
 }
 
 function text(sender, text) {
