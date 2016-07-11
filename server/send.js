@@ -555,6 +555,7 @@ function more_info(sender, text){
 }
 
 function game(sender, gameId){
+  console.log("called game");
   M.Game.find({_id:gameId}, function(err, result){
     if(result.length > 0){
       let data = [];
@@ -569,12 +570,13 @@ function game(sender, gameId){
       });
       data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
       data = generate_card(data);
-      cards(sender, data, "today");
+      cards(sender, data);
     }
   })
 }
 
 function publicLink(sender, gameId){
+  console.log("called public link");
   M.User.find({userId:sender}, function(err, result){
     if(result.length > 0){
       game(sender, gameId);
