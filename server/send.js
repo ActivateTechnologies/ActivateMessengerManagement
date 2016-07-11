@@ -474,7 +474,7 @@ function yep(sender){
           if(err){
             console.log(err);
           } else {
-            sendAllGames(sender);
+            allGames(sender);
             console.log("saved it!");
           }
         })
