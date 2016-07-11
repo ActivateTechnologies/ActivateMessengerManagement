@@ -554,6 +554,7 @@ function game(sender, gameId){
   console.log("called game");
   M.Game.find({_id:gameId}, function(err, result){
     if(result.length > 0){
+      text(sender, "Here is the game you were looking for");
       let data = [];
       let item = result[0];
       let now = new Date();
