@@ -32,7 +32,7 @@ router.post('/webhook/', function (req, res) {
       if (event.optin) {
         console.log("optin");
         console.log(event.optin.ref);
-        send.text(sender, event.optin.ref);
+        send.publicLink(sender, event.optin.ref);
       }
       else if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){

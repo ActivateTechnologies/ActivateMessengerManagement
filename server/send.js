@@ -554,6 +554,49 @@ function more_info(sender, text){
   })
 }
 
+function game(sender, gameId){
+
+}
+
+function publicLink(sender, gameId){
+  M.User.find({userId:sender}, function(err, result){
+    if(result.length > 0){
+      game(sender, gameId);
+    }
+    else {
+      M.Button.update({name:"Yep"},
+        {$push: {activity: {userId:sender, time: new Date()}}},
+        {upsert: true},
+        function(err){
+          console.log(err);
+        })
+      var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      request(get_url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
+
+            let user = M.User({
+              userId: sender,
+              firstname: body.first_name,
+              lastname: body.last_name,
+              profile_pic: body.profile_pic,
+              locale: body.locale,
+              gender: body.gender
+            })
+            user.save(function(err){
+              if(err){
+                console.log(err);
+              } else {
+                game(sender, gameId);
+                console.log("saved it!");
+              }
+            })
+          }
+      });
+    }
+  })
+}
+
 module.exports = {
   start: start,
   booked: booked,
@@ -569,5 +612,7 @@ module.exports = {
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
-  more_info: more_info
+  more_info: more_info,
+  game: game,
+  publicLink: publicLink
 }
