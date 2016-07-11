@@ -556,17 +556,20 @@ function game(sender, gameId){
     if(result.length > 0){
       let data = [];
       let item = result[0];
-      let booked = false;
-      let join = item.joined;
+      let now = new Date();
+      if(item.when > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+        let booked = false;
+        let join = item.joined;
 
-      join.forEach(function(i){
-        if(i.userId === sender){
-          booked = true;
-        }
-      });
-      data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
-      data = generate_card(data);
-      cards(sender, data);
+        join.forEach(function(i){
+          if(i.userId === sender){
+            booked = true;
+          }
+        });
+        data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+        data = generate_card(data);
+        cards(sender, data);
+      }
     }
   })
 }
