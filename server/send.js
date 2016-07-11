@@ -96,7 +96,7 @@ function processReceivedMessage(message, sender) {
   }
   else {
     textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
-      + "'find me a game' to look for upcoming games", [
+      + "'find me a game' to look for upcoming games.", [
         {
           "content_type":"text",
           "title":"Play!",
