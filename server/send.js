@@ -201,10 +201,6 @@ function play(sender) {
 
 function cards(sender, data, day){
 
-  // if(day){
-  //   text(sender, "Awesome, here are my options for " + day + ". Tap the card to get directions.");
-  // }
-
   if(day){
     text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
   }
