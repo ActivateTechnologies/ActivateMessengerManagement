@@ -12,20 +12,26 @@
   </head>
   <body>
     <div class="container">
-      <h2>Check out our bot to book the game.</h2>
+      <h2 id="text">Check out our bot to book the game.</h2>
     </div>
-    <div class="container">
+    <div id="clicker" class="container">
       <div class="fb-send-to-messenger"
         messenger_app_id="159289771143437"
         page_id="245261069180348"
         data-ref="<%= gid %>"
         color="blue"
-        size="standard">
+        size="xlarge">
       </div>
     </div>
 
     <script>
-    console.log('<%= gid %>')
+
+    $(document).ready(function(){
+      $('#clicker').click(function(){
+        console.log("I'm Game");
+        $('#text').innerHTML = "Go check messenger now"
+      })
+    })
 
       window.fbAsyncInit = function() {
         FB.init({
