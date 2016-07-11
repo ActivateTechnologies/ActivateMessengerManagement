@@ -557,7 +557,9 @@ function game(sender, gameId){
       let data = [];
       let item = result[0];
       let now = new Date();
-      if(item.when > new Date(now.getFullYear(), now.getMonth(), now.getDate())){
+      now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      console.log(now);
+      if(item.when > now){
         let booked = false;
         let join = item.joined;
 
@@ -569,6 +571,9 @@ function game(sender, gameId){
         data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
         data = generate_card(data);
         cards(sender, data);
+      }
+      else {
+        text(sender, "That game has finished")
       }
     }
   })
