@@ -14,13 +14,23 @@
     <div class="container">
       <h2 id="text">Check out our bot to book the game.</h2>
       <button id="lg" class="btn" onclick="magic()">Log In</button>
-      <div id="clicker">
-        <div class="fb-send-to-messenger"
-          messenger_app_id="159289771143437"
-          page_id="245261069180348"
-          data-ref="<%= gid %>"
-          color="blue"
-          size="xlarge">
+      <div class="row">
+        <div class="col l4">
+          <p></p>
+        </div>
+        <div class="col l4">
+          <div id="clicker">
+            <div class="fb-send-to-messenger"
+              messenger_app_id="159289771143437"
+              page_id="245261069180348"
+              data-ref="<%= gid %>"
+              color="blue"
+              size="xlarge">
+            </div>
+          </div>
+        </div>
+        <div class="col l4">
+          <p></p>
         </div>
       </div>
     </div>

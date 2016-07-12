@@ -2,12 +2,9 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const config = require('./../config')
 
-//actual db
-// mongoose.connect('mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot');
-
-// test db
-mongoose.connect('mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest');
+mongoose.connect(config.MONGODB_URI);
 
 let userSchema = new Schema({
   userId: String,

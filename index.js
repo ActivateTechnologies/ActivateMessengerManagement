@@ -10,22 +10,14 @@ const app = express()
 const M = require('./server/schemas.js')
 const AWS = require('aws-sdk');
 
-// For main Kickabout App
-// const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
-// const FACEBOOK_APP_ID = "144481079297226"
-// const FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d"
-
-//for Kicabout messenger page and test app
-const VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"
-const FACEBOOK_APP_ID = "159289771143437"
-const FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826"
-
-const accessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
-const secretAccessKey = "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";
+const config = require('./config')
+const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
+const FACEBOOK_APP_ID = config.FACEBOOK_APP_ID;
+const FACEBOOK_APP_SECRET = config.FACEBOOK_APP_SECRET;
 
 AWS.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey
+    accessKeyId: config.AWSaccessKeyId,
+    secretAccessKey: config.AWSsecretAccessKey
 });
 
 let s3 = new AWS.S3();
