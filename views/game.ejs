@@ -76,21 +76,21 @@
          fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      // var myConfObj = {
-      //   iframeMouseOver : false
-      // }
-      // window.addEventListener('blur',function(){
-      //   if(myConfObj.iframeMouseOver){
-      //     window.location.href = "http://m.me/245261069180348";
-      //   }
-      // });
-      //
-      // document.getElementById('clicker').addEventListener('mouseover',function(){
-      //    myConfObj.iframeMouseOver = true;
-      // });
-      // document.getElementById('clicker').addEventListener('mouseout',function(){
-      //     myConfObj.iframeMouseOver = false;
-      // });
+      var myConfObj = {
+        iframeMouseOver : false
+      }
+      window.addEventListener('blur',function(){
+        if(myConfObj.iframeMouseOver){
+          window.location.href = "http://m.me/245261069180348";
+        }
+      });
+
+      document.getElementById('clicker').addEventListener('mouseover',function(){
+         myConfObj.iframeMouseOver = true;
+      });
+      document.getElementById('clicker').addEventListener('mouseout',function(){
+          myConfObj.iframeMouseOver = false;
+      });
 
     </script>
   </body>
