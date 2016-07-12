@@ -112,5 +112,3 @@ let server = app.listen(app.get('port'), function() {
 })
 
 module.exports = server;
-
-// heroku git:remote -a limitless-sierra-68694
