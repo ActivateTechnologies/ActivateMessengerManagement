@@ -25,12 +25,37 @@
     </div>
 
     <script>
+    function statusChangeCallback(response) {
+      console.log('statusChangeCallback');
+      console.log(response);
+      if (response.status === 'connected') {
+      }
+      else {
+        FB.login();
+        location.reload()
+      }
+    }
 
       window.fbAsyncInit = function() {
         FB.init({
           appId: "159289771143437",
           xfbml: true,
           version: "v2.6"
+        });
+
+        FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            console.log('Logged in.');
+          }
+          else {
+            FB.login(function(res) {
+                if (res.authResponse) {
+                  location.reload()
+                } else {
+                 console.log('User cancelled login or did not fully authorize.');
+                }
+            });
+          }
         });
 
       };
@@ -41,26 +66,23 @@
          js = d.createElement(s); js.id = id;
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
-         js.addEventListener('click', function(){
-           console.log("should work");
-         })
       }(document, 'script', 'facebook-jssdk'));
 
-      var myConfObj = {
-        iframeMouseOver : false
-      }
-      window.addEventListener('blur',function(){
-        if(myConfObj.iframeMouseOver){
-          window.location.href = "http://m.me/245261069180348";
-        }
-      });
-
-      document.getElementById('clicker').addEventListener('mouseover',function(){
-         myConfObj.iframeMouseOver = true;
-      });
-      document.getElementById('clicker').addEventListener('mouseout',function(){
-          myConfObj.iframeMouseOver = false;
-      });
+      // var myConfObj = {
+      //   iframeMouseOver : false
+      // }
+      // window.addEventListener('blur',function(){
+      //   if(myConfObj.iframeMouseOver){
+      //     window.location.href = "http://m.me/245261069180348";
+      //   }
+      // });
+      //
+      // document.getElementById('clicker').addEventListener('mouseover',function(){
+      //    myConfObj.iframeMouseOver = true;
+      // });
+      // document.getElementById('clicker').addEventListener('mouseout',function(){
+      //     myConfObj.iframeMouseOver = false;
+      // });
 
     </script>
   </body>
