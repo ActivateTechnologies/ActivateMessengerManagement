@@ -31,8 +31,8 @@ router.post('/webhook/', function (req, res) {
       else if (event.message && event.message.text) {
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
-            send.processReceivedMessage(event.message.text, sender);
-            // send.allGames(sender);
+            // send.processReceivedMessage(event.message.text, sender);
+            send.allGames(sender);
           }
           else {
             send.start(sender);

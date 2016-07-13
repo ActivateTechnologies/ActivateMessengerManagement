@@ -58,7 +58,7 @@ router.post('/charge', function(req, res) {
         if(users.length > 0){
           M.Game.find({_id:gameId}, function(err, result){
             let check = true;
-            if(users.length > 0){
+            if(result.length > 0){
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
                 send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
               });
