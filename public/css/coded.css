@@ -376,3 +376,45 @@ input, select, textarea{
           box-shadow: inset 0 0 100px rgba(0,0,0,.5);
   background-color: #FF524F;
  }
+
+ /* EXTERNAL PAGES */
+.title-text {
+  color: #000000;
+  font-size: 3vh;
+}
+
+.logoLead2 {
+  width: 90%;
+
+  margin-top: 20px;
+}
+
+.stripe-text {
+  color: #000000;
+}
+
+.button-login {
+  width: 90%;
+  height: 40px;
+  color: #FFFFFF;
+  background-color: #1ED760;
+  border: none;
+  border-radius: 2em;
+  font-size: 18px;
+}
+
+.stripe-button {
+  height: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
