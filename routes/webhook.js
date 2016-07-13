@@ -46,7 +46,7 @@ router.post('/webhook/', function (req, res) {
           send.book(sender, text);
         }
 
-        if(text.substring(0, 6) == "Cancel"){
+        else if(text.substring(0, 6) == "Cancel"){
           send.cancel_booking(sender, text);
         }
 
