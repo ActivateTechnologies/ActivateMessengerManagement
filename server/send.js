@@ -41,13 +41,13 @@ function start(sender){
 }
 
 function booked(sender, price, gameName, address, image_url){
-  
+
   let messageData = {
     "attachment":{
       "type":"template",
       "payload":{
         "template_type":"receipt",
-        "recipient_name": name,
+        "recipient_name": "recipient_name",
         "currency":"GBP",
         "payment_method":"Stripe",
         "order_number": "12342341234",
