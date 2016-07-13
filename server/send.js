@@ -40,7 +40,7 @@ function start(sender){
   })
 }
 
-function booked(sender, price, gameName, address, image_url){
+function booked(sender, name, price, gameName, address, image_url, order_number){
 
   let messageData = {
     "attachment":{
@@ -50,7 +50,7 @@ function booked(sender, price, gameName, address, image_url){
         "recipient_name": "recipient_name",
         "currency":"GBP",
         "payment_method":"Stripe",
-        "order_number": "12342341234",
+        "order_number": order_number,
         "elements":[
           {
             "title": gameName,

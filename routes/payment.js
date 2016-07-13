@@ -42,6 +42,7 @@ router.post('/charge', function(req, res) {
 	var stripeToken = req.body.stripeToken;
   let sender = req.query.mid;
   let gameId = req.query.gid;
+  let price = parseFloat(req.query.gameprice) / 100;
 
 	let charge = stripe.charges.create({
 		amount: req.query.gameprice, // amount in cents, again
@@ -53,12 +54,16 @@ router.post('/charge', function(req, res) {
 		if (err && err.type === 'StripeCardError') {
       res.send("Your payment wasn't processed");
 		} else {
-      M.Game.find({_id:gameId}, function(err, result){
-        let check = true;
-        if(result.length > 0){
-          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
-            send.booked(sender, req.query.gameprice, doc.name, doc.address, doc.image_url);
-          });
+      M.User.find({_id:sender}, function(err, users){
+        if(users.length > 0){
+          M.Game.find({_id:gameId}, function(err, result){
+            let check = true;
+            if(result.length > 0){
+              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
+                send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
+              });
+            }
+          })
         }
       })
       res.redirect('http://m.me/245261069180348');
