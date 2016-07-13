@@ -40,20 +40,30 @@ function start(sender){
   })
 }
 
-function booked(sender){
+function booked(sender, price, gameName, address, image_url){
+  
   let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": "Thanks for booking. Do you want to continue looking?",
-        "buttons": [
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"receipt",
+        "recipient_name": name,
+        "currency":"GBP",
+        "payment_method":"Stripe",
+        "order_number": "12342341234",
+        "elements":[
           {
-            "type": "postback",
-            "title": "Yes",
-            "payload": "continue"
+            "title": gameName,
+            "subtitle": address,
+            "quantity":1,
+            "price": price,
+            "currency":"GBP",
+            "image_url":image_url
           }
-        ]
+        ],
+        "summary":{
+          "total_cost":price
+        }
       }
     }
   }

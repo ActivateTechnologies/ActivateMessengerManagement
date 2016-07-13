@@ -56,8 +56,8 @@ router.post('/charge', function(req, res) {
       M.Game.find({_id:gameId}, function(err, result){
         let check = true;
         if(result.length > 0){
-          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-            send.booked(sender);
+          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
+            send.booked(sender, req.query.gameprice, doc.name, doc.address, doc.image_url);
           });
         }
       })
