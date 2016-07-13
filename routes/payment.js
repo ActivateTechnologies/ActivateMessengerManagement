@@ -54,7 +54,10 @@ router.post('/charge', function(req, res) {
 		if (err && err.type === 'StripeCardError') {
       res.send("Your payment wasn't processed");
 		} else {
-      M.User.find({_id:sender}, function(err, users){
+      M.User.find({userId:sender}, function(err, users){
+        if(err){
+          console.log(err);
+        }
         if(users.length > 0){
           M.Game.find({_id:gameId}, function(err, result){
             let check = true;
