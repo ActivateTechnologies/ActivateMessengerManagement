@@ -41,7 +41,7 @@ function start(sender){
 }
 
 function booked(sender, name, price, gameName, address, image_url, order_number){
-  order_number = order_number.substring(4);
+  order_number = order_number;
   let messageData = {
     "attachment":{
       "type":"template",
