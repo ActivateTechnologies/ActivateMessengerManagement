@@ -61,7 +61,7 @@ router.post('/charge', function(req, res) {
           });
         }
       })
-			res.render('charge');
+      res.redirect('http://m.me/245261069180348');
 		}
 	});
 
