@@ -37,7 +37,9 @@ app.use(require('./routes/webhook'))
 app.use(require('./routes/payment'))
 app.use(require('./routes/game'))
 
-
+app.get('/', function(req, res){
+  res.render('home')
+})
 
 app.get('/policy', function(req, res){
   res.render('policy');

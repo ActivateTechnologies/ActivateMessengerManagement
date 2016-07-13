@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const A = require('./../server/analytics.js')
 
-router.get('/', function(req, res){
+router.get('/analytics', function(req, res){
   Promise.all([A.getNewUsers(), A.getNewBookHits(), A.getNewTodayHits(), A.getNewTomorrowHits(), A.getNewSoonHits()])
   .then(function(answers){
     res.render('analytics', {
