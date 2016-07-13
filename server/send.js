@@ -358,7 +358,7 @@ function generate_card_for_booking(sender, gameId, description, price, booked){
   }
 
   if(parseFloat(price) > 0){
-    let payingLink = "kickabouttest.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
+    let payingLink = "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
 
     let template = {
                       "attachment": {
