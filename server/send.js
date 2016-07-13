@@ -47,7 +47,7 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
       "type":"template",
       "payload":{
         "template_type":"receipt",
-        "recipient_name": "recipient_name",
+        "recipient_name": name,
         "currency":"GBP",
         "payment_method":"Stripe",
         "order_number": order_number,
