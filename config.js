@@ -31,3 +31,7 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //PAGE ID
 //MONTY MESSENGER 245261069180348
 //KICKABOUT 1625739117677522
+
+//still need to change
+//redirect link in payment.js
+//booking link generator in send.js inside generate_card_for_booking

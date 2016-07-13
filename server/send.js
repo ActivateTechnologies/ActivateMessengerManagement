@@ -85,6 +85,41 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
   })
 }
 
+function booked_for_free_games(sender){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": "Thanks for booking. Do you want to continue looking?",
+        "buttons": [
+          {
+            "type": "postback",
+            "title": "Yes",
+            "payload": "continue"
+          }
+        ]
+      }
+    }
+  }
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+      }
+  })
+}
+
 function processReceivedMessage(message, sender) {
   console.log(message);
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
@@ -503,7 +538,7 @@ function book(sender, rest){
     let check = true;
     if(result.length > 0){
       M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-        booked(sender);
+        booked_for_free_games(sender);
       });
     }
   })

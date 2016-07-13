@@ -69,7 +69,7 @@ router.post('/charge', function(req, res) {
           })
         }
       })
-      res.redirect('http://m.me/245261069180348');
+      res.redirect('http://m.me/kickaboutapp');
 		}
 	});
 
