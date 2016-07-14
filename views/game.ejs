@@ -62,12 +62,25 @@
 
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {
+            // the user is logged in and has authenticated your
+            // app, and response.authResponse supplies
+            // the user's ID, a valid access token, a signed
+            // request, and the time the access token
+            // and signed request each expire
             var lg = document.getElementById('lg');
             lg.style.display = "none";
             console.log('Logged in.');
           }
+          else if (response.status === 'not_authorized') {
+            var lg = document.getElementById('lg');
+            lg.style.display = "none";
+            // var clicker = document.getElementById('clicker');
+            // clicker.style.display = 'none'
+            // console.log("not logged into app yet");
+          }
           else {
-
+            // var clicker = document.getElementById('clicker');
+            // clicker.style.display = 'block'
           }
         });
 
