@@ -634,15 +634,19 @@ function publicLink(sender, gameId){
   console.log("called public link");
   M.User.find({userId:sender}, function(err, result){
     if(result.length > 0){
+      console.log(0.1);
       game(sender, gameId);
+      console.log(0.5);
     }
     else {
+      console.log(1);
       M.Button.update({name:"Yep"},
         {$push: {activity: {userId:sender, time: new Date()}}},
         {upsert: true},
         function(err){
           console.log(err);
         })
+      console.log(2);
       var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
