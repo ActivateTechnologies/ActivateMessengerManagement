@@ -471,7 +471,15 @@ function generate_card(array){
 function allGames(sender){
   let now = new Date();
 
-  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+  M.Game.find({
+    when: {
+      $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+    }
+  }, {
+    sort: {
+      when: 1
+    }
+  }, function(err, result){
 
     let data = [];
     result.forEach(function(item){
