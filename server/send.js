@@ -504,6 +504,7 @@ function yep(sender){
     }
     if(result.length > 0 && result[0].publicGameId){
         game(sender, gameId);
+        allGames(sender);
     } else {
       var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
