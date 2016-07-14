@@ -28,6 +28,7 @@ html,
 body {
   height: 100%;
 
+-webkit-text-size-adjust: none;
 }
 body {
   color: #fff;
@@ -43,7 +44,7 @@ body {
   min-height: 75vh !important;
   -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
           box-shadow: inset 0 0 100px rgba(0,0,0,.5);
-  background: url(../img/footballBackground-min.png) no-repeat center center; 
+  background: url(../img/footballBackground-min.png) no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -378,19 +379,16 @@ input, select, textarea{
  }
 
  /* EXTERNAL PAGES */
-.title-text {
-  color: #000000;
-  font-size: 3vh;
+
+
+p {
+  font-size: 5vh;
 }
 
 .logoLead2 {
   width: 90%;
-
-  margin-top: 20px;
-}
-
-.stripe-text {
-  color: #000000;
+  margin-top: 50px;
+  margin-bottom: 30px;
 }
 
 .button-login {
@@ -406,15 +404,3 @@ input, select, textarea{
 .stripe-button {
   height: 50px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
