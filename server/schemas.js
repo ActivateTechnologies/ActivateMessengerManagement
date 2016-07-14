@@ -12,7 +12,8 @@ let userSchema = new Schema({
   lastname: String,
   profile_pic: String,
   locale: String,
-  gender: String
+  gender: String,
+  publicGameId: String
 })
 
 let User = mongoose.model('User', userSchema);

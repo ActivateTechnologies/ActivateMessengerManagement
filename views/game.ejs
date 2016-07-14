@@ -67,11 +67,11 @@
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
-            var lg = document.getElementById('lg');
-            lg.style.display = "none";
-            // var clicker = document.getElementById('clicker');
-            // clicker.style.display = 'none'
-            // console.log("not logged into app yet");
+            /*var lg = document.getElementById('lg');
+            lg.style.display = "none";*/
+            var clicker = document.getElementById('clicker');
+            clicker.style.display = 'none'
+            console.log("not logged into app yet");
           }
           else {
             console.log("not the two above");

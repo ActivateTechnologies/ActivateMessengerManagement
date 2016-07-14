@@ -498,29 +498,38 @@ function yep(sender){
     function(err){
       console.log(err);
     })
-  var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-  request(get_url, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        body = JSON.parse(body);
+  M.User.find({userId:sender}, function(err, result){
+    if (err) {
+      console.log(err);
+    }
+    if(result.length > 0 && result[0].publicGameId){
+        game(sender, gameId);
+    } else {
+      var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      request(get_url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
 
-        let user = M.User({
-          userId: sender,
-          firstname: body.first_name,
-          lastname: body.last_name,
-          profile_pic: body.profile_pic,
-          locale: body.locale,
-          gender: body.gender
-        })
-        user.save(function(err){
-          if(err){
-            console.log(err);
-          } else {
-            allGames(sender);
-            console.log("saved it!");
+            let user = M.User({
+              userId: sender,
+              firstname: body.first_name,
+              lastname: body.last_name,
+              profile_pic: body.profile_pic,
+              locale: body.locale,
+              gender: body.gender
+            })
+            user.save(function(err){
+              if(err){
+                console.log(err);
+              } else {
+                allGames(sender);
+                console.log("saved it!");
+              }
+            })
           }
-        })
-      }
-  });
+      });
+    }
+  })
 }
 
 function book(sender, rest){
@@ -645,7 +654,8 @@ function publicLink(sender, gameId){
               lastname: body.last_name,
               profile_pic: body.profile_pic,
               locale: body.locale,
-              gender: body.gender
+              gender: body.gender,
+              publicGameId: gameId
             })
             user.save(function(err){
               if(err){
