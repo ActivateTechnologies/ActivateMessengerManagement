@@ -23,6 +23,7 @@ router.post('/webhook/', function (req, res) {
 
     messaging_events.forEach(function(event){
       let sender = event.sender.id
+      console.log('Passed in object: ' + JSON.stringify(event));
       if (event.optin) {
         console.log("optin");
         console.log(event.optin.ref);
