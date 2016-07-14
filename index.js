@@ -45,6 +45,12 @@ app.get('/policy', function(req, res){
   res.render('policy');
 })
 
+app.get('/publiclinkimage', function(req, res){
+  var img = fs.readFileSync('./public/img/publicLinkImage.png');
+  res.writeHead(200, {'Content-Type': 'image/gif' });
+  res.end(img, 'binary');
+})
+
 app.get('/input', function(req, res){
   res.render('input');
 })
