@@ -601,7 +601,7 @@ function game(sender, gameId){
       now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
       console.log(now);
       if(item.when > now){
-        text(sender, "Here is the game you were looking for");
+        text(sender, "Here is your game: ");
         let booked = false;
         let join = item.joined;
 
