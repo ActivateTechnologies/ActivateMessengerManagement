@@ -386,14 +386,13 @@ p {
 }
 
 .logoLead2 {
-  width: 90%;
+  width: 98%;
   margin-top: 50px;
   margin-bottom: 30px;
 }
 
 .button-login {
-  width: 90%;
-  height: 40px;
+  width: 200px;
   color: #FFFFFF;
   background-color: #1ED760;
   border: none;
@@ -403,4 +402,26 @@ p {
 
 .stripe-button {
   height: 50px;
+}
+
+.title-text {
+  font-size: 18px;
+  margin-top: 0px;
+  color: #000000;
+}
+
+.fb-send-to-messenger {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.messenger-button-container {
+  width: 100%;
+  text-align: center;
+
+}
+
+.messenger-container {
+  padding-left: 75px;
 }

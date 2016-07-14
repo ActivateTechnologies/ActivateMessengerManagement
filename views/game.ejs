@@ -17,25 +17,15 @@
   <body>
     <div class="container">
       <img src="img/linear-logo.png" class="logoLead2">
-      <p id="text" class="title-text">Check out our bot to book the game:</p>
-      <button id="lg" class="button-login" onclick="magic()">Log In</button>
-      <div class="row">
-        <div class="col l4">
-          <p></p>
-        </div>
-        <div class="col l4">
-          <div id="clicker">
-            <div class="fb-send-to-messenger"
-              messenger_app_id="144481079297226"
-              page_id="1625739117677522"
-              data-ref="<%= gid %>"
-              color="blue"
-              size="xlarge">
-            </div>
-          </div>
-        </div>
-        <div class="col l4">
-          <p></p>
+      <p id="text" class="title-text">Use Facebook Messenger to book your game:</p>
+      <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+      <div id="clicker" class="messenger-container">
+        <div class="fb-send-to-messenger"
+          messenger_app_id="144481079297226"
+          page_id="1625739117677522"
+          data-ref="<%= gid %>"
+          color="blue"
+          size="xlarge">
         </div>
       </div>
     </div>
