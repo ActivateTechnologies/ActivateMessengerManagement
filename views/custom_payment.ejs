@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Kickabout | Pay</title>
+    <title>Kickabout | Custom Pay</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
@@ -35,46 +35,47 @@
               <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
 
               <div class="formContainer">
-                <form class="form-horizontal">
+                <form class="form-horizontal" action="/custompayment" method="POST" id="payment-form">
+                  <span class="payment-errors"></span>
                   <div class="form-group">
                     <div class="input-group centre-group">
                       <div class="input-group-addon custom-width">Amount (£)</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="0.00">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="0.00" name="amount">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon custom-width">Reference</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="e.g. Katy's Powerleague Payment">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="e.g. Katy's Powerleague Payment" name="reference">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon custom-width">Card Number</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxxx xxxx xxxx xxxx">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxxx xxxx xxxx xxxx" data-stripe="number">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon">Expiry Month</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="MM">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="MM" data-stripe="exp_month">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon">Expiry Year</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="YY">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="YY" data-stripe="exp_year">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-addon">Security Code (CVC)</div>
-                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxx">
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxx" data-stripe="cvc">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <button type="submit" class="btn btn-primary">Sign in</button>
+                      <button type="submit" class="btn btn-primary" value="Submit Payment">Pay with Card</button>
                     </div>
                   </div>
                 </form>

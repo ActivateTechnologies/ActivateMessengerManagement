@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <title>Kickabout | Book</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/input.css">
     <link rel="icon" href="imag/favicon.png">
     <link href="css/coded.css" rel="stylesheet">
+    <link rel="icon" href="img/favicon.png">
 
     <meta property="og:title" content="<%= gameName %>" />
     <meta property="og:description" content="Kickabout Game" />
@@ -30,35 +31,59 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <img src="img/linear-logo.png" class="logoLead2">
-      <p id="text" class="title-text">Use Facebook Messenger to book your game:</p>
-      <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-      <div id="clicker" class="messenger-container">
-        <div class="fb-send-to-messenger"
-          messenger_app_id="144481079297226"
-          page_id="1625739117677522"
-          data-ref="<%= gid %>"
-          color="blue"
-          size="xlarge">
-        </div>
-      </div>
-      <div id="loader" class="preloader-wrapper active">
-        <div class="spinner-layer spinner-blue-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
+    <div class="site-wrapper-payment">
+
+      <div class="site-wrapper-inner2">
+
+        <div class="cover-container2">
+
+          <div class="inner cover">
+
+              <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
+
+              <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+              <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+              <div id="clicker" class="messenger-container">
+                <div class="fb-send-to-messenger"
+                  messenger_app_id="144481079297226"
+                  page_id="1625739117677522"
+                  data-ref="<%= gid %>"
+                  color="blue"
+                  size="xlarge">
+                </div>
+              </div>
+              <div id="loader" class="preloader-wrapper active">
+                <div class="spinner-layer spinner-blue-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container" id="finished">
+                <a class="btn btn-primary" href="http://m.me/kickaboutapp">Go to Messenger</a>
+              </div>
+            
+              <p class="footertext">
+                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+                <br>
+                www.activatetechnologies.co.uk
+              </p>
+
+            </div>
+
           </div>
+
+          </div>
+
         </div>
+
       </div>
 
-      <div class="container" id="finished">
-        <a class="btn" href="http://m.me/kickaboutapp">Go to the Bot</a>
-      </div>
-    </div>
 
     <script>
 

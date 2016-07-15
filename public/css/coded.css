@@ -430,6 +430,12 @@ p {
   color: #000000;
 }
 
+.title-text-useMessenger {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #FFFFFF;
+}
+
 .fb-send-to-messenger {
   margin-left: auto;
   margin-right: auto;
@@ -465,10 +471,14 @@ p {
   font-size: 10px;
   position: absolute;
   bottom: 0;
+  text-align: center;
 }
 
 .footertext-customPayment {
   font-size: 10px;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
 }
 
 .input-field {
