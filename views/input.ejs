@@ -81,13 +81,15 @@
     <script type="text/javascript">
 
       var getCard = function(item){
+
+
         var data = '<div class="card">'
                 + "<span class='card-title'>" + item.name + "</span>"
                 + "<p>" + "<b>Address: </b>" + item.address + "</p>"
                 + "<p>" + "<b>Image Link: </b>" + item.image_url + "</p>"
                 + "<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>"
                 + "<p>" + "<b>When: </b>" + item.when.substring(8, 10) + "/" + item.when.substring(5,7) + "/" + item.when.substring(0, 4) + "</p>"
-                + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
+                + "<p>" + "<b>Joined: </b>" + item.joiners + "</p>"
                 + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
                 + "<p>" + "<b>Priee: </b>£" + (Math.round(item.price*100)/100).toFixed(2) + "</p>"
                 + "<p>" + "<b>Shareable Link: </b>" + "https://kickabouttest.herokuapp.com/game?gid="+ item._id + "</p>"

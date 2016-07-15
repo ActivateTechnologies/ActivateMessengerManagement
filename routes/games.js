@@ -10,36 +10,7 @@ router.get('/today', function(req, res){
     if(err){
       console.log(err);
     } else {
-      let ret = []
-      result.forEach((item) => {
-        item.joined.forEach((i) => {
-          M.User.find({userId: i.userId}, function(err, doc){
-            if(err){
-              console.log(err);
-            }
-            doc.forEach((j) => {
-              console.log(j.firstname + " " + j.lastname);
-              joiners.push(j.firstname + " " + j.lastname);
-            })
-          })
-          console.log("called");
-          console.log(joiners);
-          ret.push({
-            _id: item._id,
-            name: item.name,
-            address: item.address,
-            image_url: item.image_url,
-            latlong: item.latlong,
-            price: item.price,
-            when: item.when,
-            desc: item.desc,
-            joiners: joiners.join(),
-            capacity: item.capacity
-          })
-        })
-      })
-
-      res.send(ret);
+      res.send(result);
     }
   })
 })
