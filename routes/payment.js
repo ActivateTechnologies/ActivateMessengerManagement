@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const M = require('./../server/schemas.js')
+// const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const send = require('./../server/send.js')
 
@@ -35,6 +36,29 @@ router.get('/payment', function(req, res){
       console.log("not here");
     }
   })
+})
+
+router.get('/custompayment', function(req, res){
+  res.render('custom_payment');
+})
+
+router.post('/custompayment', function(req, res){
+  var stripeToken = req.body.stripeToken;
+
+  var charge = stripe.charges.create({
+    amount: (parseFloat(req.body.amount)) * 100, // amount in cents, again
+    currency: "gbp",
+    source: stripeToken,
+    description: req.body.reference
+  }, function(err, charge) {
+    if (err && err.type === 'StripeCardError') {
+      // The card has been declined
+      res.send(err.message)
+      console.log(err);
+    } else {
+      res.send("Success")
+    }
+  });
 })
 
 router.post('/charge', function(req, res) {

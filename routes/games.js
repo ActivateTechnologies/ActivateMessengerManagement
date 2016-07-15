@@ -22,6 +22,8 @@ router.get('/today', function(req, res){
               joiners.push(j.firstname + " " + j.lastname);
             })
           })
+          console.log("called");
+          console.log(joiners);
           ret.push({
             _id: item._id,
             name: item.name,
