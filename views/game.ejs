@@ -19,6 +19,16 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+
+
+    <style>
+      a {
+        text-shadow: none;
+      }
+      #loader {
+        margin: 0 auto;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -33,6 +43,21 @@
           color="blue"
           size="xlarge">
         </div>
+      </div>
+      <div id="loader" class="preloader-wrapper active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="finished">
+        <a class="btn" href="http://m.me/kickaboutapp">Go to the Bot</a>
       </div>
     </div>
 
@@ -50,6 +75,12 @@
     }
 
       window.fbAsyncInit = function() {
+
+        var fin = document.getElementById('finished');
+        fin.style.display = 'none';
+        var loader = document.getElementById('loader');
+        loader.style.display = 'none'
+
         FB.init({
           appId: "144481079297226",
           xfbml: true,
@@ -58,30 +89,19 @@
 
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {
-            // the user is logged in and has authenticated your
-            // app, and response.authResponse supplies
-            // the user's ID, a valid access token, a signed
-            // request, and the time the access token
-            // and signed request each expire
             var lg = document.getElementById('lg');
             lg.style.display = "none";
             console.log('Logged in.');
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
-            /*var lg = document.getElementById('lg');
-            lg.style.display = "none";*/
             var clicker = document.getElementById('clicker');
-            clicker.style.display = 'none'
-            console.log("not logged into app yet");
+            clicker.style.display = 'none';
           }
           else {
             console.log("not the two above");
-            // var clicker = document.getElementById('clicker');
-            // clicker.style.display = 'block'
             var clicker = document.getElementById('clicker');
-            clicker.style.display = 'none'
-            console.log("not logged into app yet");
+            clicker.style.display = 'none';
           }
         });
 
@@ -95,21 +115,30 @@
          fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      // var myConfObj = {
-      //   iframeMouseOver : false
-      // }
-      // window.addEventListener('blur',function(){
-      //   if(myConfObj.iframeMouseOver){
-      //     window.location.href = "http://m.me/245261069180348";
-      //   }
-      // });
-      //
-      // document.getElementById('clicker').addEventListener('mouseover',function(){
-      //    myConfObj.iframeMouseOver = true;
-      // });
-      // document.getElementById('clicker').addEventListener('mouseout',function(){
-      //     myConfObj.iframeMouseOver = false;
-      // });
+      var myConfObj = {
+        iframeMouseOver : false
+      }
+      window.addEventListener('blur',function(){
+        if(myConfObj.iframeMouseOver){
+          // var clicker = document.getElementById('clicker');
+          // clicker.style.display = 'none'
+          var loader = document.getElementById('loader');
+          loader.style.display = 'block'
+          setTimeout(function(){
+            loader.style.display = 'none'
+            // window.location.href = "http://m.me/245261069180348";
+            var fin = document.getElementById('finished');
+            fin.style.display = 'block'
+          }, 2000);
+        }
+      });
+
+      document.getElementById('clicker').addEventListener('mouseover',function(){
+         myConfObj.iframeMouseOver = true;
+      });
+      document.getElementById('clicker').addEventListener('mouseout',function(){
+          myConfObj.iframeMouseOver = false;
+      });
 
     </script>
   </body>
