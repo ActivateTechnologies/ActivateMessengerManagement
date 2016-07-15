@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <title>Kickabout | Pay</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <link href="css/coded.css" rel="stylesheet">
+    <link rel="icon" href="img/favicon.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
@@ -21,41 +23,112 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <img src="img/linear-logo.png" class="logoLead2">
-    </div>
-    <div class="container">
-      <form action="/custompayment" method="POST" id="payment-form">
-        <span class="payment-errors"></span>
-        <div class="input-field">
-          <input type="text" name="amount" placeholder="Amount (£)">
-        </div>
-        <div class="input-field">
-          <input type="text" name="reference" placeholder="Reference">
-        </div>
-        <div class="input-field">
-          <input type="text" data-stripe="number" placeholder="Card Number">
-        </div>
-        <div class="row">
-          <div class="col s6">
-            <div class="input-field">
-              <input type="text" data-stripe="exp_month" placeholder="expiry month (MM)">
+    <div class="site-wrapper-payment">
+
+      <div class="site-wrapper-inner2">
+
+        <div class="cover-container2">
+
+          <div class="inner cover">
+
+            
+              <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
+
+              <div class="formContainer">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                    <div class="input-group centre-group">
+                      <div class="input-group-addon custom-width">Amount (£)</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="0.00">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-addon custom-width">Reference</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="e.g. Katy's Powerleague Payment">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-addon custom-width">Card Number</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxxx xxxx xxxx xxxx">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-addon">Expiry Month</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="MM">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-addon">Expiry Year</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="YY">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-addon">Security Code (CVC)</div>
+                      <input type="text" class="form-control" id="exampleInputAmount" placeholder="xxx">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-primary">Sign in</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!--
+              <div class="container">
+                <form action="/custompayment" method="POST" id="payment-form">
+                  <span class="payment-errors"></span>
+                  <div class="input-field">
+                    <input type="text" name="amount" placeholder="Amount (£)">
+                  </div>
+                  <div class="input-field">
+                    <input type="text" name="reference" placeholder="Reference">
+                  </div>
+                  <div class="input-field">
+                    <input type="text" data-stripe="number" placeholder="Card Number">
+                  </div>
+                  <div class="row">
+                    <div class="col s6">
+                      <div class="input-field">
+                        <input type="text" data-stripe="exp_month" placeholder="expiry month (MM)">
+                      </div>
+                    </div>
+                    <div class="col s6">
+                      <div class="input-field">
+                        <input type="text" data-stripe="exp_year" placeholder="expiry year (YY)">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="input-field">
+                    <input type="text" data-stripe="cvc" placeholder="CVC">
+                  </div>
+
+                  <input type="submit" class="submit" value="Submit Payment">
+                </form>
+              </div>
+              -->
+
+              <p class="footertext">
+                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+                <br>
+                www.activatetechnologies.co.uk
+              </p>
+
             </div>
+
           </div>
-          <div class="col s6">
-            <div class="input-field">
-              <input type="text" data-stripe="exp_year" placeholder="expiry year (YY)">
-            </div>
-          </div>
+
         </div>
 
-        <div class="input-field">
-          <input type="text" data-stripe="cvc" placeholder="CVC">
-        </div>
+      </div>
 
-        <input type="submit" class="submit" value="Submit Payment">
-      </form>
-    </div>
 
     <script type="text/javascript">
       // Stripe.setPublishableKey('pk_test_p3GX2e0V1P9FteC3qz29z4YK');

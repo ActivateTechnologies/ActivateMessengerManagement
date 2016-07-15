@@ -39,7 +39,6 @@ body {
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper2 {
   display: table;
-  width: 100%;
   height: 75vh !important; /* For at least Firefox */
   min-height: 75vh !important;
   -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
@@ -49,6 +48,16 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+.site-wrapper-payment {
+  display: table;
+  width: 100%;
+  height: 100vh !important; /* For at least Firefox */
+  min-height: 75vh !important;
+  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+  background: #1ED760;
 }
 
 .site-wrapper6 {
@@ -269,6 +278,17 @@ body {
   width: 350px;
 }
 
+.logoLead-payment {
+  margin-top: 10px;
+  width: 350px;
+  margin-bottom: 50px;
+}
+
+.logoLead-custompayment {
+  margin-top: 10px;
+  width: 350px;
+}
+
 .number-section {
   text-align: left;
 }
@@ -425,3 +445,45 @@ p {
 .messenger-container {
   padding-left: 75px;
 }
+
+.payWithCardButtonContainer {
+  background: #FFFFFF;
+  width: 170px;
+  height: 80px;
+  padding-top: 25px;
+  position: relative;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  background:rgba(255,255,255, 0.5);
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+} 
+
+.footertext {
+  font-size: 10px;
+  position: absolute;
+  bottom: 0;
+}
+
+.footertext-customPayment {
+  font-size: 10px;
+}
+
+.input-field {
+  color: #FFFFFF;
+}
+
+.formContainer {
+  text-align: center;
+  width: auto;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 300px;
+}
+
+
+
