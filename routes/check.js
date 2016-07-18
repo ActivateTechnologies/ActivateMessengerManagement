@@ -5,7 +5,7 @@ const router = express.Router()
 const M = require('./../server/schemas.js')
 
 router.get('/check', function(req, res){
-  M.User.find({_id:req.query.userId}, function(err, result){
+  M.User.find({facebookID:req.query.fbid}, function(err, result){
     if(err){
       console.log(err);
     }
