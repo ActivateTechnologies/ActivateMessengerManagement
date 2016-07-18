@@ -632,9 +632,11 @@ function game(sender, gameId){
 }
 
 function publicLink(sender, optin){
-  let arr = optin.split('|');
+  let arr = optin.split('facebook');
   let gameId = arr[0];
   let facebookID = arr[1];
+  console.log("Public Link");
+  console.log(facebookID);
   M.User.find({userId:sender}, function(err, result){
     if(result.length > 0){
       game(sender, gameId);
