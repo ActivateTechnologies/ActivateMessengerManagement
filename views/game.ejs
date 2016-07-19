@@ -61,7 +61,7 @@
                 </div>
               </div>
 
-              
+
               <p class="footertext">
                 Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
                 <br>
@@ -142,7 +142,7 @@
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
           setInterval(function(){
-            $.get("http://localhost:3000/check?fbid=" + fbid, function(data){
+            $.get("http://kickabouttest.herokuapp.com/check?fbid=" + fbid, function(data){
               if(data == "true"){
                 setTimeout(function(){
                   window.location.href = "http://m.me/245261069180348";
