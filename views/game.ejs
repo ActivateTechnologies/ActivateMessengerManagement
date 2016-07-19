@@ -141,6 +141,13 @@
         if(myConfObj.iframeMouseOver){
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
+          $.get("http://kickabouttest.herokuapp.com/check?fbid=" + fbid, function(data){
+            if(data == "true"){
+              setTimeout(function(){
+                window.location.href = "http://m.me/245261069180348";
+              }, 2000)
+            }
+          })
           setInterval(function(){
             $.get("http://kickabouttest.herokuapp.com/check?fbid=" + fbid, function(data){
               if(data == "true"){
