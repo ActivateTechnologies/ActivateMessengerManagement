@@ -27,6 +27,7 @@
             <span id="type_message" class="radioButton">O</span>
           </td>
           <td>
+            <b>Text Message</b> with following text:<br>
             <textarea name="textarea_message" id="textarea_message"></textarea>
           </td>
         </tr>
@@ -35,7 +36,8 @@
             <span id="type_upcomingGames" class="radioButton">O</span>
           </td>
           <td>
-            Send upcoming games
+            <b>Upcoming Games</b> with following text:<br>
+            <textarea name="textarea_upcomingGames" id="textarea_upcomingGames"></textarea>
           </td>
         </tr>
         <tr>
@@ -81,8 +83,12 @@
           sendMessage(type, $('#textarea_message').val().trim());
         }
       } else if (type == 'upcomingGames') {
-        if (confirm("Are you sure you want to send upcoming games to all users?")) {
-          sendMessage(type);
+        if ($('#textarea_upcomingGames').val().trim().length == 0) {
+          alert('Message box empty');
+          return;
+        }
+        if (confirm("Are you sure you want to send this message along with upcoming games?")) {
+          sendMessage(type, $('#textarea_upcomingGames').val().trim());
         }
       }
     }
