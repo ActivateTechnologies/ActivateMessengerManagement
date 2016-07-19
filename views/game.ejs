@@ -40,42 +40,40 @@
 
           <div class="inner cover">
 
-              <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
+            <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
 
-              <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-              <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-              <div id="clicker" class="messenger-container">
-                <div class="fb-send-to-messenger"
-                  messenger_app_id="144481079297226"
-                  page_id="1625739117677522"
-                  data-ref="<%= gid %>"
-                  color="blue"
-                  size="xlarge">
-                </div>
+            <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+            <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+            <div id="clicker" class="messenger-container">
+              <div class="fb-send-to-messenger"
+                messenger_app_id="144481079297226"
+                page_id="1625739117677522"
+                data-ref="<%= gid %>"
+                color="blue"
+                size="xlarge">
               </div>
-              <div id="loader" class="preloader-wrapper active">
-                <div class="spinner-layer spinner-blue-only">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="container" id="finished">
-                <a class="btn btn-primary" href="http://m.me/kickaboutapp">Go to Messenger</a>
-              </div>
-
-              <p class="footertext">
-                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
-                <br>
-                www.activatetechnologies.co.uk
-              </p>
-
             </div>
+            <div id="loader" class="preloader-wrapper active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="container" id="finished">
+              <a class="btn btn-primary" href="http://m.me/kickaboutapp">Go to Messenger</a>
+            </div>
+
+            <p class="footertext">
+              Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+              <br>
+              www.activatetechnologies.co.uk
+            </p>
 
           </div>
 
@@ -83,23 +81,25 @@
 
       </div>
 
-      <div class="container" id="finished">
-        <a class="btn" href="http://m.me/245261069180348">Go to the Bot</a>
-      </div>
+    </div>
+
+    <div class="container" id="finished">
+      <a class="btn" href="http://m.me/245261069180348">Go to the Bot</a>
+    </div>
 
 
     <script>
 
-    function magic(){
-      console.log("called magic");
-      FB.login(function(res) {
-        if (res.authResponse) {
-          location.reload()
-        } else {
-         console.log('User cancelled login or did not fully authorize.');
-        }
-      });
-    }
+      function magic(){
+        console.log("called magic");
+        FB.login(function(res) {
+          if (res.authResponse) {
+            location.reload()
+          } else {
+           console.log('User cancelled login or did not fully authorize.');
+          }
+        });
+      }
 
       window.fbAsyncInit = function() {
 

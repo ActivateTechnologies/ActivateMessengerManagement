@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
-
   </head>
   <body>
 
@@ -80,19 +79,42 @@
 
     <script type="text/javascript">
 
-      var getCard = function(item){
+      var getPlayerCard = function(player) {
+        var data = "<div>";
+        data += "<div class='profileDivLeft'>" + "<img class='profile_img' src='" + player.profile_pic + "'>" + "</div>"
+        data += "<div class='profileDivRight'>"
+        data += "<b>" + player.firstname + " " + player.lastname + "</b><br>";
+        data += "userid:" + player._id + "";
+        data += "</div>"
+        player._id + "<br>";
+        return data;
+      }
+
+      var getCard = function(game){
         var data = '<div class="card">'
-                + "<span class='card-title'>" + item.name + "</span>"
-                + "<p>" + "<b>Address: </b>" + item.address + "</p>"
-                + "<p>" + "<b>Image Link: </b>" + item.image_url + "</p>"
-                + "<p>" + "<b>Lat, Long: </b>" + item.latlong + "</p>"
-                + "<p>" + "<b>When: </b>" + item.when.substring(8, 10) + "/" + item.when.substring(5,7) + "/" + item.when.substring(0, 4) + "</p>"
-                + "<p>" + "<b>Joined: </b>" + item.joined.length + "</p>"
-                + "<p>" + "<b>Capacity: </b>" + item.capacity + "</p>"
-                + "<p>" + "<b>Priee: </b>£" + (Math.round(item.price*100)/100).toFixed(2) + "</p>"
-                + "<p>" + "<b>Shareable Link: </b>" + "http://www.activatetechnologies.co.uk/game?gid="+ item._id + "</p>"
-                + "<p>" + "<b>id: </b>" + item._id + "</p>"
-                + '</div>'
+          + "<span class='card-title'>" + game.name + "</span><br><br>"
+          + "<b>Address: </b>" + game.address + "<br>"
+          + "<b>Image Link: </b><a target='_blank' href='" + game.image_url + "'>Link</a><br>"
+          + "<b>Lat, Long: </b>" + game.latlong + "<br>"
+          + "<b>When: </b>" + game.when.substring(8, 10) + "/" + game.when.substring(5,7) + "/" + game.when.substring(0, 4) + "<br>"
+          + "<b>Number of Players: </b>" + game.joined.length + "/" + game.capacity + "<br>"
+          + "<b>Price: </b>£" + (Math.round(game.price*100)/100).toFixed(2) + "<br>"
+          + "<b>Shareable Link: </b><a target='_blank' href='" + "http://www.activatetechnologies.co.uk/game?gid="+ game._id + "'>Link</a><br>"
+          + "<b>id: </b>" + game._id + "<br>"
+          + "<b>Players attending: </b>" + "<br>"
+          + "<div id='" + game._id + "_players'></div>"
+          + '</div>';
+
+        if (game.joined && game.joined.length) {
+          $.get('/players?gid=' + game._id, function(data, status){
+            console.log(data);
+            data.forEach(function(player){
+              var playerCard = getPlayerCard(player);
+              console.log(playerCard);
+              $('#' + game._id + '_players').append(playerCard);
+            })
+          })
+        }
         return data;
       }
 
