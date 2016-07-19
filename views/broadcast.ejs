@@ -67,7 +67,7 @@
       $('#type_' + type).addClass("radioButtonSelected");
     }
 
-    function sendMessage(type, message) {
+    function sendMessage(type, message, greeting) {
       $.post(window.location.href + "?typ=" + type + "&message=" + message, function( data ) {
         console.log(data);
       });

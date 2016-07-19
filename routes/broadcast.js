@@ -24,7 +24,7 @@ router.post('/broadcast', function(req, res){
   else if(type === "upcomingGames"){
     M.User.find({}, function(err, result){
       result.forEach(function(item){
-        send.allGames(item.userId);
+        send.allGames(item.userId, message);
       })
       res.send("People reached: " + result.length)
     })
