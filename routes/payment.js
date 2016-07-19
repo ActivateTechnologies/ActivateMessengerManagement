@@ -30,6 +30,7 @@ router.get('/payment', function(req, res){
         gid: gameId,
         gameprice: gameprice,
         gameName: result[0].name,
+        gameAddress: result[0].address,
         imageLink: result[0].image_url
       });
     }
