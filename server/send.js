@@ -242,8 +242,11 @@ function play(sender) {
 
 function cards(sender, data, day){
 
-  if(day){
+  if(day === "today"){
     text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
+  }
+  else if(day){
+    text(sender, day);
   }
 
   let messageData = data;
@@ -468,7 +471,11 @@ function generate_card(array){
   return template;
 }
 
-function allGames(sender){
+function allGames(sender, broadcast){
+  let temp = "today"
+  if(text){
+    temp = broadcast;
+  }
   let now = new Date();
 
   M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
@@ -487,7 +494,7 @@ function allGames(sender){
     })
 
     data = generate_card(data);
-    cards(sender, data, "today");
+    cards(sender, data, temp);
   })
 }
 

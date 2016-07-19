@@ -12,7 +12,7 @@
 
     <style media="screen">
 
-    
+
     </style>
   </head>
   <body onload="init()">
@@ -69,8 +69,10 @@
       $('#textarea' + type).attr("disabled", false)
     }
 
-    function sendMessage(type, message) {
-      console.log(type, message);
+    function sendMessage(type, message, greeting) {
+      $.post(window.location.href + "?typ=" + type + "&message=" + message, function( data ) {
+        console.log(data);
+      });
     }
 
     function send() {

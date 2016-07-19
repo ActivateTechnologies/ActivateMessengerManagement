@@ -9,21 +9,24 @@ router.get('/broadcast', function (req, res) {
     res.render('broadcast');
 });
 
-router.get('/sendall', function(req, res){
-  let type = req.query.type;
-  let message = req.query.txt;
+router.post('/broadcast', function(req, res){
+  let type = req.query.typ;
+  let message = req.query.message;
 
-  if(type === "text"){
+  if(type === "message"){
     M.User.find({}, function(err, result){
       result.forEach(function(item){
         send.text(item.userId, message);
       })
+      res.send("People reached: " + result.length)
     })
-  } else {
+  }
+  else if(type === "upcomingGames"){
     M.User.find({}, function(err, result){
       result.forEach(function(item){
-        send.allGames(item.userId);
+        send.allGames(item.userId, message);
       })
+      res.send("People reached: " + result.length)
     })
   }
 })
