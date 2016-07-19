@@ -667,8 +667,7 @@ function publicLink(sender, optin){
               lastname: body.last_name,
               profile_pic: body.profile_pic,
               locale: body.locale,
-              gender: body.gender,
-              publicGameId: gameId
+              gender: body.gender
             })
             user.save(function(err){
               if(err){
