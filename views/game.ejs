@@ -85,6 +85,8 @@
 
     <script>
 
+    document.domain = "facebook.com";
+
     var fbid = "";
 
     function magic(){
@@ -99,8 +101,6 @@
     }
 
       window.fbAsyncInit = function() {
-
-        document.domain = "facebook.com"
 
         FB.init({
           appId: "144481079297226",
