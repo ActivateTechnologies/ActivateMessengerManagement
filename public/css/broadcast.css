@@ -1,46 +1,66 @@
 body {
-    }
 
-    .container {
-      width: 80%;
-    }
+}
 
-    .card {
-      background: #F0EFED;
-    }
+.container {
+  width: 80%;
+}
 
-    h1 {
-      text-align: center;
-      color: #dddddd;
-    }
+.card {
+  background: #F0EFED;
+}
 
-    h3 {
-      text-align: center;
-      padding-top: 20px;
-      color: #766F62;
-      font-size: 20px;
-    }
+h1 {
+  text-align: center;
+  color: #dddddd;
+}
 
-    .bar {
-      fill: steelblue;
-    }
+h3 {
+  text-align: center;
+  padding-top: 20px;
+  color: #766F62;
+  font-size: 20px;
+}
 
-    .axis text {
-      font: 10px sans-serif;
-    }
+.bar {
+  fill: steelblue;
+}
 
-    svg {
-      margin: 0 auto;
-      display: block;
-    }
+.axis text {
+  font: 10px sans-serif;
+}
 
-    .axis path,
-    .axis line {
-      fill: none;
-      stroke: #333;
-      shape-rendering: crispEdges;
-    }
+svg {
+  margin: 0 auto;
+  display: block;
+}
 
-    .x.axis path {
-      display: none;
-    }
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #333;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.radioButton {
+  font-weight: normal;
+  color: grey;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.radioButtonSelected {
+  font-weight: normal;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form_td {
+  text-align: center;
+  cursor: pointer;
+}

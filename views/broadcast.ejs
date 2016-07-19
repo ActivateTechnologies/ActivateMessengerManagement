@@ -22,20 +22,25 @@
       <form>
       <p>Enter the messaged to send to all registered bot users:</p>
       <table>
-        <tr>
-          <td>
-            <span id="type_message">o</span>
+        <tr onclick="changeType('message')">
+          <td class="form_td">
+            <span id="type_message" class="radioButton">O</span>
           </td>
           <td>
             <textarea name="textarea_message" id="textarea_message"></textarea>
           </td>
         </tr>
-        <tr>
-          <td>
-            <span id="type_upcomingGames">o</span>
+        <tr onclick="changeType('upcomingGames')">
+          <td class="form_td">
+            <span id="type_upcomingGames" class="radioButton">O</span>
           </td>
           <td>
             Send upcoming games
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input type="button" value="Send" onclick="send()">
           </td>
         </tr>
 
@@ -53,9 +58,31 @@
     }
 
     function changeType(newType) {
-      $('#type_' + type).css("font-weight", "normal");
+      $('#type_' + type).removeClass("radioButtonSelected");
+      $('#type_' + type).addClass("radioButton");
       type = newType;
-      $('#type_' + type).css("font-weight", "bold");
+      $('#type_' + type).removeClass("radioButton");
+      $('#type_' + type).addClass("radioButtonSelected");
+    }
+
+    function sendMessage(type, message) {
+      console.log(type, message);
+    }
+
+    function send() {
+      if (type == 'message') {
+        if ($('#textarea_message').val().trim().length == 0) {
+          alert('Message box empty');
+          return;
+        }
+        if (confirm("Are you sure you want to send this message?")) {
+          sendMessage(type, $('#textarea_message').val().trim());
+        }
+      } else if (type == 'upcomingGames') {
+        if (confirm("Are you sure you want to send upcoming games to all users?")) {
+          sendMessage(type);
+        }
+      }
     }
 
     </script>
