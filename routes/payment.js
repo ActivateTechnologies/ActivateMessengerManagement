@@ -18,7 +18,6 @@ router.get('/payment', function(req, res){
       console.log(err);
     })
 
-  console.log(gameId);
   M.Game.find({_id:gameId}, function(err, result){
     if(err){
       console.log(err);
@@ -29,7 +28,9 @@ router.get('/payment', function(req, res){
       res.render('payment', {
         mid:userId,
         gid: gameId,
-        gameprice: gameprice
+        gameprice: gameprice,
+        gameName: result[0].name,
+        imageLink: result[0].image_url
       });
     }
     else {
