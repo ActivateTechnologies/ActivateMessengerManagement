@@ -5,8 +5,7 @@
     <title>Kickabout | Book</title>
 
     <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
@@ -145,7 +144,9 @@
         iframeMouseOver : false
       }
       window.addEventListener('blur',function(){
+        console.log("reached blur");
         if(myConfObj.iframeMouseOver){
+          console.log("detected click");
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
           $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
