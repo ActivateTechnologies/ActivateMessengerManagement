@@ -15,7 +15,7 @@
     
     </style>
   </head>
-  <body>
+  <body onload="init()">
     <div class="container">
       <h1>Broadcast</h1>
 
@@ -24,9 +24,7 @@
       <table>
         <tr>
           <td>
-            <input type="radio" name="gender" value="male"> Male<br>
-  <input type="radio" name="gender" value="female"> Female<br>
-  <input type="radio" name="gender" value="other"> Other1
+            <span id="type_message">o</span>
           </td>
           <td>
             <textarea name="textarea_message" id="textarea_message"></textarea>
@@ -34,7 +32,7 @@
         </tr>
         <tr>
           <td>
-            <input type="radio" name="messageType" value="upcomingGames" />2
+            <span id="type_upcomingGames">o</span>
           </td>
           <td>
             Send upcoming games
@@ -47,6 +45,19 @@
     </div>
 
     <script type="text/javascript">
+
+    var type = 'message';
+
+    function init() {
+      changeType(type);
+    }
+
+    function changeType(newType) {
+      $('#type_' + type).css("font-weight", "normal");
+      type = newType;
+      $('#type_' + type).css("font-weight", "bold");
+    }
+
     </script>
   </body>
 </html>
