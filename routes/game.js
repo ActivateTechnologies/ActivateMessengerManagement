@@ -13,7 +13,7 @@ router.get('/game', function(req, res){
       res.render('game', {
         gid: req.query.gid,
         gameName: result[0].name,
-        imageLink result[0].image_url
+        imageLink: result[0].image_url
       });
     } else {
       res.render('game', {
