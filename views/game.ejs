@@ -149,7 +149,7 @@
           console.log("detected click");
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+          $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
             if(data == "true"){
               setTimeout(function(){
                 console.log("calling refresh");
@@ -158,7 +158,7 @@
             }
           })
           setInterval(function(){
-            $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+            $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
               if(data == "true"){
                 setTimeout(function(){
                   console.log("calling refresh");
