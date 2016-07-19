@@ -9,7 +9,7 @@ router.get('/broadcast', function (req, res) {
     res.render('broadcast');
 });
 
-router.get('/sendall', function(req, res){
+router.post('/broadcast', function(req, res){
   let type = req.query.type;
   let message = req.query.txt;
 
@@ -26,6 +26,8 @@ router.get('/sendall', function(req, res){
       })
     })
   }
+
+  res.send("done")
 })
 
 module.exports = router
