@@ -87,6 +87,27 @@
 
     var fbid = "";
 
+    function ref(){
+      $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+        if(data.check === true){
+          setTimeout(function(){
+            console.log("calling refresh");
+            location.href = "http://m.me/kickaboutapp";
+          }, 2000)
+        }
+      })
+      setInterval(function(){
+        $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+          if(data.check === false){
+            setTimeout(function(){
+              console.log("calling refresh");
+              location.href = "http://m.me/kickaboutapp";
+            }, 2000)
+          }
+        })
+      }, 2000);
+    }
+
     function magic(){
       console.log("called magic");
       FB.login(function(res) {
@@ -149,25 +170,9 @@
           console.log("detected click");
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          document.domain = "facebook.com"
-          $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-            if(data == "true"){
-              setTimeout(function(){
-                console.log("calling refresh");
-                location.href = "http://m.me/kickaboutapp";
-              }, 2000)
-            }
-          })
-          setInterval(function(){
-            $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-              if(data == "true"){
-                setTimeout(function(){
-                  console.log("calling refresh");
-                  location.href = "http://m.me/kickaboutapp";
-                }, 2000)
-              }
-            })
-          }, 2000);
+
+          ref();
+
         }
       });
 

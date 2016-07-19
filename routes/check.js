@@ -10,9 +10,11 @@ router.get('/check', function(req, res){
       console.log(err);
     }
     if(result.length > 0){
-      res.send("true");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ check: true}));
     } else {
-      res.send("false")
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ check: false }));
     }
   })
 })
