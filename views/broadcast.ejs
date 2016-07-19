@@ -62,9 +62,11 @@
     function changeType(newType) {
       $('#type_' + type).removeClass("radioButtonSelected");
       $('#type_' + type).addClass("radioButton");
+      $('#textarea' + type).attr("disabled", true)
       type = newType;
       $('#type_' + type).removeClass("radioButton");
       $('#type_' + type).addClass("radioButtonSelected");
+      $('#textarea' + type).attr("disabled", false)
     }
 
     function sendMessage(type, message) {
