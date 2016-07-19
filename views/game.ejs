@@ -4,17 +4,19 @@
     <meta charset="utf-8">
     <title>Kickabout | Book</title>
 
+    <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/input.css">
-    <link rel="icon" href="imag/favicon.png">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
 
+
     <meta property="og:title" content="<%= gameName %>" />
-    <meta property="og:description" content="Kickabout Game" />
+    <meta property="og:description" content="<%= gameAddress %>" />
     <meta property="fb:app_id" content="144481079297226">
-    <meta property="og:image" content="http://limitless-sierra-68694.herokuapp.com/img/testimage.png" />
-    <meta property="og:image:secure_url" content="https://limitless-sierra-68694.herokuapp.com/img/testimage.png" />
+    <meta property="og:image" content="<%= imageLink %>" />
+    <meta property="og:image:secure_url" content="<%= imageLink %>" />
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -40,33 +42,40 @@
 
           <div class="inner cover">
 
-            <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
+              <img src="img/logoUnbinded-white.png" class="logoLead-custompayment">
+              <br/>
+              <!-- game image -->
+              <img src="<%= imageLink %>" width="100" height="80">
+              <h2><%= gameName %></h2>
+              <p>
+                <%= gameAddress %>
+              </p>
 
-            <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-            <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-            <div id="clicker" class="messenger-container">
-              <div class="fb-send-to-messenger"
-                messenger_app_id="144481079297226"
-                page_id="1625739117677522"
-                data-ref="<%= gid %>"
-                color="blue"
-                size="xlarge">
-              </div>
-            </div>
-            <div id="loader" class="preloader-wrapper active">
-              <div class="spinner-layer spinner-blue-only">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div><div class="gap-patch">
-                  <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                  <div class="circle"></div>
+              <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+              <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+
+              <div id="clicker" class="messenger-container"></div>
+
+              <div id="loader" style="display:none" class="preloader-wrapper active">
+                <div class="spinner-layer spinner-blue-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="container" id="finished">
-              <a class="btn btn-primary" href="http://m.me/kickaboutapp">Go to Messenger</a>
+
+              <p class="footertext">
+                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+                <br>
+                www.activatetechnologies.co.uk
+              </p>
+
             </div>
 
             <p class="footertext">
@@ -81,32 +90,23 @@
 
       </div>
 
-    </div>
-
-    <div class="container" id="finished">
-      <a class="btn" href="http://m.me/245261069180348">Go to the Bot</a>
-    </div>
-
 
     <script>
 
-      function magic(){
-        console.log("called magic");
-        FB.login(function(res) {
-          if (res.authResponse) {
-            location.reload()
-          } else {
-           console.log('User cancelled login or did not fully authorize.');
-          }
-        });
-      }
+    var fbid = "";
+
+    function magic(){
+      console.log("called magic");
+      FB.login(function(res) {
+        if (res.authResponse) {
+          location.reload()
+        } else {
+         console.log('User cancelled login or did not fully authorize.');
+        }
+      });
+    }
 
       window.fbAsyncInit = function() {
-
-        var fin = document.getElementById('finished');
-        fin.style.display = 'none';
-        var loader = document.getElementById('loader');
-        loader.style.display = 'none'
 
         FB.init({
           appId: "144481079297226",
@@ -118,9 +118,13 @@
           if (response.status === 'connected') {
             var lg = document.getElementById('lg');
             lg.style.display = "none";
-            console.log('Logged in.');
-            // console.log("<%= gid %>|" + response.authResponse.userID);
-            // $('fb-send-to-messenger').data('ref', "<%= gid %>|" + response.authResponse.userID);
+
+            fbid = response.authResponse.userID;
+
+            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="144481079297226" page_id="1625739117677522" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
+            document.getElementById('clicker').innerHTML = temp
+
+            FB.XFBML.parse();
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
@@ -149,15 +153,25 @@
       }
       window.addEventListener('blur',function(){
         if(myConfObj.iframeMouseOver){
-          // var clicker = document.getElementById('clicker');
-          // clicker.style.display = 'none'
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          setTimeout(function(){
-            loader.style.display = 'none'
-            // window.location.href = "http://m.me/245261069180348";
-            var fin = document.getElementById('finished');
-            fin.style.display = 'block'
+          $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+            if(data == "true"){
+              setTimeout(function(){
+                console.log("calling refresh");
+                location.href = "http://m.me/kickaboutapp";
+              }, 2000)
+            }
+          })
+          setInterval(function(){
+            $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+              if(data == "true"){
+                setTimeout(function(){
+                  console.log("calling refresh");
+                  location.href = "http://m.me/kickaboutapp";
+                }, 2000)
+              }
+            })
           }, 2000);
         }
       });

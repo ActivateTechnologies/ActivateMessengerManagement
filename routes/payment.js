@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const M = require('./../server/schemas.js')
 // const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
-const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const send = require('./../server/send.js')
 
 router.get('/payment', function(req, res){
@@ -18,7 +18,6 @@ router.get('/payment', function(req, res){
       console.log(err);
     })
 
-  console.log(gameId);
   M.Game.find({_id:gameId}, function(err, result){
     if(err){
       console.log(err);
@@ -29,7 +28,10 @@ router.get('/payment', function(req, res){
       res.render('payment', {
         mid:userId,
         gid: gameId,
-        gameprice: gameprice
+        gameprice: gameprice,
+        gameName: result[0].name,
+        gameAddress: result[0].address,
+        imageLink: result[0].image_url
       });
     }
     else {

@@ -26,12 +26,20 @@
 
               <img src="img/logoUnbinded-white.png" class="logoLead-payment">
 
+              <br/>
+              <!-- game image -->
+              <img src="<%= imageLink %>" width="100" height="80">
+              <h5><%= gameName %></h5>
+              <p>
+                <%= gameAddress %>
+              </p>
+
 
             <div class="payWithCardButtonContainer">
                 <form action="/charge?mid=<%=mid%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>" method="POST">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-                    data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
+                    data-key="pk_live_Dey0ulbB4AOL81fmpzWnFKYa"
                     data-amount="<%= gameprice*100 %>"
                     data-name="Kickabout"
                     data-description=""

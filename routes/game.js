@@ -10,9 +10,19 @@ router.get('/game', function(req, res){
       console.log(err);
     }
     if(result.length > 0){
-      res.render('game', {gid: req.query.gid, gameName: result[0].name});
+      res.render('game', {
+        gid: req.query.gid,
+        gameName: result[0].name,
+        gameAddress: result[0].address,
+        imageLink: result[0].image_url
+      });
     } else {
-      res.render('game', {gid: req.query.gid, gameName: "Kickabout Game"})
+      res.render('game', {
+        gid: req.query.gid,
+        gameName: "Kickabout Game",
+        gameAddress: "",
+        imageLink: "http://limitless-sierra-68694.herokuapp.com/img/testimage.png"
+      })
     }
   })
 });

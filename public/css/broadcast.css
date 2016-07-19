@@ -1,0 +1,46 @@
+body {
+    }
+
+    .container {
+      width: 80%;
+    }
+
+    .card {
+      background: #F0EFED;
+    }
+
+    h1 {
+      text-align: center;
+      color: #dddddd;
+    }
+
+    h3 {
+      text-align: center;
+      padding-top: 20px;
+      color: #766F62;
+      font-size: 20px;
+    }
+
+    .bar {
+      fill: steelblue;
+    }
+
+    .axis text {
+      font: 10px sans-serif;
+    }
+
+    svg {
+      margin: 0 auto;
+      display: block;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #333;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }

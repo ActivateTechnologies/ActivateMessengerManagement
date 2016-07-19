@@ -8,12 +8,12 @@ mongoose.connect(config.MONGODB_URI);
 
 let userSchema = new Schema({
   userId: String,
+  facebookID: String,
   firstname: String,
   lastname: String,
   profile_pic: String,
   locale: String,
-  gender: String,
-  publicGameId: String
+  gender: String
 })
 
 let User = mongoose.model('User', userSchema);

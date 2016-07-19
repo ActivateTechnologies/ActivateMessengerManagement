@@ -631,13 +631,20 @@ function game(sender, gameId){
   })
 }
 
-function publicLink(sender, gameId){
-  console.log("called public link");
+function publicLink(sender, optin){
+  let arr = optin.split('facebook');
+  let gameId = arr[0];
+  let facebookID = arr[1];
+  console.log("Public Link");
+  console.log(facebookID);
   M.User.find({userId:sender}, function(err, result){
     if(result.length > 0){
-      console.log(0.1);
       game(sender, gameId);
-      console.log(0.5);
+      M.User.findOneAndUpdate({userId:sender}, {facebookID:facebookID}, function(err, res){
+        if(err){
+          console.log(err);
+        }
+      })
     }
     else {
       console.log(1);
@@ -655,12 +662,12 @@ function publicLink(sender, gameId){
 
             let user = M.User({
               userId: sender,
+              facebookID: facebookID,
               firstname: body.first_name,
               lastname: body.last_name,
               profile_pic: body.profile_pic,
               locale: body.locale,
-              gender: body.gender,
-              publicGameId: gameId
+              gender: body.gender
             })
             user.save(function(err){
               if(err){
