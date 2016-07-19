@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <title>Kickabout | Book</title>
 
+    <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/input.css">
-    <link rel="icon" href="imag/favicon.png">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
+
 
     <meta property="og:title" content="<%= gameName %>" />
     <meta property="og:description" content="Kickabout Game" />
@@ -45,11 +47,9 @@
               <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
-              <div id="clicker" class="messenger-container">
+              <div id="clicker" class="messenger-container"></div>
 
-              </div>
-
-              <div id="loader" class="preloader-wrapper active">
+              <div id="loader" style="display:none" class="preloader-wrapper active">
                 <div class="spinner-layer spinner-blue-only">
                   <div class="circle-clipper left">
                     <div class="circle"></div>
@@ -59,10 +59,6 @@
                     <div class="circle"></div>
                   </div>
                 </div>
-              </div>
-
-              <div class="container" id="finished">
-                <a class="btn btn-primary" href="http://m.me/kickaboutapp">Go to Messenger</a>
               </div>
 
               <p class="footertext">
@@ -79,12 +75,10 @@
 
       </div>
 
-      <div class="container" id="finished">
-        <a class="btn" href="http://m.me/245261069180348">Go to the Bot</a>
-      </div>
-
 
     <script>
+
+    var fbid = "";
 
     function magic(){
       console.log("called magic");
@@ -99,11 +93,6 @@
 
       window.fbAsyncInit = function() {
 
-        var fin = document.getElementById('finished');
-        fin.style.display = 'none';
-        var loader = document.getElementById('loader');
-        loader.style.display = 'none'
-
         FB.init({
           appId: "159289771143437",
           xfbml: true,
@@ -114,10 +103,10 @@
           if (response.status === 'connected') {
             var lg = document.getElementById('lg');
             lg.style.display = "none";
-            console.log('Logged in.');
-            var fbid = response.authResponse.userID;
+
+            fbid = response.authResponse.userID;
+
             var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="159289771143437" page_id="245261069180348" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
-            console.log(temp);
             document.getElementById('clicker').innerHTML = temp
 
             FB.XFBML.parse();
@@ -149,15 +138,16 @@
       }
       window.addEventListener('blur',function(){
         if(myConfObj.iframeMouseOver){
-          // var clicker = document.getElementById('clicker');
-          // clicker.style.display = 'none'
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          setTimeout(function(){
-            loader.style.display = 'none'
-            // window.location.href = "http://m.me/245261069180348";
-            var fin = document.getElementById('finished');
-            fin.style.display = 'block'
+          setInterval(function(){
+            $.get("http://localhost:3000/check?fbid=" + fbid, function(data){
+              if(data == "true"){
+                setTimeout(function(){
+                  window.location.href = "http://m.me/245261069180348";
+                }, 2000)
+              }
+            })
           }, 2000);
         }
       });
