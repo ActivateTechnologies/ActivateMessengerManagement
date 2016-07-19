@@ -31,11 +31,21 @@ describe('testing routes', function(){
       .expect(200, done)
   })
 
-  // it('responds to analytics', function(done){
-  //   request(server)
-  //     .get('/analytics')
-  //     .expect(200, done)
-  // })
+  it('responds to analytics', function(done){
+    request(server)
+      .get('/analytics')
+      .expect(200, done)
+  })
+})
+
+describe('helper routes', function(){
+
+  it('/check', function(done){
+    request(server)
+      .get('/check?fbid=1')
+      .expect(200, done)
+  })
+  
 })
 
 describe('testing games for input', function(){
