@@ -5,8 +5,7 @@
     <title>Kickabout | Book</title>
 
     <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
@@ -95,6 +94,27 @@
 
     var fbid = "";
 
+    function ref(){
+      $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+        if(data.check === true){
+          setTimeout(function(){
+            console.log("calling refresh");
+            location.href = "http://m.me/kickaboutapp";
+          }, 2000)
+        }
+      })
+      setInterval(function(){
+        $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+          if(data.check === false){
+            setTimeout(function(){
+              console.log("calling refresh");
+              location.href = "http://m.me/kickaboutapp";
+            }, 2000)
+          }
+        })
+      }, 2000);
+    }
+
     function magic(){
       console.log("called magic");
       FB.login(function(res) {
@@ -152,27 +172,14 @@
         iframeMouseOver : false
       }
       window.addEventListener('blur',function(){
+        console.log("reached blur");
         if(myConfObj.iframeMouseOver){
+          console.log("detected click");
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
-            if(data == "true"){
-              setTimeout(function(){
-                console.log("calling refresh");
-                location.href = "http://m.me/kickaboutapp";
-              }, 2000)
-            }
-          })
-          setInterval(function(){
-            $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
-              if(data == "true"){
-                setTimeout(function(){
-                  console.log("calling refresh");
-                  location.href = "http://m.me/kickaboutapp";
-                }, 2000)
-              }
-            })
-          }, 2000);
+
+          ref();
+
         }
       });
 
