@@ -95,7 +95,7 @@
       window.fbAsyncInit = function() {
 
         FB.init({
-          appId: "159289771143437",
+          appId: "144481079297226",
           xfbml: true,
           version: "v2.6"
         });
@@ -107,7 +107,7 @@
 
             fbid = response.authResponse.userID;
 
-            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="159289771143437" page_id="245261069180348" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
+            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="144481079297226" page_id="1625739117677522" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
             document.getElementById('clicker').innerHTML = temp
 
             FB.XFBML.parse();
@@ -141,18 +141,18 @@
         if(myConfObj.iframeMouseOver){
           var loader = document.getElementById('loader');
           loader.style.display = 'block'
-          $.get("http://kickabouttest.herokuapp.com/check?fbid=" + fbid, function(data){
+          $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
             if(data == "true"){
               setTimeout(function(){
-                window.location.href = "http://m.me/245261069180348";
+                window.location.href = "http://m.me/kickaboutapp";
               }, 2000)
             }
           })
           setInterval(function(){
-            $.get("http://kickabouttest.herokuapp.com/check?fbid=" + fbid, function(data){
+            $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
               if(data == "true"){
                 setTimeout(function(){
-                  window.location.href = "http://m.me/245261069180348";
+                  window.location.href = "http://m.me/kickaboutapp";
                 }, 2000)
               }
             })
