@@ -9,17 +9,6 @@ const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
 
-/*let Wit = null;
-let log = null;
-try {
-  // if running from repo
-  Wit = require('../').Wit;
-  log = require('../').log;
-} catch (e) {
-  Wit = require('node-wit').Wit;
-  log = require('node-wit').log;
-}*/
-
 // Wit actions
 const actions = {
   send(request, response) {
@@ -78,7 +67,7 @@ const wit = new Wit({
   logger: new log.Logger(log.INFO)
 });
 
-function sendConversationMessage(message, sender, context) {
+function sendConversationMessage(message, sender, context, callback) {
 	// Setting up Wit bot
 	if (!context) {
 		context = {};

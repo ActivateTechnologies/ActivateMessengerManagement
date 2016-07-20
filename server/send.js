@@ -158,7 +158,7 @@ function processReceivedMessageOld(message, sender) {
   }
 }
 
-function text(sender, text) {
+let text = function (sender, text) {
   let messageData = { text: text }
 
   request({
@@ -178,7 +178,7 @@ function text(sender, text) {
   })
 }
 
-function typingIndicator(sender, onOrOff) {
+let typingIndicator = function (sender, onOrOff) {
   let typingStatus = (onOrOff) ? 'typing_on' : 'typing_off';
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -720,7 +720,7 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
-  /*typingIndicator: typingIndicator,*/
+  typingIndicator: typingIndicator,
   play: play,
   cards: cards,
   directions: directions,
