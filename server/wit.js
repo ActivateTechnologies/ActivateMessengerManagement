@@ -83,8 +83,8 @@ function sendConversationMessage(message, sender, context) {
 	if (!context) {
 		context = {};
 	}
-	console.log('This is send:');
-	console.log(S);
+	console.log('This is m:');
+	console.log(M);
 	S.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
