@@ -63,7 +63,7 @@ function sendConversationMessage(message, sender, context) {
         console.log('Context action with countUpcomingGames');
         context.numUpcomingGames = 4;
         //sendConversationMessage(message, sender, context);
-        wit.converse(sender, message, context)
+        return wit.converse(sender, message, context)
 				.then((context) => {
 				  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 				  if (context.type == 'msg' && context.msg) {
