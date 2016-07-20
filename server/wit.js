@@ -2,7 +2,7 @@
 
 const request = require('request')
 const M = require('./schemas.js')
-const send = require('./send.js')
+const S = require('./send.js')
 const config = require('./../config')
 
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
@@ -63,7 +63,7 @@ function sendConversationMessage(message, sender, context) {
 	  	console.log(4);
       console.log('Sender is ' + sender);
       console.log(5);
-      send.text(sender, context.msg);
+      S.text(sender, context.msg);
       console.log(6);
       sendConversationMessage(message, sender, context);
       console.log(7);
@@ -74,7 +74,11 @@ function sendConversationMessage(message, sender, context) {
         console.log('Context action with countUpcomingGames');
         context.numUpcomingGames = 4;
         console.log(10);
-        sendConversationMessage(message, sender, context);
+        //sendConversationMessage(message, sender, context);
+        wit.converse(sender, message, context)
+				.then((context) => {
+					console.log('After count: ' + JSON.stringify(context));
+				});
         console.log(11);
       }
     } else if (context.type == 'stop') {
