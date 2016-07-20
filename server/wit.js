@@ -3,7 +3,7 @@
 const request = require('request')
 const M = require('./schemas.js')
 const config = require('./../config')
-const send = require('./sendnew.js');
+const sendNew = require('./sendnew.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 const Wit = require('node-wit').Wit;
@@ -19,9 +19,9 @@ const actions = {
   	const text = response.text;
   	const quickreplies = response.quickreplies;
 
-    console.log('actions.send() called');
+    console.log('actions.send() called with context: ' + JSON.stringify(context));
     return new Promise(function(resolve, reject) {
-			send.text(sessionId, context.msg);
+			sendNew.text(sessionId, context.msg);
       return resolve(context);
     });
   },
@@ -55,13 +55,13 @@ function sendConversationMessage(sender, message, context) {
 		context = {};
 	}
 	console.log('Context: ' + JSON.stringify(context));
-	send.typingIndicator(sender, true);
+	sendNew.typingIndicator(sender, true);
 	console.log(wit.runActions(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
       console.log('Sender is ' + sender);
-      send.text(sender, context.msg);
+      sendNew.text(sender, context.msg);
       //sendConversationMessage(message, sender, context);
     } else if (context.type == 'action' && context.action) {
       if (context.action == 'countUpcomingGames') {
@@ -70,9 +70,9 @@ function sendConversationMessage(sender, message, context) {
         sendConversationMessage(sender, null, context);
       }
     } else if (context.type == 'stop') {
-	  	send.typingIndicator(sender, false);
+	  	sendNew.typingIndicator(sender, false);
 	  } else {
-	  	send.typingIndicator(sender, false);
+	  	sendNew.typingIndicator(sender, false);
 	  }
 	}, (error) => {
 		console.log('Error with wit.ai converse', error)
