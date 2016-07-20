@@ -19,6 +19,7 @@ router.get('/webhook', function (req, res) {
 });
 
 router.post('/webhook/', function (req, res) {
+    console.log('GOT Message: ', req.body.entry);
     let messaging_events = req.body.entry[0].messaging
 
     messaging_events.forEach(function(event){
@@ -29,7 +30,7 @@ router.post('/webhook/', function (req, res) {
         send.publicLink(sender, event.optin.ref);
       }
       else if (event.message && event.message.text) {
-        console.log('Got message: ' + event.message.text + ' from ' + sender);
+        //console.log('Got message: ' + event.message.text + ' from ' + sender);
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
             send.processReceivedMessage(event.message.text, sender);
