@@ -123,7 +123,6 @@ function booked_for_free_games(sender){
 
 function processReceivedMessage(message, sender) {
   console.log(message);
-  typingIndicator(sender, true);
   W.sendConversationMessage(message, sender);
 }
 
