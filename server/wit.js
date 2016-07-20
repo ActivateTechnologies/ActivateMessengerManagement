@@ -61,7 +61,7 @@ const actions = {
   	const text = response.text;
   	const quickreplies = response.quickreplies;
 
-		console.log('actions.countUpcomingGames() called with sessionId: ' + sessionId);
+		console.log('countUpcomingGames() called with sessionId: ' + sessionId);
 
 		return new Promise(function(resolve, reject) {
 			context.numUpcomingGames = 4

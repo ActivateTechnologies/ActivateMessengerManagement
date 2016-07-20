@@ -126,6 +126,7 @@ function processReceivedMessage(message, sender) {
   typingIndicator(sender, true);
   W.sendConversationMessage(message, sender, function (data, error) {
     if (data.type == 'msg' && data.msg) {
+      console.log('Sender is ' + sender);
       typingIndicator(sender, false);
       text(sender, data.msg);
     }
