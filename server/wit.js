@@ -2,13 +2,23 @@
 
 const request = require('request')
 const M = require('./schemas.js')
-const S = require('./send.js')
 const config = require('./../config')
-
+const send = require('./../server/send.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
+
+/*let Wit = null;
+let log = null;
+try {
+  // if running from repo
+  Wit = require('../').Wit;
+  log = require('../').log;
+} catch (e) {
+  Wit = require('node-wit').Wit;
+  log = require('node-wit').log;
+}*/
 
 // Wit actions
 const actions = {
@@ -21,14 +31,36 @@ const actions = {
   	const quickreplies = response.quickreplies;
 
     console.log('actions.send() called');
+    /*// Our bot has something to say!
+	    // Let's retrieve the Facebook user whose session belongs to
+	    const recipientId = sessions[sessionId].fbid;
+	    if (recipientId) {
+	      // Yay, we found our recipient!
+	      // Let's forward our bot response to her.
+	      // We return a promise to let our bot know when we're done sending
+	      return fbMessage(recipientId, text)
+	      .then(() => null)
+	      .catch((err) => {
+	        console.error(
+	          'Oops! An error occurred while forwarding the response to',
+	          recipientId,
+	          ':',
+	          err.stack || err
+	        );
+	      });
+	    } else {
+	      console.error('Oops! Couldn\'t find user for session:', sessionId);
+	      // Giving the wheel back to our bot
+	      return Promise.resolve()
+	    }*/
   },
-  countUpcomingGames(request/*, response*/) {
+  countUpcomingGames(request, response) {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
 
-  	/*const text = response.text;
-  	const quickreplies = response.quickreplies;*/
+  	const text = response.text;
+  	const quickreplies = response.quickreplies;
 
 		console.log('countUpcomingGames() called with sessionId: ' + sessionId);
 
@@ -47,45 +79,25 @@ const wit = new Wit({
 });
 
 function sendConversationMessage(message, sender, context) {
-	console.log('Inside sendConversationMessage()');
-	console.log(1);
 	// Setting up Wit bot
 	if (!context) {
 		context = {};
 	}
-	console.log(2);
-	//send.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
-		console.log(3);
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
-	  	console.log(4);
       console.log('Sender is ' + sender);
-      console.log(5);
-      S.text(sender, context.msg);
-      console.log(6);
-      sendConversationMessage(message, sender, context);
-      console.log(7);
+      typingIndicator(sender, false);
+      text(sender, context.msg);
     } else if (context.type == 'action' && context.action) {
-    	console.log(8);
       if (context.action == 'countUpcomingGames') {
-      	console.log(9);
         console.log('Context action with countUpcomingGames');
-        context.numUpcomingGames = 4;
-        console.log(10);
-        //sendConversationMessage(message, sender, context);
-        wit.converse(sender, message, context)
-				.then((context) => {
-					console.log('After count: ' + JSON.stringify(context));
-				});
-        console.log(11);
       }
-    } else if (context.type == 'stop') {
-    	console.log(12);
-	  	//send.typingIndicator(sender, false);
+    }
+	  if (context.type != 'stop') {
+	  	sendConversationMessage(message, sender, context);
 	  }
-	  console.log(13);
 	})
 	.catch((error) => {
 		console.error(error);
