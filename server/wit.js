@@ -85,7 +85,8 @@ function sendConversationMessage(message, sender, context) {
 	}
 	console.log('This is send:');
 	console.log(send);
-	send.typingIndicator(sender, true);
+	send.text(sender, message);
+	/*send.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
@@ -106,7 +107,7 @@ function sendConversationMessage(message, sender, context) {
 	.catch((error) => {
 		console.error(error);
 		callback(null, error);
-	});
+	});*/
 }
 
 module.exports = {
