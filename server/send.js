@@ -121,9 +121,9 @@ function booked_for_free_games(sender){
   })
 }
 
-function processReceivedMessage(message, sender) {
+function processReceivedMessage(sender, message) {
   console.log(message);
-  W.sendConversationMessage(message, sender);
+  W.sendConversationMessage(sender, message);
 }
 
 /*function processReceivedMessageOld(message, sender) {

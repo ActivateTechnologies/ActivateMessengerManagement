@@ -45,7 +45,7 @@ const wit = new Wit({
   logger: new log.Logger(log.INFO)
 });
 
-function sendConversationMessage(message, sender, context) {
+function sendConversationMessage(sender, message, context) {
 	// Setting up Wit bot
 	if (!context) {
 		context = {};
@@ -62,7 +62,7 @@ function sendConversationMessage(message, sender, context) {
       if (context.action == 'countUpcomingGames') {
         console.log('Context action with countUpcomingGames');
         context.numUpcomingGames = 4;
-        sendConversationMessage(message, sender, context);
+        sendConversationMessage(sender, null, context);
       }
     } else if (context.type == 'stop') {
 	  	send.typingIndicator(sender, false);
