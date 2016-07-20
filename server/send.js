@@ -123,8 +123,10 @@ function booked_for_free_games(sender){
 
 function processReceivedMessage(message, sender) {
   console.log(message);
+  typingIndicator(sender, true);
   W.sendConversationMessage(message, sender, function (data, error) {
     if (data.type == 'msg' && data.msg) {
+      typingIndicator(sender, false);
       text(sender, data.msg);
     }
   });
@@ -176,6 +178,25 @@ function text(sender, text) {
     }, function(error, response, body) {
         if (error) {
             console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
+
+function typingIndicator(sender, onOrOff) {
+    let typingStatus = (onOrOff) ? 'typing_on' : 'typing_off';
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            sender_action: typingStatus
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error setting typing indicator: ', error)
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         }
