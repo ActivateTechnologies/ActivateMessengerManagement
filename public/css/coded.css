@@ -496,3 +496,16 @@ p {
   display: block;
   max-width: 300px;
 }
+
+.gamePic {
+  width: 150px;
+}
+
+.gametitle {
+  font-size: 12px;
+}
+
+.gameaddress {
+  font-size: 12px;
+}
+
