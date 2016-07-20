@@ -6,7 +6,6 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const fs = require('fs')
 const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express()
@@ -27,32 +26,10 @@ AWS.config.update({
 let s3 = new AWS.S3();
 let upload = multer({dest:'uploads/'});
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log("reached");
-    if (username === "admin" && password === "letmebroadcast"){
-      console.log("correct");
-      return done(null, [])
-    }
-    else {
-      console.log("incorrect");
-      return done(null, false)
-    }
-  }
-));
-
-passport.serializeUser(function(user, done) {
-  done(null, "serialized");
-});
-
-// used to deserialize the user
-passport.deserializeUser(function(str, done) {
-    done(null, "deserialized");
-});
-
-
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
+
+require('./server/passport-config')(passport);
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}))
@@ -80,20 +57,6 @@ app.post('/login',
                                    failureRedirect: '/login'
                                  })
 );
-
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/login');
-}
-
-app.get('/broadcast', isLoggedIn, function (req, res) {
-    res.render('broadcast');
-});
 
 app.get('/', function(req, res){
   res.render('home')

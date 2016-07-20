@@ -5,9 +5,9 @@ const router = express.Router();
 const M = require('./../server/schemas.js')
 const send = require('./../server/send.js')
 
-// router.get('/broadcast', function (req, res) {
-//     res.render('broadcast');
-// });
+router.get('/broadcast', isLoggedIn, function (req, res) {
+    res.render('broadcast');
+});
 
 router.post('/broadcast', function(req, res){
   let type = req.query.typ;
@@ -30,5 +30,15 @@ router.post('/broadcast', function(req, res){
     })
   }
 })
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/login');
+}
 
 module.exports = router
