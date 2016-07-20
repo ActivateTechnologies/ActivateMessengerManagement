@@ -126,7 +126,7 @@ function processReceivedMessage(message, sender) {
   W.sendConversationMessage(message, sender);
 }
 
-function processReceivedMessageOld(message, sender) {
+/*function processReceivedMessageOld(message, sender) {
   console.log(message);
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
   let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
@@ -157,8 +157,8 @@ function processReceivedMessageOld(message, sender) {
       ]);
   }
 }
-
-let text = function (sender, text) {
+*/
+function text(sender, text) {
   let messageData = { text: text }
 
   request({
@@ -178,7 +178,7 @@ let text = function (sender, text) {
   })
 }
 
-let typingIndicator = function (sender, onOrOff) {
+/*function typingIndicator(sender, onOrOff) {
   let typingStatus = (onOrOff) ? 'typing_on' : 'typing_off';
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -195,7 +195,7 @@ let typingIndicator = function (sender, onOrOff) {
         console.log('Error: ', response.body.error)
     }
   })
-}
+}*/
 
 function textWithQuickReplies(sender, text, quickReplies) {
     let messageData = {
@@ -720,7 +720,7 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
-  typingIndicator: typingIndicator,
+  /*typingIndicator: typingIndicator,*/
   play: play,
   cards: cards,
   directions: directions,

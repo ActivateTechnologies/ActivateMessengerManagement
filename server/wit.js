@@ -78,8 +78,6 @@ function sendConversationMessage(message, sender, context, callback) {
 	  if (context.type == 'msg' && context.msg) {
       console.log('Sender is ' + sender);
       //typingIndicator(sender, false);
-      console.log('config:::');
-      console.log(config);
       console.log('send:::');
       console.log(send);
       send.text(sender, context.msg);
