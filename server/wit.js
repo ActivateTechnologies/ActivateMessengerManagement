@@ -18,7 +18,7 @@ try {
 
 // Wit actions
 const actions = {
-  send(request, response) {
+  send: function (request, response) {
     const {sessionId, context, entities} = request;
     const {text, quickreplies} = response;
     console.log('actions.send() called');
@@ -45,7 +45,7 @@ const actions = {
 	      return Promise.resolve()
 	    }*/
   },
-  countUpcomingGames(request, response) {
+  countUpcomingGames: function (request, response) {
   	const {sessionId, context, entities} = request;
     const {text, quickreplies} = response;
 		console.log('actions.countUpcomingGames() called');
