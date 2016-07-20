@@ -72,13 +72,17 @@ const wit = new Wit({
   logger: new log.Logger(log.INFO)
 });
 
-function sendConversationMessage(message, sender) {
+function sendConversationMessage(message, sender, callback) {
 	// Setting up Wit bot
 	wit.converse(sender, message, {})
 	.then((data) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
+	  callback(data);
 	})
-	.catch(console.error);
+	.catch((error) => {
+		console.error(error);
+		callback(null, error);
+	});
 }
 
 module.exports = {

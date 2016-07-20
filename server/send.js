@@ -123,7 +123,11 @@ function booked_for_free_games(sender){
 
 function processReceivedMessage(message, sender) {
   console.log(message);
-  W.sendConversationMessage(message, sender);
+  W.sendConversationMessage(message, sender, function (data, error) {
+    if (data.type == 'msg' && data.msg) {
+      text(sender, data.msg);
+    }
+  });
 }
 
 function processReceivedMessageOld(message, sender) {
