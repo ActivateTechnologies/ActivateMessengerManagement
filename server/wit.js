@@ -52,7 +52,7 @@ function sendConversationMessage(sender, message, context) {
 	}
 	console.log('Context: ' + JSON.stringify(context));
 	send.typingIndicator(sender, true);
-	wit.runActions(sender, message, context)
+	console.log(wit.runActions(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
@@ -72,7 +72,7 @@ function sendConversationMessage(sender, message, context) {
 	  }
 	}, (error) => {
 		console.log('Error with wit.ai converse', error)
-	});/*
+	}));/*
 	.catch((error) => {
 		console.log('Error with wit.converse', error);
 	});*/
