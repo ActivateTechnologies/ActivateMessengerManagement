@@ -2,7 +2,159 @@
 
 const express = require('express')
 const router = express.Router()
+const multer = require('multer')
+const fs = require('fs')
+const AWS = require('aws-sdk');
 const M = require('./../server/schemas.js')
+const config = require('./../config')
+
+AWS.config.update({
+    accessKeyId: config.AWSaccessKeyId,
+    secretAccessKey: config.AWSsecretAccessKey
+});
+
+let s3 = new AWS.S3();
+let upload = multer({dest:'uploads/'});
+
+router.get('/input', function(req, res){
+  res.render('input');
+})
+
+router.post('/input', upload.single('image'), function(req, res){
+
+  console.log(req.file);
+
+  let file = req.file
+  let imagename = file.filename;
+
+  var params = {
+    Bucket: 'kickabout-messenger',
+    Key: imagename,
+    Body: fs.readFileSync(file.path)
+  };
+
+  s3.putObject(params, function (perr, pres) {
+    if (perr) {
+      console.log("Error uploading data: ", perr);
+    }
+    else {
+      console.log("Successfully uploaded data to myBucket/myKey");
+      let urlParams = {Bucket: 'kickabout-messenger', Key: imagename, Expires: 30000000};
+      let image_url = s3.getSignedUrl('getObject', urlParams);
+
+      console.log(image_url);
+
+      let data = {
+        name: req.body.title,
+        address: req.body.address,
+        image_url: image_url,
+        image_name: imagename,
+        latlong: req.body.latlong,
+        desc: req.body.desc,
+        when: req.body.when,
+        capacity: req.body.capacity,
+        price: parseFloat(req.body.price)
+      };
+
+      if(req.body.id){
+        M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
+          if(err){
+            console.log(err);
+          }
+        })
+      }
+
+      else {
+        let game = M.Game(data);
+
+        game.save(function(err){
+          if(err){
+            console.log(err);
+          }
+        })
+      }
+    }
+  });
+
+  res.render('input');
+});
+
+router.get('/game', function(req, res){
+  M.Game.find({_id:req.query.gid}, function(err, result){
+    if(err){
+      console.log(err);
+    }
+    if(result.length > 0){
+      res.render('game', {
+        gid: req.query.gid,
+        gameName: result[0].name,
+        gameAddress: result[0].address,
+        imageLink: result[0].image_url
+      });
+    } else {
+      res.render('game', {
+        gid: req.query.gid,
+        gameName: "Kickabout Game",
+        gameAddress: "",
+        imageLink: "http://limitless-sierra-68694.herokuapp.com/img/testimage.png"
+      })
+    }
+  })
+});
+
+router.get('/check', function(req, res){
+  M.User.find({facebookID:req.query.fbid}, function(err, result){
+
+    if(err){
+      console.log(err);
+    }
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://limitless-sierra-68694.herokuapp.com');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    if(result.length > 0){
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ check: true}));
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ check: false }));
+    }
+  })
+})
+
+
+router.get('/players', function(req, res){
+  M.Game.find({_id:req.query.gid}, function(err, games){
+    if(err){
+      console.log(err);
+      res.send([]);
+    }
+    else if (games[0].joined && games[0].joined.length) {
+      var playerIds = [];
+      games[0].joined.forEach(function(player, i) {
+        playerIds.push(player._id);
+      });
+      M.User.find({_id:{ $in : playerIds}}, function(err, users){
+        if(err){
+          console.log(err);
+        }
+        res.send(users)
+      })
+    } else {
+      res.send([]);
+    }
+  });
+});
 
 router.get('/today', function(req, res){
   let now = new Date();
