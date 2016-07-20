@@ -54,13 +54,13 @@ const actions = {
 	      return Promise.resolve()
 	    }*/
   },
-  countUpcomingGames(request, response) {
+  countUpcomingGames(request/*, response*/) {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
 
-  	const text = response.text;
-  	const quickreplies = response.quickreplies;
+  	/*const text = response.text;
+  	const quickreplies = response.quickreplies;*/
 
 		console.log('countUpcomingGames() called with sessionId: ' + sessionId);
 
@@ -83,6 +83,8 @@ function sendConversationMessage(message, sender, context) {
 	if (!context) {
 		context = {};
 	}
+	console.log('This is send:');
+	console.log(send);
 	send.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
