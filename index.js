@@ -41,6 +41,15 @@ passport.use(new LocalStrategy(
   }
 ));
 
+passport.serializeUser(function(user, done) {
+  done(null, "serialized");
+});
+
+// used to deserialize the user
+passport.deserializeUser(function(str, done) {
+    done(null, "deserialized");
+});
+
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
@@ -67,10 +76,24 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
+  passport.authenticate('local', { successRedirect: '/broadcast',
                                    failureRedirect: '/login'
                                  })
 );
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/login');
+}
+
+app.get('/broadcast', isLoggedIn, function (req, res) {
+    res.render('broadcast');
+});
 
 app.get('/', function(req, res){
   res.render('home')

@@ -5,9 +5,9 @@ const router = express.Router();
 const M = require('./../server/schemas.js')
 const send = require('./../server/send.js')
 
-router.get('/broadcast', function (req, res) {
-    res.render('broadcast');
-});
+// router.get('/broadcast', function (req, res) {
+//     res.render('broadcast');
+// });
 
 router.post('/broadcast', function(req, res){
   let type = req.query.typ;
