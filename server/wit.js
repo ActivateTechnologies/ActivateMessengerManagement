@@ -21,7 +21,7 @@ const actions = {
 
     console.log('actions.send() called');
     return new Promise(function(resolve, reject) {
-			send.text(sender, context.msg);
+			send.text(sessionId, context.msg);
       return resolve(context);
     });
   },
