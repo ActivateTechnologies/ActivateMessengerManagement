@@ -5,6 +5,10 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const multer = require('multer')
 const fs = require('fs')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy;
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const app = express()
 
 const M = require('./server/schemas.js')
@@ -23,11 +27,30 @@ AWS.config.update({
 let s3 = new AWS.S3();
 let upload = multer({dest:'uploads/'});
 
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log("reached");
+    if (username === "admin" && password === "letmebroadcast"){
+      console.log("correct");
+      return done(null, [])
+    }
+    else {
+      console.log("incorrect");
+      return done(null, false)
+    }
+  }
+));
+
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
+
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(session({ secret: 'SECRET' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(require('./routes/analytics'))
@@ -38,6 +61,16 @@ app.use(require('./routes/payment'))
 app.use(require('./routes/game'))
 app.use(require('./routes/check'))
 app.use(require('./routes/broadcast'))
+
+app.get('/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login'
+                                 })
+);
 
 app.get('/', function(req, res){
   res.render('home')
