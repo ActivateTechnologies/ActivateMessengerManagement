@@ -3,6 +3,7 @@
 const request = require('request')
 const M = require('./schemas.js')
 const config = require('./../config')
+const send = require('./send.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 const Wit = require('node-wit').Wit;
@@ -77,12 +78,28 @@ const wit = new Wit({
   logger: new log.Logger(log.INFO)
 });
 
-function sendConversationMessage(message, sender, callback) {
+function sendConversationMessage(message, sender, context) {
 	// Setting up Wit bot
-	wit.converse(sender, message, {})
+	if (!context) {
+		context = {};
+	}
+	send.typingIndicator(sender, true);
+	wit.converse(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
-	  callback(context);
+	  if (context.type == 'msg' && context.msg) {
+      console.log('Sender is ' + sender);
+      send.text(sender, context.msg);
+      sendConversationMessage(message, sender, context);
+    } else if (context.type == 'action' && context.action) {
+      if (context.action == 'countUpcomingGames') {
+        console.log('Context action with countUpcomingGames');
+        context.numUpcomingGames = 4;
+        sendConversationMessage(message, sender, context);
+      }
+    } else if (context.type == 'stop') {
+	  	send.typingIndicator(sender, false);
+	  }
 	})
 	.catch((error) => {
 		console.error(error);

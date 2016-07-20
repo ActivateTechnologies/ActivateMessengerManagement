@@ -124,17 +124,7 @@ function booked_for_free_games(sender){
 function processReceivedMessage(message, sender) {
   console.log(message);
   typingIndicator(sender, true);
-  W.sendConversationMessage(message, sender, function (context, error) {
-    if (context.type == 'msg' && context.msg) {
-      console.log('Sender is ' + sender);
-      typingIndicator(sender, false);
-      text(sender, context.msg);
-    } else if (context.type == 'action' && context.action) {
-      if (context.action == 'countUpcomingGames') {
-        console.log('Context action with countUpcomingGames');
-      }
-    }
-  });
+  W.sendConversationMessage(message, sender);
 }
 
 function processReceivedMessageOld(message, sender) {
