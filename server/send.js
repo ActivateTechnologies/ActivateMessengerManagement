@@ -1,8 +1,9 @@
 'use strict'
 
-const request = require('request')
-const M = require('./schemas.js')
-const config = require('./../config')
+const request = require('request');
+const M = require('./schemas.js');
+const config = require('./../config');
+const W = require('wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 function start(sender){
@@ -121,7 +122,12 @@ function booked_for_free_games(sender){
 }
 
 function processReceivedMessage(message, sender) {
+
+}
+
+function processReceivedMessageOld(message, sender) {
   console.log(message);
+  W.sendConversationMessage(message, sender);
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
   let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
   let help = ['help', 'help!', 'info', 'info!'];
