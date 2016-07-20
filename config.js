@@ -10,7 +10,7 @@
 
 //TEST
 // heroku git:remote -a kickabouttest
-
+// Avi Messenger webhook url: http://kickabouthegiu2389t3g034gg3433ghnod.localtunnel.me/
 const VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
 const FACEBOOK_APP_ID = "159289771143437";
 const FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826";
@@ -39,3 +39,6 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //redirect link in payment.js
 //booking link generator in send.js inside generate_card_for_booking
 //need to change app id and page id in game.ejs
+
+
+// LOCAL TUNNEL Reference https://github.com/localtunnel/localtunnel

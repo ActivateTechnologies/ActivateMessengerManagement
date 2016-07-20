@@ -53,7 +53,7 @@ const actions = {
 	      return Promise.resolve()
 	    }*/
   },
-  countUpcomingGames: function (request, response) {
+  countUpcomingGames: function (request) {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
