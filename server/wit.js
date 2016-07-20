@@ -20,6 +20,10 @@ const actions = {
   	const quickreplies = response.quickreplies;
 
     console.log('actions.send() called');
+    return new Promise(function(resolve, reject) {
+			send.text(sender, context.msg);
+      return resolve(context);
+    });
   },
   countUpcomingGames(request) {
   	const sessionId = request.sessionId;

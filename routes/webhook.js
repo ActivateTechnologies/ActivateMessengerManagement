@@ -36,7 +36,6 @@ router.post('/webhook/', function (req, res) {
             //send.allGames(sender);
           }
           else {
-            console.log('Going to call send.start()')
             send.start(sender);
           }
         })
