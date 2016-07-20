@@ -88,8 +88,8 @@ function sendConversationMessage(message, sender, context) {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
       console.log('Sender is ' + sender);
-      typingIndicator(sender, false);
-      text(sender, context.msg);
+      //typingIndicator(sender, false);
+      send.text(sender, context.msg);
     } else if (context.type == 'action' && context.action) {
       if (context.action == 'countUpcomingGames') {
         console.log('Context action with countUpcomingGames');
