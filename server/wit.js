@@ -21,7 +21,7 @@ try {
 
 // Wit actions
 const actions = {
-  send: function (request, response) {
+  send(request, response) {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
@@ -53,7 +53,7 @@ const actions = {
 	      return Promise.resolve()
 	    }*/
   },
-  countUpcomingGames: function (request) {
+  countUpcomingGames(request, response) {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
@@ -80,9 +80,9 @@ const wit = new Wit({
 function sendConversationMessage(message, sender, callback) {
 	// Setting up Wit bot
 	wit.converse(sender, message, {})
-	.then((data) => {
-	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
-	  callback(data);
+	.then((context) => {
+	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
+	  callback(context);
 	})
 	.catch((error) => {
 		console.error(error);
