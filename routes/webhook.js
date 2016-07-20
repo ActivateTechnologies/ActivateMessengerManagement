@@ -29,7 +29,8 @@ router.post('/webhook/', function (req, res) {
         console.log(event.optin.ref);
         send.publicLink(sender, event.optin.ref);
       }
-      else if (event.message && event.message.text && !event.is_echo) {
+      else if (event.message && event.message.text && !event.message.is_echo) {
+
         //console.log('Got message: ' + event.message.text + ' from ' + sender);
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0){
