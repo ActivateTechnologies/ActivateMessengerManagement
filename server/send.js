@@ -194,7 +194,7 @@ function typingIndicator(sender, onOrOff) {
       } else if (response.body.error) {
           console.log('Error: ', response.body.error)
       }
-  });
+  })
 }
 
 function textWithQuickReplies(sender, text, quickReplies) {
