@@ -68,8 +68,8 @@ const actions = {
 // Setting up Wit bot
 const wit = new Wit({
   accessToken: config.WIT_TOKEN,
-  actions: actions/*,
-  logger: new log.Logger(log.INFO)*/
+  actions: actions,
+  logger: new log.Logger(log.INFO)
 });
 
 function sendConversationMessage(message, sender) {

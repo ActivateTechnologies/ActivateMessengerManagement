@@ -122,12 +122,12 @@ function booked_for_free_games(sender){
 }
 
 function processReceivedMessage(message, sender) {
-
+  console.log(message);
+  W.sendConversationMessage(message, sender);
 }
 
 function processReceivedMessageOld(message, sender) {
   console.log(message);
-  W.sendConversationMessage(message, sender);
   let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
   let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
   let help = ['help', 'help!', 'info', 'info!'];
