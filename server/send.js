@@ -3,7 +3,7 @@
 const request = require('request');
 const M = require('./schemas.js');
 const config = require('./../config');
-const W = require('wit.js');
+const W = require('./wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 function start(sender){

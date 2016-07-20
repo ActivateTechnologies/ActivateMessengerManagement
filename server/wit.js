@@ -69,21 +69,5 @@ sendConversationMessage(message, sender) {
 }
 
 module.exports = {
-  start: start,
-  booked: booked,
-  processReceivedMessage: processReceivedMessage,
-  text: text,
-  play: play,
-  cards: cards,
-  directions: directions,
-  generate_card_element: generate_card_element,
-  generate_card: generate_card,
-  generate_card_for_booking: generate_card_for_booking,
-  allGames: allGames,
-  yep: yep,
-  book: book,
-  cancel_booking: cancel_booking,
-  more_info: more_info,
-  game: game,
-  publicLink: publicLink
+  sendConversationMessage: sendConversationMessage
 }
