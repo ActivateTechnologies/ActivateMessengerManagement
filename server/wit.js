@@ -51,7 +51,7 @@ function sendConversationMessage(sender, message, context) {
 		context = {};
 	}
 	send.typingIndicator(sender, true);
-	wit.converse(sender, message, context)
+	wit.runActions(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
