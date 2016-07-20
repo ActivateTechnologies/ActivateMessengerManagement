@@ -716,11 +716,11 @@ function publicLink(sender, optin){
 }
 
 module.exports = {
-/*  start: start,
+  start: start,
   booked: booked,
   processReceivedMessage: processReceivedMessage,
-  text: text,*/
-  typingIndicator: typingIndicator/*,
+  text: text,
+  typingIndicator: typingIndicator,
   play: play,
   cards: cards,
   directions: directions,
@@ -733,5 +733,5 @@ module.exports = {
   cancel_booking: cancel_booking,
   more_info: more_info,
   game: game,
-  publicLink: publicLink*/
+  publicLink: publicLink
 }
