@@ -42,7 +42,7 @@ function typingIndicator(sender, onOrOff) {
     if (error) {
         console.log('Error setting typing indicator: ', error)
     } else if (response.body.error) {
-        console.log('Error: ', response.body.error)
+        console.log('Error setting typing indicator: ', response.body.error)
     }
   })
 }

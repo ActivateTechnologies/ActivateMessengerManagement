@@ -50,22 +50,22 @@ function sendConversationMessage(message, sender, context, callback) {
 	if (!context) {
 		context = {};
 	}
+	send.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
       console.log('Sender is ' + sender);
-      //typingIndicator(sender, false);
-      console.log('send:::');
-      console.log(send);
       send.text(sender, context.msg);
+      sendConversationMessage(message, sender, context);
     } else if (context.type == 'action' && context.action) {
       if (context.action == 'countUpcomingGames') {
         console.log('Context action with countUpcomingGames');
+        context.numUpcomingGames = 4;
+        sendConversationMessage(message, sender, context);
       }
-    }
-	  if (context.type != 'stop') {
-	  	sendConversationMessage(message, sender, context);
+    } else if (context.type == 'stop') {
+	  	send.typingIndicator(sender, false);
 	  }
 	})
 	.catch((error) => {
