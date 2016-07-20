@@ -50,6 +50,7 @@ function sendConversationMessage(sender, message, context) {
 	if (!context) {
 		context = {};
 	}
+	console.log('Context: ' + JSON.stringify(context));
 	send.typingIndicator(sender, true);
 	wit.runActions(sender, message, context)
 	.then((context) => {
