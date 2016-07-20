@@ -3,7 +3,7 @@
 const request = require('request')
 const M = require('./schemas.js')
 const config = require('./../config')
-const send = require('./send.js');
+const S = require('./send.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 const Wit = require('node-wit').Wit;
@@ -84,15 +84,14 @@ function sendConversationMessage(message, sender, context) {
 		context = {};
 	}
 	console.log('This is send:');
-	console.log(send);
-	send.text(sender, message);
-	/*send.typingIndicator(sender, true);
+	console.log(S);
+	S.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
       console.log('Sender is ' + sender);
-      send.text(sender, context.msg);
+      S.text(sender, context.msg);
       sendConversationMessage(message, sender, context);
     } else if (context.type == 'action' && context.action) {
       if (context.action == 'countUpcomingGames') {
@@ -101,13 +100,13 @@ function sendConversationMessage(message, sender, context) {
         sendConversationMessage(message, sender, context);
       }
     } else if (context.type == 'stop') {
-	  	send.typingIndicator(sender, false);
+	  	S.typingIndicator(sender, false);
 	  }
 	})
 	.catch((error) => {
 		console.error(error);
 		callback(null, error);
-	});*/
+	});
 }
 
 module.exports = {
