@@ -6,7 +6,7 @@
 // const FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d"
 // const MONGODB_URI = 'mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot'
 // const MESSENGER_URL = "http://m.me/kickaboutapp"
-// const WIT_TOKEN = "W6VRJTTRCOJ2IORUOG4FV5WR43BMLFVH";
+// const WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
 
 //TEST
 // heroku git:remote -a kickabouttest
@@ -16,7 +16,7 @@ const FACEBOOK_APP_ID = "159289771143437";
 const FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826";
 const MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
 const MESSENGER_URL = "http://m.me/245261069180348";
-const WIT_TOKEN = "W6VRJTTRCOJ2IORUOG4FV5WR43BMLFVH";
+const WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
 
 //COMMON TO PRODUCTION AND TEST
 exports.VERIFICATION_TOKEN = VERIFICATION_TOKEN;
