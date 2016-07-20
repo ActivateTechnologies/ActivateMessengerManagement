@@ -720,7 +720,7 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
-  typingIndicator: typingIndicator,
+  /*typingIndicator: typingIndicator,*/
   play: play,
   cards: cards,
   directions: directions,

@@ -86,7 +86,7 @@ function sendConversationMessage(message, sender, context) {
 	}
 	console.log('This is m:');
 	console.log(send);
-	send.typingIndicator(sender, true);
+	//send.typingIndicator(sender, true);
 	wit.converse(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
@@ -101,7 +101,7 @@ function sendConversationMessage(message, sender, context) {
         sendConversationMessage(message, sender, context);
       }
     } else if (context.type == 'stop') {
-	  	send.typingIndicator(sender, false);
+	  	//send.typingIndicator(sender, false);
 	  }
 	})
 	.catch((error) => {
