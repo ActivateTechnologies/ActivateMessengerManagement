@@ -2,8 +2,9 @@
 
 const request = require('request')
 const M = require('./schemas.js')
-const config = require('./../config')
 const send = require('./send.js')
+const config = require('./../config')
+
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 const Wit = require('node-wit').Wit;
