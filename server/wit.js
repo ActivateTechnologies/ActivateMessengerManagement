@@ -45,7 +45,7 @@ const wit = new Wit({
   logger: new log.Logger(log.INFO)
 });
 
-function sendConversationMessage(message, sender, context, callback) {
+function sendConversationMessage(message, sender, context) {
 	// Setting up Wit bot
 	if (!context) {
 		context = {};
@@ -69,7 +69,7 @@ function sendConversationMessage(message, sender, context, callback) {
 	  }
 	})
 	.catch((error) => {
-		console.error(error);
+		console.log('Error with wit.converse', error);
 		callback(null, error);
 	});
 }

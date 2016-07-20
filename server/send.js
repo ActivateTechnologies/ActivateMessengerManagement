@@ -34,9 +34,9 @@ function start(sender){
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages: ', error)
+          console.log('Error in start(): ', error)
       } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
+          console.log('Error in start(): ', response.body.error)
       }
   })
 }
@@ -79,9 +79,9 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages: ', error)
+          console.log('Error sending booked message: ', error)
       } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
+          console.log('Error sending booked message: ', response.body.error)
       }
   })
 }
@@ -114,9 +114,9 @@ function booked_for_free_games(sender){
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages: ', error)
+          console.log('Error sending booked free message: ', error)
       } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
+          console.log('Error sending booked free message: ', response.body.error)
       }
   })
 }
@@ -171,9 +171,9 @@ function text(sender, text) {
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages: ', error)
+          console.log('Error sending text messages: ', error)
       } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
+          console.log('Error sending text messages: ', response.body.error)
       }
   })
 }
@@ -215,7 +215,7 @@ function textWithQuickReplies(sender, text, quickReplies) {
         if (error) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
+            console.log('Error sending messages: ', response.body.error)
         }
     })
 }
@@ -258,9 +258,9 @@ function play(sender) {
         }
     }, function(error, response, body) {
         if (error) {
-            console.log('Error sending messages: ', error)
+            console.log('Error sending play message: ', error)
         } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
+            console.log('Error sending play message: ', response.body.error)
         }
     })
 }
@@ -286,9 +286,9 @@ function cards(sender, data, day){
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages: ', error)
+          console.log('Error sending cards: ', error)
       } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
+          console.log('Error sending cards: ', response.body.error)
       }
   })
 }
@@ -332,10 +332,10 @@ function directions(sender, name, address, latlong){
         }
     }, function(error, response, body) {
         if (error) {
-            console.log('Error sending messages: ', error)
+            console.log('Error sending directinos: ', error)
             reject(err);
         } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
+            console.log('Error sending directinos: ', response.body.error);
             reject(err);
         } else {
           resolve("success");
