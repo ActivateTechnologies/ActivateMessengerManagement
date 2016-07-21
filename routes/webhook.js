@@ -19,8 +19,9 @@ router.get('/webhook', function (req, res) {
 });
 
 router.post('/webhook/', function (req, res) {
-  let messaging_events = req.body.entry[0].messaging
+  let messaging_events = req.body.entry[0].messaging;
   messaging_events.forEach(function(event){
+    console.log(event);
     let sender = event.sender.id;
     if (event.optin) {
       console.log("optin");
