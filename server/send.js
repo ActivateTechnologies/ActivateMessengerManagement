@@ -597,7 +597,7 @@ function more_info(sender, text){
 
   directions(sender, name, address, latlong)
   .then(function(success){
-    card_for_booking(sender, gameId, description, price, booked));
+    card_for_booking(sender, gameId, description, price, booked);
   })
   .catch(function(err){
     console.log(err);
