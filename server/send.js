@@ -331,6 +331,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
 function card_for_booking(sender, gameId, description, price, booked){
 
+  console.log("card for booking");
+
   let temp = {
     "type": "postback",
     "title": "BOOK",
@@ -338,6 +340,7 @@ function card_for_booking(sender, gameId, description, price, booked){
   }
 
   if(booked === true){
+    console.log("booked is true");
     temp = {
       "type": "postback",
       "title": "Cancel Booking",
