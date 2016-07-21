@@ -69,16 +69,141 @@ function typingIndicator(sender, onOrOff) {
         sender_action: typingStatus
     }
   }, function(error, response, body) {
-    if (error) {
-        console.log('Error setting typing indicator: ', error)
-    } else if (response.body.error) {
-        console.log('Error setting typing indicator: ', response.body.error)
+  	let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error setting typing indicator (for sender: ' 
+      	+ sender + '): ', errorObject);
     }
   })
+}
+
+function allGames(sender, broadcast, queryDates){
+  let temp = "today"
+  if(text){
+    temp = broadcast;
+  }
+  let now = new Date();
+  let query = {
+		when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}
+	}
+  if (queryDates) {
+  	query = {when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
+  }
+  console.log('Query: ' + JSON.stringify(query));
+  M.Game.find(query, function(err, games) {
+    let data = [];
+    if (games) {
+    	games.forEach(function(item) {
+	      let booked = false;
+	      let join = item.joined;
+	      join.forEach(function (i) {
+	        if(i.userId === sender){
+	          booked = true;
+	        }
+	      });
+	      data.push([item.name, item.address, item.image_url, item.latlong, item._id,
+	       item.joined.length + item.non_members_attending, item.capacity, booked,
+	       item.desc, item.when, item.price]);
+	  	});
+	    data = generate_card(data);
+	    cards(sender, data, temp);
+    }
+  })
+}
+
+function generate_card(array){
+  let elements = [];
+  array.forEach(function(item){
+    //name, address, image_url, latlong, gameId,
+    //attending, capacity, booked, description, when, price
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4],
+     item[5], item[6], item[7], item[8], item[9], item[10]));
+  });
+
+  var template = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": elements
+      }
+    }
+  }
+
+  return template;
+}
+
+function cards(sender, data, day){
+
+  if (day === "today") {
+    text(sender, "Here are some upcoming games to join. "
+    	+ "Tap the card for directions or 'More Info' to book.");
+  }
+  else if (day) {
+    text(sender, day);
+  }
+
+  let messageData = data;
+
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+        recipient: {id:sender},
+        message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+        console.log('Error sending cards: ', error)
+    } else if (response.body.error) {
+        console.log('Error sending cards: ', response.body.error)
+    }
+  });
+}
+
+function generate_card_element(name, address, image_url, latlong, gameId, 
+ attending, capacity, booked, description, when, price){
+  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong 
+  	+ "|" + gameId + "|" + description + "|" + price + "|" + booked;
+  let directions_link = "http://maps.google.com/?q=" + address;
+  if (attending > 0){
+    address = address + " (" + attending + " attending)";
+  }
+  address = when.toString().substring(0, 10) + "\n" + address;
+  if(booked){
+    address = address + " (You're going)";
+  }
+  if(attending == capacity){
+    if(attending == capacity){
+      address = address + " (fully booked)";
+    }
+    let template = {
+      "title": name,
+      "subtitle": address,
+      "image_url": image_url,
+      "item_url": directions_link,
+    }
+    return template;
+  } else {
+    let template = {
+      "title": name,
+      "subtitle": address,
+      "image_url": image_url,
+      "item_url": directions_link,
+      "buttons": [{
+        "type": "postback",
+        "title": "More Info",
+        "payload": pl,
+      }]
+    }
+    return template;
+  }
 }
 
 module.exports = {
   text: text,
   typingIndicator: typingIndicator,
-  textWithQuickReplies: textWithQuickReplies
+  textWithQuickReplies: textWithQuickReplies,
+  allGames: allGames
 }
