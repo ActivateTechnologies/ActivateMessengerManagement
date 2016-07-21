@@ -15,9 +15,11 @@ const actions = {
   	const sessionId = request.sessionId;
   	const context = request.context;
   	const entities = request.entities;
-
-    console.log('actions.send() called with : ' + JSON.stringify(request) + ', '
-    	+ JSON.stringify(response));
+    
+    console.log('actions.send() called with text: ' + response.text);
+		if (response.quickreplies) {
+			console.log('Also includes quickreplies: ', response.quickreplies);
+		}
     return new Promise(function(resolve, reject) {
     	if (response.quickreplies) {
     		sendNew.textWithQuickReplies(sessionId, response.text,
