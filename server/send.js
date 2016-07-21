@@ -583,16 +583,17 @@ function my_games(sender){
 
     let data = [];
     result.forEach(function(item){
-      let booked = false;
       let join = item.joined;
 
       join.forEach(function(i){
         if(i.userId === sender){
-          booked = true;
-          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, booked, item.desc, item.when, item.price]);
+          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
         }
       });
     })
+
+    console.log("inside my games");
+    console.log(data);
 
     if(data === []){
       text(sender, "You haven't joined any games. Type 'play' to find games")
