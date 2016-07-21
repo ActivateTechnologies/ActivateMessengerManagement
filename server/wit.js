@@ -16,13 +16,16 @@ const actions = {
   	const context = request.context;
   	const entities = request.entities;
 
-  	const text = response.text;
-  	const quickreplies = response.quickreplies;
-
-    console.log('actions.send() called with context: ' + JSON.stringify(context));
+    console.log('actions.send() called with : ' + JSON.stringify(request) + ', '
+    	+ JSON.stringify(response));
     return new Promise(function(resolve, reject) {
-			sendNew.text(sessionId, context.msg);
-      return resolve(context);
+    	if (response.quickreplies) {
+    		sendNew.textWithQuickReplies(sessionId, response.text,
+    		 response.quickreplies);
+    	} else {
+    		sendNew.text(sessionId, response.text);
+    	}
+      return resolve();
     });
   },
   countUpcomingGames(request) {
@@ -54,7 +57,7 @@ function sendConversationMessage(sender, message, context) {
 	if (!context) {
 		context = {};
 	}
-	console.log('Context: ' + JSON.stringify(context));
+	console.log('sendConversationMessage context: ' + JSON.stringify(context));
 	sendNew.typingIndicator(sender, true);
 	return wit.runActions(sender, message, context)
 	.then((context) => {

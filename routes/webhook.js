@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
-const request = require('request');
+const request = require('request');1
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 const FACEBOOK_APP_ID = config.FACEBOOK_APP_ID
@@ -19,63 +19,62 @@ router.get('/webhook', function (req, res) {
 });
 
 router.post('/webhook/', function (req, res) {
-    let messaging_events = req.body.entry[0].messaging
-
-    messaging_events.forEach(function(event){
-      let sender = event.sender.id;
-      if (event.optin) {
-        console.log("optin");
-        //console.log(event.optin.ref);
-        send.publicLink(sender, event.optin.ref);
-      }
-      else if (event.message && event.message.text && !event.message.is_echo) {
-        console.log('Got message: ' + event.message.text + ' from ' + sender);
-        M.User.find({userId: sender}, function(err, result){
-          if(result.length > 0){
-            send.processReceivedMessage(sender, event.message.text);
-            //send.allGames(sender);
-          }
-          else {
-            send.start(sender);
-          }
-        })
-      }
-      else if (event.postback) {
-        let text = event.postback.payload;
-
-        if(text.substring(0, 4) == "Book"){
-          send.book(sender, text);
+  let messaging_events = req.body.entry[0].messaging
+  messaging_events.forEach(function(event){
+    let sender = event.sender.id;
+    if (event.optin) {
+      console.log("optin");
+      //console.log(event.optin.ref);
+      send.publicLink(sender, event.optin.ref);
+    }
+    else if (event.message && event.message.text && !event.message.is_echo) {
+      console.log('Got message: ' + event.message.text + ' from ' + sender);
+      M.User.find({userId: sender}, function(err, result){
+        if(result.length > 0){
+          send.processReceivedMessage(sender, event.message.text);
+          //send.allGames(sender);
         }
-
-        else if(text.substring(0, 6) == "Cancel"){
-          send.cancel_booking(sender, text);
-        }
-
-        else if(text.substring(0, 9) == "More Info"){
-          send.more_info(sender, text);
-        }
-
         else {
-          switch(text.toLowerCase()){
-
-            case('start'):
-            send.start(sender);
-            break;
-
-            case("yep"):
-            send.yep(sender);
-            break;
-
-            default:
-            send.allGames(sender);
-
-          }
+          send.start(sender);
         }
+      })
+    }
+    else if (event.postback) {
+      let text = event.postback.payload;
+
+      if(text.substring(0, 4) == "Book"){
+        send.book(sender, text);
       }
 
-    })
+      else if(text.substring(0, 6) == "Cancel"){
+        send.cancel_booking(sender, text);
+      }
 
-    res.sendStatus(200)
+      else if(text.substring(0, 9) == "More Info"){
+        send.more_info(sender, text);
+      }
+
+      else {
+        switch(text.toLowerCase()){
+
+          case('start'):
+          send.start(sender);
+          break;
+
+          case("yep"):
+          send.yep(sender);
+          break;
+
+          default:
+          send.allGames(sender);
+
+        }
+      }
+    }
+
+  })
+
+  res.sendStatus(200);
 })
 
 module.exports = router

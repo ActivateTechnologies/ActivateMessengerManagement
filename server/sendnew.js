@@ -10,6 +10,38 @@ function text(sender, text) {
   let messageData = { text: text }
 
   request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+        recipient: {id:sender},
+        message: messageData,
+    }
+  }, function(error, response, body) {
+		let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending messages (to user ' 
+      	+ sender + '): ', errorObject);
+    }
+  });
+}
+
+function textWithQuickReplies(sender, text, quickReplies) {
+	let quickRepliesObjects = [];
+	quickReplies.forEach((textString) => {
+		quickRepliesObjects.push({
+      "content_type":"text",
+      "title":textString,
+      "payload":"staticTempPayLoad~" + textString
+    });
+	});
+
+  let messageData = {
+    text: text,
+    quick_replies: quickRepliesObjects
+  }
+
+  request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
       method: 'POST',
@@ -19,13 +51,11 @@ function text(sender, text) {
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error sending messages (to user ' 
-          	+ sender + '): ', error)
+          console.log('Error sending messages: ', error)
       } else if (response.body.error) {
-          console.log('Error sending messages (to user ' 
-          	+ sender + '): ', response.body.error);
+          console.log('Error sending messages: ', response.body.error)
       }
-  })
+  });
 }
 
 function typingIndicator(sender, onOrOff) {
@@ -49,5 +79,6 @@ function typingIndicator(sender, onOrOff) {
 
 module.exports = {
   text: text,
-  typingIndicator: typingIndicator
+  typingIndicator: typingIndicator,
+  textWithQuickReplies: textWithQuickReplies
 }
