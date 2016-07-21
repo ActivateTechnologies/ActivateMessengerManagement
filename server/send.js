@@ -340,7 +340,7 @@ function card_for_booking(sender, gameId, description, price, booked){
     "payload": "Book" + "|" + gameId,
   }
 
-  if(booked === true){
+  if(booked){
     console.log("booked is true");
     temp = {
       "type": "postback",
