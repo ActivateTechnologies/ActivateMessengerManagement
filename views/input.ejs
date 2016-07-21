@@ -83,6 +83,38 @@
 
     <script type="text/javascript">
 
+      var games = {};
+
+      var editEvent = function(gid) {
+        if (games[gid]) {
+          console.log('Found game', games[gid]);
+          $("#addgame input[name=title]").val(games[gid].name);
+          $("#addgame input[name=address]").val(games[gid].address);
+          $("#addgame input[name=latlong]").val(games[gid].latlong);
+          $("#addgame input[name=when]").val(games[gid].when.substring(0,10));
+          $("#addgame input[name=desc]").val(games[gid].desc);
+          $("#addgame input[name=capacity]").val(games[gid].capacity);
+          $("#addgame input[name=non_members_attending]").val(games[gid].non_members_attending);
+          $("#addgame input[name=price]").val(games[gid].price);
+          $("#addgame input[name=id]").val(gid);
+
+          //Focus on all to move floating lable up, end with title to help scroll
+          $("html, body").animate({ scrollTop: 0 }, "slow", () => {
+            $("#addgame input[name=address]").focus();
+            $("#addgame input[name=latlong]").focus();
+            $("#addgame input[name=when]").focus();
+            $("#addgame input[name=desc]").focus();
+            $("#addgame input[name=capacity]").focus();
+            $("#addgame input[name=non_members_attending]").focus();
+            $("#addgame input[name=price]").focus();
+            $("#addgame input[name=id]").focus();
+            $("#addgame input[name=title]").focus();
+          });
+        } else {
+          console.log('Game not found');
+        }
+      }
+
       var getPlayerCard = function(player) {
         var data = "<div>";
         data += "<div class='profileDivLeft'>" + "<img class='profile_img' src='" + player.profile_pic + "'>" + "</div>"
@@ -94,9 +126,11 @@
         return data;
       }
 
-      var getCard = function(game){
+      var getCard = function(game, timeframe){
         var data = '<div class="card">'
-          + "<span class='card-title'>" + game.name + "</span><br><br>"
+          + "<span class='card-title'>" + game.name + "</span>"
+          + "<span style='cursor:pointer;' onclick=\"editEvent('" + game._id + "')\">&nbsp;(edit)</span><br><br>"
+          + "<b>Description: </b>" + game.desc + "<br>"
           + "<b>Address: </b>" + game.address + "<br>"
           + "<b>Image Link: </b><a target='_blank' href='" + game.image_url + "'>Link</a><br>"
           + "<b>Lat, Long: </b>" + game.latlong + "<br>"
@@ -106,16 +140,16 @@
           + "<b>Shareable Link: </b><a target='_blank' href='" + "http://www.activatetechnologies.co.uk/game?gid="+ game._id + "'>Link</a><br>"
           + "<b>id: </b>" + game._id + "<br>"
           + "<b>Players attending: </b>" + "<br>"
-          + "<div id='" + game._id + "_players'></div>"
+          + "<div id='" + timeframe + "_" + game._id + "_players'></div>"
           + '</div>';
 
         if (game.joined && game.joined.length) {
           $.get('/players?gid=' + game._id, function(data, status){
-            console.log(data);
+            //console.log('Data', data);
             data.forEach(function(player){
               var playerCard = getPlayerCard(player);
-              console.log(playerCard);
-              $('#' + game._id + '_players').append(playerCard);
+              //console.log('playerCard', playerCard);
+              $('#' + timeframe + "_" + game._id + '_players').append(playerCard);
             })
           })
         }
@@ -125,21 +159,24 @@
       $(document).ready(function(){
         $.get('/today', function(data, status){
           data.forEach(function(item){
-            var data = getCard(item);
+            games[item._id] = item;
+            var data = getCard(item, 'today');
             $('#today').append(data);
           })
         })
 
         $.get('/tomorrow', function(data, status){
           data.forEach(function(item){
-            var data = getCard(item);
+            games[item._id] = item;
+            var data = getCard(item, 'tomorrow');
             $('#tomorrow').append(data);
           })
         })
 
         $.get('/soon', function(data, status){
           data.forEach(function(item){
-            var data = getCard(item);
+            games[item._id] = item;
+            var data = getCard(item, 'soon');
             $('#soon').append(data);
           })
         })

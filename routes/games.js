@@ -137,7 +137,6 @@ router.get('/check', function(req, res){
 router.get('/players', function(req, res){
   M.Game.find({_id:req.query.gid}, function(err, games){
     if(err){
-      console.log(err);
       res.send([]);
     }
     else if (games[0].joined && games[0].joined.length) {
