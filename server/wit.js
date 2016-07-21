@@ -56,18 +56,19 @@ function sendConversationMessage(sender, message, context) {
 	}
 	console.log('Context: ' + JSON.stringify(context));
 	sendNew.typingIndicator(sender, true);
-	console.log(wit.runActions(sender, message, context)
+	return wit.runActions(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
-      console.log('Sender is ' + sender);
+      console.log('Wit response type msg');
       sendNew.text(sender, context.msg);
       //sendConversationMessage(message, sender, context);
     } else if (context.type == 'action' && context.action) {
+    	console.log('Wit response type action');
       if (context.action == 'countUpcomingGames') {
-        console.log('Context action with countUpcomingGames');
+        console.log('Wit action type countUpcomingGames');
         context.numUpcomingGames = 4;
-        sendConversationMessage(sender, null, context);
+        return sendConversationMessage(sender, null, context);
       }
     } else if (context.type == 'stop') {
 	  	sendNew.typingIndicator(sender, false);
@@ -76,10 +77,10 @@ function sendConversationMessage(sender, message, context) {
 	  }
 	}, (error) => {
 		console.log('Error with wit.ai converse', error)
-	}));/*
-	.catch((error) => {
-		console.log('Error with wit.converse', error);
-	});*/
+	})
+	/*.catch((error) => {
+			console.log('Error with wit.converse', error);
+		});*/
 }
 
 module.exports = {
