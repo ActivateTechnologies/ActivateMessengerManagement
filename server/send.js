@@ -276,14 +276,15 @@ function play(sender) {
     })
 }
 
-function cards(sender, data, day){
+function cards(sender, data, message){
 
-  if(day === "today"){
+  if(message === undefined){
     text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
   }
-  else if(day){
-    text(sender, day);
+  else {
+    text(sender, message);
   }
+
 
   let messageData = data;
 
@@ -403,88 +404,47 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
 function generate_card_for_booking(sender, gameId, description, price, booked){
 
-  if(booked === 'true'){
-    let pl = "Cancel" + "|" + gameId;
+  let type = "postback";
+  let title = "BOOK";
+  let pl = "Book" + "|" + gameId;
+  let porurl = "payload"
 
-    let template = {
-                      "attachment": {
-                        "type": "template",
-                        "payload": {
-                            "template_type": "button",
-                            "text": description,
-                            "buttons": [
-                                {
+  if(booked === true){
+    type = "postback";
+    title = "Cancel Booking"
+    pl = "Cancel" + "|" + gameId;
+  }
+
+  else if(parseFloat(price) > 0){
+    type = "web_url";
+    pl = "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
+    porurl = "url";
+  }
+
+
+  let template = {
+                    "attachment": {
+                      "type": "template",
+                      "payload": {
+                          "template_type": "button",
+                          "text": description,
+                          "buttons": [
+                              {
+                                "type": type,
+                                "title": title,
+                                porurl: pl,
+                              },
+                              {
                                   "type": "postback",
-                                  "title": "Cancel Booking",
-                                  "payload": pl,
-                                },
-                                {
-                                    "type": "postback",
-                                    "title": "Keep Looking",
-                                    "payload": "No, thanks",
-                                }
-                              ],
-                            }
-                        }
-                    }
-
-    return template;
-  }
-
-  if(parseFloat(price) > 0){
-    let payingLink = "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
-
-    let template = {
-                      "attachment": {
-                        "type": "template",
-                        "payload": {
-                            "template_type": "button",
-                            "text": description,
-                            "buttons": [
-                                {
-                                  "type": "web_url",
-                                  "title": "BOOK",
-                                  "url": payingLink,
-                                },
-                                {
-                                    "type": "postback",
-                                    "title": "Keep Looking",
-                                    "payload": "No, thanks",
-                                }
-                              ],
-                            }
-                        }
-                    }
-
-    return template;
-  }
-  else {
-    let pl = "Book" + "|" + gameId;
-
-    let template = {
-                      "attachment": {
-                        "type": "template",
-                        "payload": {
-                            "template_type": "button",
-                            "text": description,
-                            "buttons": [
-                                {
-                                  "type": "postback",
-                                  "title": "BOOK",
-                                  "payload": pl,
-                                },
-                                {
-                                    "type": "postback",
-                                    "title": "Keep Looking",
-                                    "payload": "No, thanks",
-                                }
-                              ],
-                            }
-                        }
-                    }
-
-    return template;
-  }
+                                  "title": "Keep Looking",
+                                  "payload": "No, thanks",
+                              }
+                            ],
+                          }
+                      }
+                  }
+                  
+  return template;
 }
 
 function generate_card(array){
@@ -508,10 +468,6 @@ function generate_card(array){
 }
 
 function allGames(sender, broadcast){
-  let temp = "today"
-  if(text){
-    temp = broadcast;
-  }
   let now = new Date();
 
   M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
@@ -530,7 +486,12 @@ function allGames(sender, broadcast){
     })
 
     data = generate_card(data);
-    cards(sender, data, temp);
+    if(broadcast === undefined){
+      cards(sender, data);
+    }
+    else {
+      cards(sender, data, broadcast);
+    }
   })
 }
 
