@@ -35,7 +35,7 @@ router.get('/payment', function(req, res){
       });
     }
     else {
-      console.log("not here");
+      console.log("Can't find game");
     }
   })
 })

@@ -7,21 +7,32 @@ const W = require('./wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 function start(sender){
+  // let messageData = {
+  //   "attachment": {
+  //     "type": "template",
+  //     "payload": {
+  //       "template_type": "button",
+  //       "text": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+  //       "buttons": [
+  //         {
+  //           "type": "postback",
+  //           "title": "Yep",
+  //           "payload": "yep"
+  //         }
+  //       ]
+  //     }
+  //   }
+  // }
+
   let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-        "buttons": [
-          {
-            "type": "postback",
-            "title": "Yep",
-            "payload": "yep"
-          }
-        ]
+    "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"Yep",
+        "payload":"yep"
       }
-    }
+    ]
   }
 
   request({
