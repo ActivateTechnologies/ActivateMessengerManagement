@@ -20,7 +20,7 @@ router.get('/webhook', function (req, res) {
 
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
-  
+
   messaging_events.forEach(function(event){
     let sender = event.sender.id;
     if (event.optin) {
@@ -64,16 +64,18 @@ router.post('/webhook/', function (req, res) {
         }
       }
 
-      console.log('Got message: ' + event.message.text + ' from ' + sender);
-      M.User.find({userId: sender}, function(err, result){
-        if(result.length > 0){
-          send.processReceivedMessage(sender, event.message.text);
-          //send.allGames(sender);
-        }
-        else {
-          send.start(sender);
-        }
-      })
+      else {
+        console.log('Got message: ' + event.message.text + ' from ' + sender);
+        M.User.find({userId: sender}, function(err, result){
+          if(result.length > 0){
+            send.processReceivedMessage(sender, event.message.text);
+            //send.allGames(sender);
+          }
+          else {
+            send.start(sender);
+          }
+        })
+      }
     }
     else if (event.postback) {
       let text = event.postback.payload;
