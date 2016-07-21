@@ -31,7 +31,8 @@ let gameSchema = new Schema({
   joined: [{
     userId: String
   }],
-  capacity: Number
+  capacity: Number,
+  non_members_attending: Number
 })
 
 let Game = mongoose.model('Game', gameSchema);

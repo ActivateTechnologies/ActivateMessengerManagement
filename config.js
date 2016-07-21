@@ -1,12 +1,12 @@
 //PRODUCTION
 // heroku git:remote -a limitless-sierra-68694
 
-// const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
-// const FACEBOOK_APP_ID = "144481079297226"
-// const FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d"
-// const MONGODB_URI = 'mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot'
-// const MESSENGER_URL = "http://m.me/kickaboutapp"
-// const WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
+const VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
+const FACEBOOK_APP_ID = "144481079297226"
+const FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d"
+const MONGODB_URI = 'mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot'
+const MESSENGER_URL = "http://m.me/kickaboutapp"
+const WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
 
 //TEST
 // heroku git:remote -a kickabouttest

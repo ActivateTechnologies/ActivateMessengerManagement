@@ -33,7 +33,6 @@ body {
 body {
   color: #fff;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
@@ -282,7 +281,7 @@ body {
 .logoLead-payment {
   margin-top: 10px;
   width: 350px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .logoLead-custompayment {
@@ -498,14 +497,90 @@ p {
 }
 
 .gamePic {
-  width: 150px;
+  width: 195px;
+  height: 100px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  margin-bottom: 0px;
 }
 
 .gametitle {
   font-size: 12px;
+  background: #FFFFFF;
+  width: 195px;
+  margin-top: -10px;
+  padding-top: 5px;
+  color: #000000;
+  box-shadow: none;
+  font-weight: 500;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.gametitlegame {
+  font-size: 12px;
+  background: #FFFFFF;
+  width: 195px;
+  margin-top: 0px;
+  padding-top: 10px;
+  color: #000000;
+  box-shadow: none;
+  font-weight: 500;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .gameaddress {
-  font-size: 12px;
+  font-size: 10px;
+  background: #FFFFFF;
+  width: 195px;
+  margin-top: -15px;
+  padding-top: 5px;
+  color: #DBDBDB;
+  box-shadow: none;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.gameaddressgame {
+  font-size: 10px;
+  background: #FFFFFF;
+  width: 195px;
+  margin-top: -15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #DBDBDB;
+  box-shadow: none;
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 

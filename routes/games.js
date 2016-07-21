@@ -53,6 +53,7 @@ router.post('/input', upload.single('image'), function(req, res){
         desc: req.body.desc,
         when: req.body.when,
         capacity: req.body.capacity,
+        non_members_attending: req.body.non_members_attending,
         price: parseFloat(req.body.price)
       };
 
@@ -110,7 +111,7 @@ router.get('/check', function(req, res){
     }
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://limitless-sierra-68694.herokuapp.com');
+    res.setHeader('Access-Control-Allow-Origin', 'http://www.activatetechnologies.co.uk');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
