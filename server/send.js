@@ -332,6 +332,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 function card_for_booking(sender, gameId, description, price, booked){
 
   console.log("card for booking");
+  console.log(booked);
 
   let temp = {
     "type": "postback",
