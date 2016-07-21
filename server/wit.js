@@ -16,13 +16,16 @@ const actions = {
   	const context = request.context;
   	const entities = request.entities;
 
-  	const text = response.text;
-  	const quickreplies = response.quickreplies;
-
-    console.log('actions.send() called with context: ' + JSON.stringify(context));
+    console.log('actions.send() called with : ' + JSON.stringify(request) + ', '
+    	+ JSON.stringify(response));
     return new Promise(function(resolve, reject) {
-			sendNew.text(sessionId, context.msg);
-      return resolve(context);
+    	if (response.quickreplies) {
+    		sendNew.textWithQuickReplies(sessionId, response.text,
+    		 response.quickreplies);
+    	} else {
+    		sendNew.text(sessionId, response.text);
+    	}
+      return resolve();
     });
   },
   countUpcomingGames(request) {
@@ -54,20 +57,21 @@ function sendConversationMessage(sender, message, context) {
 	if (!context) {
 		context = {};
 	}
-	console.log('Context: ' + JSON.stringify(context));
+	console.log('sendConversationMessage context: ' + JSON.stringify(context));
 	sendNew.typingIndicator(sender, true);
-	console.log(wit.runActions(sender, message, context)
+	return wit.runActions(sender, message, context)
 	.then((context) => {
 	  console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  if (context.type == 'msg' && context.msg) {
-      console.log('Sender is ' + sender);
+      console.log('Wit response type msg');
       sendNew.text(sender, context.msg);
       //sendConversationMessage(message, sender, context);
     } else if (context.type == 'action' && context.action) {
+    	console.log('Wit response type action');
       if (context.action == 'countUpcomingGames') {
-        console.log('Context action with countUpcomingGames');
+        console.log('Wit action type countUpcomingGames');
         context.numUpcomingGames = 4;
-        sendConversationMessage(sender, null, context);
+        return sendConversationMessage(sender, null, context);
       }
     } else if (context.type == 'stop') {
 	  	sendNew.typingIndicator(sender, false);
@@ -76,10 +80,10 @@ function sendConversationMessage(sender, message, context) {
 	  }
 	}, (error) => {
 		console.log('Error with wit.ai converse', error)
-	}));/*
-	.catch((error) => {
-		console.log('Error with wit.converse', error);
-	});*/
+	})
+	/*.catch((error) => {
+			console.log('Error with wit.converse', error);
+		});*/
 }
 
 module.exports = {
