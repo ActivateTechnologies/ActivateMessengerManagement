@@ -28,9 +28,9 @@ router.post('/webhook/', function (req, res) {
       send.publicLink(sender, event.optin.ref);
     }
 
-    else if (event.message && event.message.quick_reply){
-      console.log(event.message.quick_reply);
-      let text = event.message.quick_reply.payload;
+    else if (event.quick_reply){
+      console.log(event.quick_reply);
+      let text = event.quick_reply.payload;
 
       if(text.substring(0, 4) == "Book"){
         send.book(sender, text);
