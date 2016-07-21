@@ -593,14 +593,15 @@ function my_games(sender){
         }
       });
     })
+
+    if(data === []){
+      text(sender, "You haven't joined any games. Type 'play' to find games")
+    }
+    else {
+      data = generate_card(data);
+      cards(sender, data, "Here are the games you've joined: ");
+    }
   })
-  if(data === []){
-    text(sender, "You haven't joined any games. Type 'play' to find games")
-  }
-  else {
-    data = generate_card(data);
-    cards(sender, data, "Here are the games you've joined: ");
-  }
 }
 
 function publicLink(sender, optin){
