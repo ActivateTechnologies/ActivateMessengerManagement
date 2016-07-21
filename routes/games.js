@@ -53,6 +53,7 @@ router.post('/input', upload.single('image'), function(req, res){
         desc: req.body.desc,
         when: req.body.when,
         capacity: req.body.capacity,
+        non_members_attending: req.body.non_members_attending,
         price: parseFloat(req.body.price)
       };
 

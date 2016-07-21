@@ -516,7 +516,7 @@ function allGames(sender, broadcast){
           booked = true;
         }
       });
-      data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+      data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, booked, item.desc, item.when, item.price]);
     })
 
     data = generate_card(data);
