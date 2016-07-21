@@ -7,22 +7,6 @@ const W = require('./wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 function start(sender){
-  // let messageData = {
-  //   "attachment": {
-  //     "type": "template",
-  //     "payload": {
-  //       "template_type": "button",
-  //       "text": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-  //       "buttons": [
-  //         {
-  //           "type": "postback",
-  //           "title": "Yep",
-  //           "payload": "yep"
-  //         }
-  //       ]
-  //     }
-  //   }
-  // }
 
   let messageData = {
     "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
@@ -402,38 +386,38 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function generate_card_for_booking(sender, gameId, description, price, booked){
+function card_for_booking(sender, gameId, description, price, booked){
 
-  let type = "postback";
-  let title = "BOOK";
-  let pl = "Book" + "|" + gameId;
-  let porurl = "payload"
+  let temp = {
+    "type": "postback",
+    "title": "BOOK",
+    "payload": "Book" + "|" + gameId,
+  }
 
   if(booked === true){
-    type = "postback";
-    title = "Cancel Booking"
-    pl = "Cancel" + "|" + gameId;
+    temp = {
+      "type": "postback",
+      "title": "Cancel Booking",
+      "payload": "Cancel" + "|" + gameId,
+    }
   }
 
   else if(parseFloat(price) > 0){
-    type = "web_url";
-    pl = "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId;
-    porurl = "url";
+    temp = {
+      "type": "web_url",
+      "title": "BOOK",
+      "url": "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId,
+    }
   }
 
-
-  let template = {
+  let messageData = {
                     "attachment": {
                       "type": "template",
                       "payload": {
                           "template_type": "button",
                           "text": description,
                           "buttons": [
-                              {
-                                "type": type,
-                                "title": title,
-                                porurl: pl,
-                              },
+                              temp,
                               {
                                   "type": "postback",
                                   "title": "Keep Looking",
@@ -443,8 +427,23 @@ function generate_card_for_booking(sender, gameId, description, price, booked){
                           }
                       }
                   }
-                  
-  return template;
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending cards: ', error)
+        } else if (response.body.error) {
+            console.log('Error sending cards: ', response.body.error)
+        }
+    })
+
 }
 
 function generate_card(array){
@@ -598,7 +597,7 @@ function more_info(sender, text){
 
   directions(sender, name, address, latlong)
   .then(function(success){
-    cards(sender, generate_card_for_booking(sender, gameId, description, price, booked));
+    card_for_booking(sender, gameId, description, price, booked));
   })
   .catch(function(err){
     console.log(err);
@@ -692,18 +691,12 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
-  /*typingIndicator: typingIndicator,*/
   play: play,
   cards: cards,
-  directions: directions,
-  generate_card_element: generate_card_element,
-  generate_card: generate_card,
-  generate_card_for_booking: generate_card_for_booking,
   allGames: allGames,
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
   more_info: more_info,
-  game: game,
   publicLink: publicLink
 }
