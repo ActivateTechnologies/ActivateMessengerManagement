@@ -84,22 +84,16 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
 
 function booked_for_free_games(sender){
   let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "button",
-        "text": "Thanks for booking. Do you want to continue looking?",
-        "buttons": [
-          {
-            "type": "postback",
-            "title": "Yes",
-            "payload": "continue"
-          }
-        ]
+    "text":"Thanks for booking. Do you want to continue looking?",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"Yes",
+        "payload":"continue"
       }
-    }
+    ]
   }
-
+  
   request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
@@ -121,38 +115,6 @@ function processReceivedMessage(sender, message) {
   W.sendConversationMessage(sender, message);
 }
 
-/*function processReceivedMessageOld(message, sender) {
-  console.log(message);
-  let greetings = ['hello', 'hi', 'whats up', "what's up", 'sup'];
-  let play = ['play', 'play!', 'find me games', 'find me games!', 'find me a game', 'find me a game!'];
-  let help = ['help', 'help!', 'info', 'info!'];
-  if (greetings.indexOf(message.toLowerCase()) > -1) {
-    text(sender, "Hello there! Feel like you could do with a game?"
-      + " Just say 'Play' or 'Find me games' to see upcoming games or help for more info.");
-  }
-  else if (play.indexOf(message.toLowerCase()) > -1) {
-    allGames(sender);
-  }
-  else if (help.indexOf(message.toLowerCase()) > -1) {
-    text(sender, "Call us on 07825542533");
-  }
-  else {
-    textWithQuickReplies(sender, "I didn't quite catch that. Say 'play' or "
-      + "'find me a game' to look for upcoming games.", [
-        {
-          "content_type":"text",
-          "title":"Play",
-          "payload":"play"
-        },
-        {
-          "content_type":"text",
-          "title":"Help",
-          "payload":"help"
-        }
-      ]);
-  }
-}
-*/
 function text(sender, text) {
   let messageData = { text: text }
 
@@ -172,25 +134,6 @@ function text(sender, text) {
       }
   })
 }
-
-/*function typingIndicator(sender, onOrOff) {
-  let typingStatus = (onOrOff) ? 'typing_on' : 'typing_off';
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-        recipient: {id:sender},
-        sender_action: typingStatus
-    }
-  }, function(error, response, body) {
-    if (error) {
-        console.log('Error setting typing indicator: ', error)
-    } else if (response.body.error) {
-        console.log('Error: ', response.body.error)
-    }
-  })
-}*/
 
 function textWithQuickReplies(sender, text, quickReplies) {
     let messageData = {
@@ -505,10 +448,11 @@ function yep(sender){
     if (err) {
       console.log(err);
     }
-    if(result.length > 0 && result[0].publicGameId){
-        game(sender, gameId);
-        allGames(sender);
-    } else {
+    if(result.length > 0){
+      console.log("User is already registered");
+      allGames(sender);
+    }
+    else {
       var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -527,7 +471,6 @@ function yep(sender){
                 console.log(err);
               } else {
                 allGames(sender);
-                console.log("saved it!");
               }
             })
           }
@@ -605,7 +548,6 @@ function more_info(sender, text){
 }
 
 function game(sender, gameId){
-  console.log("called game");
   M.Game.find({_id:gameId}, function(err, result){
     if(result.length > 0){
       let data = [];
@@ -638,8 +580,6 @@ function publicLink(sender, optin){
   let arr = optin.split('facebook');
   let gameId = arr[0];
   let facebookID = arr[1];
-  console.log("Public Link");
-  console.log(facebookID);
   M.User.find({userId:sender}, function(err, result){
     if(result.length > 0){
       game(sender, gameId);
@@ -650,14 +590,12 @@ function publicLink(sender, optin){
       })
     }
     else {
-      console.log(1);
       M.Button.update({name:"Yep"},
         {$push: {activity: {userId:sender, time: new Date()}}},
         {upsert: true},
         function(err){
           console.log(err);
         })
-      console.log(2);
       var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
@@ -677,7 +615,6 @@ function publicLink(sender, optin){
                 console.log(err);
               } else {
                 game(sender, gameId);
-                console.log("saved it!");
               }
             })
           }
@@ -691,6 +628,7 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
+  game: game,
   play: play,
   cards: cards,
   allGames: allGames,
