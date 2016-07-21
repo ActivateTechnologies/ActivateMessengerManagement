@@ -20,51 +20,50 @@ router.get('/webhook', function (req, res) {
 
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
+  
   messaging_events.forEach(function(event){
-    console.log("event");
-    console.log(event);
     let sender = event.sender.id;
     if (event.optin) {
       console.log("optin");
       send.publicLink(sender, event.optin.ref);
     }
 
-    else if (event.quick_reply && !event.message.is_echo){
-      console.log("quick reply");
-      console.log(event.quick_reply);
-      let text = event.quick_reply.payload;
+    else if (event.message && event.message.text && !event.message.is_echo) {
 
-      if(text.substring(0, 4) == "Book"){
-        send.book(sender, text);
-      }
+      if(event.message.quick_reply){
+        console.log("quick_reply");
+        console.log(event.message);
+        let text = event.message.quick_reply.payload;
+        if(text.substring(0, 4) == "Book"){
+          send.book(sender, text);
+        }
 
-      else if(text.substring(0, 6) == "Cancel"){
-        send.cancel_booking(sender, text);
-      }
+        else if(text.substring(0, 6) == "Cancel"){
+          send.cancel_booking(sender, text);
+        }
 
-      else if(text.substring(0, 9) == "More Info"){
-        send.more_info(sender, text);
-      }
+        else if(text.substring(0, 9) == "More Info"){
+          send.more_info(sender, text);
+        }
 
-      else {
-        switch(text.toLowerCase()){
+        else {
+          switch(text.toLowerCase()){
 
-          case('start'):
-          send.start(sender);
-          break;
+            case('start'):
+            send.start(sender);
+            break;
 
-          case("yep"):
-          send.yep(sender);
-          break;
+            case("yep"):
+            send.yep(sender);
+            break;
 
-          default:
-          send.allGames(sender);
+            default:
+            send.allGames(sender);
 
+          }
         }
       }
-    }
 
-    else if (event.message && event.message.text && !event.message.is_echo) {
       console.log('Got message: ' + event.message.text + ' from ' + sender);
       M.User.find({userId: sender}, function(err, result){
         if(result.length > 0){
