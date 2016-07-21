@@ -93,7 +93,7 @@ function booked_for_free_games(sender){
       }
     ]
   }
-  
+
   request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
@@ -576,6 +576,33 @@ function game(sender, gameId){
   })
 }
 
+function my_games(sender){
+  let now = new Date();
+
+  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+
+    let data = [];
+    result.forEach(function(item){
+      let booked = false;
+      let join = item.joined;
+
+      join.forEach(function(i){
+        if(i.userId === sender){
+          booked = true;
+          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, booked, item.desc, item.when, item.price]);
+        }
+      });
+    })
+    if(data === []){
+      text(sender, "You haven't joined any games. Type 'play' to find games")
+    }
+    else {
+      data = generate_card(data);
+      cards(sender, data);
+    }
+  })
+}
+
 function publicLink(sender, optin){
   let arr = optin.split('facebook');
   let gameId = arr[0];
@@ -632,6 +659,7 @@ module.exports = {
   play: play,
   cards: cards,
   allGames: allGames,
+  my_games: my_games,
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,

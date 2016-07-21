@@ -103,6 +103,9 @@ router.post('/webhook/', function (req, res) {
           send.yep(sender);
           break;
 
+          case("my games"):
+          send.my_games(sender);
+
           default:
           send.allGames(sender);
 
