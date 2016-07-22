@@ -60,3 +60,23 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 
 
 // LOCAL TUNNEL Reference https://github.com/localtunnel/localtunnel
+
+
+// For setting up Persistent Menu
+
+// curl -X POST -H "Content-Type: application/json" -d '{
+//   "setting_type" : "call_to_actions",
+//   "thread_state" : "existing_thread",
+//   "call_to_actions":[
+//     {
+//       "type":"postback",
+//       "title":"Find Games",
+//       "payload":"play"
+//     },
+//     {
+//       "type":"postback",
+//       "title":"My Games",
+//       "payload":"my games"
+//     }
+//   ]
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"

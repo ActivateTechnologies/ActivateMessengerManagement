@@ -22,62 +22,96 @@ router.get('/input', function(req, res){
 
 router.post('/input', upload.single('image'), function(req, res){
 
-  console.log(req.file);
+  if(req.file){
+    let file = req.file
+    let imagename = file.filename;
 
-  let file = req.file
-  let imagename = file.filename;
+    var params = {
+      Bucket: 'kickabout-messenger',
+      Key: imagename,
+      Body: fs.readFileSync(file.path)
+    };
 
-  var params = {
-    Bucket: 'kickabout-messenger',
-    Key: imagename,
-    Body: fs.readFileSync(file.path)
-  };
+    s3.putObject(params, function (perr, pres) {
 
-  s3.putObject(params, function (perr, pres) {
-    if (perr) {
-      console.log("Error uploading data: ", perr);
-    }
-    else {
-      console.log("Successfully uploaded data to myBucket/myKey");
-      let urlParams = {Bucket: 'kickabout-messenger', Key: imagename, Expires: 30000000};
-      let image_url = s3.getSignedUrl('getObject', urlParams);
-
-      console.log(image_url);
-
-      let data = {
-        name: req.body.title,
-        address: req.body.address,
-        image_url: image_url,
-        image_name: imagename,
-        latlong: req.body.latlong,
-        desc: req.body.desc,
-        when: req.body.when,
-        capacity: req.body.capacity,
-        non_members_attending: req.body.non_members_attending,
-        price: parseFloat(req.body.price)
-      };
-
-      if(req.body.id){
-        M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
-          if(err){
-            console.log(err);
-          }
-        })
+      if (perr) {
+        console.log("Error uploading data: ", perr);
+        res.send(perr);
       }
-
       else {
-        let game = M.Game(data);
+        console.log("Successfully uploaded data to myBucket/myKey");
+        let urlParams = {Bucket: 'kickabout-messenger', Key: imagename, Expires: 30000000};
+        let image_url = s3.getSignedUrl('getObject', urlParams);
 
-        game.save(function(err){
-          if(err){
-            console.log(err);
-          }
-        })
+        let data = {
+          name: req.body.title,
+          address: req.body.address,
+          image_url: image_url,
+          image_name: imagename,
+          latlong: req.body.latlong,
+          desc: req.body.desc,
+          when: req.body.when,
+          capacity: req.body.capacity,
+          non_members_attending: req.body.non_members_attending,
+          price: parseFloat(req.body.price)
+        };
+
+        if(req.body.id){
+          console.log("Editing game");
+
+          M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
+            if(err){
+              console.log(err);
+            }
+            res.render('input');
+          })
+        }
+
+        else {
+          console.log("Adding game");
+          let game = M.Game(data);
+
+          game.save(function(err){
+            if(err){
+              console.log(err);
+            }
+            res.render('input');
+          })
+        }
       }
-    }
-  });
 
-  res.render('input');
+    });
+  }
+
+  else {
+    let data = {
+      name: req.body.title,
+      address: req.body.address,
+      latlong: req.body.latlong,
+      desc: req.body.desc,
+      when: req.body.when,
+      capacity: req.body.capacity,
+      non_members_attending: req.body.non_members_attending,
+      price: parseFloat(req.body.price)
+    };
+
+    M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
+      if(err){
+        console.log(err);
+      }
+      res.render('input');
+    })
+  }
+});
+
+router.delete('/input', function(req, res){
+  M.Game.findOneAndRemove({_id:req.query.gid}, function(err){
+    if(err){
+      console.log(err);
+    }
+    console.log("deleted game");
+    res.send("deleted game")
+  })
 });
 
 router.get('/game', function(req, res){

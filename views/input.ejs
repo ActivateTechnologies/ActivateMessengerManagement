@@ -29,7 +29,7 @@
             <label for="address">Address</label>
           </div>
           <div class="input-field">
-            <input type="file" name="image" id="image" required>
+            <input type="file" name="image" id="image">
           </div>
           <div class="input-field">
             <input name="latlong" type="text" class="validate" required>
@@ -54,7 +54,7 @@
             <input name="price" type="text" class="validate" required>
             <label for="price">Price (0 for free)</label>
           </div>
-          <div class="input-field">
+          <div class="input-field" style="display:none">
             <input name="id" type="text" class="validate">
             <label for="id">Id (only for editing the event)</label>
           </div>
@@ -84,6 +84,18 @@
     <script type="text/javascript">
 
       var games = {};
+
+      function deleteGame(gid){
+        if (confirm("Are you sure you want to delete the game?")) {
+          $.ajax({
+            url: window.location.href + "?gid=" + gid,
+            type: "DELETE",
+            success: function(result) {
+              location.reload();
+            }
+          });
+        }
+      }
 
       var editEvent = function(gid) {
         if (games[gid]) {
@@ -129,7 +141,8 @@
       var getCard = function(game, timeframe){
         var data = '<div class="card">'
           + "<span class='card-title'>" + game.name + "</span>"
-          + "<span style='cursor:pointer;' onclick=\"editEvent('" + game._id + "')\">&nbsp;(edit)</span><br><br>"
+          + "<span style='cursor:pointer;' onclick=\"editEvent('" + game._id + "')\">&nbsp;(edit)</span>"
+          + "<span style='cursor:pointer;' onclick=\"deleteGame('" + game._id + "')\">&nbsp;(delete)</span><br><br>"
           + "<b>Description: </b>" + game.desc + "<br>"
           + "<b>Address: </b>" + game.address + "<br>"
           + "<b>Image Link: </b><a target='_blank' href='" + game.image_url + "'>Link</a><br>"

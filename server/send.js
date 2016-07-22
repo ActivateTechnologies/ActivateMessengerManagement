@@ -93,7 +93,7 @@ function booked_for_free_games(sender){
       }
     ]
   }
-  
+
   request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
@@ -331,13 +331,10 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
 function card_for_booking(sender, gameId, description, price, booked){
 
-  let temp = {
-    "type": "postback",
-    "title": "BOOK",
-    "payload": "Book" + "|" + gameId,
-  }
+  let temp = {}
 
-  if(booked === true){
+  if(booked === "true"){
+    console.log("booked is true");
     temp = {
       "type": "postback",
       "title": "Cancel Booking",
@@ -350,6 +347,14 @@ function card_for_booking(sender, gameId, description, price, booked){
       "type": "web_url",
       "title": "BOOK",
       "url": "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId,
+    }
+  }
+
+  else {
+    temp = {
+      "type": "postback",
+      "title": "BOOK",
+      "payload": "Book" + "|" + gameId,
     }
   }
 
@@ -576,6 +581,34 @@ function game(sender, gameId){
   })
 }
 
+function my_games(sender){
+  let now = new Date();
+
+  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+
+    let data = [];
+    result.forEach(function(item){
+      let join = item.joined;
+
+      join.forEach(function(i){
+        if(i.userId === sender){
+          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
+        }
+      });
+    })
+
+    console.log(data);
+
+    if(data.length === 0){
+      text(sender, "You haven't joined any games. Type 'play' to find games")
+    }
+    else {
+      data = generate_card(data);
+      cards(sender, data, "Here are the games you've joined: ");
+    }
+  })
+}
+
 function publicLink(sender, optin){
   let arr = optin.split('facebook');
   let gameId = arr[0];
@@ -632,6 +665,7 @@ module.exports = {
   play: play,
   cards: cards,
   allGames: allGames,
+  my_games: my_games,
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
