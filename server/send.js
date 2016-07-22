@@ -599,7 +599,7 @@ function my_games(sender){
 
     console.log(data);
 
-    if(data === []){
+    if(data.length === 0){
       text(sender, "You haven't joined any games. Type 'play' to find games")
     }
     else {
