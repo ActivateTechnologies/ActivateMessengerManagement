@@ -334,11 +334,7 @@ function card_for_booking(sender, gameId, description, price, booked){
   console.log("card for booking");
   console.log(booked);
 
-  let temp = {
-    "type": "postback",
-    "title": "BOOK",
-    "payload": "Book" + "|" + gameId,
-  }
+  let temp = {}
 
   if(booked){
     console.log("booked is true");
@@ -354,6 +350,14 @@ function card_for_booking(sender, gameId, description, price, booked){
       "type": "web_url",
       "title": "BOOK",
       "url": "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId,
+    }
+  }
+
+  else {
+    temp = {
+      "type": "postback",
+      "title": "BOOK",
+      "payload": "Book" + "|" + gameId,
     }
   }
 
