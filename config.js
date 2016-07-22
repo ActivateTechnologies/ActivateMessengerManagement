@@ -23,6 +23,8 @@ const AVI_FACEBOOK_APP_ID = "159289771143437";
 const AVI_FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826";
 const AVI_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
 const AVI_WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
+const AVI_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
+const AVI_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
 
 if (status == 'production') {
 	exports.VERIFICATION_TOKEN = PRODUCTION_VERIFICATION_TOKEN;
@@ -42,6 +44,8 @@ if (status == 'production') {
 	exports.FACEBOOK_APP_SECRET = AVI_FACEBOOK_APP_SECRET;
 	exports.MONGODB_URI = AVI_MONGODB_URI;
 	exports.WIT_TOKEN = AVI_WIT_TOKEN;
+	exports.MS_BOT_APP_ID = AVI_MS_BOT_APP_ID;
+	exports.MS_BOT_PASSWORD = AVI_MS_BOT_PASSWORD;
 }
 
 //AWS S3 keys
