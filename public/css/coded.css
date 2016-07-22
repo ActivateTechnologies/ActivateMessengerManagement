@@ -116,6 +116,8 @@ body {
   vertical-align: top;
 }
 .cover-container2 {
+  height: 90%;
+
   margin-right: auto;
   margin-left: auto;
 }
@@ -469,10 +471,10 @@ p {
 
 .footertext {
   font-size: 10px;
-  position: absolute;
-  bottom: 0;
   text-align: center;
   width: 100%;
+  padding-bottom: 5px;
+  padding-top: 15px;
 }
 
 .footertext-customPayment {
@@ -582,5 +584,10 @@ p {
 
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+
+.footerDiv {
+  height: 10%;
+  width: 100%;
 }
 
