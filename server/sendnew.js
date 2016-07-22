@@ -136,7 +136,7 @@ function generate_card(array){
 function cards(sender, data, day){
 
   if (day === "today") {
-    text(sender, "Here are some upcoming games to join. "
+    text(sender, "(sendnew) Here are some upcoming games to join. "
     	+ "Tap the card for directions or 'More Info' to book.");
   }
   else if (day) {

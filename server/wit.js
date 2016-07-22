@@ -16,10 +16,11 @@ const actions = {
   	const context = request.context;
   	const entities = request.entities;
     
-    console.log('actions.send() called with text: ' + response.text);
+    console.log('send()', JSON.stringify(request), JSON.stringify(response));
+    /*console.log('actions.send() called with text: ' + response.text);
 		if (response.quickreplies) {
 			console.log('Also includes quickreplies: ', response.quickreplies);
-		}
+		}*/
     return new Promise(function(resolve, reject) {
     	if (response.quickreplies) {
     		sendNew.textWithQuickReplies(sessionId, response.text,
@@ -34,12 +35,24 @@ const actions = {
   	const sessionId = request.sessionId;
   	const context = request.context;
 
-		console.log('countUpcomingGames() called with sessionId: ' + sessionId
-			+ ' and entities: ' + JSON.stringify(request.entities));
+		console.log('countUpcomingGames', JSON.stringify(request));
+		/*console.log('countUpcomingGames() called with sessionId: ' + sessionId
+			+ ' and entities: ' + JSON.stringify(request.entities));*/
 		return new Promise(function(resolve, reject) {
 			getCountUpcomingGames(request.entities, (numGames, dates, error) => {
 				if (!error) {
-					context.numUpcomingGames = numGames;
+					delete context.noUpcomingGames;
+					delete context.numUpcomingGame;
+					delete context.numUpcomingGames;
+					if (numGames == 0) {
+						context.noUpcomingGames = true;
+					} else if (numGames == 1) {
+						context.numUpcomingGame = 1;
+					} else {
+						context.numUpcomingGames = numGames;
+					}
+					console.log(context.noUpcomingGames, context.numUpcomingGame,
+						context.numUpcomingGames);
 					context.queryDates = JSON.stringify(dates);
 					return resolve(context);
 				} else {
@@ -54,8 +67,14 @@ const actions = {
   	const sessionId = request.sessionId;
   	const context = request.context;
 
-  	console.log('showUpcomingGames() called');
-  	sendNew.allGames(sessionId, null, JSON.parse(request.context.queryDates));
+  	console.log('showUpcomingGames()', JSON.stringify(request));
+  	let queryDates = (request.context.queryDates) 
+  		? JSON.parse(request.context.queryDates) : null;
+  	if (queryDates && Object.keys(queryDates).length) {
+			sendNew.allGames(sessionId, null, queryDates);
+  	} else {
+  		sendNew.text(sessionId, 'There are no upcoming games sorry. :( (Error)');
+  	}
   	return new Promise(function(resolve, reject) {
       return resolve(context);
     });
@@ -70,7 +89,6 @@ const wit = new Wit({
 });
 
 function sendConversationMessage(sender, message, context) {
-	// Setting up Wit bot
 	if (!context) {
 		context = {};
 	}
@@ -80,28 +98,9 @@ function sendConversationMessage(sender, message, context) {
 	.then((context) => {
 	  //console.log('Yay, got Wit.ai response: ' + JSON.stringify(context));
 	  sendNew.typingIndicator(sender, false);
-	  /*if (context.type == 'msg' && context.msg) {
-      console.log('Wit response type msg');
-      sendNew.text(sender, context.msg);
-      //sendConversationMessage(message, sender, context);
-    } else if (context.type == 'action' && context.action) {
-    	console.log('Wit response type action');
-      if (context.action == 'countUpcomingGames') {
-        console.log('Wit action type countUpcomingGames');
-        context.numUpcomingGames = 4;
-        return sendConversationMessage(sender, null, context);
-      }
-    } else if (context.type == 'stop') {
-	  	sendNew.typingIndicator(sender, false);
-	  } else {
-	  	sendNew.typingIndicator(sender, false);
-	  }*/
 	}, (error) => {
 		console.log('Error with wit.ai runActions', error)
 	})
-	/*.catch((error) => {
-			console.log('Error with wit.converse', error);
-		});*/
 }
 
 function getCountUpcomingGames(entities, callback) {
@@ -120,14 +119,16 @@ function getCountUpcomingGames(entities, callback) {
 			 + 2 * 3600 * 1000);
 		}
 	}
+	let now = new Date();
 	let query = (Object.keys(dates).length) 
-		? {when:{$gt: dates.startDate, $lt: dates.endDate}} : {};
-	console.log('Dates are: ', dates, ' and query is ', query);
+		? {when:{$gt: dates.startDate, $lt: dates.endDate}}
+		: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
+	//console.log('Dates are: ', dates, ' and query is ', query);
 	M.Game.find(query, function(error, games){
     if (error) {
       callback(0, null, error);
     } else {
-    	console.log('Number of games found: ' + games);
+    	console.log('Number of games found: ' + games.length);
       (games) ? callback(games.length, dates) : callback(0, null);
     }
   });
