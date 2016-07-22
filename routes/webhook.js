@@ -23,7 +23,7 @@ router.post('/webhook/', function (req, res) {
 
   messaging_events.forEach(function(event){
 
-    console.log('Got event: ' + JSON.parse(event));
+    console.log('Got event: ' + event);
     let sender = event.sender.id;
     if (event.optin) {
       console.log("optin");
@@ -33,7 +33,7 @@ router.post('/webhook/', function (req, res) {
     else if (event.message && event.message.text && !event.message.is_echo) {
 
       send.processReceivedMessage(sender, event.message.text);
-      
+
       /*if (event.message.quick_reply) {
         console.log("quick_reply");
         console.log(event.message);
