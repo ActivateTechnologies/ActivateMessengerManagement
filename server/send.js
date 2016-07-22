@@ -336,7 +336,7 @@ function card_for_booking(sender, gameId, description, price, booked){
 
   let temp = {}
 
-  if(booked){
+  if(booked === "true"){
     console.log("booked is true");
     temp = {
       "type": "postback",
