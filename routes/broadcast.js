@@ -11,7 +11,7 @@ router.get('/broadcast', isLoggedIn, function (req, res) {
 
 router.post('/broadcast', function(req, res){
   let type = req.query.typ;
-  let message = req.query.message;
+  let message = decodeURIComponent(req.query.message);
 
   if(type === "message"){
     M.User.find({}, function(err, result){
