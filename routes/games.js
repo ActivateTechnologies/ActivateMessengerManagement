@@ -33,9 +33,10 @@ router.post('/input', upload.single('image'), function(req, res){
     };
 
     s3.putObject(params, function (perr, pres) {
-      
+
       if (perr) {
         console.log("Error uploading data: ", perr);
+        res.send(perr);
       }
       else {
         console.log("Successfully uploaded data to myBucket/myKey");
@@ -62,6 +63,7 @@ router.post('/input', upload.single('image'), function(req, res){
             if(err){
               console.log(err);
             }
+            res.render('input');
           })
         }
 
@@ -73,6 +75,7 @@ router.post('/input', upload.single('image'), function(req, res){
             if(err){
               console.log(err);
             }
+            res.render('input');
           })
         }
       }
@@ -96,10 +99,19 @@ router.post('/input', upload.single('image'), function(req, res){
       if(err){
         console.log(err);
       }
+      res.render('input');
     })
   }
+});
 
-  res.render('input');
+router.delete('/input', function(req, res){
+  M.Game.findOneAndRemove({_id:req.query.gid}, function(err){
+    if(err){
+      console.log(err);
+    }
+    console.log("deleted game");
+    res.send("deleted game")
+  })
 });
 
 router.get('/game', function(req, res){
