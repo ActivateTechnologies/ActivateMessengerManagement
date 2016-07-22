@@ -331,9 +331,6 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
 function card_for_booking(sender, gameId, description, price, booked){
 
-  console.log("card for booking");
-  console.log(booked);
-
   let temp = {}
 
   if(booked === "true"){
@@ -599,10 +596,7 @@ function my_games(sender){
         }
       });
     })
-
-    console.log("inside my games");
-    console.log(data);
-
+    
     if(data === []){
       text(sender, "You haven't joined any games. Type 'play' to find games")
     }
