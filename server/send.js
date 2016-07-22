@@ -596,7 +596,9 @@ function my_games(sender){
         }
       });
     })
-    
+
+    console.log(data);
+
     if(data === []){
       text(sender, "You haven't joined any games. Type 'play' to find games")
     }
