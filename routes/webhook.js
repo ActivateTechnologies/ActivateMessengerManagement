@@ -27,31 +27,19 @@ router.post('/webhook/', function (req, res) {
     if (event.optin) {
       console.log("optin");
       send.publicLink(sender, event.optin.ref);
-    }
-
-    else if (event.message && event.message.text && !event.message.is_echo) {
-
-      // send.processReceivedMessage(sender, event.message.text);
-
+    } else if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
         console.log("quick_reply");
         console.log(event.message);
         let text = event.message.quick_reply.payload;
         if (text.substring(0, 4) == "Book") {
           send.book(sender, text);
-        }
-
-        else if (text.substring(0, 6) == "Cancel") {
+        } else if (text.substring(0, 6) == "Cancel") {
           send.cancel_booking(sender, text);
-        }
-
-        else if (text.substring(0, 9) == "More Info") {
+        } else if (text.substring(0, 9) == "More Info") {
           send.more_info(sender, text);
-        }
-
-        else {
+        } else {
           switch(text.toLowerCase()){
-
             case('start'):
             send.start(sender);
             break;
@@ -62,40 +50,32 @@ router.post('/webhook/', function (req, res) {
 
             default:
             send.allGames(sender);
-
           }
         }
+      } else {
+        send.processReceivedMessage(sender, event.message.text, () => {
+          //LUIS Did not find anything, so default response
+          console.log('Got message: ' + event.message.text + ' from ' + sender);
+          M.User.find({userId: sender}, function(err, result){
+            if (result.length > 0){
+              //send.allGames(sender);
+            } else {
+              send.start(sender);
+            }
+          })
+        });
       }
-
-      else {
-        console.log('Got message: ' + event.message.text + ' from ' + sender);
-        M.User.find({userId: sender}, function(err, result){
-          if(result.length > 0){
-            //send.allGames(sender);
-          }
-          else {
-            send.start(sender);
-          }
-        })
-      }
-    }
-    else if (event.postback) {
+    } else if (event.postback) {
       let text = event.postback.payload;
 
-      if(text.substring(0, 4) == "Book"){
+      if (text.substring(0, 4) == "Book") {
         send.book(sender, text);
-      }
-
-      else if(text.substring(0, 6) == "Cancel"){
+      } else if(text.substring(0, 6) == "Cancel") {
         send.cancel_booking(sender, text);
-      }
-
-      else if(text.substring(0, 9) == "More Info"){
+      } else if(text.substring(0, 9) == "More Info") {
         send.more_info(sender, text);
-      }
-
-      else {
-        switch(text.toLowerCase()){
+      } else {
+        switch(text.toLowerCase()) {
 
           case('start'):
           send.start(sender);
@@ -115,7 +95,6 @@ router.post('/webhook/', function (req, res) {
         }
       }
     }
-
   })
 
   res.sendStatus(200);

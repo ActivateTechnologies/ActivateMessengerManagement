@@ -4,6 +4,7 @@ const request = require('request');
 const M = require('./schemas.js');
 const config = require('./../config');
 const W = require('./wit.js');
+const W = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
 function start(sender){
@@ -111,8 +112,9 @@ function booked_for_free_games(sender){
   })
 }
 
-function processReceivedMessage(sender, message) {
-  W.sendConversationMessage(sender, message);
+function processReceivedMessage(sender, message, defaultCallback) {
+  //W.sendConversationMessage(sender, message);
+  L.processTextMessage(sender, message, defaultCallback);
 }
 
 function text(sender, text) {
