@@ -1,4 +1,4 @@
-const status = 'avi'; //'produciton' or 'test' or 'avi'
+const status = 'test'; //'produciton' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -25,6 +25,8 @@ const AVI_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bot
 const AVI_WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
 const AVI_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
 const AVI_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
+const AVI_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
+const AVI_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
 
 if (status == 'production') {
 	exports.VERIFICATION_TOKEN = PRODUCTION_VERIFICATION_TOKEN;
@@ -46,6 +48,8 @@ if (status == 'production') {
 	exports.WIT_TOKEN = AVI_WIT_TOKEN;
 	exports.MS_BOT_APP_ID = AVI_MS_BOT_APP_ID;
 	exports.MS_BOT_PASSWORD = AVI_MS_BOT_PASSWORD;
+	exports.LUIS_ID = AVI_LUIS_ID;
+	exports.LUIS_SUBSCRIPTION_KEY = AVI_LUIS_SUBSCRIPTION_KEY;
 }
 
 //AWS S3 keys
