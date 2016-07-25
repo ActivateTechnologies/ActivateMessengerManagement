@@ -97,7 +97,7 @@ router.post('/webhook/', function (req, res) {
     else if(event.message.attachments){
       //handling like button
       console.log(event.message.attachments);
-      if(event.message.attachments.payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
+      if(event.message.attachments[0].payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
         send.menu(sender);
       }
     }
