@@ -13,7 +13,8 @@ let userSchema = new Schema({
   lastname: String,
   profile_pic: String,
   locale: String,
-  gender: String
+  gender: String,
+  notifications: String
 })
 
 let User = mongoose.model('User', userSchema);

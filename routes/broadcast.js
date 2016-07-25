@@ -15,18 +15,26 @@ router.post('/broadcast', function(req, res){
 
   if(type === "message"){
     M.User.find({}, function(err, result){
-      result.forEach(function(item){
-        send.text(item.userId, message);
-      })
-      res.send("People reached: " + result.length)
+      let counter = 0;
+      for(let i = 0; i<result.length; i++){
+        if(result[i].notifications !== "off"){
+          send.text(result[i].userId, message);
+          counter++;
+        }
+      }
+      res.send("People reached: " + counter)
     })
   }
   else if(type === "upcomingGames"){
     M.User.find({}, function(err, result){
-      result.forEach(function(item){
-        send.allGames(item.userId, message);
-      })
-      res.send("People reached: " + result.length)
+      let counter =  0;
+      for(let i = 0; i<result.length; i++){
+        if(result[i].notifications !== "off"){
+          send.allGames(result[i].userId, message);
+          counter++;
+        }
+      }
+      res.send("People reached: " + counter)
     })
   }
 })

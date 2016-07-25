@@ -23,8 +23,6 @@ router.post('/webhook/', function (req, res) {
 
   messaging_events.forEach(function(event){
 
-    console.log(event);
-
     let sender = event.sender.id;
     if (event.optin) {
       console.log("optin");
@@ -115,6 +113,14 @@ router.post('/webhook/', function (req, res) {
 
           case("notifications"):
           send.notifications(sender);
+          break;
+
+          case("notifications_on"):
+          send.notifications_change(sender, "on");
+          break;
+
+          case("notifications_off"):
+          send.notifications_change(sender, "off");
           break;
 
           default:

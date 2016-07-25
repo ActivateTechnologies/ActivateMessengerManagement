@@ -115,6 +115,20 @@ function notifications(sender){
   })
 }
 
+function notifications_change(sender, set){
+  M.User.update({userId:sender}, {notifications: set}, function(err){
+    if(err){
+      console.log(err);
+    }
+    if(set === "on"){
+      text(sender, "You will receive weekly notifications")
+    }
+    else {
+      text(sender, "You won't receive weekly notifications")
+    }
+  })
+}
+
 function booked(sender, name, price, gameName, address, image_url, order_number){
   order_number = order_number;
   let messageData = {
