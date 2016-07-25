@@ -2,10 +2,6 @@
 
 const request = require('supertest')
 const sinon = require('sinon')
-const chai = require('chai')
-const should = chai.should()
-const mongoose = require('mongoose')
-require('sinon-mongoose')
 
 const Game = require('./../server/schemas.js').Game
 
@@ -45,7 +41,7 @@ describe('helper routes', function(){
       .get('/check?fbid=1')
       .expect(200, done)
   })
-  
+
 })
 
 describe('testing games for input', function(){
@@ -66,29 +62,4 @@ describe('testing games for input', function(){
       .get('/soon')
       .expect(200, done)
   })
-})
-
-describe('creating a mew game', function(){
-  it("should create new game", function(done){
-      var GameMock = sinon.mock(new Game({
-        name: "Test Game",
-        address: "Some address",
-        image_name: "Image name",
-        image_url: "https://www.google.com",
-        latlong: "51, 0.3",
-        when: new Date(),
-        desc: "Description field",
-        joined: [],
-        capacity: 5
-      }));
-      var game = GameMock.object;
-      var expectedResult = { status: true };
-      GameMock.expects('save').yields(null, expectedResult);
-      game.save(function (err, result) {
-          GameMock.verify();
-          GameMock.restore();
-          (result.status).should.be.true;
-          done();
-      });
-  });
 })

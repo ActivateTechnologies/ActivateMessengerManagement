@@ -27,18 +27,22 @@ router.post('/webhook/', function (req, res) {
     if (event.optin) {
       console.log("optin");
       send.publicLink(sender, event.optin.ref);
-    } else if (event.message && event.message.text && !event.message.is_echo) {
+    }
+    else if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
-        console.log("quick_reply");
-        console.log(event.message);
+
         let text = event.message.quick_reply.payload;
+
         if (text.substring(0, 4) == "Book") {
           send.book(sender, text);
-        } else if (text.substring(0, 6) == "Cancel") {
+        }
+        else if (text.substring(0, 6) == "Cancel") {
           send.cancel_booking(sender, text);
-        } else if (text.substring(0, 9) == "More Info") {
+        }
+        else if (text.substring(0, 9) == "More Info") {
           send.more_info(sender, text);
-        } else {
+        }
+        else {
           switch(text.toLowerCase()){
             case('start'):
             send.start(sender);
@@ -52,7 +56,9 @@ router.post('/webhook/', function (req, res) {
             send.allGames(sender);
           }
         }
-      } else {
+      }
+
+      else {
         send.processReceivedMessage(sender, event.message.text, () => {
           //LUIS Did not find anything, so default response
           console.log('Got message: ' + event.message.text + ' from ' + sender);
@@ -65,16 +71,48 @@ router.post('/webhook/', function (req, res) {
           })
         });
       }
-    } else if (event.postback) {
+    }
+
+    // {
+    //   "sender":{"id":"1103399343063413"},
+    //   "recipient":{"id":"245261069180348"},
+    //   "timestamp":1469185504304,
+    //   "message":{
+    //     "mid":"mid.1469185504294:c4546db816dc70fb44",
+    //     "seq":9451,
+    //     "sticker_id":369239263222822,
+    //     "attachments":[
+    //         {
+    //         "type":"image",
+    //         "payload": {
+    //           "url":"https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"
+    //           }
+    //         }
+    //       ]
+    //   }
+    // }
+
+    //Handling Attachments
+    else if(event.message.attachments){
+      //handling like button
+      if(event.message.attachments.payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
+        send.menu(sender);
+      }
+    }
+
+    else if (event.postback) {
       let text = event.postback.payload;
 
       if (text.substring(0, 4) == "Book") {
         send.book(sender, text);
-      } else if(text.substring(0, 6) == "Cancel") {
+      }
+      else if(text.substring(0, 6) == "Cancel") {
         send.cancel_booking(sender, text);
-      } else if(text.substring(0, 9) == "More Info") {
+      }
+      else if(text.substring(0, 9) == "More Info") {
         send.more_info(sender, text);
-      } else {
+      }
+      else {
         switch(text.toLowerCase()) {
 
           case('start'):
