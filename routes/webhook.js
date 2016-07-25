@@ -53,6 +53,10 @@ router.post('/webhook/', function (req, res) {
             send.yep(sender);
             break;
 
+            case("notifications"):
+            send.notifications(sender);
+            break;
+
             case("notifications on"):
             send.notifications_change(sender, "on");
             break;
@@ -120,7 +124,6 @@ router.post('/webhook/', function (req, res) {
           break;
 
           case("notifications"):
-          console.log("caught notif");
           send.notifications(sender);
           break;
 
