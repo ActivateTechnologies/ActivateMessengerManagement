@@ -59,17 +59,18 @@ router.post('/webhook/', function (req, res) {
       }
 
       else {
-        send.processReceivedMessage(sender, event.message.text, () => {
-          //LUIS Did not find anything, so default response
-          console.log('Got message: ' + event.message.text + ' from ' + sender);
-          M.User.find({userId: sender}, function(err, result){
-            if (result.length > 0){
-              //send.allGames(sender);
-            } else {
-              send.start(sender);
-            }
-          })
-        });
+        // send.processReceivedMessage(sender, event.message.text, () => {
+        //   //LUIS Did not find anything, so default response
+        //   console.log('Got message: ' + event.message.text + ' from ' + sender);
+        //   M.User.find({userId: sender}, function(err, result){
+        //     if (result.length > 0){
+        //       //send.allGames(sender);
+        //     } else {
+        //       send.start(sender);
+        //     }
+        //   })
+        // });
+        send.start(sender);
       }
     }
 
@@ -95,6 +96,7 @@ router.post('/webhook/', function (req, res) {
     //Handling Attachments
     else if(event.message.attachments){
       //handling like button
+      console.log(event.message.attachments);
       if(event.message.attachments.payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
         send.menu(sender);
       }
