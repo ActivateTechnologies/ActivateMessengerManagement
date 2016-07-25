@@ -6,7 +6,7 @@ const config = require('./../config');
 const W = require('./wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
-function text(sender, text) {
+function text(sender, text, callback) {
   let messageData = { text: text }
 
   request({
@@ -23,6 +23,7 @@ function text(sender, text) {
       console.log('Error sending messages (to user ' 
       	+ sender + '): ', errorObject);
     }
+    (callback) ? ((errorObject) ? callback(errorObject) : callback()) : null;
   });
 }
 
@@ -83,12 +84,9 @@ function allGames(sender, broadcast, queryDates){
     temp = broadcast;
   }
   let now = new Date();
-  let query = {
-		when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}
-	}
-  if (queryDates) {
-  	query = {when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
-  }
+  let query = (queryDates) ? 
+  	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
+  	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
   console.log('Query: ' + JSON.stringify(query));
   M.Game.find(query, function(err, games) {
     let data = [];
@@ -105,10 +103,46 @@ function allGames(sender, broadcast, queryDates){
 	       item.joined.length + item.non_members_attending, item.capacity, booked,
 	       item.desc, item.when, item.price]);
 	  	});
-	    data = generate_card(data);
-	    cards(sender, data, temp);
+	  	console.log(data);
+	  	if (data.length) {
+	  		data = generate_card(data);
+	    	cards(sender, data, temp);
+	  	} else {
+	  		textWithQuickReplies(sender, "Sadly there are no upcoming games currently. "
+	  			+ "Would you like to be notified when the next one is created?",
+	  			["Yes! (not coded)", "No thanks"]);
+	  	}
+	    
     }
   })
+}
+
+function my_games(sender, queryDates){
+  let now = new Date();
+  let query = (queryDates) ? 
+  	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
+  	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
+  M.Game.find(query, function(err, result){
+    let data = [];
+    result.forEach(function(item){
+      let join = item.joined;
+
+      join.forEach(function(i){
+        if(i.userId === sender){
+          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
+        }
+      });
+    })
+
+    //console.log(data);
+
+    if (data.length === 0) {
+      text(sender, "You haven't joined any games. Type 'play' to find games")
+    } else {
+      data = generate_card(data);
+      cards(sender, data, "Here are the games you've joined: ");
+    }
+  });
 }
 
 function generate_card(array){
@@ -205,5 +239,6 @@ module.exports = {
   text: text,
   typingIndicator: typingIndicator,
   textWithQuickReplies: textWithQuickReplies,
-  allGames: allGames
+  allGames: allGames,
+  my_games: my_games
 }
