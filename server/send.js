@@ -87,12 +87,12 @@ function notifications(sender){
       {
         "content_type":"text",
         "title":"Yes",
-        "payload":"notifications_on"
+        "payload":"notifications on"
       },
       {
         "content_type":"text",
         "title":"No",
-        "payload":"notifications_off"
+        "payload":"notifications off"
       }
     ]
   }

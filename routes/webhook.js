@@ -115,11 +115,11 @@ router.post('/webhook/', function (req, res) {
           send.notifications(sender);
           break;
 
-          case("notifications_on"):
+          case("notifications on"):
           send.notifications_change(sender, "on");
           break;
 
-          case("notifications_off"):
+          case("notifications off"):
           send.notifications_change(sender, "off");
           break;
 
