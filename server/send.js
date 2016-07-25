@@ -753,6 +753,7 @@ module.exports = {
   start: start,
   menu: menu,
   notifications: notifications,
+  notifications_change: notifications_change,
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,

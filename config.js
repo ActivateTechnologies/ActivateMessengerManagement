@@ -78,13 +78,18 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //   "call_to_actions":[
 //     {
 //       "type":"postback",
-//       "title":"Find Games",
+//       "title":"Show Games",
 //       "payload":"play"
 //     },
 //     {
 //       "type":"postback",
 //       "title":"My Games",
 //       "payload":"my games"
+//     },
+// 		{
+//       "type":"postback",
+//       "title":"Notifications",
+//       "payload":"notifications"
 //     }
 //   ]
 // }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"
