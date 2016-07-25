@@ -77,7 +77,7 @@ router.post('/webhook/', function (req, res) {
       }
     }
 
-    else if(event.message.attachments){
+    else if(event.message && event.message.attachments && !event.message.is_echo){
       console.log("detected attachment");
       //handling like button
       console.log(event.message.attachments);
