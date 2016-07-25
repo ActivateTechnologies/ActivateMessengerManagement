@@ -38,6 +38,47 @@ function start(sender){
   })
 }
 
+function menu(sender){
+
+  let messageData = {
+    "text":"Hi there, what do you want to do?",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"Show Games",
+        "payload":"show games"
+      },
+      {
+        "content_type":"text",
+        "title":"My Games",
+        "payload":"my games"
+      },
+      {
+        "content_type":"text",
+        "title":"Notifications",
+        "payload":"notifications"
+      }
+    ]
+  }
+
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error in start(): ', error)
+      } else if (response.body.error) {
+          console.log('Error in start(): ', response.body.error)
+      }
+  })
+}
+
 function booked(sender, name, price, gameName, address, image_url, order_number){
   order_number = order_number;
   let messageData = {
@@ -660,6 +701,7 @@ function publicLink(sender, optin){
 
 module.exports = {
   start: start,
+  menu: menu,
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
