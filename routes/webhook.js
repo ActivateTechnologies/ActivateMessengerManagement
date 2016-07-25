@@ -23,11 +23,14 @@ router.post('/webhook/', function (req, res) {
 
   messaging_events.forEach(function(event){
 
+    console.log(event);
+
     let sender = event.sender.id;
     if (event.optin) {
       console.log("optin");
       send.publicLink(sender, event.optin.ref);
     }
+
     else if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
 
@@ -74,27 +77,8 @@ router.post('/webhook/', function (req, res) {
       }
     }
 
-    // {
-    //   "sender":{"id":"1103399343063413"},
-    //   "recipient":{"id":"245261069180348"},
-    //   "timestamp":1469185504304,
-    //   "message":{
-    //     "mid":"mid.1469185504294:c4546db816dc70fb44",
-    //     "seq":9451,
-    //     "sticker_id":369239263222822,
-    //     "attachments":[
-    //         {
-    //         "type":"image",
-    //         "payload": {
-    //           "url":"https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"
-    //           }
-    //         }
-    //       ]
-    //   }
-    // }
-
-    //Handling Attachments
     else if(event.message.attachments){
+      console.log("detected attachment");
       //handling like button
       console.log(event.message.attachments);
       if(event.message.attachments[0].payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
