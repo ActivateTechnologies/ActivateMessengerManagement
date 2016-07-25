@@ -72,9 +72,45 @@ function menu(sender){
       }
   }, function(error, response, body) {
       if (error) {
-          console.log('Error in start(): ', error)
+          console.log('Error in menu(): ', error)
       } else if (response.body.error) {
-          console.log('Error in start(): ', response.body.error)
+          console.log('Error in menu(): ', response.body.error)
+      }
+  })
+}
+
+function notifications(sender){
+
+  let messageData = {
+    "text":"Do you want to receive weekly game updates?",
+    "quick_replies":[
+      {
+        "content_type":"text",
+        "title":"Yes",
+        "payload":"notifications_on"
+      },
+      {
+        "content_type":"text",
+        "title":"No",
+        "payload":"notifications_off"
+      }
+    ]
+  }
+
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error in notifications(): ', error)
+      } else if (response.body.error) {
+          console.log('Error in notifications(): ', response.body.error)
       }
   })
 }
@@ -702,6 +738,7 @@ function publicLink(sender, optin){
 module.exports = {
   start: start,
   menu: menu,
+  notifications: notifications,
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,

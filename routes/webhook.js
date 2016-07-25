@@ -113,6 +113,10 @@ router.post('/webhook/', function (req, res) {
           send.my_games(sender);
           break;
 
+          case("notifications"):
+          send.notifications(sender);
+          break;
+
           default:
           send.allGames(sender);
 
