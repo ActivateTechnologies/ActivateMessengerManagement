@@ -40,6 +40,10 @@ app.get('/login', (req, res) => {
   res.render('login')
 })
 
+app.get('/table', (req, res) => {
+  res.render('table')
+})
+
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/broadcast',
                                    failureRedirect: '/login'
