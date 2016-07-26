@@ -91,24 +91,24 @@
     var fbid = "";
 
     function ref(){
-      $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-        if(data.check === true){
-          setTimeout(function(){
-            console.log("calling refresh");
-            location.href = "http://m.me/kickaboutapp";
-          }, 2000)
-        }
-      })
-      setInterval(function(){
-        $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-          if(data.check === true){
-            setTimeout(function(){
-              console.log("calling refresh in loop");
-              location.href = "http://m.me/kickaboutapp";
-            }, 2000)
-          }
-        })
-      }, 2000);
+      // $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+      //   if(data.check === true){
+      //     setTimeout(function(){
+      //       console.log("calling refresh");
+      //       location.href = "http://m.me/kickaboutapp";
+      //     }, 2000)
+      //   }
+      // })
+      // setInterval(function(){
+      //   $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+      //     if(data.check === true){
+      //       setTimeout(function(){
+      //         console.log("calling refresh in loop");
+      //         location.href = "http://m.me/kickaboutapp";
+      //       }, 2000)
+      //     }
+      //   })
+      // }, 2000);
     }
 
     function magic(){
