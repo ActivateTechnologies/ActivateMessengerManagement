@@ -704,6 +704,7 @@ function publicLink(sender, optin){
               if(err){
                 console.log(err);
               } else {
+                console.log("saved and sending game");
                 game(sender, gameId);
               }
             })
