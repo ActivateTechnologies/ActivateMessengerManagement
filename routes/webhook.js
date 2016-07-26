@@ -56,6 +56,10 @@ router.post('/webhook/', function (req, res) {
             send.notifications(sender);
             break;
 
+            case("my games"):
+            send.my_games(sender);
+            break;
+
             case("notifications on"):
             send.notifications_change(sender, "on");
             break;
