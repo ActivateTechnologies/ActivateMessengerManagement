@@ -104,7 +104,7 @@
         $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
           if(data.check === true){
             setTimeout(function(){
-              console.log("calling refresh");
+              console.log("calling refresh in loop");
               location.href = "http://m.me/kickaboutapp";
             }, 2000)
           }
