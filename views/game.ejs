@@ -92,7 +92,7 @@
     var fbid = "";
 
     function ref(){
-      $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+      $.get("http://localhost:3000/check?fbid=" + fbid, function(data){
         if(data.check === true){
           setTimeout(function(){
             console.log("calling refresh");
@@ -101,7 +101,7 @@
         }
       })
       setInterval(function(){
-        $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
+        $.get("http://localhost:3000/check?fbid=" + fbid, function(data){
           if(data.check === true){
             setTimeout(function(){
               console.log("calling refresh in loop");
