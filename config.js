@@ -66,6 +66,9 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //booking link generator in send.js inside generate_card_for_booking
 //need to change app id and page id in game.ejs
 
+//Alex's real account
+// 10153573553662304
+
 
 // LOCAL TUNNEL Reference https://github.com/localtunnel/localtunnel
 
