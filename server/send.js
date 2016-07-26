@@ -209,7 +209,7 @@ function processReceivedMessage(sender, message, defaultCallback) {
 }
 
 function text_promise(sender, text){
-  return new Promise(resolve, reject){
+  return new Promise(function(resolve, reject){
     let messageData = { text: text }
 
     request({
@@ -232,7 +232,7 @@ function text_promise(sender, text){
           resolve()
         }
     })
-  }
+  })
 }
 
 function text(sender, text) {
