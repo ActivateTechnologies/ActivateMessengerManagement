@@ -652,7 +652,7 @@ function my_games(sender){
     console.log(data);
 
     if(data.length === 0){
-      text_promise(sender, "You haven't joined any games. Type 'play' to find games")
+      text_promise(sender, "You haven't joined any games.")
       .then(()=>{
         allGames(sender);
       })
