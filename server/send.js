@@ -255,74 +255,6 @@ function text(sender, text) {
   })
 }
 
-function textWithQuickReplies(sender, text, quickReplies) {
-    let messageData = {
-      text: text,
-      quick_replies: quickReplies
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error sending messages: ', response.body.error)
-        }
-    })
-}
-
-function play(sender) {
-    let messageData = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": "When do you want to play?",
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Today",
-              "payload": "Today"
-            },
-            {
-              "type": "postback",
-              "title": "Tomorrow",
-              "payload": "Tomorrow"
-            },
-            {
-              "type": "postback",
-              "title": "Soon",
-              "payload": "Soon"
-            }
-          ]
-        }
-      }
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending play message: ', error)
-        } else if (response.body.error) {
-            console.log('Error sending play message: ', response.body.error)
-        }
-    })
-}
-
 function cards(sender, data, message){
 
   if(message === undefined){
@@ -791,7 +723,6 @@ module.exports = {
   processReceivedMessage: processReceivedMessage,
   text: text,
   game: game,
-  play: play,
   cards: cards,
   allGames: allGames,
   my_games: my_games,
