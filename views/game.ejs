@@ -52,16 +52,7 @@
               <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
-              <div id="clicker" class="messenger-container">
-                <div id="stm"
-                  class="fb-send-to-messenger"
-                  messenger_app_id="144481079297226"
-                  page_id="1625739117677522"
-                  data-ref="<%= gid %>"
-                  color="blue"
-                  size="xlarge">
-                </div>
-              </div>
+              <div id="clicker" class="messenger-container"></div>
 
               <div id="loader" style="display:none" class="preloader-wrapper active">
                 <div class="spinner-layer spinner-blue-only">
@@ -146,10 +137,10 @@
 
             fbid = response.authResponse.userID;
 
-            // var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="144481079297226" page_id="1625739117677522" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
-            // document.getElementById('clicker').innerHTML = temp
-            //
-            // FB.XFBML.parse();
+            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="144481079297226" page_id="1625739117677522" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
+            document.getElementById('clicker').innerHTML = temp
+
+            FB.XFBML.parse();
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
