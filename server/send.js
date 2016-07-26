@@ -208,6 +208,33 @@ function processReceivedMessage(sender, message, defaultCallback) {
   L.processTextMessage(sender, message, defaultCallback);
 }
 
+function text_promise(sender, text){
+  return new Promise(resolve, reject){
+    let messageData = { text: text }
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending text messages: ', error)
+            reject(err);
+        } else if (response.body.error) {
+            console.log('Error sending text messages: ', response.body.error)
+            reject(err);
+        }
+        else {
+          resolve()
+        }
+    })
+  }
+}
+
 function text(sender, text) {
   let messageData = { text: text }
 
@@ -693,7 +720,13 @@ function my_games(sender){
     console.log(data);
 
     if(data.length === 0){
-      text(sender, "You haven't joined any games. Type 'play' to find games")
+      text_promise(sender, "You haven't joined any games. Type 'play' to find games")
+      .then(()=>{
+        allGames(sender);
+      })
+      .catch((e)=>{
+        console.log(e);
+      })
     }
     else {
       data = generate_card(data);
