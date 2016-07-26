@@ -65,6 +65,8 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //redirect link in payment.js
 //booking link generator in send.js inside generate_card_for_booking
 //need to change app id and page id in game.ejs
+// > also need to change cors request on /check
+
 
 //Alex's real account
 // 10153573553662304
