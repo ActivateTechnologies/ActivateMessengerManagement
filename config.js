@@ -1,4 +1,4 @@
-const status = 'test'; //'produciton' or 'test' or 'avi'
+const status = 'avi'; //'produciton' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -51,6 +51,8 @@ if (status == 'production') {
 	exports.LUIS_ID = AVI_LUIS_ID;
 	exports.LUIS_SUBSCRIPTION_KEY = AVI_LUIS_SUBSCRIPTION_KEY;
 }
+
+exports.DEVELOPMENT_STATUS = status;
 
 //AWS S3 keys
 exports.AWSaccessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
