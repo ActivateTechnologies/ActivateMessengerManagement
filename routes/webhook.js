@@ -31,7 +31,6 @@ router.post('/webhook/', function (req, res) {
 
     else if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
-
         let text = event.message.quick_reply.payload;
 
         if (text.substring(0, 4) == "Book") {
@@ -83,7 +82,7 @@ router.post('/webhook/', function (req, res) {
         //     }
         //   })
         // });
-        send.start(sender);
+        send.allGames(sender);
       }
     }
 
