@@ -82,7 +82,15 @@ router.post('/webhook/', function (req, res) {
         //     }
         //   })
         // });
-        send.allGames(sender);
+        M.User.find({userId: sender}, function(err, result){
+          if(result.length > 0){
+            // send.processReceivedMessage(sender, event.message.text);
+            send.allGames(sender);
+          }
+          else {
+            send.start(sender);
+          }
+        })
       }
     }
 
