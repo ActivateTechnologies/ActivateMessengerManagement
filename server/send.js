@@ -726,7 +726,7 @@ function start(sender){
           "image_url": "http://manvelsoccer.org/wp-content/uploads/2014/02/soccer.jpg",
           "buttons": [{
             "type": "account_link",
-            "url": "https://kickabouttest.herokuapp.com/game?gid=5792143b19193603005254f2"
+            "url": ("https://kickabouttest.herokuapp.com/register?mid=" + sender)
           }]
         }]
       }

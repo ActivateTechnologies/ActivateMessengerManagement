@@ -164,6 +164,32 @@ router.post('/check', function(req, res){
   res.send("Cool")
 })
 
+router.post('/register', function(req, res){
+  console.log("Reached register");
+  console.log(req.query.fbid);
+  let fbid = req.query.fbid;
+  let gameId = req.query.gid;
+  M.User.find({facebookID: req.query.fbid}, function(err, result){
+    if(result.length > 0){
+      send.game(result[0].userId, gameId)
+    }
+    else {
+      let user = M.User({
+        facebookID: facebookID,
+        publicLink: gid
+      })
+      user.save(function(err){
+        if(err){
+          console.log(err);
+        } else {
+          console.log("saved user");
+        }
+      })
+    }
+  })
+  res.send("Cool")
+})
+
 
 router.get('/players', function(req, res){
   M.Game.find({_id:req.query.gid}, function(err, games){
