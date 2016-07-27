@@ -179,6 +179,7 @@ router.post('/register', function(req, res){
   let mid = req.query.mid;
 
   M.User.find({facebookID: fbid}, function(err, result){
+    //if user has visited public link
     if(result.length > 0){
 
         var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
@@ -186,21 +187,23 @@ router.post('/register', function(req, res){
             if (!error && response.statusCode == 200) {
               body = JSON.parse(body);
 
-              let user = M.User({
+              let user = {
                 userId: mid,
-                facebookID: fbid,
                 firstname: body.first_name,
                 lastname: body.last_name,
                 profile_pic: body.profile_pic,
                 locale: body.locale,
                 gender: body.gender
-              })
-              user.save(function(err){
-                if(err){
-                  console.log(err);
-                } else {
-                  console.log("saved new user");
+              }
+
+              M.User.update({facebookID: fbid}, user, function(e, r){
+                if(e){
+                  console.log(e);
                 }
+                else [
+                  console.log("saved the user and sending game");
+                  send.game(mid, result[0].publicLink)
+                ]
               })
             }
         });
