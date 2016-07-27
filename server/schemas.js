@@ -14,7 +14,8 @@ let userSchema = new Schema({
   profile_pic: String,
   locale: String,
   gender: String,
-  notifications: String
+  notifications: String,
+  publicLink: String
 })
 
 let User = mongoose.model('User', userSchema);

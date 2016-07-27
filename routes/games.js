@@ -148,7 +148,17 @@ router.post('/check', function(req, res){
       send.game(result[0].userId, gameId)
     }
     else {
-      
+      let user = M.User({
+        facebookID: facebookID,
+        publicLink: gid
+      })
+      user.save(function(err){
+        if(err){
+          console.log(err);
+        } else {
+          console.log("saved user");
+        }
+      })
     }
   })
   res.send("Cool")
