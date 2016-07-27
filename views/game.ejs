@@ -91,24 +91,24 @@
     var fbid = "";
 
     function ref(){
-      $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-        if(data.check === true){
-          setTimeout(function(){
-            console.log("calling refresh");
-            location.href = "http://m.me/kickaboutapp";
-          }, 2000)
-        }
-      })
-      setInterval(function(){
-        $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-          if(data.check === true){
-            setTimeout(function(){
-              console.log("calling refresh in loop");
-              location.href = "http://m.me/kickaboutapp";
-            }, 2000)
-          }
-        })
-      }, 2000);
+      // $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+      //   if(data.check === true){
+      //     setTimeout(function(){
+      //       console.log("calling refresh");
+      //       location.href = "http://m.me/kickaboutapp";
+      //     }, 2000)
+      //   }
+      // })
+      // setInterval(function(){
+      //   $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
+      //     if(data.check === true){
+      //       setTimeout(function(){
+      //         console.log("calling refresh in loop");
+      //         location.href = "http://m.me/kickaboutapp";
+      //       }, 2000)
+      //     }
+      //   })
+      // }, 2000);
     }
 
     function magic(){
@@ -125,7 +125,7 @@
       window.fbAsyncInit = function() {
 
         FB.init({
-          appId: "144481079297226",
+          appId: "159289771143437",
           xfbml: true,
           version: "v2.6"
         });
@@ -137,10 +137,11 @@
 
             fbid = response.authResponse.userID;
 
-            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="144481079297226" page_id="1625739117677522" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
-            document.getElementById('clicker').innerHTML = temp
+            document.getElementById('clicker').innerHTML = fbid
 
-            FB.XFBML.parse();
+            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid, function( data ) {
+              console.log("done");
+            });
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
@@ -164,27 +165,27 @@
          fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      var myConfObj = {
-        iframeMouseOver : false
-      }
-      window.addEventListener('blur',function(){
-        console.log("reached blur");
-        if(myConfObj.iframeMouseOver){
-          console.log("detected click");
-          var loader = document.getElementById('loader');
-          loader.style.display = 'block'
-
-          ref();
-
-        }
-      });
-
-      document.getElementById('clicker').addEventListener('mouseover',function(){
-         myConfObj.iframeMouseOver = true;
-      });
-      document.getElementById('clicker').addEventListener('mouseout',function(){
-          myConfObj.iframeMouseOver = false;
-      });
+      // var myConfObj = {
+      //   iframeMouseOver : false
+      // }
+      // window.addEventListener('blur',function(){
+      //   console.log("reached blur");
+      //   if(myConfObj.iframeMouseOver){
+      //     console.log("detected click");
+      //     var loader = document.getElementById('loader');
+      //     loader.style.display = 'block'
+      //
+      //     ref();
+      //
+      //   }
+      // });
+      //
+      // document.getElementById('clicker').addEventListener('mouseover',function(){
+      //    myConfObj.iframeMouseOver = true;
+      // });
+      // document.getElementById('clicker').addEventListener('mouseout',function(){
+      //     myConfObj.iframeMouseOver = false;
+      // });
 
     </script>
   </body>
