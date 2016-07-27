@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
+const sendNew = require('./../server/sendNew.js');
 const request = require('request');1
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
@@ -31,7 +32,6 @@ router.post('/webhook/', function (req, res) {
 
     else if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
-
         let text = event.message.quick_reply.payload;
 
         if (text.substring(0, 4) == "Book") {
@@ -57,6 +57,10 @@ router.post('/webhook/', function (req, res) {
             send.notifications(sender);
             break;
 
+            case("my games"):
+            send.my_games(sender);
+            break;
+
             case("notifications on"):
             send.notifications_change(sender, "on");
             break;
@@ -72,18 +76,33 @@ router.post('/webhook/', function (req, res) {
       }
 
       else {
-        // send.processReceivedMessage(sender, event.message.text, () => {
-        //   //LUIS Did not find anything, so default response
-        //   console.log('Got message: ' + event.message.text + ' from ' + sender);
-        //   M.User.find({userId: sender}, function(err, result){
-        //     if (result.length > 0){
-        //       //send.allGames(sender);
-        //     } else {
-        //       send.start(sender);
-        //     }
-        //   })
-        // });
-        send.start(sender);
+        if (config.DEVELOPMENT_STATUS == 'avi') {
+          send.processReceivedMessage(sender, event.message.text, () => {
+            //LUIS Did not find anything, so default response
+            console.log('Got message: ' + event.message.text + ' from ' + sender);
+            sendNew.text(sender, "I didn't quite understand that sorry. "
+             + "Here are all upcoming games. Alternatively, just say 'help'"
+             + " if you wanna talk to our support taem", () => {
+              M.User.find({userId: sender}, function(err, result){
+                if (result.length > 0){
+                  //send.allGames(sender);
+                } else {
+                  send.start(sender);
+                }
+              })
+            });
+          });
+        } else {
+          M.User.find({userId: sender}, function(err, result){
+            if(result.length > 0){
+              // send.processReceivedMessage(sender, event.message.text);
+              send.allGames(sender);
+            }
+            else {
+              send.start(sender);
+            }
+          })
+        }
       }
     }
 

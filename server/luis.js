@@ -22,6 +22,10 @@ function processTextMessage(sender, message, defaultCallback) {
 	      processGreetings(sender, firstIntent);
 	      break;
 
+	      case("Help"):
+	      processHelp(sender, firstIntent);
+	      break;
+
 	      case("ShowGames"):
 	      processShowGames(sender, firstIntent, 
 	      	getDateQuery(resolveTime(data.entities)));
@@ -88,6 +92,16 @@ function processGreetings(sender, intent) {
 	sendNew.text(sender, 'Hello there!', (error) => {
 		if (!error) {
 			sendNew.textWithQuickReplies(sender, 'Looking for games to play?',
+			  ['Sure thing!', 'Nah not now']);
+		}
+	});
+}
+
+function processHelp(sender, intent) {
+	sendNew.text(sender, 'Sure, someone from our team will '
+		+ 'get in touch with you soon', (error) => {
+		if (!error) {
+			sendNew.textWithQuickReplies(sender, 'Meanwhile looking for games to play?',
 			  ['Sure thing!', 'Nah not now']);
 		}
 	});

@@ -67,6 +67,11 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //redirect link in payment.js
 //booking link generator in send.js inside generate_card_for_booking
 //need to change app id and page id in game.ejs
+// > also need to change cors request on /check
+
+
+//Alex's real account
+// 10153573553662304
 
 
 // LOCAL TUNNEL Reference https://github.com/localtunnel/localtunnel
@@ -94,4 +99,4 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"

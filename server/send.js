@@ -208,6 +208,33 @@ function processReceivedMessage(sender, message, defaultCallback) {
   L.processTextMessage(sender, message, defaultCallback);
 }
 
+function text_promise(sender, text){
+  return new Promise(function(resolve, reject){
+    let messageData = { text: text }
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending text messages: ', error)
+            reject(err);
+        } else if (response.body.error) {
+            console.log('Error sending text messages: ', response.body.error)
+            reject(err);
+        }
+        else {
+          resolve()
+        }
+    })
+  })
+}
+
 function text(sender, text) {
   let messageData = { text: text }
 
@@ -226,74 +253,6 @@ function text(sender, text) {
           console.log('Error sending text messages: ', response.body.error)
       }
   })
-}
-
-function textWithQuickReplies(sender, text, quickReplies) {
-    let messageData = {
-      text: text,
-      quick_replies: quickReplies
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error sending messages: ', response.body.error)
-        }
-    })
-}
-
-function play(sender) {
-    let messageData = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": "When do you want to play?",
-          "buttons": [
-            {
-              "type": "postback",
-              "title": "Today",
-              "payload": "Today"
-            },
-            {
-              "type": "postback",
-              "title": "Tomorrow",
-              "payload": "Tomorrow"
-            },
-            {
-              "type": "postback",
-              "title": "Soon",
-              "payload": "Soon"
-            }
-          ]
-        }
-      }
-    }
-
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending play message: ', error)
-        } else if (response.body.error) {
-            console.log('Error sending play message: ', response.body.error)
-        }
-    })
 }
 
 function cards(sender, data, message){
@@ -654,7 +613,6 @@ function game(sender, gameId){
       now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
       console.log(now);
       if(item.when > now){
-        text(sender, "Here is your game: ");
         let booked = false;
         let join = item.joined;
 
@@ -665,7 +623,7 @@ function game(sender, gameId){
         });
         data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
         data = generate_card(data);
-        cards(sender, data);
+        cards(sender, data, "Here is your game: ");
       }
       else {
         text(sender, "That game has finished")
@@ -693,7 +651,13 @@ function my_games(sender){
     console.log(data);
 
     if(data.length === 0){
-      text(sender, "You haven't joined any games. Type 'play' to find games")
+      text_promise(sender, "You haven't joined any games.")
+      .then(()=>{
+        allGames(sender);
+      })
+      .catch((e)=>{
+        console.log(e);
+      })
     }
     else {
       data = generate_card(data);
@@ -740,6 +704,7 @@ function publicLink(sender, optin){
               if(err){
                 console.log(err);
               } else {
+                console.log("saved and sending game");
                 game(sender, gameId);
               }
             })
@@ -758,7 +723,6 @@ module.exports = {
   processReceivedMessage: processReceivedMessage,
   text: text,
   game: game,
-  play: play,
   cards: cards,
   allGames: allGames,
   my_games: my_games,
