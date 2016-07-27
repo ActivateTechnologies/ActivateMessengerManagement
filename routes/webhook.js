@@ -76,7 +76,7 @@ router.post('/webhook/', function (req, res) {
       }
 
       else {
-        if (config.DEVELOPMENT_STATUS == 'avi') {
+        if (config.DEVELOPMENT_STATUS == 'test') {
           send.processReceivedMessage(sender, event.message.text, () => {
             //LUIS Did not find anything, so default response
             console.log('Got message: ' + event.message.text + ' from ' + sender);
