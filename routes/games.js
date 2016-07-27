@@ -7,6 +7,7 @@ const fs = require('fs')
 const AWS = require('aws-sdk');
 const M = require('./../server/schemas.js')
 const config = require('./../config')
+const send = require('./../server/send.js')
 
 AWS.config.update({
     accessKeyId: config.AWSaccessKeyId,
@@ -140,34 +141,17 @@ router.get('/game', function(req, res){
 router.post('/check', function(req, res){
   console.log("Reached check");
   console.log(req.query.fbid);
+  let fbid = req.query.fbid;
+  let gameId = req.query.gid;
+  M.User.find({facebookID: req.query.fbid}, function(err, result){
+    if(result.length > 0){
+      send.game(result[0].userId, gameId)
+    }
+    else {
+      
+    }
+  })
   res.send("Cool")
-  // M.User.find({facebookID:req.query.fbid}, function(err, result){
-  //
-  //   if(err){
-  //     console.log(err);
-  //   }
-  //
-  //   // Website you wish to allow to connect
-  //   res.setHeader('Access-Control-Allow-Origin', 'http://limitless-sierra-68694.herokuapp.com');
-  //
-  //   // Request methods you wish to allow
-  //   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  //
-  //   // Request headers you wish to allow
-  //   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  //
-  //   // Set to true if you need the website to include cookies in the requests sent
-  //   // to the API (e.g. in case you use sessions)
-  //   res.setHeader('Access-Control-Allow-Credentials', true);
-  //
-  //   if(result.length > 0){
-  //     res.setHeader('Content-Type', 'application/json');
-  //     res.send(JSON.stringify({ check: true}));
-  //   } else {
-  //     res.setHeader('Content-Type', 'application/json');
-  //     res.send(JSON.stringify({ check: false }));
-  //   }
-  // })
 })
 
 
