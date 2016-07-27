@@ -717,18 +717,18 @@ function publicLink(sender, optin){
 function start(sender){
 
   let messageData = {
-    "attachment":{
-      "type":"template",
-      "payload":{
-        "template_type":"button",
-        "text":"Linking",
-        "buttons":[
-          {
-            "type":"web_url",
-            "url":"https://kickabouttest.herokuapp.com/game?gid=5792143b19193603005254f2",
-            "title":"Link"
-          }
-        ]
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [{
+          "title": "Welcome to Kickabout",
+          "image_url": "http://manvelsoccer.org/wp-content/uploads/2014/02/soccer.jpg",
+          "buttons": [{
+            "type": "account_link",
+            "url": "https://kickabouttest.herokuapp.com/game?gid=5792143b19193603005254f2"
+          }]
+        }]
       }
     }
   }
