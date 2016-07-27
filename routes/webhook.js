@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
+const sendNew = require('./../server/sendnew.js');
 const request = require('request');1
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
@@ -75,26 +76,33 @@ router.post('/webhook/', function (req, res) {
       }
 
       else {
-        // send.processReceivedMessage(sender, event.message.text, () => {
-        //   //LUIS Did not find anything, so default response
-        //   console.log('Got message: ' + event.message.text + ' from ' + sender);
-        //   M.User.find({userId: sender}, function(err, result){
-        //     if (result.length > 0){
-        //       //send.allGames(sender);
-        //     } else {
-        //       send.start(sender);
-        //     }
-        //   })
-        // });
-        M.User.find({userId: sender}, function(err, result){
-          if(result.length > 0){
-            // send.processReceivedMessage(sender, event.message.text);
-            send.allGames(sender);
-          }
-          else {
-            send.start(sender);
-          }
-        })
+        if (config.DEVELOPMENT_STATUS == 'test') {
+          send.processReceivedMessage(sender, event.message.text, () => {
+            //LUIS Did not find anything, so default response
+            console.log('Got message: ' + event.message.text + ' from ' + sender);
+            sendNew.text(sender, "I didn't quite understand that sorry. "
+             + "Here are all upcoming games. Alternatively, just say 'help'"
+             + " if you wanna talk to our support taem", () => {
+              M.User.find({userId: sender}, function(err, result){
+                if (result.length > 0){
+                  //send.allGames(sender);
+                } else {
+                  send.start(sender);
+                }
+              })
+            });
+          });
+        } else {
+          M.User.find({userId: sender}, function(err, result){
+            if(result.length > 0){
+              // send.processReceivedMessage(sender, event.message.text);
+              send.allGames(sender);
+            }
+            else {
+              send.start(sender);
+            }
+          })
+        }
       }
     }
 
