@@ -164,12 +164,16 @@ router.post('/check', function(req, res){
   res.send("Cool")
 })
 
+router.get('/register', function(req, res){
+  res.render('register')
+})
+
 router.post('/register', function(req, res){
 
   console.log("Reached register");
   let fbid = req.query.fbid;
   let mid = req.query.mid;
-  
+
   M.User.find({facebookID: fbid}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, result[0].publicLink)
@@ -183,7 +187,7 @@ router.post('/register', function(req, res){
 
             let user = M.User({
               userId: sender,
-              facebookID: fbid
+              facebookID: fbid,
               firstname: body.first_name,
               lastname: body.last_name,
               profile_pic: body.profile_pic,
