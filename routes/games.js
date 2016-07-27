@@ -200,10 +200,12 @@ router.post('/register', function(req, res){
               M.User.update({facebookID: fbid}, user, function(e, r){
                 if(e){
                   console.log(e);
+                  res.send("Not Cool")
                 }
                 else {
                   console.log("saved the user and sending game");
                   send.game(mid, result[0].publicLink)
+                  res.send("Cool")
                 }
               })
             }
@@ -230,8 +232,10 @@ router.post('/register', function(req, res){
             user.save(function(err){
               if(err){
                 console.log(err);
+                res.send("Not Cool")
               } else {
                 console.log("saved new user");
+                res.send("Cool")
               }
             })
           }
@@ -239,7 +243,6 @@ router.post('/register', function(req, res){
 
     }
   })
-  res.send("Cool")
 })
 
 
