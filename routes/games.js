@@ -146,10 +146,11 @@ router.post('/check', function(req, res){
   M.User.find({facebookID: fbid}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, gameId)
+      res.send("Cool")
     }
     else {
       let user = M.User({
-        facebookID: facebookID,
+        facebookID: fbid,
         publicLink: gid
       })
       user.save(function(err){
@@ -157,11 +158,11 @@ router.post('/check', function(req, res){
           console.log(err);
         } else {
           console.log("saved user");
+          res.send("Cool")
         }
       })
     }
   })
-  res.send("Cool")
 })
 
 router.get('/register', function(req, res){
