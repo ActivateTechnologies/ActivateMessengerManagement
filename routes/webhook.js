@@ -45,6 +45,11 @@ router.post('/webhook/', function (req, res) {
         }
         else {
           switch(text.toLowerCase()){
+
+            case('link'):
+            send.acclink(sender);
+            break;
+
             case('start'):
             send.start(sender);
             break;

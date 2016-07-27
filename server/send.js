@@ -714,8 +714,46 @@ function publicLink(sender, optin){
   })
 }
 
+function acclink(sender){
+
+  let messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"Linking",
+        "buttons":[
+          {
+            "type":"web_url",
+            "url":"https://kickabouttest.herokuapp.com/game?gid=5792143b19193603005254f2",
+            "title":"Link"
+          }
+        ]
+      }
+    }
+  }
+
+
+  request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+          recipient: {id:sender},
+          message: messageData,
+      }
+  }, function(error, response, body) {
+      if (error) {
+          console.log('Error in start(): ', error)
+      } else if (response.body.error) {
+          console.log('Error in start(): ', response.body.error)
+      }
+  })
+}
+
 module.exports = {
   start: start,
+  acclink: acclink,
   menu: menu,
   notifications: notifications,
   notifications_change: notifications_change,
