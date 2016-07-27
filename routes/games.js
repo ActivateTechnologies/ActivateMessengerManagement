@@ -151,7 +151,7 @@ router.post('/check', function(req, res){
     else {
       let user = M.User({
         facebookID: fbid,
-        publicLink: gid
+        publicLink: gameId
       })
       user.save(function(err){
         if(err){
