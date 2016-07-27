@@ -9,6 +9,8 @@ const M = require('./../server/schemas.js')
 const config = require('./../config')
 const send = require('./../server/send.js')
 
+const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
+
 AWS.config.update({
     accessKeyId: config.AWSaccessKeyId,
     secretAccessKey: config.AWSsecretAccessKey
@@ -177,17 +179,42 @@ router.post('/register', function(req, res){
 
   M.User.find({facebookID: fbid}, function(err, result){
     if(result.length > 0){
-      send.game(result[0].userId, result[0].publicLink)
+
+        var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+        request(get_url, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+              body = JSON.parse(body);
+
+              let user = M.User({
+                userId: sender,
+                facebookID: fbid,
+                firstname: body.first_name,
+                lastname: body.last_name,
+                profile_pic: body.profile_pic,
+                locale: body.locale,
+                gender: body.gender
+              })
+              user.save(function(err){
+                if(err){
+                  console.log(err);
+                } else {
+                  console.log("saved new user");
+                }
+              })
+            }
+        });
+
     }
+
     else {
 
-      var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             body = JSON.parse(body);
 
             let user = M.User({
-              userId: sender,
+              userId: mid,
               facebookID: fbid,
               firstname: body.first_name,
               lastname: body.last_name,
