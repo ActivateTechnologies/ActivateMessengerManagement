@@ -32,48 +32,6 @@
   </head>
   <body>
 
-    <div class="site-wrapper-payment">
-
-      <div class="site-wrapper-inner2">
-
-        <div class="cover-container2">
-
-          <div class="inner cover">
-
-              <img src="img/logoUnbinded-white.png" class="logoLead-payment">
-              <br/>
-              <!-- game image -->
-              <img src="<%= imageLink %>" class="gamePic">
-              <p class="gametitlegame"><%= gameName %></p>
-              <p class="gameaddress">
-                <%= gameAddress %>
-              </p>
-
-              <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-              <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-
-              <div id="clicker" class="messenger-container"></div>
-            </div>
-
-            </div>
-
-            <div class="footerDiv">
-              <p class="footertext">
-                    Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
-                    <br>
-                    www.activatetechnologies.co.uk
-              </p>
-            </div>
-
-          </div>
-
-
-
-        </div>
-
-
-
-
     <script>
 
     var magic = function(){
@@ -143,5 +101,43 @@
       }(document, 'script', 'facebook-jssdk'));
 
     </script>
+
+    <div class="site-wrapper-payment">
+
+      <div class="site-wrapper-inner2">
+
+        <div class="cover-container2">
+
+          <div class="inner cover">
+
+              <img src="img/logoUnbinded-white.png" class="logoLead-payment">
+              <br/>
+              <!-- game image -->
+              <img src="<%= imageLink %>" class="gamePic">
+              <p class="gametitlegame"><%= gameName %></p>
+              <p class="gameaddress">
+                <%= gameAddress %>
+              </p>
+
+              <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+              <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+
+              <div id="clicker" class="messenger-container"></div>
+            </div>
+
+            </div>
+
+            <div class="footerDiv">
+              <p class="footertext">
+                    Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+                    <br>
+                    www.activatetechnologies.co.uk
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
   </body>
 </html>
