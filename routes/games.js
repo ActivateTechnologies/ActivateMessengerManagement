@@ -180,13 +180,13 @@ router.post('/register', function(req, res){
   M.User.find({facebookID: fbid}, function(err, result){
     if(result.length > 0){
 
-        var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+        var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
         request(get_url, function (error, response, body) {
             if (!error && response.statusCode == 200) {
               body = JSON.parse(body);
 
               let user = M.User({
-                userId: sender,
+                userId: mid,
                 facebookID: fbid,
                 firstname: body.first_name,
                 lastname: body.last_name,
