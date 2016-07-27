@@ -140,6 +140,7 @@ router.get('/game', function(req, res){
 router.post('/check', function(req, res){
   console.log("Reached check");
   console.log(req.query.fbid);
+  res.send("Cool")
   // M.User.find({facebookID:req.query.fbid}, function(err, result){
   //
   //   if(err){

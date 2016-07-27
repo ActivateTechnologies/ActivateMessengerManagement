@@ -141,6 +141,9 @@
 
             $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid, function( data ) {
               console.log("done");
+              setTimeout(function(){
+                location.href = "http://m.me/245261069180348";
+              }, 5000)
             });
           }
           else if (response.status === 'not_authorized') {
