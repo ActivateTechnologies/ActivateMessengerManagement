@@ -53,18 +53,6 @@
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
               <div id="clicker" class="messenger-container"></div>
-
-              <div id="loader" style="display:none" class="preloader-wrapper active">
-                <div class="spinner-layer spinner-blue-only">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             </div>
@@ -88,29 +76,6 @@
 
     <script>
 
-    var fbid = "";
-
-    function ref(){
-      // $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-      //   if(data.check === true){
-      //     setTimeout(function(){
-      //       console.log("calling refresh");
-      //       location.href = "http://m.me/kickaboutapp";
-      //     }, 2000)
-      //   }
-      // })
-      // setInterval(function(){
-      //   $.get("https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid, function(data){
-      //     if(data.check === true){
-      //       setTimeout(function(){
-      //         console.log("calling refresh in loop");
-      //         location.href = "http://m.me/kickaboutapp";
-      //       }, 2000)
-      //     }
-      //   })
-      // }, 2000);
-    }
-
     function magic(){
       console.log("called magic");
       FB.login(function(res) {
@@ -120,6 +85,16 @@
          console.log('User cancelled login or did not fully authorize.');
         }
       });
+    }
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
       window.fbAsyncInit = function() {
@@ -135,16 +110,17 @@
             var lg = document.getElementById('lg');
             lg.style.display = "none";
 
-            fbid = response.authResponse.userID;
+            let fbid = response.authResponse.userID;
 
             document.getElementById('clicker').innerHTML = fbid
 
-            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid, function( data ) {
+            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
               console.log("done");
               setTimeout(function(){
                 location.href = "http://m.me/245261069180348";
               }, 5000)
             });
+            
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
@@ -167,28 +143,6 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
-
-      // var myConfObj = {
-      //   iframeMouseOver : false
-      // }
-      // window.addEventListener('blur',function(){
-      //   console.log("reached blur");
-      //   if(myConfObj.iframeMouseOver){
-      //     console.log("detected click");
-      //     var loader = document.getElementById('loader');
-      //     loader.style.display = 'block'
-      //
-      //     ref();
-      //
-      //   }
-      // });
-      //
-      // document.getElementById('clicker').addEventListener('mouseover',function(){
-      //    myConfObj.iframeMouseOver = true;
-      // });
-      // document.getElementById('clicker').addEventListener('mouseout',function(){
-      //     myConfObj.iframeMouseOver = false;
-      // });
 
     </script>
   </body>
