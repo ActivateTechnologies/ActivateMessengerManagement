@@ -159,6 +159,7 @@ router.post('/check', function(req, res){
       user.save(function(err){
         if(err){
           console.log(err);
+          res.send("Not Cool")
         } else {
           console.log("saved user");
           res.send("Cool")

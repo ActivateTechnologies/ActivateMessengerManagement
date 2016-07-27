@@ -666,54 +666,6 @@ function my_games(sender){
   })
 }
 
-function publicLink(sender, optin){
-  let arr = optin.split('facebook');
-  let gameId = arr[0];
-  let facebookID = arr[1];
-  M.User.find({userId:sender}, function(err, result){
-    if(result.length > 0){
-      game(sender, gameId);
-      M.User.findOneAndUpdate({userId:sender}, {facebookID:facebookID}, function(err, res){
-        if(err){
-          console.log(err);
-        }
-      })
-    }
-    else {
-      M.Button.update({name:"Yep"},
-        {$push: {activity: {userId:sender, time: new Date()}}},
-        {upsert: true},
-        function(err){
-          console.log(err);
-        })
-      var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-      request(get_url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            body = JSON.parse(body);
-
-            let user = M.User({
-              userId: sender,
-              facebookID: facebookID,
-              firstname: body.first_name,
-              lastname: body.last_name,
-              profile_pic: body.profile_pic,
-              locale: body.locale,
-              gender: body.gender
-            })
-            user.save(function(err){
-              if(err){
-                console.log(err);
-              } else {
-                console.log("saved and sending game");
-                game(sender, gameId);
-              }
-            })
-          }
-      });
-    }
-  })
-}
-
 function start(sender){
 
   let messageData = {
@@ -722,8 +674,8 @@ function start(sender){
       "payload": {
         "template_type": "generic",
         "elements": [{
-          "title": "Welcome to Kickabout",
-          "image_url": "http://manvelsoccer.org/wp-content/uploads/2014/02/soccer.jpg",
+          "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
           "buttons": [{
             "type": "account_link",
             "url": ("https://kickabouttest.herokuapp.com/register?mid=" + sender)
@@ -766,6 +718,5 @@ module.exports = {
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
-  more_info: more_info,
-  publicLink: publicLink
+  more_info: more_info
 }

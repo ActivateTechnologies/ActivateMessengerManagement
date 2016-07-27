@@ -25,12 +25,7 @@ router.post('/webhook/', function (req, res) {
   messaging_events.forEach(function(event){
 
     let sender = event.sender.id;
-    if (event.optin) {
-      console.log("optin");
-      send.publicLink(sender, event.optin.ref);
-    }
-
-    else if (event.message && event.message.text && !event.message.is_echo) {
+    if (event.message && event.message.text && !event.message.is_echo) {
       if (event.message.quick_reply) {
         let text = event.message.quick_reply.payload;
 
