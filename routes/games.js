@@ -200,10 +200,10 @@ router.post('/register', function(req, res){
                 if(e){
                   console.log(e);
                 }
-                else [
+                else {
                   console.log("saved the user and sending game");
                   send.game(mid, result[0].publicLink)
-                ]
+                }
               })
             }
         });
