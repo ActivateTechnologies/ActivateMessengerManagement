@@ -101,9 +101,7 @@
 
             $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
               console.log("registered");
-              setTimeout(function(){
-                location.href = "http://m.me/245261069180348";
-              }, 5000)
+              location.href = "http://m.me/245261069180348";
             });
 
           }
