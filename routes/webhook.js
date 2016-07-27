@@ -46,10 +46,6 @@ router.post('/webhook/', function (req, res) {
         else {
           switch(text.toLowerCase()){
 
-            case('link'):
-            send.acclink(sender);
-            break;
-
             case('start'):
             send.start(sender);
             break;
@@ -82,22 +78,33 @@ router.post('/webhook/', function (req, res) {
 
       else {
         if (config.DEVELOPMENT_STATUS == 'test') {
-          send.processReceivedMessage(sender, event.message.text, () => {
-            //LUIS Did not find anything, so default response
-            console.log('Got message: ' + event.message.text + ' from ' + sender);
-            sendNew.text(sender, "I didn't quite understand that sorry. "
-             + "Here are all upcoming games. Alternatively, just say 'help'"
-             + " if you wanna talk to our support taem", () => {
-              M.User.find({userId: sender}, function(err, result){
-                if (result.length > 0){
-                  //send.allGames(sender);
-                } else {
-                  send.start(sender);
-                }
-              })
-            });
-          });
-        } else {
+          M.User.find({userId: sender}, function(err, result){
+            if(result.length > 0){
+              // send.processReceivedMessage(sender, event.message.text);
+              send.allGames(sender);
+            }
+            else {
+              send.start(sender);
+            }
+          })
+          // send.processReceivedMessage(sender, event.message.text, () => {
+          //   //LUIS Did not find anything, so default response
+          //   console.log('Got message: ' + event.message.text + ' from ' + sender);
+          //   sendNew.text(sender, "I didn't quite understand that sorry. "
+          //    + "Here are all upcoming games. Alternatively, just say 'help'"
+          //    + " if you wanna talk to our support team", () => {
+          //     M.User.find({userId: sender}, function(err, result){
+          //       if (result.length > 0){
+          //         //send.allGames(sender);
+          //       } else {
+          //         send.start(sender);
+          //       }
+          //     })
+          //   });
+          // });
+        }
+
+        else {
           M.User.find({userId: sender}, function(err, result){
             if(result.length > 0){
               // send.processReceivedMessage(sender, event.message.text);
