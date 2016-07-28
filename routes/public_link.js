@@ -3,14 +3,10 @@
 const express = require('express')
 const router = express.Router()
 const request = require('request')
-const multer = require('multer')
-const fs = require('fs')
-const AWS = require('aws-sdk');
 const M = require('./../server/schemas.js')
-const config = require('./../config')
 const send = require('./../server/send.js')
 
-const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
+const VERIFICATION_TOKEN = require('./../config').VERIFICATION_TOKEN
 
 router.get('/game', function(req, res){
   M.Game.find({_id:req.query.gid}, function(err, result){
