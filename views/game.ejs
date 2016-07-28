@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Kickabout | Book</title>
 
-    <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="css/coded.css" rel="stylesheet">
@@ -26,39 +25,13 @@
       a {
         text-shadow: none;
       }
-      #loader {
-        margin: 0 auto;
-      }
     </style>
   </head>
   <body>
 
     <script>
 
-    var fbid = "";
-
-    function ref(){
-      $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
-        if(data.check === true){
-          setTimeout(function(){
-            console.log("calling refresh");
-            location.href = "http://m.me/kickaboutapp";
-          }, 2000)
-        }
-      })
-      setInterval(function(){
-        $.get("http://www.activatetechnologies.co.uk/check?fbid=" + fbid, function(data){
-          if(data.check === false){
-            setTimeout(function(){
-              console.log("calling refresh");
-              location.href = "http://m.me/kickaboutapp";
-            }, 2000)
-          }
-        })
-      }, 2000);
-    }
-
-    function magic(){
+    var magic = function(){
       console.log("called magic");
       FB.login(function(res) {
         if (res.authResponse) {
@@ -67,6 +40,16 @@
          console.log('User cancelled login or did not fully authorize.');
         }
       });
+    }
+
+    var getParameterByName = function(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
       window.fbAsyncInit = function() {
@@ -82,12 +65,15 @@
             var lg = document.getElementById('lg');
             lg.style.display = "none";
 
-            fbid = response.authResponse.userID;
+            var fbid = response.authResponse.userID;
 
-            var temp = '<div id="stm" class="fb-send-to-messenger" messenger_app_id="159289771143437" page_id="245261069180348" data-ref="<%= gid %>facebook' + fbid + '" color="blue" size="xlarge"></div>'
-            document.getElementById('clicker').innerHTML = temp
+            document.getElementById('clicker').innerHTML = "Success"
 
-            FB.XFBML.parse();
+            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+              console.log("done");
+              location.href = "http://m.me/245261069180348";
+            });
+
           }
           else if (response.status === 'not_authorized') {
             console.log("not authorized");
@@ -110,28 +96,6 @@
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
-
-      var myConfObj = {
-        iframeMouseOver : false
-      }
-      window.addEventListener('blur',function(){
-        console.log("reached blur");
-        if(myConfObj.iframeMouseOver){
-          console.log("detected click");
-          var loader = document.getElementById('loader');
-          loader.style.display = 'block'
-
-          ref();
-
-        }
-      });
-
-      document.getElementById('clicker').addEventListener('mouseover',function(){
-         myConfObj.iframeMouseOver = true;
-      });
-      document.getElementById('clicker').addEventListener('mouseout',function(){
-          myConfObj.iframeMouseOver = false;
-      });
 
     </script>
 
@@ -156,18 +120,6 @@
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
               <div id="clicker" class="messenger-container"></div>
-
-              <div id="loader" style="display:none" class="preloader-wrapper active">
-                <div class="spinner-layer spinner-blue-only">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             </div>
@@ -181,8 +133,6 @@
             </div>
 
           </div>
-
-
 
         </div>
 
