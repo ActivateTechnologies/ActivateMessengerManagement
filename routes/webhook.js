@@ -28,7 +28,6 @@ router.post('/webhook/', function (req, res) {
 
     if (event.optin) {
       console.log("optin");
-      send.publicLink(sender, event.optin.ref);
     }
 
     //if text message or quick reply
