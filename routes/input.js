@@ -6,6 +6,7 @@ const multer = require('multer')
 const fs = require('fs')
 const AWS = require('aws-sdk');
 const M = require('./../server/schemas.js')
+const config = require('./../config')
 
 AWS.config.update({
     accessKeyId: config.AWSaccessKeyId,
