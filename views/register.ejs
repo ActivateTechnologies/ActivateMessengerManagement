@@ -17,9 +17,6 @@
       a {
         text-shadow: none;
       }
-      #loader {
-        margin: 0 auto;
-      }
     </style>
   </head>
   <body>
@@ -61,7 +58,7 @@
 
             var fbid = response.authResponse.userID;
 
-            document.getElementById('clicker').innerHTML = fbid
+            document.getElementById('clicker').innerHTML = "Success";
 
             $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
               console.log("registered");
