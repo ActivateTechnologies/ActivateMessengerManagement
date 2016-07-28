@@ -105,31 +105,49 @@ router.post('/register', function(req, res){
 
     else {
 
-      var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-      request(get_url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            body = JSON.parse(body);
+      M.User.find({userId:mid}, function(e, r){
+        if(e){
+          console.log(e);
+        }
+        if(r.length > 0){
+          M.User.update({userId: mid}, {facebookID: fbid}, function(e, r){
+            if(e){
+              console.log(e);
+              res.send("Not Cool")
+            }
+            else {
+              res.send("Cool")
+            }
+          })
+        }
+        else {
+          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+          request(get_url, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                body = JSON.parse(body);
 
-            let user = M.User({
-              userId: mid,
-              facebookID: fbid,
-              firstname: body.first_name,
-              lastname: body.last_name,
-              profile_pic: body.profile_pic,
-              locale: body.locale,
-              gender: body.gender
-            })
-            user.save(function(err){
-              if(err){
-                console.log(err);
-                res.send("Not Cool")
-              } else {
-                console.log("saved new user");
-                res.send("Cool")
+                let user = M.User({
+                  userId: mid,
+                  facebookID: fbid,
+                  firstname: body.first_name,
+                  lastname: body.last_name,
+                  profile_pic: body.profile_pic,
+                  locale: body.locale,
+                  gender: body.gender
+                })
+                user.save(function(err){
+                  if(err){
+                    console.log(err);
+                    res.send("Not Cool")
+                  } else {
+                    console.log("saved new user");
+                    res.send("Cool")
+                  }
+                })
               }
-            })
-          }
-      });
+          });
+        }
+      })
 
     }
   })

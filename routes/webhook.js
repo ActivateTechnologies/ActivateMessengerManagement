@@ -73,15 +73,6 @@ router.post('/webhook/', function (req, res) {
 
       else {
         if (config.DEVELOPMENT_STATUS == 'test') {
-          // M.User.find({userId: sender}, function(err, result){
-          //   if(result.length > 0){
-          //     // send.processReceivedMessage(sender, event.message.text);
-          //     send.allGames(sender);
-          //   }
-          //   else {
-          //     send.start(sender);
-          //   }
-          // })
           send.processReceivedMessage(sender, event.message.text, () => {
             //LUIS Did not find anything, so default response
             console.log('Got message: ' + event.message.text + ' from ' + sender);
@@ -90,7 +81,7 @@ router.post('/webhook/', function (req, res) {
              + " if you wanna talk to our support team", () => {
               M.User.find({userId: sender}, function(err, result){
                 if (result.length > 0){
-                  //send.allGames(sender);
+                  send.allGames(sender);
                 } else {
                   send.start(sender);
                 }
@@ -102,8 +93,12 @@ router.post('/webhook/', function (req, res) {
         else {
           M.User.find({userId: sender}, function(err, result){
             if(result.length > 0){
-              // send.processReceivedMessage(sender, event.message.text);
-              send.allGames(sender);
+              if(result[0].facebookID){
+                send.allGames(sender);
+              }
+              else {
+                send.start(sender)
+              }
             }
             else {
               send.start(sender);
@@ -140,7 +135,7 @@ router.post('/webhook/', function (req, res) {
           case('start'):
           send.start(sender);
           break;
-          
+
           case("my games"):
           send.my_games(sender);
           break;
