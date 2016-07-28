@@ -2,6 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
+
 const request = require('request')
 const M = require('./../server/schemas.js')
 const send = require('./../server/send.js')
@@ -149,10 +150,12 @@ router.post('/register', function(req, res){
                 })
               }
           });
-          
+
         }
       })
 
     }
   })
 })
+
+module.exports = router
