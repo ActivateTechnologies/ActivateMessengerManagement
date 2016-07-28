@@ -62,9 +62,9 @@
 
             document.getElementById('clicker').innerHTML = "Success";
 
-            $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
-              console.log("registered");
-              location.href = "http://m.me/245261069180348";
+            // $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+            //   console.log("registered");
+            //   location.href = "http://m.me/245261069180348";
             });
 
           }
@@ -106,6 +106,13 @@
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
               <div id="clicker" class="messenger-container"></div>
+              <div class="fb-send-to-messenger"
+                messenger_app_id="159289771143437"
+                page_id="245261069180348"
+                data-ref="some optin"
+                color="blue"
+                size="standard">
+              </div>
             </div>
 
             </div>
