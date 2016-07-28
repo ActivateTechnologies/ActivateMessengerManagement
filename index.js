@@ -30,18 +30,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(require('./routes/broadcast'))
-app.use(require('./routes/games'))
+app.use(require('./routes/input'))
 app.use(require('./routes/payment'))
 app.use(require('./routes/stats'))
 app.use(require('./routes/webhook'))
+app.use(require('./routes/public_link'))
 
 
 app.get('/login', (req, res) => {
   res.render('login')
-})
-
-app.get('/table', (req, res) => {
-  res.render('table')
 })
 
 app.post('/login',

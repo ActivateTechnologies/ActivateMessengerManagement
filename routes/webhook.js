@@ -140,11 +140,7 @@ router.post('/webhook/', function (req, res) {
           case('start'):
           send.start(sender);
           break;
-
-          case("yep"):
-          send.yep(sender);
-          break;
-
+          
           case("my games"):
           send.my_games(sender);
           break;

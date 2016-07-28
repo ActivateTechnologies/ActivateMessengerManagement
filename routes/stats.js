@@ -37,4 +37,9 @@ router.get('/visualize', function (req, res) {
   })
 })
 
+
+router.get('/table', (req, res) => {
+  res.render('table')
+})
+
 module.exports = router
