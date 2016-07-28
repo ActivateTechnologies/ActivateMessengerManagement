@@ -9,8 +9,6 @@
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
 
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 
@@ -62,9 +60,9 @@
 
             document.getElementById('clicker').innerHTML = "Success";
 
-            // $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
-            //   console.log("registered");
-            //   location.href = "http://m.me/245261069180348";
+            $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+              console.log("registered");
+              location.href = "http://m.me/245261069180348";
             });
 
           }
@@ -106,13 +104,6 @@
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
 
               <div id="clicker" class="messenger-container"></div>
-              <div class="fb-send-to-messenger"
-                messenger_app_id="159289771143437"
-                page_id="245261069180348"
-                data-ref="some optin"
-                color="blue"
-                size="standard">
-              </div>
             </div>
 
             </div>

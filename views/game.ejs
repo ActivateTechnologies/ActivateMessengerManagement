@@ -69,10 +69,10 @@
 
             document.getElementById('clicker').innerHTML = "Success"
 
-            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
-              console.log("done");
-              location.href = "http://m.me/245261069180348";
-            });
+            // $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+            //   console.log("done");
+            //   location.href = "http://m.me/245261069180348";
+            // });
 
           }
           else if (response.status === 'not_authorized') {
@@ -118,6 +118,14 @@
 
               <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
               <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+
+              <div class="fb-send-to-messenger"
+                messenger_app_id="159289771143437"
+                page_id="245261069180348"
+                data-ref="hi optin" 
+                color="blue"
+                size="standard">
+              </div>
 
               <div id="clicker" class="messenger-container"></div>
             </div>
