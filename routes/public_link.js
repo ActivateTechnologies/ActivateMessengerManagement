@@ -109,6 +109,7 @@ router.post('/register', function(req, res){
         if(e){
           console.log(e);
         }
+        //if exiting user then update his document
         if(r.length > 0){
           M.User.update({userId: mid}, {facebookID: fbid}, function(e, r){
             if(e){
@@ -120,7 +121,9 @@ router.post('/register', function(req, res){
             }
           })
         }
+        //if new user then create new record
         else {
+
           var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
           request(get_url, function (error, response, body) {
               if (!error && response.statusCode == 200) {
@@ -146,6 +149,7 @@ router.post('/register', function(req, res){
                 })
               }
           });
+          
         }
       })
 
