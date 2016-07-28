@@ -25,7 +25,11 @@ router.post('/webhook/', function (req, res) {
   messaging_events.forEach(function(event){
 
     let sender = event.sender.id;
+
+    //if text message or quick reply
     if (event.message && event.message.text && !event.message.is_echo) {
+
+      //if quick reply
       if (event.message.quick_reply) {
         let text = event.message.quick_reply.payload;
 
@@ -71,6 +75,7 @@ router.post('/webhook/', function (req, res) {
         }
       }
 
+      // if message
       else {
         if (config.DEVELOPMENT_STATUS == 'test') {
           send.processReceivedMessage(sender, event.message.text, () => {
@@ -80,9 +85,10 @@ router.post('/webhook/', function (req, res) {
              + "Here are all upcoming games. Alternatively, just say 'help'"
              + " if you wanna talk to our support team", () => {
               M.User.find({userId: sender}, function(err, result){
-                if (result.length > 0){
+                if(result.length > 0 && result[0].facebookID){
                   send.allGames(sender);
-                } else {
+                }
+                else {
                   send.start(sender);
                 }
               })
@@ -92,13 +98,8 @@ router.post('/webhook/', function (req, res) {
 
         else {
           M.User.find({userId: sender}, function(err, result){
-            if(result.length > 0){
-              if(result[0].facebookID){
-                send.allGames(sender);
-              }
-              else {
-                send.start(sender)
-              }
+            if(result.length > 0 && result[0].facebookID){
+              send.allGames(sender);
             }
             else {
               send.start(sender);
