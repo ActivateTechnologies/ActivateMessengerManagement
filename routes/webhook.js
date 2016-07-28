@@ -26,12 +26,8 @@ router.post('/webhook/', function (req, res) {
 
     let sender = event.sender.id;
 
-    if (event.optin) {
-      console.log("optin");
-    }
-
     //if text message or quick reply
-    else if (event.message && event.message.text && !event.message.is_echo) {
+    if (event.message && event.message.text && !event.message.is_echo) {
 
       //if quick reply
       if (event.message.quick_reply) {
