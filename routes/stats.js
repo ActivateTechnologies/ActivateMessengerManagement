@@ -39,6 +39,62 @@ router.get('/visualize', function (req, res) {
   })
 })
 
+router.get('/table', (req, res) => {
+  getUsers()
+  .then((users)=>{
+    let arr = _.map(users, (tup)=>{
+      return tup[0];
+    })
+
+    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
+    .then((values) => {
+      let data = [];
+      for(let i = 0; i<values[0].length; i++){
+        data.push({
+          userId: arr[i],
+          name: users[i][1],
+          gamesAttended: values[0][i],
+          buttonHits: values[1][i]
+        })
+      }
+
+      console.log(data);
+      res.render('table', {'data': data})
+    })
+  })
+  .catch((e)=>{
+    res.render('table', {'data': "You should not be seeing this"})
+  })
+})
+
+router.get('/tabledata', (req, res) => {
+  getUsers()
+  .then((users)=>{
+    let arr = _.map(users, (tup)=>{
+      return tup[0];
+    })
+
+    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
+    .then((values) => {
+      let data = [];
+      for(let i = 0; i<values[0].length; i++){
+        data.push({
+          userId: arr[i],
+          name: users[i][1],
+          gamesAttended: values[0][i],
+          buttonHits: values[1][i]
+        })
+      }
+
+      console.log(data);
+      res.json({'data': data})
+    })
+  })
+  .catch((e)=>{
+    res.render('table', {'data': "You should not be seeing this"})
+  })
+})
+
 function getUsers(){
   return new Promise((resolve, reject) => {
     M.User.find({}, function(err, results){
@@ -98,33 +154,5 @@ function getButtonHitsByUsers(userIds){
     })
   })
 }
-
-router.get('/table', (req, res) => {
-  getUsers()
-  .then((users)=>{
-    let arr = _.map(users, (tup)=>{
-      return tup[0];
-    })
-
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
-    .then((values) => {
-      let data = [];
-      for(let i = 0; i<values[0].length; i++){
-        data.push({
-          userId: arr[i],
-          name: users[i][1],
-          gamesAttended: values[0][i],
-          buttonHits: values[1][i]
-        })
-      }
-
-      console.log(data);
-      res.render('table', {'data': "Hi", 'othertext': "lalalala"})
-    })
-  })
-  .catch((e)=>{
-    res.render('table', {'data': "err", 'othertext': "lalalala"})
-  })
-})
 
 module.exports = router
