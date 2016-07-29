@@ -39,12 +39,12 @@ router.get('/visualize', function (req, res) {
   })
 })
 
-function getUserIds(){
+function getUsers(){
   return new Promise((resolve, reject) => {
     M.User.find({}, function(err, results){
       let ret = [];
       _.each(results, (i) => {
-        ret.push(i.userId);
+        ret.push([i.userId, i.firstname + " " + i.lastname]);
       })
       resolve(ret)
     })
@@ -100,13 +100,25 @@ function getButtonHitsByUsers(userIds){
 }
 
 router.get('/table', (req, res) => {
-  getUserIds()
-  .then((arr)=>{
-    console.log(arr);
+  getUsers()
+  .then((users)=>{
+    let arr = _.map(users, (tup)=>{
+      return tup[0];
+    })
+
     Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
     .then((values) => {
-      console.log(values[0]);
-      console.log(values[1]);
+      let data = [];
+      for(let i = 0; i<values[0].length; i++){
+        data.push({
+          userId: arr[i],
+          name: users[i][1],
+          gamesAttended: values[0][i],
+          buttonHits: values[1][i]
+        })
+      }
+
+      console.log(data);
       res.render('table', {'data': "Hi", 'othertext': "lalalala"})
     })
   })
