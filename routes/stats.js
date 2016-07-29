@@ -40,31 +40,7 @@ router.get('/visualize', function (req, res) {
 })
 
 router.get('/table', (req, res) => {
-  getUsers()
-  .then((users)=>{
-    let arr = _.map(users, (tup)=>{
-      return tup[0];
-    })
-
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
-    .then((values) => {
-      let data = [];
-      for(let i = 0; i<values[0].length; i++){
-        data.push({
-          userId: arr[i],
-          name: users[i][1],
-          gamesAttended: values[0][i],
-          buttonHits: values[1][i]
-        })
-      }
-
-      console.log(data);
-      res.render('table', {'data': data})
-    })
-  })
-  .catch((e)=>{
-    res.render('table', {'data': "You should not be seeing this"})
-  })
+  res.render('table')
 })
 
 router.get('/tabledata', (req, res) => {
