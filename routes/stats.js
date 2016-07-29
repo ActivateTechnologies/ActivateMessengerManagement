@@ -39,45 +39,32 @@ router.get('/visualize', function (req, res) {
   })
 })
 
-function gamesAttendedByUser(userId){
-  return new Promise((resolve, reject)=>{
-    M.Game.find({}, (err, results) => {
-      if(err){
-        reject(err)
-      }
-      let gamesAttended = 0
-      _.each(results, (i) => {
-        if(i.joined.indexOf({userId: userId}) != -1){
-          gamesAttended++
-        }
+function getUserIds(){
+  return new Promise((resolve, reject) => {
+    M.User.find({}, function(err, results){
+      let ret = [];
+      _.each(results, function(i) => {
+        ret.push(i.userId);
       })
-      resolve(gamesAttended)
+      resolve(ret)
     })
   })
 }
 
-function createTableDate(){
+function getGames(userids){
   return new Promise((resolve, reject) => {
-    M.User.find({}, (err, results) => {
-      if(err){
-        reject(err)
-      }
-      let ret = []
-      _.each(results, (item) => {
-        let temp = {}
-        temp['name'] = item.firstname + " " + item.lastname;
-        gamesAttendedByUser(item.userId)
-        .then((gamesAttended) => {
-          console.log(temp['name']);
-          temp['gamesAttended'] = gamesAttended
-          ret.push(temp)
+    let ret = [];
+    _.each(userids, function(i)=>{
+      let gamesAttended = 0
+      M.Games.find({}, function(err, results){
+        let ret = [];
+        _.each(results, function(ii)=>{
+          if(ii.joined.indexOf({userId:i} != -1)){
+            gamesAttended += 1;
+          }
         })
-        .catch((e)=>{
-          console.log(e);
-        })
-        console.log(temp);
+        resolve(ret)
       })
-      resolve(ret);
     })
   })
 }
