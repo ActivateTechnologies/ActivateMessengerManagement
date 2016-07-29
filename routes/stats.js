@@ -52,27 +52,26 @@ function getUserIds(){
 }
 
 function getGamesAttendedByUsers(userIds){
-  let ret = [];
-  //prefilling ret
-  for(let i = 0; i<userIds.length; i++){
-    ret.push(0);
-  }
-  M.Game.find({}, function(err, results){
-
-  })
-}
-
-function getGames(userids){
-  return new Promise((resolve, reject) => {
-    console.log("inside getgames!!");
+  return new Promise((resolve, reject)=>{
     let ret = [];
 
-    _.each(userids, (i)=>{
-      console.log(i);
-      ret.push(getGamesAttendedByUser(i))
-    })
+    //prefilling ret
+    for(let i = 0; i<userIds.length; i++){
+      ret.push(0);
+    }
 
-    resolve(ret);
+    //filling ret
+    M.Game.find({}, function(err, results){
+      _.each(results, (item)=>{
+        _.each(item.joined, (joiner)=>{
+          let ind = userIds.indexOf(joiner.userId);
+          if(ind != -1){
+            ret[ind] += 1;
+          }
+        })
+      })
+      resolve(ret);
+    })
   })
 }
 
@@ -80,10 +79,10 @@ router.get('/table', (req, res) => {
   getUserIds()
   .then((arr)=>{
     console.log(arr);
-    Promise.all([getGames(arr)])
+    Promise.all([getGamesAttendedByUsers(arr)])
     .then((values) => {
       console.log(values[0]);
-      res.render('table', {'data': data, 'othertext': "lalalala"})
+      res.render('table', {'data': "Hi", 'othertext': "lalalala"})
     })
   })
   .catch((e)=>{
