@@ -75,13 +75,38 @@ function getGamesAttendedByUsers(userIds){
   })
 }
 
+function getButtonHitsByUsers(userIds){
+  return new Promise((resolve, reject)=>{
+    let ret = [];
+
+    //prefilling ret
+    for(let i = 0; i<userIds.length; i++){
+      ret.push(0);
+    }
+
+    //filling ret
+    M.Button.find({}, function(err, results){
+      _.each(results, (item)=>{
+        _.each(item.activity, (hitter)=>{
+          let ind = userIds.indexOf(hitter.userId);
+          if(ind != -1){
+            ret[ind] += 1;
+          }
+        })
+      })
+      resolve(ret);
+    })
+  })
+}
+
 router.get('/table', (req, res) => {
   getUserIds()
   .then((arr)=>{
     console.log(arr);
-    Promise.all([getGamesAttendedByUsers(arr)])
+    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
     .then((values) => {
       console.log(values[0]);
+      console.log(values[1]);
       res.render('table', {'data': "Hi", 'othertext': "lalalala"})
     })
   })
