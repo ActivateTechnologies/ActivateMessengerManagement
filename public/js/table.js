@@ -2,12 +2,10 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Reactable = require('reactable')
 
+var props = document.getElementById('#text').innerHTML
+
 var Table = Reactable.Table;
 ReactDOM.render(
-    <Table sortable={true} className="table" data={[
-        { Name: 'Griffin Smith', Age: 18 },
-        { Age: 23,  Name: 'Lee Salminen' },
-        { Age: 28, Position: 'Developer' },
-    ]} />,
+    <Table sortable={true} className="table" data={props} />,
     document.getElementById('example')
 );
