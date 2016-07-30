@@ -27,13 +27,11 @@ function processTextMessage(sender, message, defaultCallback) {
 	      break;
 
 	      case("ShowGames"):
-	      processShowGames(sender, firstIntent, 
-	      	getDateQuery(resolveTime(data.entities)));
+	      processShowGames(sender, firstIntent, data.entities);
 	      break;
 
 	      case("MyGames"):
-	      processMyGames(sender, firstIntent, 
-	      	getDateQuery(resolveTime(data.entities)));
+	      processMyGames(sender, firstIntent, data.entities);
 	      break;
 
 	      default:
@@ -46,25 +44,15 @@ function processTextMessage(sender, message, defaultCallback) {
 }
 
 function getDateQuery (dateObject) {
-	if (dateObject) {
+	console.log('getDateQuery called with', dateObject);
+	if (dateObject && dateObject.date) {
 		let dates = {};
-		dates.startDate = dateObject;
+		dates.startDate = dateObject.date;
 		dates.startDate = new Date(dates.startDate.getTime()
 		 - (dates.startDate.getTime() % (86400 * 1000)) - 2 * 3600 * 1000);
-		console.log('Start date: ' + dates.startDate);
-		/*if (entities.datetime[0].grain == 'day') {*/
-			dates.endDate = new Date(dates.startDate.getTime() + 86400 * 1000
-			 + 2 * 3600 * 1000);
-		/*} else if (entities.datetime[0].grain == 'week') {
-			dates.endDate = new Date(dates.startDate.getTime() + 86400 * 1000 * 7
-			 + 2 * 3600 * 1000);
-		}*/
-		/*let now = new Date();
-		let query = (Object.keys(dates).length) 
-			? {when:{$gt: dates.startDate, $lt: dates.endDate}}
-			: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};*/
-
-		console.log('Going to return query:', JSON.stringify(dates));
+		dates.endDate = new Date(dates.startDate.getTime() 
+		 + 86400 * 1000 * dateObject.durationInDays
+		 + 2 * 3600 * 1000);
 		return dates;
 	} else {
 		return null;
@@ -101,22 +89,24 @@ function processHelp(sender, intent) {
 	sendNew.text(sender, 'Sure, someone from our team will '
 		+ 'get in touch with you soon', (error) => {
 		if (!error) {
-			sendNew.textWithQuickReplies(sender, 'Meanwhile looking for games to play?',
+			sendNew.textWithQuickReplies(sender,
+				'Meanwhile continue looking for games to play?',
 			  ['Sure thing!', 'Nah not now']);
 		}
 	});
 }
 
-function processShowGames(sender, intent, queryDates) {
-	sendNew.text(sender, 'Sure thing. Here are some upcoming games:', () => {
-		sendNew.allGames(sender, null, queryDates);
-	});
+function processShowGames(sender, intent, entities) {
+	let queryDates = getDateQuery(resolveTime(entities));
+	let dateEntityText = (entities.length) ? entities[0].entity : null;
+	sendNew.allGames(sender, null, queryDates, dateEntityText);
 }
 
-function processMyGames(sender, intent, queryDates) {
-	//sendNew.text(sender, 'Here are your games:');
-	console.log(queryDates);
-	sendNew.my_games(sender, queryDates);
+function processMyGames(sender, intent, entities) {
+	let queryDates = getDateQuery(resolveTime(entities));
+	let dateEntityText = (entities.length) ? entities[0].entity : null;
+	console.log(intent, queryDates, dateEntityText);
+	sendNew.my_games(sender, queryDates, dateEntityText);
 }
 
 /*
@@ -129,6 +119,7 @@ function resolveTime (entities) {
   let resolvedDate;
   let date;
   let time;
+  let durationInDays = 1;
   entities.forEach(function (entity) {
     if (entity.resolution) {
       switch (entity.resolution.resolution_type || entity.type) {
@@ -136,8 +127,14 @@ function resolveTime (entities) {
         case 'builtin.datetime.date':
         case 'builtin.datetime.time':
           let parts = (entity.resolution.date || entity.resolution.time).split('T');
+          let weekParts = (entity.resolution.date || entity.resolution.time).split('-W');
+          console.log('Parts', JSON.stringify(parts));
           if (!date && dateExpression.test(parts[0])) {
             date = parts[0];
+          } else if (!date && weekParts.length > 1) {
+          	date = getDateOfISOWeek(weekParts[0], weekParts[1]).toISOString().slice(0,10);
+          	//console.log(date, getDateOfISOWeek(weekParts[0], weekParts[1]));
+          	durationInDays = 7;
           }
           if (!time && parts[1]) {
             time = 'T' + parts[1];
@@ -163,14 +160,40 @@ function resolveTime (entities) {
   });
   if (!resolvedDate && (date || time)) {
     if (!date) {
-      date = utils.toDate8601(now);
+      date = toDate8601(now);
     }
     if (time) {
       date += time;
     }
     resolvedDate = new Date(date);
   }
-  return resolvedDate;
+
+  return {
+  	date: resolvedDate,
+  	durationInDays: durationInDays
+  };
+
+  function toDate8601(date) {
+  	return date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1)
+		 + '-' + pad(date.getUTCDate());
+	}
+
+	function pad(num) {
+    return (num < 10) ? '0' + num 
+    	: '' + num;
+	}
+
+	//Source: http://stackoverflow.com/a/16591175/2015362
+	function getDateOfISOWeek(y, w) {
+    var simple = new Date(y, 0, 1 + (w - 1) * 7);
+    var dow = simple.getDay();
+    var ISOweekStart = simple;
+    if (dow <= 4)
+      ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else
+      ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    return ISOweekStart;
+	}
 };
 
 module.exports = {

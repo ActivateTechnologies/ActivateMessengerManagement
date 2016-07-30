@@ -5,7 +5,7 @@ const router = express.Router();
 const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
 const sendNew = require('./../server/sendnew.js');
-const request = require('request');1
+const request = require('request');
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 const FACEBOOK_APP_ID = config.FACEBOOK_APP_ID
@@ -77,24 +77,24 @@ router.post('/webhook/', function (req, res) {
 
       // if message
       else {
-        // if (config.DEVELOPMENT_STATUS == 'test') {
-        //   send.processReceivedMessage(sender, event.message.text, () => {
-        //     //LUIS Did not find anything, so default response
-        //     console.log('Got message: ' + event.message.text + ' from ' + sender);
-        //     sendNew.text(sender, "I didn't quite understand that sorry. "
-        //      + "Here are all upcoming games. Alternatively, just say 'help'"
-        //      + " if you wanna talk to our support team", () => {
-        //       M.User.find({userId: sender}, function(err, result){
-        //         if(result.length > 0 && result[0].facebookID){
-        //           send.allGames(sender);
-        //         }
-        //         else {
-        //           send.start(sender);
-        //         }
-        //       })
-        //     });
-        //   });
-        // }
+        /*if (config.DEVELOPMENT_STATUS == 'avi') {
+          send.processReceivedMessage(sender, event.message.text, () => {
+            //LUIS Did not find anything, so default response
+            console.log('Got message: ' + event.message.text + ' from ' + sender);
+            sendNew.text(sender, "I didn't quite understand that sorry. "
+             + "Here are all upcoming games. Alternatively, just say 'help'"
+             + " if you wanna talk to our support team", () => {
+              M.User.find({userId: sender}, function(err, result){
+                if(result.length > 0 && result[0].facebookID){
+                  send.allGames(sender);
+                }
+                else {
+                  send.start(sender);
+                }
+              })
+            });
+          });
+        }*/
 
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0 && result[0].facebookID){

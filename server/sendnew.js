@@ -78,9 +78,9 @@ function typingIndicator(sender, onOrOff) {
   })
 }
 
-function allGames(sender, broadcast, queryDates){
+function allGames(sender, broadcast, queryDates, dateEntityText){
   let temp = "today"
-  if(text){
+  if (broadcast) {
     temp = broadcast;
   }
   let now = new Date();
@@ -103,21 +103,33 @@ function allGames(sender, broadcast, queryDates){
 	       item.joined.length + item.non_members_attending, item.capacity, booked,
 	       item.desc, item.when, item.price]);
 	  	});
-	  	console.log(data);
-	  	if (data.length) {
-	  		data = generate_card(data);
-	    	cards(sender, data, temp);
-	  	} else {
-	  		textWithQuickReplies(sender, "Sadly there are no upcoming games currently. "
-	  			+ "Would you like to be notified when the next one is created?",
-	  			["Yes! (not coded)", "No thanks"]);
-	  	}
-	    
+	  	//console.log(data);
+	  	if (data.length == 0) {
+    		if (dateEntityText) {
+					text(sender, "There are no games on " + dateEntityText + " currently");
+	    	} else {
+	    		textWithQuickReplies(sender, "Sadly there are no upcoming games currently. "
+		  			+ "Would you like to be notified when the next one is created?",
+		  			["Yes! (not coded)", "No thanks"]);
+	    	}
+	    } else {
+	    	let text = '';
+	    	if (data.length == 1 && dateEntityText) {
+	      	text = 'Here is an upcoming game on ' + dateEntityText + ':';
+		    } else if (data.length == 1 && !dateEntityText) {
+	    		text = 'Here is an upcoming game:';
+	    	} else if (dateEntityText) {
+	      	text = 'Here are some upcoming games for ' + dateEntityText + ':';
+	    	} else {
+	    		text = 'Here are some upcoming games: ';
+	    	}
+	      cards(sender, generate_card(data), text);
+	    }
     }
   })
 }
 
-function my_games(sender, queryDates){
+function my_games(sender, queryDates, dateEntityText){
   let now = new Date();
   let query = (queryDates) ? 
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
@@ -134,13 +146,24 @@ function my_games(sender, queryDates){
       });
     })
 
-    //console.log(data);
-
-    if (data.length === 0) {
-      text(sender, "You haven't joined any games. Type 'play' to find games")
+    if (data.length == 0) {
+    	if (dateEntityText) {
+				text(sender, "You don't any games on " + dateEntityText);
+    	} else {
+    		text(sender, "You haven't joined any games. Type 'play' to find games")
+    	}
     } else {
-      data = generate_card(data);
-      cards(sender, data, "Here are the games you've joined: ");
+    	let text = '';
+    	if (data.length == 1 && dateEntityText) {
+      	text = 'Here is the game you have on ' + dateEntityText + ':';
+	    } else if (data.length == 1 && !dateEntityText) {
+    		text = 'You only have one booking for now:';
+    	} else if (dateEntityText) {
+      	text = 'Here are your games for ' + dateEntityText + ':';
+    	} else {
+    		text = 'Here are the games you\'ve joined: ';
+    	}
+      cards(sender, generate_card(data), text);
     }
   });
 }
@@ -167,14 +190,13 @@ function generate_card(array){
   return template;
 }
 
-function cards(sender, data, day){
+function cards(sender, data, message){
 
-  if (day === "today") {
+  if (message == "today") {
     text(sender, "(sendnew) Here are some upcoming games to join. "
     	+ "Tap the card for directions or 'More Info' to book.");
-  }
-  else if (day) {
-    text(sender, day);
+  } else if (message) {
+    text(sender, message);
   }
 
   let messageData = data;
