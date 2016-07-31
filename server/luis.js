@@ -34,6 +34,10 @@ function processTextMessage(sender, message, defaultCallback) {
 	      processMyGames(sender, firstIntent, data.entities);
 	      break;
 
+	      case("Feedback"):
+	      processFeedback(sender, firstIntent, data.entities);
+	      break;
+
 	      default:
 	      defaultCallback();
 	    }
@@ -107,6 +111,13 @@ function processMyGames(sender, intent, entities) {
 	let dateEntityText = (entities.length) ? entities[0].entity : null;
 	console.log(intent, queryDates, dateEntityText);
 	sendNew.my_games(sender, queryDates, dateEntityText);
+}
+
+function processFeedback(sender, intent, entities) {
+	/*let queryDates = getDateQuery(resolveTime(entities));
+	let dateEntityText = (entities.length) ? entities[0].entity : null;
+	console.log(intent, queryDates, dateEntityText);
+	sendNew.my_games(sender, queryDates, dateEntityText);*/
 }
 
 /*
