@@ -25,107 +25,96 @@
     <div id="fb-root"></div>
     <script>
 
-    function magic(){
+    function magic() {
+      alert(0);
       console.log("called magic");
       FB.login(function(res) {
+        alert(1);
         if (res.authResponse) {
-          location.reload()
+          alert(2);
+          //location.reload()
+          alert(3);
         } else {
-         console.log('User cancelled login or did not fully authorize.');
+          alert(4);
+          console.log('User cancelled login or did not fully authorize.');
         }
       });
     }
 
     function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-      window.fbAsyncInit = function() {
+    window.fbAsyncInit = function() {
 
-        FB.init({
-          appId: "159289771143437",
-          xfbml: true,
-          version: "v2.7"
-        });
+      FB.init({
+        appId: "159289771143437",
+        xfbml: true,
+        version: "v2.7"
+      });
 
-        FB.getLoginStatus(function(response) {
-          if (response.status === 'connected') {
-            // var lg = document.getElementById('lg');
-            // lg.style.display = "none";
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+          // var lg = document.getElementById('lg');
+          // lg.style.display = "none";
 
-            var fbid = response.authResponse.userID;
+          var fbid = response.authResponse.userID;
+          document.getElementById('clicker').innerHTML = fbid
 
-            document.getElementById('clicker').innerHTML = fbid
+          $.post( "https://e5587dce.ngrok.io/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+            console.log("registered");
+            location.href = "http://m.me/245261069180348";
+          });
+        }
+        else if (response.status === 'not_authorized') {
+          console.log("not authorized");
+          var clicker = document.getElementById('clicker');
+          clicker.style.display = 'none';
+        }
+        else {
+          console.log("not the two above");
+          var clicker = document.getElementById('clicker');
+          clicker.style.display = 'none';
+        }
+      });
+    };
 
-            $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
-              console.log("registered");
-              location.href = "http://m.me/245261069180348";
-            });
-
-          }
-          else if (response.status === 'not_authorized') {
-            console.log("not authorized");
-            var clicker = document.getElementById('clicker');
-            clicker.style.display = 'none';
-          }
-          else {
-            console.log("not the two above");
-            var clicker = document.getElementById('clicker');
-            clicker.style.display = 'none';
-          }
-        });
-
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) { return; }
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) { return; }
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 
     </script>
 
     <div class="site-wrapper-payment">
-
       <div class="site-wrapper-inner2">
-
         <div class="cover-container2">
 
           <div class="inner cover">
-
-              <img src="img/logoUnbinded-white.png" class="logoLead-payment">
-              <br/>
-
-              <!-- <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png"> -->
-
-              <div class="fb-login-button" onlogin="magic()" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
-
-              <div id="clicker" class="messenger-container"></div>
-            </div>
-
-            </div>
-
-            <div class="footerDiv">
-              <p class="footertext">
-                    Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
-                    <br>
-                    www.activatetechnologies.co.uk
-              </p>
-            </div>
-
+            <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
+            <!-- <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png"> -->
+            <div class="fb-login-button" onlogin="magic()" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
+            <div id="clicker" class="messenger-container"></div>
           </div>
 
-
+          <div class="footerDiv">
+            <p class="footertext">
+              Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+              <br>www.activatetechnologies.co.uk
+            </p>
+          </div>
 
         </div>
-
+      </div>
+    </div>
   </body>
 </html>
