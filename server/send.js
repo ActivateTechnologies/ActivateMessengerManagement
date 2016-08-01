@@ -679,7 +679,7 @@ function start(sender){
           "buttons": [{
             "title": "Login",
             "type": "web_url",
-            "url": ("https://e5587dce.ngrok.io/register?mid=" + sender)
+            "url": ("https://kickabouttest.herokuapp.com/register?mid=" + sender)
           }]
         }]
       }
