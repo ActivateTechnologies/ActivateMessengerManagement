@@ -26,16 +26,11 @@
     <script>
 
     function magic() {
-      alert(0);
       console.log("called magic");
       FB.login(function(res) {
-        alert(1);
         if (res.authResponse) {
-          alert(2);
           //location.reload()
-          alert(3);
         } else {
-          alert(4);
           console.log('User cancelled login or did not fully authorize.');
         }
       });
