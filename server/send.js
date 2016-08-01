@@ -711,6 +711,7 @@ module.exports = {
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
+  text_promise: text_promise,
   game: game,
   cards: cards,
   allGames: allGames,
