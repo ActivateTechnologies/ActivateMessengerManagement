@@ -46,6 +46,8 @@ router.get('/table', (req, res) => {
 router.get('/tabledata', (req, res) => {
   getUsers()
   .then((users)=>{
+
+    //creating array of userids
     let arr = _.map(users, (tup)=>{
       return tup[0];
     })
@@ -61,7 +63,6 @@ router.get('/tabledata', (req, res) => {
           buttonHits: values[1][i]
         })
       }
-
       console.log(data);
       res.json({'data': data})
     })
