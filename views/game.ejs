@@ -29,6 +29,14 @@
     <div id="fb-root"></div>
     <script>
 
+    function isAndroidFacebookApp() {
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        return (
+            (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1)
+            && (ua.indexOf("Android") || ua.indexOf("android"))
+        );
+    }
+
     var magic = function(){
       console.log("called magic");
       FB.login(function(res) {
@@ -57,6 +65,11 @@
         xfbml: true,
         version: "v2.7"
       });
+
+      if(isAndroidFacebookApp()){
+        $('#controls').css('display', 'none');
+        $('#android').css('display', 'block')
+      }
 
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
@@ -102,18 +115,25 @@
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment">
             <br/>
-            <!-- game image -->
             <img src="<%= imageLink %>" class="gamePic">
             <p class="gametitlegame"><%= gameName %></p>
             <p class="gameaddress">
               <%= gameAddress %>
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-            <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
           </div>
           <br>
 
-          <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/245261069180348')" target="_blank">Open</a><br><br>
+          <div id="controls">
+            <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
+            <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/245261069180348')" target="_blank">Open</a><br><br>
+          </div>
+
+          <div id="android">
+            <p>
+              Click on the three dots and choose open in chrome
+            </p>
+          </div>
 
           <div class="footerDiv">
             <p class="footertext">
