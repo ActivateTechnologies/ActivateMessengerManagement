@@ -94,8 +94,6 @@ router.post('/webhook/', function (req, res) {
           });
         });*/
 
-        console.log("sending start");
-
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0 && result[0].facebookID){
             send.allGames(sender);
