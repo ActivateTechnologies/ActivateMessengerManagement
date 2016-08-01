@@ -38,7 +38,6 @@
     }
 
     var magic = function(){
-      console.log("called magic");
       FB.login(function(res) {
         if (res.authResponse) {
           location.reload()
@@ -71,30 +70,32 @@
         $('#android').css('display', 'block')
       }
 
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-          var lg = document.getElementById('lg');
-          lg.style.display = "none";
+      else {
+        FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            var lg = document.getElementById('lg');
+            lg.style.display = "none";
 
-          var fbid = response.authResponse.userID;
+            var fbid = response.authResponse.userID;
 
-          $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
-            console.log("done");
-            //$('#facebookMessageUsButton').fadeIn();
-            //location.href = "http://m.me/245261069180348";
-            //location.href = "https://www.messenger.com/t/245261069180348";
-            //window.open('http://m.me/245261069180348');
-            document.getElementById('messengerLinkButton').style.display = '';
+            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+              console.log("done");
+              //$('#facebookMessageUsButton').fadeIn();
+              //location.href = "http://m.me/245261069180348";
+              //location.href = "https://www.messenger.com/t/245261069180348";
+              //window.open('http://m.me/245261069180348');
+              document.getElementById('messengerLinkButton').style.display = '';
 
-          });
-        }
-        else if (response.status === 'not_authorized') {
-          console.log("not authorized");
-        }
-        else {
-          console.log("not the two above");
-        }
-      });
+            });
+          }
+          else if (response.status === 'not_authorized') {
+            console.log("not authorized");
+          }
+          else {
+            console.log("not the two above");
+          }
+        });
+      }
 
     };
 
@@ -112,7 +113,7 @@
       <div class="site-wrapper-inner2">
         <div class="cover-container2">
 
-          <div class="inner cover">
+          <div id="controls" class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment">
             <br/>
             <img src="<%= imageLink %>" class="gamePic">
@@ -121,10 +122,6 @@
               <%= gameAddress %>
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-          </div>
-          <br>
-
-          <div id="controls">
             <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
             <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/245261069180348')" target="_blank">Open</a><br><br>
           </div>
