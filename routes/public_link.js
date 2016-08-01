@@ -144,6 +144,7 @@ router.post('/register', function(req, res){
                     console.log(err);
                     res.send("Not Cool")
                   } else {
+                    send.text(mid, "You've successfully logged in");
                     console.log("saved new user");
                     res.send("Cool")
                   }
