@@ -29,6 +29,11 @@
             <label for="address">Address</label>
           </div>
           <div class="input-field">
+            <div id="image_preview_div" style="display:none;">
+              Current image:<br>
+              <img width="200" id="image_preview" src=""><br>
+              (upload another below only if you want to change it)
+            </div>
             <input type="file" name="image" id="image">
           </div>
           <div class="input-field">
@@ -57,6 +62,8 @@
           <div class="input-field" style="display:none">
             <input name="id" type="text" class="validate">
             <label for="id">Id (only for editing the event)</label>
+            <input name="image_url" type="text" class="validate">
+            <label for="id">Image URL (only for editing the event)</label>
           </div>
 
           <input type="submit" class="btn" value="Submit"/>
@@ -115,6 +122,9 @@
           $("#addgame input[name=non_members_attending]").val(games[gid].non_members_attending);
           $("#addgame input[name=price]").val(games[gid].price);
           $("#addgame input[name=id]").val(gid);
+          $("#addgame input[name=image_url]").val(games[gid].image_url);
+          $("#image_preview").attr("src", games[gid].image_url);
+          $("#image_preview_div").fadeIn();
 
           //Focus on all to move floating lable up, end with title to help scroll
           $("html, body").animate({ scrollTop: 0 }, "slow", () => {
@@ -125,7 +135,37 @@
             $("#addgame input[name=capacity]").focus();
             $("#addgame input[name=non_members_attending]").focus();
             $("#addgame input[name=price]").focus();
-            $("#addgame input[name=id]").focus();
+            $("#addgame input[name=title]").focus();
+          });
+        } else {
+          console.log('Game not found');
+        }
+      }
+
+      var duplicateGame = function(gid) {
+        if (games[gid]) {
+          $("#addgame input[name=title]").val(games[gid].name);
+          $("#addgame input[name=address]").val(games[gid].address);
+          $("#addgame input[name=latlong]").val(games[gid].latlong);
+          $("#addgame input[name=when]").val(games[gid].when.substring(0,10));
+          $("#addgame input[name=desc]").val(games[gid].desc);
+          $("#addgame input[name=capacity]").val(games[gid].capacity);
+          $("#addgame input[name=non_members_attending]").val(games[gid].non_members_attending);
+          $("#addgame input[name=price]").val(games[gid].price);
+          $("#addgame input[name=image_url]").val(games[gid].image_url);
+          $("#image_preview").attr("src", games[gid].image_url);
+          $("#image_preview_div").fadeIn();
+          //$("#addgame input[name=id]").val(gid);
+
+          //Focus on all to move floating lable up, end with title to help scroll
+          $("html, body").animate({ scrollTop: 0 }, "slow", () => {
+            $("#addgame input[name=address]").focus();
+            $("#addgame input[name=latlong]").focus();
+            $("#addgame input[name=when]").focus();
+            $("#addgame input[name=desc]").focus();
+            $("#addgame input[name=capacity]").focus();
+            $("#addgame input[name=non_members_attending]").focus();
+            $("#addgame input[name=price]").focus();
             $("#addgame input[name=title]").focus();
           });
         } else {
@@ -151,6 +191,7 @@
             + '<div class="col s6">'
               + "<span class='card-title'>" + game.name + "</span>"
               + "<span style='cursor:pointer;' onclick=\"editEvent('" + game._id + "')\">&nbsp;(edit)</span>"
+              + "<span style='cursor:pointer;' onclick=\"duplicateGame('" + game._id + "')\">&nbsp;(duplicate)</span>"
               + "<span style='cursor:pointer;' onclick=\"deleteGame('" + game._id + "')\">&nbsp;(delete)</span><br><br>"
               + "<b>Description: </b>" + game.desc + "<br>"
               + "<b>Address: </b>" + game.address + "<br>"
