@@ -95,7 +95,7 @@ router.post('/register', function(req, res){
                 }
                 else {
                   console.log("saved the user and sending game");
-                  send.text_promise(sender, "Successfully logged in")
+                  send.text_promise(mid, "Successfully logged in")
                   .then(() => {
                     send.game(mid, result[0].publicLink)
                   })
