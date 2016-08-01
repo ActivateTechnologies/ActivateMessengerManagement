@@ -49,7 +49,7 @@
     window.fbAsyncInit = function() {
 
       FB.init({
-        appId: "159289771143437",
+        appId: "144481079297226",
         xfbml: true,
         version: "v2.7"
       });
@@ -59,9 +59,9 @@
 
           var fbid = response.authResponse.userID;
 
-          $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+          $.post( "https://limitless-sierra-68694.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
             console.log("registered");
-            location.href = "http://m.me/245261069180348";
+            location.href = "http://m.me/kickaboutapp";
           });
         }
         else if (response.status === 'not_authorized') {

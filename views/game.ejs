@@ -63,7 +63,7 @@
     window.fbAsyncInit = function() {
 
       FB.init({
-        appId: "159289771143437",
+        appId: "144481079297226",
         xfbml: true,
         version: "v2.7"
       });
@@ -81,7 +81,7 @@
 
             var fbid = response.authResponse.userID;
 
-            $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+            $.post( "https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
               console.log("done");
               //$('#facebookMessageUsButton').fadeIn();
               //location.href = "http://m.me/245261069180348";
@@ -126,7 +126,7 @@
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
             <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-            <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/245261069180348')" target="_blank">Open</a><br><br>
+            <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/kickaboutapp')" target="_blank">Open</a><br><br>
           </div>
 
           <div id="android" style="display:none">
