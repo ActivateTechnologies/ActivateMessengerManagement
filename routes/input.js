@@ -23,6 +23,7 @@ router.get('/input', function(req, res){
 
 router.post('/input', upload.single('image'), function(req, res){
 
+  //if file is uploaded then updating the game or changing depending on id
   if(req.file){
     let file = req.file
     let imagename = file.filename;
@@ -84,10 +85,13 @@ router.post('/input', upload.single('image'), function(req, res){
     });
   }
 
+  //if no image uploaded then updating the game or saving depending on presence of id
   else {
+
     let data = {
       name: req.body.title,
       address: req.body.address,
+      image_url: req.body.image_url,
       latlong: req.body.latlong,
       desc: req.body.desc,
       when: req.body.when,
@@ -96,12 +100,28 @@ router.post('/input', upload.single('image'), function(req, res){
       price: parseFloat(req.body.price)
     };
 
-    M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
-      if(err){
-        console.log(err);
-      }
-      res.render('input');
-    })
+    if(req.body.id){
+      console.log("Editing game");
+
+      M.Game.findOneAndUpdate({_id:req.body.id}, data, function(err){
+        if(err){
+          console.log(err);
+        }
+        res.render('input');
+      })
+    }
+
+    else {
+      console.log("Adding game");
+      let game = M.Game(data);
+
+      game.save(function(err){
+        if(err){
+          console.log(err);
+        }
+        res.render('input');
+      })
+    }
   }
 });
 
