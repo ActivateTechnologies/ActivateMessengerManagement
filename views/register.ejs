@@ -56,13 +56,10 @@
 
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
-          // var lg = document.getElementById('lg');
-          // lg.style.display = "none";
 
           var fbid = response.authResponse.userID;
-          document.getElementById('clicker').innerHTML = fbid
 
-          $.post( "https://e5587dce.ngrok.io/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+          $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
             console.log("registered");
             location.href = "http://m.me/245261069180348";
           });
@@ -96,9 +93,7 @@
 
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
-            <!-- <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png"> -->
             <div class="fb-login-button" onlogin="magic()" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
-            <div id="clicker" class="messenger-container"></div>
           </div>
 
           <div class="footerDiv">
