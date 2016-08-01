@@ -33,7 +33,7 @@
         var ua = navigator.userAgent || navigator.vendor || window.opera;
         $('#controls').css('display', 'none');
         $('#android').css('display', 'block');
-        document.getElementById('android') = ua;
+        document.getElementById('android').innerHTML = ua;
         return (
             (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1)
             && (ua.indexOf("Android") || ua.indexOf("android"))
