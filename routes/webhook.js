@@ -77,7 +77,7 @@ router.post('/webhook/', function (req, res) {
 
       // if message
       else {
-        send.processReceivedMessage(sender, event.message.text, () => {
+        /*send.processReceivedMessage(sender, event.message.text, () => {
           //LUIS Did not find anything, so default response
           console.log('Got message: ' + event.message.text + ' from ' + sender);
           sendNew.text(sender, "I didn't quite understand that sorry. "
@@ -92,16 +92,16 @@ router.post('/webhook/', function (req, res) {
               }
             })
           });
-        });
+        });*/
 
-        /*M.User.find({userId: sender}, function(err, result){
+        M.User.find({userId: sender}, function(err, result){
           if(result.length > 0 && result[0].facebookID){
             send.allGames(sender);
           }
           else {
             send.start(sender);
           }
-        })*/
+        })
       }
     }
 
@@ -119,14 +119,13 @@ router.post('/webhook/', function (req, res) {
 
       if (text.substring(0, 4) == "Book") {
         send.book(sender, text);
-      }
-      else if(text.substring(0, 6) == "Cancel") {
+      } else if(text.substring(0, 6) == "Cancel") {
         send.cancel_booking(sender, text);
-      }
-      else if(text.substring(0, 9) == "More Info") {
+      } else if(text.substring(0, 5) == "Share") {
+        send.shareGame(sender, text);
+      } else if(text.substring(0, 9) == "More Info") {
         send.more_info(sender, text);
-      }
-      else {
+      } else {
         switch(text.toLowerCase()) {
 
           case('start'):

@@ -61,21 +61,20 @@ function menu(sender){
     ]
   }
 
-
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData,
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error in menu(): ', error)
-      } else if (response.body.error) {
-          console.log('Error in menu(): ', response.body.error)
-      }
+    if (error) {
+      console.log('Error in menu(): ', error)
+    } else if (response.body.error) {
+      console.log('Error in menu(): ', response.body.error)
+    }
   })
 }
 
@@ -97,34 +96,32 @@ function notifications(sender){
     ]
   }
 
-
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error in notifications(): ', error)
-      } else if (response.body.error) {
-          console.log('Error in notifications(): ', response.body.error)
-      }
+    if (error) {
+      console.log('Error in notifications(): ', error)
+    } else if (response.body.error) {
+      console.log('Error in notifications(): ', response.body.error)
+    }
   })
 }
 
 function notifications_change(sender, set){
   M.User.update({userId:sender}, {notifications: set}, function(err){
-    if(err){
+    if (err) {
       console.log(err);
     }
-    if(set === "on"){
-      text(sender, "You will receive weekly notifications")
-    }
-    else {
-      text(sender, "You won't receive weekly notifications")
+    if (set === "on") {
+      text(sender, "You will receive weekly notifications");
+    } else {
+      text(sender, "You won't receive weekly notifications");
     }
   })
 }
@@ -132,24 +129,22 @@ function notifications_change(sender, set){
 function booked(sender, name, price, gameName, address, image_url, order_number){
   order_number = order_number;
   let messageData = {
-    "attachment":{
+    "attachment": {
       "type":"template",
-      "payload":{
-        "template_type":"receipt",
+      "payload": {
+        "template_type": "receipt",
         "recipient_name": name,
-        "currency":"GBP",
-        "payment_method":"Stripe",
+        "currency": "GBP",
+        "payment_method": "Stripe",
         "order_number": order_number,
-        "elements":[
-          {
-            "title": gameName,
-            "subtitle": address,
-            "quantity":1,
-            "price": price,
-            "currency":"GBP",
-            "image_url":image_url
-          }
-        ],
+        "elements":[{
+          "title": gameName,
+          "subtitle": address,
+          "quantity": 1,
+          "price": price,
+          "currency":"GBP",
+          "image_url":image_url
+        }],
         "summary":{
           "total_cost":price
         }
@@ -158,19 +153,19 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
   }
 
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending booked message: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending booked message: ', response.body.error)
-      }
+    if (error) {
+      console.log('Error sending booked message: ', error)
+    } else if (response.body.error) {
+      console.log('Error sending booked message: ', response.body.error)
+    }
   })
 }
 
@@ -187,19 +182,19 @@ function booked_for_free_games(sender){
   }
 
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData,
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending booked free message: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending booked free message: ', response.body.error)
-      }
+    if (error) {
+      console.log('Error sending booked free message: ', error)
+    } else if (response.body.error) {
+      console.log('Error sending booked free message: ', response.body.error)
+    }
   })
 }
 
@@ -213,24 +208,23 @@ function text_promise(sender, text){
     let messageData = { text: text }
 
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {id:sender},
+        message: messageData
+      }
     }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending text messages: ', error)
-            reject(err);
-        } else if (response.body.error) {
-            console.log('Error sending text messages: ', response.body.error)
-            reject(err);
-        }
-        else {
-          resolve()
-        }
+      if (error) {
+        console.log('Error sending text messages: ', error)
+        reject(err);
+      } else if (response.body.error) {
+        console.log('Error sending text messages: ', response.body.error)
+        reject(err);
+      } else {
+        resolve();
+      }
     })
   })
 }
@@ -239,99 +233,152 @@ function text(sender, text) {
   let messageData = { text: text }
 
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending text messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending text messages: ', response.body.error)
-      }
+    if (error) {
+      console.log('Error sending text messages: ', error)
+    } else if (response.body.error) {
+      console.log('Error sending text messages: ', response.body.error)
+    }
   })
 }
 
 function cards(sender, data, message){
 
-  if(message === undefined){
-    text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
-  }
-  else {
+  if (message === undefined) {
+    text(sender, "Here are some upcoming games to join. "
+     + "Tap the card for directions or 'More Info' to book.");
+  } else {
     text(sender, message);
   }
-
 
   let messageData = data;
 
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData
+    }
   }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending cards: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending cards: ', response.body.error)
-      }
+    if (error) {
+      console.log('Error sending cards: ', error)
+    } else if (response.body.error) {
+      console.log('Error sending cards: ', response.body.error)
+    }
   })
 }
 
 function directions(sender, name, address, latlong){
 
-  return new Promise(function(resolve, reject){
-    let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" + latlong +
-                        "&zoom=15&size=300x300&markers=" + latlong
+  return new Promise(function (resolve, reject) {
+    let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" 
+      + latlong + "&zoom=15&size=300x300&markers=" + latlong;
 
     let directions_link = "http://maps.google.com/?q=" + address
 
     let messageData = {
       "attachment": {
-          "type": "template",
-          "payload": {
-              "template_type": "generic",
-              "elements": [
-                  {
-                    "title": name,
-                    "image_url": image_link,
-                    "item_url": directions_link,
-                    "buttons": [{
-                        "type": "web_url",
-                        "title": "Directions",
-                        "url": directions_link,
-                    }],
-                }
-              ]
-          }
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [
+            {
+              "title": name,
+              "image_url": image_link,
+              "item_url": directions_link,
+              "buttons": [{
+                "type": "web_url",
+                "title": "Directions",
+                "url": directions_link,
+              }]
+            }
+          ]
+        }
       }
     }
 
     request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {id:sender},
+        message: messageData
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending directinos: ', error)
+        reject(err);
+      } else if (response.body.error) {
+        console.log('Error sending directinos: ', response.body.error);
+        reject(err);
+      } else {
+        resolve("success");
+      }
+    })
+  })
+}
+
+function shareGame(sender, text){
+
+  let gid = text.split("|")[1];
+
+  M.Game.find({_id:gid}, function(err, results){
+    if (results.length > 0) {
+      let game = results[0];
+      let publicLink = "http://localhost:3000/game?gid=" + gid;
+      let description = game.when.toString().substring(0, 10)
+       + " | " + game.address;
+      let numAttending = game.non_members_attending + game.joined.length;
+      if (numAttending > 0){
+        description = description + " | " + numAttending + " attending";
+      }
+
+      let messageData = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [
+              {
+                "title": game.name,
+                "subtitle": description,
+                "image_url": game.image_url,
+                "item_url": game.publicLink,
+                "buttons": [{
+                  "type": "web_url",
+                  "title": "More Info",
+                  "url": publicLink,
+                }]
+              }
+            ]
+          }
+        }
+      }
+      request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token:VERIFICATION_TOKEN},
         method: 'POST',
         json: {
-            recipient: {id:sender},
-            message: messageData,
+          recipient: {id:sender},
+          message: messageData
         }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending directinos: ', error)
-            reject(err);
-        } else if (response.body.error) {
-            console.log('Error sending directinos: ', response.body.error);
-            reject(err);
-        } else {
-          resolve("success");
+      }, function(error, response, body) {
+        let errorObject = (error) ? error : response.body.error;
+        if (errorObject) {
+          console.log('Error sending share card: ', errorObject)
         }
-    })
+      })
+    }
   })
 }
 
@@ -383,67 +430,66 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
 
 function card_for_booking(sender, gameId, description, price, booked){
 
-  let temp = {}
+  let bookOrCancelButton = {}
 
-  if(booked === "true"){
+  if (booked === "true") {
     console.log("booked is true");
-    temp = {
+    bookOrCancelButton = {
       "type": "postback",
       "title": "Cancel Booking",
-      "payload": "Cancel" + "|" + gameId,
+      "payload": "Cancel" + "|" + gameId
     }
-  }
-
-  else if(parseFloat(price) > 0){
-    temp = {
+  } else if (parseFloat(price) > 0) {
+    bookOrCancelButton = {
       "type": "web_url",
       "title": "BOOK",
-      "url": "limitless-sierra-68694.herokuapp.com/payment" + "?mid=" + sender + "&gid=" + gameId,
+      "url": "limitless-sierra-68694.herokuapp.com/payment" 
+        + "?mid=" + sender + "&gid=" + gameId
     }
-  }
-
-  else {
-    temp = {
+  } else {
+    bookOrCancelButton = {
       "type": "postback",
       "title": "BOOK",
-      "payload": "Book" + "|" + gameId,
+      "payload": "Book" + "|" + gameId
     }
   }
 
   let messageData = {
-                    "attachment": {
-                      "type": "template",
-                      "payload": {
-                          "template_type": "button",
-                          "text": description,
-                          "buttons": [
-                              temp,
-                              {
-                                  "type": "postback",
-                                  "title": "Keep Looking",
-                                  "payload": "No, thanks",
-                              }
-                            ],
-                          }
-                      }
-                  }
+    "attachment": {
+    "type": "template",
+    "payload": {
+      "template_type": "button",
+      "text": description,
+      "buttons": [
+          bookOrCancelButton, {
+            "type": "postback",
+            "title": "Keep Looking",
+            "payload": "No, thanks",
+          }, {
+            "type": "postback",
+            "title": "Share",
+            "payload": "Share" + "|" + gameId
+          }
+        ]
+      }
+    }
+  }
 
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending cards: ', error)
-        } else if (response.body.error) {
-            console.log('Error sending cards: ', response.body.error)
-        }
-    })
-
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error sending cards: ', error)
+    } else if (response.body.error) {
+      console.log('Error sending cards: ', response.body.error)
+    }
+  })
 }
 
 function generate_card(array){
@@ -470,7 +516,7 @@ function allGames(sender, broadcast){
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
-    
+
   M.Game.find(query).sort('when').exec(function(err, result){
 
     let data = [];
@@ -495,7 +541,7 @@ function allGames(sender, broadcast){
   })
 }
 
-function yep(sender){
+function yep (sender) {
   M.Button.update({name:"Yep"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
@@ -537,7 +583,7 @@ function yep(sender){
   })
 }
 
-function book(sender, rest){
+function book (sender, rest) {
   M.Button.update({name:"Book"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
@@ -558,7 +604,7 @@ function book(sender, rest){
   })
 }
 
-function cancel_booking(sender, rest){
+function cancel_booking (sender, rest) {
   M.Button.update({name:"Cancel"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
@@ -579,11 +625,11 @@ function cancel_booking(sender, rest){
   })
 }
 
-function more_info(sender, text){
+function more_info (sender, text) {
   M.Button.update({name:"More Info"},
     {$push: {activity: {userId:sender, time: new Date()}}},
     {upsert: true},
-    function(err){
+    function (err) {
       console.log(err);
     })
 
@@ -720,5 +766,6 @@ module.exports = {
   yep: yep,
   book: book,
   cancel_booking: cancel_booking,
-  more_info: more_info
+  more_info: more_info,
+  shareGame: shareGame
 }
