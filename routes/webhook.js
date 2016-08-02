@@ -94,8 +94,17 @@ router.post('/webhook/', function (req, res) {
         //   });
         // });
 
+        // M.User.find({userId: sender}, function(err, result){
+        //   if(result.length > 0 && result[0].facebookID){
+        //     send.allGames(sender);
+        //   }
+        //   else {
+        //     send.start(sender);
+        //   }
+        // })
+
         M.User.find({userId: sender}, function(err, result){
-          if(result.length > 0 && result[0].facebookID){
+          if(result.length > 0){
             send.allGames(sender);
           }
           else {
