@@ -698,6 +698,34 @@ function game(sender, gameId){
   })
 }
 
+function game_phoneNumber(sender, gameId){
+  M.Game.find({_id:gameId}, function(err, result){
+    if(result.length > 0){
+      let data = [];
+      let item = result[0];
+      let now = new Date();
+      now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
+      console.log(now);
+      if(item.when > now){
+        let booked = false;
+        let join = item.joined;
+
+        join.forEach(function(i){
+          if(i.userId === sender){
+            booked = true;
+          }
+        });
+        data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+        data = generate_card(data);
+        cards_phoneNumber(sender, data, "Here is your game: ");
+      }
+      else {
+        text_phoneNumber(sender, "That game has finished")
+      }
+    }
+  })
+}
+
 function my_games(sender){
   let now = new Date();
   let query = {when:{

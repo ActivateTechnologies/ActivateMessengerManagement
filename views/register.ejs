@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Kickabout | Login</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
@@ -21,65 +20,29 @@
     </style>
   </head>
   <body>
-    <div id="fb-root"></div>
     <script src="js/config.js"></script>
     <script>
 
-    function magic() {
-      console.log("called magic");
-      FB.login(function(res) {
-        if (res.authResponse) {
-          //location.reload()
-        } else {
-          console.log('User cancelled login or did not fully authorize.');
-        }
-      });
-    }
+      function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
 
-    function getParameterByName(name, url) {
-      if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
-    window.fbAsyncInit = function() {
-
-      FB.init({
-        appId: FACEBOOK_APP_ID,
-        xfbml: true,
-        version: "v2.7"
-      });
-
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-
-          var fbid = response.authResponse.userID;
-
-          $.post( ROOT_URL + "/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+      $(document).ready(function(){
+        $('#pnform').submit(function(e){
+          e.preventDefault();
+          var pn = $('#phoneNumber').val();
+          $.post( ROOT_URL + "/register?mid=" + getParameterByName('mid') + "&pn=" + pn, function( data ) {
             console.log("registered");
             location.href = "http://m.me/kickaboutapp";
           });
-        }
-        else if (response.status === 'not_authorized') {
-          console.log("not authorized");
-        }
-        else {
-          console.log("not the two above");
-        }
-      });
-    };
-
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) { return; }
-       js = d.createElement(s); js.id = id;
-       js.src = "//connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+        })
+      })
 
     </script>
 
@@ -89,7 +52,18 @@
 
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
-            <div class="fb-login-button" onlogin="magic()" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
+            <div class="formContainer">
+              <form class="form-horizontal" id="pnform">
+                <div class="input-group centre-group">
+                  <div class="input-group-addon custom-width">Phone Number</div>
+                  <input placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                </div>
+                <br/>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" value="Submit Payment">Submit</button>
+                </div>
+              </form>
+            </div>
           </div>
 
           <div class="footerDiv">

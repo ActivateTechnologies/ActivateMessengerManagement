@@ -8,7 +8,7 @@ mongoose.connect(config.MONGODB_URI);
 
 let userSchema = new Schema({
   userId: String,
-  facebookID: String,
+  phoneNumber: String,
   firstname: String,
   lastname: String,
   profile_pic: String,
