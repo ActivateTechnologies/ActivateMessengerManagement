@@ -75,13 +75,13 @@ router.post('/register', function(req, res){
   let mid = req.query.mid;
   phoneNumber = "+44" + phoneNumber;
 
-  M.User.find({userId:mid}, function(e, r){
+  M.User.find({userId:mid}, function(err, result){
     if(e){
       console.log(e);
     }
 
     //if exiting user then update his document
-    if(r.length > 0){
+    if(result.length > 0){
       M.User.update({userId: mid}, {phoneNumber: phoneNumber}, function(e, r){
         if(e){
           console.log(e);
@@ -94,38 +94,59 @@ router.post('/register', function(req, res){
       })
     }
 
-    //if new user then create new record
+    //if new user
     else {
-      var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-      request(get_url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            body = JSON.parse(body);
 
-            let user = M.User({
-              userId: mid,
-              phoneNumber: phoneNumber,
-              firstname: body.first_name,
-              lastname: body.last_name,
-              profile_pic: body.profile_pic,
-              locale: body.locale,
-              gender: body.gender
-            })
+      M.User.find({phoneNumber: phoneNumber}, function(e, r){
+        if(e){
+          console.log(e);
+        }
 
-            user.save(function(err){
-              if(err){
-                console.log(err);
-                res.send("Not Cool")
+        // if visited publicLink
+        if(r.length > 0){
+          send.text_promise(mid, "Successfully logged in")
+          .then(()=>{
+            send.game(mid, r[0].publicLink);
+            res.send("Cool")
+          })
+        }
+
+        //not visited link
+        else{
+          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+          request(get_url, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                body = JSON.parse(body);
+
+                let user = M.User({
+                  userId: mid,
+                  phoneNumber: phoneNumber,
+                  firstname: body.first_name,
+                  lastname: body.last_name,
+                  profile_pic: body.profile_pic,
+                  locale: body.locale,
+                  gender: body.gender
+                })
+
+                user.save(function(err){
+                  if(err){
+                    console.log(err);
+                    res.send("Not Cool")
+                  }
+                  else {
+                    send.text(mid, "You've successfully logged in");
+                    console.log("saved new user");
+                    res.send("Cool")
+                  }
+                })
               }
-              else {
-                send.text(mid, "You've successfully logged in");
-                console.log("saved new user");
-                res.send("Cool")
-              }
-            })
-          }
-      });
+          });
+        }
+      })
+
     }
   })
+  
 })
 
 module.exports = router
