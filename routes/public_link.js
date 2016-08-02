@@ -137,6 +137,7 @@ router.post('/register', function(req, res){
               res.send("Not Cool")
             }
             else {
+              send.text(mid, "Successfully logged in");
               res.send("Cool")
             }
           })
