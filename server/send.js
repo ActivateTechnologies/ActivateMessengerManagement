@@ -718,7 +718,7 @@ function start2(sender){
           "buttons": [{
             "title": "Login",
             "type": "web_url",
-            "url": ("https://limitless-sierra-68694.herokuapp.com/register?mid=" + sender)
+            "url": ( config.ROOT_URL + "/register?mid=" + sender)
           }]
         }]
       }
