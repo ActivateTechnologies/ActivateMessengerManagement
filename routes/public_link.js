@@ -52,8 +52,6 @@ router.post('/check', function(req, res){
         publicLink: gameId
       })
 
-      send.game_phoneNumber(phoneNumber, gameId)
-
       user.save(function(err){
         if(err){
           console.log(err);
@@ -73,115 +71,59 @@ router.get('/register', function(req, res){
 
 router.post('/register', function(req, res){
 
-  console.log("Reached register");
-  let fbid = req.query.fbid;
+  let phoneNumber = req.query.pn;
   let mid = req.query.mid;
+  phoneNumber = "+44" + phoneNumber;
 
-  M.User.find({facebookID: fbid}, function(err, result){
-    //if user has facebookID
-    if(result.length > 0){
-        //if user also has messenger id
-        if(result[0].userId){
-          send.text(mid, "Successfully logged in")
-          res.send("Cool")
-        }
-
-        //if user has visited public link
-        else if(result[0].publicLink){
-
-          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-          request(get_url, function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-                body = JSON.parse(body);
-
-                let user = {
-                  userId: mid,
-                  firstname: body.first_name,
-                  lastname: body.last_name,
-                  profile_pic: body.profile_pic,
-                  locale: body.locale,
-                  gender: body.gender
-                }
-
-                M.User.update({facebookID: fbid}, user, function(e, r){
-                  if(e){
-                    console.log(e);
-                    res.send("Not Cool")
-                  }
-                  else {
-                    console.log("saved the user and sending game");
-                    send.text_promise(mid, "Successfully logged in")
-                    .then(() => {
-                      send.game(mid, result[0].publicLink)
-                    })
-
-                    res.send("Cool")
-                  }
-                })
-              }
-          });
-
-        }
-
-        //otherwise send success
-        else {
-          send.text(mid, "Successfully logged in")
-          res.send("Cool")
-        }
+  M.User.find({userId:mid}, function(e, r){
+    if(e){
+      console.log(e);
     }
 
-    else {
-
-      M.User.find({userId:mid}, function(e, r){
+    //if exiting user then update his document
+    if(r.length > 0){
+      M.User.update({userId: mid}, {phoneNumber: phoneNumber}, function(e, r){
         if(e){
           console.log(e);
+          res.send("Not Cool")
         }
-        //if exiting user then update his document
-        if(r.length > 0){
-          M.User.update({userId: mid}, {facebookID: fbid}, function(e, r){
-            if(e){
-              console.log(e);
-              res.send("Not Cool")
-            }
-            else {
-              send.text(mid, "Successfully logged in");
-              res.send("Cool")
-            }
-          })
-        }
-        //if new user then create new record
         else {
-
-          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-          request(get_url, function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-                body = JSON.parse(body);
-
-                let user = M.User({
-                  userId: mid,
-                  facebookID: fbid,
-                  firstname: body.first_name,
-                  lastname: body.last_name,
-                  profile_pic: body.profile_pic,
-                  locale: body.locale,
-                  gender: body.gender
-                })
-                user.save(function(err){
-                  if(err){
-                    console.log(err);
-                    res.send("Not Cool")
-                  } else {
-                    send.text(mid, "You've successfully logged in");
-                    console.log("saved new user");
-                    res.send("Cool")
-                  }
-                })
-              }
-          });
-
+          send.text(mid, "Successfully logged in");
+          res.send("Cool")
         }
       })
+    }
 
+    //if new user then create new record
+    else {
+      var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      request(get_url, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
+
+            let user = M.User({
+              userId: mid,
+              phoneNumber: phoneNumber,
+              firstname: body.first_name,
+              lastname: body.last_name,
+              profile_pic: body.profile_pic,
+              locale: body.locale,
+              gender: body.gender
+            })
+
+            user.save(function(err){
+              if(err){
+                console.log(err);
+                res.send("Not Cool")
+              }
+              else {
+                send.text(mid, "You've successfully logged in");
+                console.log("saved new user");
+                res.send("Cool")
+              }
+            })
+          }
+      });
     }
   })
 })
