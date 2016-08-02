@@ -27,6 +27,8 @@
   </head>
   <body>
     <div id="fb-root"></div>
+    <script src="js/config.js">
+    </script>
     <script>
 
     function isAndroidFacebookApp() {
@@ -63,7 +65,7 @@
     window.fbAsyncInit = function() {
 
       FB.init({
-        appId: "144481079297226",
+        appId: FACEBOOK_APP_ID,
         xfbml: true,
         version: "v2.7"
       });
@@ -81,7 +83,7 @@
 
             var fbid = response.authResponse.userID;
 
-            $.post( "https://limitless-sierra-68694.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+            $.post( ROOT_URL + "/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
               console.log("done");
               //$('#facebookMessageUsButton').fadeIn();
               //location.href = "http://m.me/245261069180348";
