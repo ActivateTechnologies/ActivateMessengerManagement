@@ -26,16 +26,11 @@
     <script>
 
     function magic() {
-      alert(0);
       console.log("called magic");
       FB.login(function(res) {
-        alert(1);
         if (res.authResponse) {
-          alert(2);
           //location.reload()
-          alert(3);
         } else {
-          alert(4);
           console.log('User cancelled login or did not fully authorize.');
         }
       });
@@ -61,26 +56,19 @@
 
       FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
-          // var lg = document.getElementById('lg');
-          // lg.style.display = "none";
 
           var fbid = response.authResponse.userID;
-          document.getElementById('clicker').innerHTML = fbid
 
-          $.post( "https://e5587dce.ngrok.io/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+          $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
             console.log("registered");
             location.href = "http://m.me/245261069180348";
           });
         }
         else if (response.status === 'not_authorized') {
           console.log("not authorized");
-          var clicker = document.getElementById('clicker');
-          clicker.style.display = 'none';
         }
         else {
           console.log("not the two above");
-          var clicker = document.getElementById('clicker');
-          clicker.style.display = 'none';
         }
       });
     };
@@ -101,9 +89,7 @@
 
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
-            <!-- <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png"> -->
             <div class="fb-login-button" onlogin="magic()" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
-            <div id="clicker" class="messenger-container"></div>
           </div>
 
           <div class="footerDiv">

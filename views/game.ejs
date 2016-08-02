@@ -26,7 +26,7 @@
     </style>
   </head>
   <body>
-    <!-- <div id="fb-root"></div> -->
+    <div id="fb-root"></div>
     <script>
 
     var magic = function(){
@@ -65,9 +65,7 @@
 
           var fbid = response.authResponse.userID;
 
-          document.getElementById('clicker').innerHTML = "Success"
-
-          $.post( "https://e5587dce.ngrok.io/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
+          $.post( "https://kickabouttest.herokuapp.com/check?fbid=" + fbid + "&gid=" + getParameterByName('gid'), function( data ) {
             console.log("done");
             document.getElementById('messengerLinkButton').style.display = '';
 
@@ -75,13 +73,9 @@
         }
         else if (response.status === 'not_authorized') {
           console.log("not authorized");
-          var clicker = document.getElementById('clicker');
-          clicker.style.display = 'none';
         }
         else {
           console.log("not the two above");
-          var clicker = document.getElementById('clicker');
-          clicker.style.display = 'none';
         }
       });
 
@@ -112,21 +106,10 @@
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
             <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-            <!-- <div class="fb-messengermessageus" 
-              id="facebookMessageUsButton" 
-              style="display:none;" 
-              messenger_app_id="159289771143437" 
-              page_id="245261069180348"
-              color="blue"
-              size="standard" >
-            </div>    -->
-            <div id="clicker" class="messenger-container"></div>
           </div>
           <br>
+
           <a id="messengerLinkButton" style="display:none;" onclick="window.open('http://m.me/245261069180348')" target="_blank">Open</a><br><br>
-          <!-- <a href="http://m.me/245261069180348" target="_blank">_blank</a><br><br>
-          <a href="http://m.me/245261069180348" target="_top">top</a><br><br>
-          <a href="http://m.me/245261069180348" target="_parent">parent</a> -->
 
           <div class="footerDiv">
             <p class="footertext">
