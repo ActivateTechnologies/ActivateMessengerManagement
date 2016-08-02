@@ -37,6 +37,8 @@ router.post('/check', function(req, res){
   let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
 
+  let sender = "+44" + phoneNumber
+
   console.log(phoneNumber);
 
   M.User.find({phoneNumber:phoneNumber}, function(err, result){
@@ -49,6 +51,9 @@ router.post('/check', function(req, res){
         phoneNumber: phoneNumber,
         publicLink: gameId
       })
+      
+      send.game_phoneNumber(phoneNumber, gameId)
+
       user.save(function(err){
         if(err){
           console.log(err);
