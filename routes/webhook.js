@@ -92,8 +92,8 @@ router.post('/webhook/', function (req, res) {
               }
             })
           });
-        });*/
-
+        });
+        */
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0 && result[0].facebookID){
             send.allGames(sender);
@@ -106,9 +106,9 @@ router.post('/webhook/', function (req, res) {
     }
 
     else if(event.message && event.message.attachments && !event.message.is_echo){
-      console.log("detected attachment");
+      console.log("Detected Attachment");
       //handling like button
-      console.log(event.message.attachments);
+      //console.log(event.message.attachments);
       if(event.message.attachments[0].payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
         send.menu(sender);
       }

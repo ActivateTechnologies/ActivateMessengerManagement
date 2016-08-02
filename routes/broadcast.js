@@ -39,6 +39,24 @@ router.post('/broadcast', function(req, res){
   }
 })
 
+router.get('/broadcaststart', function(req, res){
+
+  // M.User.find({}, function(err, result){
+  //   let counter =  0;
+  //   for(let i = 0; i<result.length; i++){
+  //     if(result[i].notifications !== "off"){
+  //       send.start(result[i].userId);
+  //       counter++;
+  //     }
+  //   }
+  //   res.send("People reached: " + counter)
+  // })
+
+  send.start2("1463282163697871");
+  send.start2("1211290405548918");
+  res.send("Hope it works")
+})
+
 function isLoggedIn(req, res, next) {
 
     // if user is authenticated in the session, carry on

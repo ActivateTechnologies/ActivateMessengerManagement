@@ -22,6 +22,7 @@
   </head>
   <body>
     <div id="fb-root"></div>
+    <script src="js/config.js"></script>
     <script>
 
     function magic() {
@@ -48,7 +49,7 @@
     window.fbAsyncInit = function() {
 
       FB.init({
-        appId: "159289771143437",
+        appId: FACEBOOK_APP_ID,
         xfbml: true,
         version: "v2.7"
       });
@@ -58,9 +59,9 @@
 
           var fbid = response.authResponse.userID;
 
-          $.post( "https://kickabouttest.herokuapp.com/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
+          $.post( ROOT_URL + "/register?mid=" + getParameterByName('mid') + "&fbid=" + fbid, function( data ) {
             console.log("registered");
-            location.href = "http://m.me/245261069180348";
+            location.href = "http://m.me/kickaboutapp";
           });
         }
         else if (response.status === 'not_authorized') {

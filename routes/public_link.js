@@ -37,7 +37,10 @@ router.post('/check', function(req, res){
   let fbid = req.query.fbid;
   let gameId = req.query.gid;
 
-  M.User.find({facebookID: fbid}, function(err, result){
+  console.log("received facebookID");
+  console.log(fbid);
+
+  M.User.find({facebookID:fbid}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, gameId)
       res.send("Cool")
@@ -71,37 +74,56 @@ router.post('/register', function(req, res){
   let mid = req.query.mid;
 
   M.User.find({facebookID: fbid}, function(err, result){
-    //if user has visited public link
+    //if user has facebookID
     if(result.length > 0){
+        //if user also has messenger id
+        if(result[0].userId){
+          send.text(mid, "Successfully logged in")
+          res.send("Cool")
+        }
 
-        var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-        request(get_url, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-              body = JSON.parse(body);
+        //if user has visited public link
+        else if(result[0].publicLink){
 
-              let user = {
-                userId: mid,
-                firstname: body.first_name,
-                lastname: body.last_name,
-                profile_pic: body.profile_pic,
-                locale: body.locale,
-                gender: body.gender
+          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+          request(get_url, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                body = JSON.parse(body);
+
+                let user = {
+                  userId: mid,
+                  firstname: body.first_name,
+                  lastname: body.last_name,
+                  profile_pic: body.profile_pic,
+                  locale: body.locale,
+                  gender: body.gender
+                }
+
+                M.User.update({facebookID: fbid}, user, function(e, r){
+                  if(e){
+                    console.log(e);
+                    res.send("Not Cool")
+                  }
+                  else {
+                    console.log("saved the user and sending game");
+                    send.text_promise(mid, "Successfully logged in")
+                    .then(() => {
+                      send.game(mid, result[0].publicLink)
+                    })
+
+                    res.send("Cool")
+                  }
+                })
               }
+          });
 
-              M.User.update({facebookID: fbid}, user, function(e, r){
-                if(e){
-                  console.log(e);
-                  res.send("Not Cool")
-                }
-                else {
-                  console.log("saved the user and sending game");
-                  send.game(mid, result[0].publicLink)
-                  res.send("Cool")
-                }
-              })
-            }
-        });
+        }
 
+        //otherwise send success
+        else {
+          send.text(mid, "Successfully logged in")
+          res.send("Cool")
+        }
     }
 
     else {
@@ -118,6 +140,7 @@ router.post('/register', function(req, res){
               res.send("Not Cool")
             }
             else {
+              send.text(mid, "Successfully logged in");
               res.send("Cool")
             }
           })
