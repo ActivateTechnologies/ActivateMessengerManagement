@@ -37,7 +37,7 @@ router.post('/check', function(req, res){
   let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
 
-  let sender = "+44" + phoneNumber
+  phoneNumber = "+44" + phoneNumber
 
   console.log(phoneNumber);
 
@@ -51,7 +51,7 @@ router.post('/check', function(req, res){
         phoneNumber: phoneNumber,
         publicLink: gameId
       })
-      
+
       send.game_phoneNumber(phoneNumber, gameId)
 
       user.save(function(err){
