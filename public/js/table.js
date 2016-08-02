@@ -4,7 +4,7 @@ const Reactable = require('reactable');
 const $ = require('jquery')
 
 var props = [];
-$.get('http://localhost:3000/tabledata', function(data){
+$.get('tabledata', function(data){
   props = data.data;
   console.log(props);
   var Table = Reactable.Table;

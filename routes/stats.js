@@ -59,7 +59,8 @@ router.get('/tabledata', (req, res) => {
       return tup[0];
     })
 
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr), getPaymentsByUsers(arr)])
+    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr),
+     getPaymentsByUsers(arr)])
     .then((values) => {
       let data = [];
       for(let i = 0; i<values[0].length; i++){
@@ -89,12 +90,12 @@ router.get('/tablecsv', (req, res) => {
       return tup[0];
     })
 
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr)])
-    .then((values) => {
-      let data = "User Id,Name,Games Attended,Button Hits";
+    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr),
+     getPaymentsByUsers(arr)]).then((values) => {
+      let data = "User Id,Name,Games Attended,Button Hits,Payments";
       for(let i = 0; i < values[0].length; i++){
         data += "\r\n" + arr[i] + "," + users[i][1] + "," 
-          + values[0][i] + "," + values[1][i];
+          + values[0][i] + "," + values[1][i] + "," + values[2][i];
       }
       res.setHeader('Content-disposition', 
         'attachment; filename=KickaboutAnalytics.csv');
