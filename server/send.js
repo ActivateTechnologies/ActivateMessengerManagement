@@ -468,14 +468,15 @@ function generate_card(array){
 
 function allGames(sender, broadcast){
   let now = new Date();
-
-  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+  let query = {when:
+    {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
+    
+  M.Game.find(query).sort('when').exec(function(err, result){
 
     let data = [];
     result.forEach(function(item){
       let booked = false;
       let join = item.joined;
-
       join.forEach(function(i){
         if(i.userId === sender){
           booked = true;
@@ -634,13 +635,14 @@ function game(sender, gameId){
 
 function my_games(sender){
   let now = new Date();
+  let query = {when:{
+    $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
 
-  M.Game.find({when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}, function(err, result){
+  M.Game.find(query).sort('when').exec(function(err, result){
 
     let data = [];
     result.forEach(function(item){
       let join = item.joined;
-
       join.forEach(function(i){
         if(i.userId === sender){
           data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
@@ -648,9 +650,9 @@ function my_games(sender){
       });
     })
 
-    console.log(data);
+    //console.log(data);
 
-    if(data.length === 0){
+    if (data.length === 0) {
       text_promise(sender, "You haven't joined any games.")
       .then(()=>{
         allGames(sender);
