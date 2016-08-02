@@ -53,12 +53,18 @@
 
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
-            <form id="pnform">
-              <div class="input-field">
-                <input placeholder="Phone Number" id="phoneNumber" type="text" class="validate">
-              </div>
-              <input type="submit" class="btn" />
-            </form>
+            <div class="formContainer">
+              <form class="form-horizontal" id="pnform">
+                <div class="input-group centre-group">
+                  <div class="input-group-addon custom-width">Phone Number</div>
+                  <input placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                </div>
+                <br/>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" value="Submit Payment">Submit</button>
+                </div>
+              </form>
+            </div>
           </div>
 
           <div class="footerDiv">

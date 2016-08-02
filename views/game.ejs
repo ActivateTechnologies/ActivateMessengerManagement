@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Kickabout | Book</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="css/coded.css" rel="stylesheet">
     <link rel="icon" href="img/favicon.png">
@@ -78,17 +77,18 @@
               <%= gameAddress %>
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-<<<<<<< HEAD
-            <form id="pnform">
-              <div class="input-field">
-                <input placeholder="Phone Number" id="phoneNumber" type="text" class="validate">
-              </div>
-              <input type="submit" class="btn" />
-            </form>
-=======
-            <img id="lg" class="button-login" onclick="magic()" src="img/login-with-facebook.png">
-            <a id="messengerLinkButton" style="display:none;" onclick="location.href='http://m.me/631474433673481'" target="_blank">Open</a><br><br>
->>>>>>> 0e49cbec717039c053c730f9861bc52b803839c8
+            <div class="formContainer">
+              <form class="form-horizontal" id="pnform">
+                <div class="input-group centre-group">
+                  <div class="input-group-addon custom-width">Phone Number</div>
+                  <input placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                </div>
+                <br/>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" value="Submit Payment">Submit</button>
+                </div>
+              </form>
+            </div>
           </div>
 
 

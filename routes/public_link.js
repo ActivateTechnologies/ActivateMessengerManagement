@@ -41,7 +41,7 @@ router.post('/check', function(req, res){
   let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
 
-  phoneNumber = "+44" + phoneNumber
+  phoneNumber = "+44" + phoneNumber.substring(1);
 
   console.log(phoneNumber);
 
@@ -77,7 +77,7 @@ router.post('/register', function(req, res){
 
   let phoneNumber = req.query.pn;
   let mid = req.query.mid;
-  phoneNumber = "+44" + phoneNumber;
+  phoneNumber = "+44" + phoneNumber.substring(1);
 
   M.User.find({userId:mid}, function(err, result){
     if(err){

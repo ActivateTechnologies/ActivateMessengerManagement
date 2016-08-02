@@ -282,7 +282,7 @@ body {
 
 .logoLead-payment {
   margin-top: 10px;
-  width: 350px;
+  width: 100px;
   margin-bottom: 10px;
 }
 
@@ -499,11 +499,9 @@ p {
 }
 
 .gamePic {
-  width: 195px;
-  height: 100px;
+  width: 350px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-
   margin-bottom: 0px;
 }
 
@@ -590,4 +588,3 @@ p {
   height: 10%;
   width: 100%;
 }
-
