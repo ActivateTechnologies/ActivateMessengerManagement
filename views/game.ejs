@@ -58,6 +58,7 @@
         var pn = $('#phoneNumber').val();
         $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
           console.log("done");
+          location.href = "http://m.me/kickaboutapp";
         });
       })
     })

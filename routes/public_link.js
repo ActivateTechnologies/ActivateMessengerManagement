@@ -32,6 +32,10 @@ router.get('/game', function(req, res){
   })
 });
 
+// function validatePhoneNumber(number){
+//   number.replace(/\D/gm, '');
+// }
+
 router.post('/check', function(req, res){
   console.log("Reached check");
   let phoneNumber = req.query.pn;

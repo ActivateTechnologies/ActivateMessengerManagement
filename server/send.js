@@ -255,26 +255,6 @@ function text(sender, text) {
   })
 }
 
-function text_phoneNumber(sender, text) {
-  let messageData = { text: text }
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {phone_number:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending text messages: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending text messages: ', response.body.error)
-      }
-  })
-}
-
 function cards(sender, data, message){
 
   if(message === undefined){
@@ -293,35 +273,6 @@ function cards(sender, data, message){
       method: 'POST',
       json: {
           recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error sending cards: ', error)
-      } else if (response.body.error) {
-          console.log('Error sending cards: ', response.body.error)
-      }
-  })
-}
-
-function cards_phoneNumber(sender, data, message){
-
-  if(message === undefined){
-    text(sender, "Here are some upcoming games to join. Tap the card for directions or 'More Info' to book.");
-  }
-  else {
-    text(sender, message);
-  }
-
-
-  let messageData = data;
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {phone_number:sender},
           message: messageData,
       }
   }, function(error, response, body) {
@@ -830,7 +781,6 @@ module.exports = {
   text: text,
   text_promise: text_promise,
   game: game,
-  game_phoneNumber: game_phoneNumber,
   cards: cards,
   allGames: allGames,
   my_games: my_games,
