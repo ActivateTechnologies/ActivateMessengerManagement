@@ -22,7 +22,7 @@ var TEST_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
 var TEST_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
 var TEST_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
 var TEST_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
-var TEST_ROOT_URL = "https://kickabouttest.herokuapp.com/"
+var TEST_ROOT_URL = "https://kickabouttest.herokuapp.com"
 
 //AVI MESSENGER PAGE - localhost
 var AVI_VERIFICATION_TOKEN = "EAANkfNpMGO4BAB33jQHaexONb3ZAoSd9aZCavOZCM7Xa84WMEYELbJRY2qZB7KWlI2M4DTXUTtlkwA12x4Ms2gK2LYy4r3fh18cs2tI2vSbvZBcJ70RXOdM3ZBmZCHw8iDKXOMJKw5TZBwLLI0FZCRFbISh2LE6q7CBQW0m17ZBZAcwyQZDZD";
