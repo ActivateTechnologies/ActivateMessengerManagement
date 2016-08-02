@@ -37,6 +37,9 @@ router.post('/check', function(req, res){
   let fbid = req.query.fbid;
   let gameId = req.query.gid;
 
+  console.log("received facebookID");
+  console.log(fbid);
+
   M.User.find({facebookID: fbid}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, gameId)
