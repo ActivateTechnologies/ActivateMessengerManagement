@@ -63,8 +63,9 @@
         localStorage.setItem('phoneNumber', pn);
         $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
           console.log("done");
-          window.open('http://m.me/kickaboutapp"');
-        })
+          // location.href = "http://m.me/kickaboutapp";
+          setTimeout(function(){document.location.href = "http://m.me/kickaboutapp";},250);
+        });
       })
     })
 
