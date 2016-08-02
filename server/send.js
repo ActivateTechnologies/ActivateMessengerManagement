@@ -7,7 +7,7 @@ const W = require('./wit.js');
 const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
-/*function start(sender){
+function start(sender){
 
   let messageData = {
     "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
@@ -36,7 +36,7 @@ const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
           console.log('Error in start(): ', response.body.error)
       }
   })
-}*/
+}
 
 function menu(sender){
 
@@ -280,7 +280,7 @@ function cards(sender, data, message){
 function directions(sender, name, address, latlong){
 
   return new Promise(function (resolve, reject) {
-    let image_link = "https://maps.googleapis.com/maps/api/staticmap?center=" 
+    let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
       + latlong + "&zoom=15&size=300x300&markers=" + latlong;
 
     let directions_link = "http://maps.google.com/?q=" + address
@@ -383,7 +383,7 @@ function shareGame(sender, text){
       }).catch((e)=>{
         console.log('Error sending text, ' + e);
       });
-        
+
     }
   })
 }
@@ -448,7 +448,7 @@ function card_for_booking(sender, gameId, description, price, booked){
     bookOrCancelButton = {
       "type": "web_url",
       "title": "BOOK",
-      "url": "limitless-sierra-68694.herokuapp.com/payment" 
+      "url": "limitless-sierra-68694.herokuapp.com/payment"
         + "?mid=" + sender + "&gid=" + gameId
     }
   } else {
@@ -605,14 +605,14 @@ function book (sender, rest) {
 
   M.Button.update({name:"Payments"},{$push: {
     activity: {
-      userId: sender, 
+      userId: sender,
       time: new Date(),
       gid: gameId,
       amount: 10
     }
   }}, {upsert: true}, (err) => {
     console.log(err);
-  }); 
+  });
 
   M.Game.find({_id:gameId}, function(err, result){
     let check = true;
@@ -761,42 +761,42 @@ function my_games(sender){
   })
 }
 
-function start(sender){
-
-  let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [{
-          "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
-          "buttons": [{
-            "title": "Login",
-            "type": "web_url",
-            "url": ( config.ROOT_URL + "/register?mid=" + sender)
-          }]
-        }]
-      }
-    }
-  }
-
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:sender},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    if (error) {
-      console.log('Error in start(): ', error)
-    } else if (response.body.error) {
-      console.log('Error in start(): ', response.body.error)
-    }
-  })
-}
+// function start(sender){
+//
+//   let messageData = {
+//     "attachment": {
+//       "type": "template",
+//       "payload": {
+//         "template_type": "generic",
+//         "elements": [{
+//           "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+//           "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
+//           "buttons": [{
+//             "title": "Login",
+//             "type": "web_url",
+//             "url": ( config.ROOT_URL + "/register?mid=" + sender)
+//           }]
+//         }]
+//       }
+//     }
+//   }
+//
+//   request({
+//     url: 'https://graph.facebook.com/v2.6/me/messages',
+//     qs: {access_token:VERIFICATION_TOKEN},
+//     method: 'POST',
+//     json: {
+//       recipient: {id:sender},
+//       message: messageData,
+//     }
+//   }, function(error, response, body) {
+//     if (error) {
+//       console.log('Error in start(): ', error)
+//     } else if (response.body.error) {
+//       console.log('Error in start(): ', response.body.error)
+//     }
+//   })
+// }
 
 function start2(sender){
 
