@@ -150,7 +150,10 @@ router.post('/register', function(req, res){
                   res.send("Not Cool")
                 }
                 else {
-                  send.text(mid, "You've successfully logged in");
+                  send.text_promise(mid, "You've successfully logged in")
+                  .then(()=>{
+                    send.allGames(mid);
+                  })
                   console.log("saved new user");
                   res.send("Cool")
                 }
