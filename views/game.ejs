@@ -53,11 +53,13 @@
         $('#android').css('display', 'block')
       }
 
-      var pn = $('phoneNumber').val();
-
-      $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
-        console.log("done");
-      });
+      $('#pnform').submit(function(e){
+        e.preventDefault();
+        var pn = $('phoneNumber').val();
+        $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
+          console.log("done");
+        });
+      })
     })
 
     </script>
@@ -75,7 +77,13 @@
               <%= gameAddress %>
             </p>
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
-            
+            <form id="pnform">
+              <div class="input-field">
+                <input placeholder="Phone Number" id="first_name" type="text" class="validate">
+                <label for="ph">First Name</label>
+              </div>
+              <input type="submit" class="btn" />
+            </form>
           </div>
 
 
