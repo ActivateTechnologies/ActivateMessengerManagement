@@ -88,7 +88,7 @@ function allGames(sender, broadcast, queryDates, dateEntityText){
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
   	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
   console.log('Query: ' + JSON.stringify(query));
-  M.Game.find(query, function(err, games) {
+  M.Game.find(query).sort('when').exec(function(err, games) {
     let data = [];
     if (games) {
     	games.forEach(function(item) {
@@ -134,7 +134,7 @@ function my_games(sender, queryDates, dateEntityText){
   let query = (queryDates) ? 
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
   	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
-  M.Game.find(query, function(err, result){
+  M.Game.find(query).sort('when').exec(function(err, result){
     let data = [];
     result.forEach(function(item){
       let join = item.joined;
