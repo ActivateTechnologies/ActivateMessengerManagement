@@ -76,8 +76,9 @@ router.post('/register', function(req, res){
   phoneNumber = "+44" + phoneNumber;
 
   M.User.find({userId:mid}, function(err, result){
-    if(e){
-      console.log(e);
+    if(err){
+      console.log(err);
+      res.send("Not Cool")
     }
 
     //if exiting user then update his document
@@ -100,6 +101,7 @@ router.post('/register', function(req, res){
       M.User.find({phoneNumber: phoneNumber}, function(e, r){
         if(e){
           console.log(e);
+          res.send("Not Cool")
         }
 
         // if visited publicLink
@@ -115,38 +117,39 @@ router.post('/register', function(req, res){
         else{
           var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
           request(get_url, function (error, response, body) {
-              if (!error && response.statusCode == 200) {
-                body = JSON.parse(body);
+            if (!error && response.statusCode == 200) {
+              body = JSON.parse(body);
 
-                let user = M.User({
-                  userId: mid,
-                  phoneNumber: phoneNumber,
-                  firstname: body.first_name,
-                  lastname: body.last_name,
-                  profile_pic: body.profile_pic,
-                  locale: body.locale,
-                  gender: body.gender
-                })
+              let user = M.User({
+                userId: mid,
+                phoneNumber: phoneNumber,
+                firstname: body.first_name,
+                lastname: body.last_name,
+                profile_pic: body.profile_pic,
+                locale: body.locale,
+                gender: body.gender
+              })
 
-                user.save(function(err){
-                  if(err){
-                    console.log(err);
-                    res.send("Not Cool")
-                  }
-                  else {
-                    send.text(mid, "You've successfully logged in");
-                    console.log("saved new user");
-                    res.send("Cool")
-                  }
-                })
-              }
+              user.save(function(err){
+                if(err){
+                  console.log(err);
+                  res.send("Not Cool")
+                }
+                else {
+                  send.text(mid, "You've successfully logged in");
+                  console.log("saved new user");
+                  res.send("Cool")
+                }
+              })
+            }
           });
         }
+
       })
 
     }
   })
-  
+
 })
 
 module.exports = router
