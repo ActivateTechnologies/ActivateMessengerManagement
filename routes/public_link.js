@@ -73,8 +73,14 @@ router.post('/register', function(req, res){
   M.User.find({facebookID: fbid}, function(err, result){
     //if user has facebookID
     if(result.length > 0){
+        //if user also has messenger id
+        if(result[0].userId){
+          send.text(mid, "Successfully logged in")
+          res.send("Cool")
+        }
+
         //if user has visited public link
-        if(result[0].publicLink){
+        else if(result[0].publicLink){
 
           var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
           request(get_url, function (error, response, body) {
