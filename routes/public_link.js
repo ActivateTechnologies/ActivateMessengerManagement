@@ -34,20 +34,19 @@ router.get('/game', function(req, res){
 
 router.post('/check', function(req, res){
   console.log("Reached check");
-  let fbid = req.query.fbid;
+  let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
 
-  console.log("received facebookID");
-  console.log(fbid);
+  console.log(phoneNumber);
 
-  M.User.find({facebookID:fbid}, function(err, result){
+  M.User.find({phoneNumber:phoneNumber}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, gameId)
       res.send("Cool")
     }
     else {
       let user = M.User({
-        facebookID: fbid,
+        phoneNumber: phoneNumber,
         publicLink: gameId
       })
       user.save(function(err){
