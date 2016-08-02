@@ -1,6 +1,6 @@
 'use strict'
 
-var status = 'test'; //'produciton' or 'test' or 'avi'
+var status = 'avi'; //'produciton' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 var PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -27,14 +27,15 @@ var TEST_ROOT_URL = "https://kickabouttest.herokuapp.com"
 //AVI MESSENGER PAGE - localhost
 var AVI_VERIFICATION_TOKEN = "EAANkfNpMGO4BAB33jQHaexONb3ZAoSd9aZCavOZCM7Xa84WMEYELbJRY2qZB7KWlI2M4DTXUTtlkwA12x4Ms2gK2LYy4r3fh18cs2tI2vSbvZBcJ70RXOdM3ZBmZCHw8iDKXOMJKw5TZBwLLI0FZCRFbISh2LE6q7CBQW0m17ZBZAcwyQZDZD";
 var AVI_MESSENGER_URL = "http://m.me/631474433673481";
-var AVI_FACEBOOK_APP_ID = "159289771143437";
-var AVI_FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826";
+var AVI_FACEBOOK_APP_ID = "954912331274478";
+var AVI_FACEBOOK_APP_SECRET = "17da92fb8241cc4946689e284e64ce60";
 var AVI_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
 var AVI_WIT_TOKEN = "KEGDQB5O6BMVEPWVO33VVLUOPQ6EPUVN";
 var AVI_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
 var AVI_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
 var AVI_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
 var AVI_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
+var AVI_ROOT_URL = "https://df901940.ngrok.io";
 
 if (status == 'production') {
 	var VERIFICATION_TOKEN = PRODUCTION_VERIFICATION_TOKEN;
@@ -64,6 +65,7 @@ if (status == 'production') {
 	var MS_BOT_PASSWORD = AVI_MS_BOT_PASSWORD;
 	var LUIS_ID = AVI_LUIS_ID;
 	var LUIS_SUBSCRIPTION_KEY = AVI_LUIS_SUBSCRIPTION_KEY;
+	var ROOT_URL = AVI_ROOT_URL;
 }
 
 var DEVELOPMENT_STATUS = status;

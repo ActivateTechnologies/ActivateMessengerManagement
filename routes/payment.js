@@ -23,7 +23,6 @@ router.get('/payment', function(req, res){
       console.log(err);
     }
     if(result.length > 0){
-      console.log("here");
       let gameprice = result[0].price;
       res.render('payment', {
         mid:userId,
@@ -88,6 +87,16 @@ router.post('/charge', function(req, res) {
           M.Game.find({_id:gameId}, function(err, result){
             let check = true;
             if(result.length > 0){
+              M.Analytics.update({name:"Payments"},{$push: {
+                activity: {
+                  userId: userId, 
+                  time: new Date(),
+                  gid: gameId,
+                  amount: price
+                }
+              }}, {upsert: true}, (err) => {
+                console.log(err);
+              });
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
                 send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
               });

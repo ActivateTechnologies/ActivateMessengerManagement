@@ -9,8 +9,8 @@ $.get('http://localhost:3000/tabledata', function(data){
   console.log(props);
   var Table = Reactable.Table;
   ReactDOM.render(
-      <Table sortable={true} className="table" data={props} />,
-      document.getElementById('example')
+    '<table sortable={true} className="table" data={props} />'
+    + 'document.getElementById(\'example\')'
   );
 })
 

@@ -50,9 +50,21 @@ let buttonSchema = new Schema({
 
 let Button = mongoose.model('Button', buttonSchema);
 
+let analyticsSchema = new Schema({
+  name: String,
+  activity: [{
+    userId: String,
+    time: Date,
+    gid: String,
+    amount: Number
+  }]
+})
+
+let Analytics = mongoose.model('Analytics', analyticsSchema);
 
 module.exports = {
   User: User,
   Game: Game,
-  Button: Button
+  Button: Button,
+  Analytics: Analytics
 }

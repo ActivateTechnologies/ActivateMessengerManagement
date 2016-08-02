@@ -77,23 +77,23 @@ router.post('/webhook/', function (req, res) {
 
       // if message
       else {
-        // send.processReceivedMessage(sender, event.message.text, () => {
-        //   //LUIS Did not find anything, so default response
-        //   console.log('Got message: ' + event.message.text + ' from ' + sender);
-        //   sendNew.text(sender, "I didn't quite understand that sorry. "
-        //    + "Here are all upcoming games. Alternatively, just say 'help'"
-        //    + " if you wanna talk to our support team", () => {
-        //     M.User.find({userId: sender}, function(err, result){
-        //       if(result.length > 0 && result[0].facebookID){
-        //         send.allGames(sender);
-        //       }
-        //       else {
-        //         send.start(sender);
-        //       }
-        //     })
-        //   });
-        // });
-
+        /*send.processReceivedMessage(sender, event.message.text, () => {
+          //LUIS Did not find anything, so default response
+          console.log('Got message: ' + event.message.text + ' from ' + sender);
+          sendNew.text(sender, "I didn't quite understand that sorry. "
+           + "Here are all upcoming games. Alternatively, just say 'help'"
+           + " if you wanna talk to our support team", () => {
+            M.User.find({userId: sender}, function(err, result){
+              if(result.length > 0 && result[0].facebookID){
+                send.allGames(sender);
+              }
+              else {
+                send.start(sender);
+              }
+            })
+          });
+        });
+        */
         M.User.find({userId: sender}, function(err, result){
           if(result.length > 0 && result[0].phoneNumber){
             send.allGames(sender);
@@ -102,22 +102,13 @@ router.post('/webhook/', function (req, res) {
             send.start(sender);
           }
         })
-
-        // M.User.find({userId: sender}, function(err, result){
-        //   if(result.length > 0){
-        //     send.allGames(sender);
-        //   }
-        //   else {
-        //     send.start(sender);
-        //   }
-        // })
       }
     }
 
     else if(event.message && event.message.attachments && !event.message.is_echo){
-      console.log("detected attachment");
+      console.log("Detected Attachment");
       //handling like button
-      console.log(event.message.attachments);
+      //console.log(event.message.attachments);
       if(event.message.attachments[0].payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
         send.menu(sender);
       }
@@ -128,14 +119,13 @@ router.post('/webhook/', function (req, res) {
 
       if (text.substring(0, 4) == "Book") {
         send.book(sender, text);
-      }
-      else if(text.substring(0, 6) == "Cancel") {
+      } else if(text.substring(0, 6) == "Cancel") {
         send.cancel_booking(sender, text);
-      }
-      else if(text.substring(0, 9) == "More Info") {
+      } else if(text.substring(0, 5) == "Share") {
+        send.shareGame(sender, text);
+      } else if(text.substring(0, 9) == "More Info") {
         send.more_info(sender, text);
-      }
-      else {
+      } else {
         switch(text.toLowerCase()) {
 
           case('start'):
