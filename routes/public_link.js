@@ -97,39 +97,49 @@ router.post('/register', function(req, res){
 
     //if new user
     else {
+      //fetch data
+      var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      request(get_url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          body = JSON.parse(body);
+          let data = {
+            userId: mid,
+            phoneNumber: phoneNumber,
+            firstname: body.first_name,
+            lastname: body.last_name,
+            profile_pic: body.profile_pic,
+            locale: body.locale,
+            gender: body.gender
+          }
+          let user = M.User(data)
 
-      M.User.find({phoneNumber: phoneNumber}, function(e, r){
-        if(e){
-          console.log(e);
-          res.send("Not Cool")
-        }
+          M.User.find({phoneNumber: phoneNumber}, function(e, r){
+            if(e){
+              console.log(e);
+              res.send("Not Cool")
+            }
 
-        // if visited publicLink
-        if(r.length > 0){
-          send.text_promise(mid, "Successfully logged in")
-          .then(()=>{
-            send.game(mid, r[0].publicLink);
-            res.send("Cool")
-          })
-        }
-
-        //not visited link
-        else{
-          var get_url = "https://graph.facebook.com/v2.6/" + mid + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
-          request(get_url, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-              body = JSON.parse(body);
-
-              let user = M.User({
-                userId: mid,
-                phoneNumber: phoneNumber,
-                firstname: body.first_name,
-                lastname: body.last_name,
-                profile_pic: body.profile_pic,
-                locale: body.locale,
-                gender: body.gender
+            // if visited publicLink
+            if(r.length > 0){
+              //add fetched data to document
+              M.User.update({phoneNumber: phoneNumber}, data, function(e2, r2){
+                if(e2){
+                  console.log(e2);
+                  res.send("Not Cool")
+                }
+                else {
+                  send.text_promise(mid, "Successfully logged in")
+                  .then(()=>{
+                    send.game(mid, r[0].publicLink);
+                    res.send("Cool")
+                  })
+                }
               })
+            }
 
+            // not visited link
+            else{
+              //create new document
               user.save(function(err){
                 if(err){
                   console.log(err);
@@ -142,10 +152,9 @@ router.post('/register', function(req, res){
                 }
               })
             }
-          });
+          })
         }
-
-      })
+      });
 
     }
   })
