@@ -108,7 +108,7 @@
       }
       else {
 
-        var phoneNumber = localStorage.getItem('phoneNumber');
+        var phoneNumber = "0" + localStorage.getItem('phoneNumber');
         if(phoneNumber){
           $('#phoneNumber').val(phoneNumber);
         }
@@ -118,7 +118,7 @@
           var pn = $('#phoneNumber').val();
           pn = validatePhoneNumber(pn);
           if(pn === -1){
-            $('#warning').css('display', 'block')
+            $('#warning').css('display', 'block');
           }
           else {
             localStorage.setItem('phoneNumber', pn);
