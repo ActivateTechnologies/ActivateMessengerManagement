@@ -30,6 +30,8 @@
 
     function isAndroidFacebookApp() {
         var ua = navigator.userAgent || navigator.vendor || window.opera;
+        $('#warning').css('display', 'block');
+        document.getElementById('warning').innerHTML = ua;
         return (
             ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1))
             && (ua.indexOf("Android") > -1 || ua.indexOf("android") > -1)
@@ -90,50 +92,50 @@
     }
 
     $(document).ready(function(){
-
-      if(getParameterByName('process')){
-        if(isAndroidFacebookApp()){
-          $('#controls').css('display', 'none');
-          $('#android').css('display', 'block');
-        }
-        else if(isIOSFacebookApp()){
-          $('#controls').css('display', 'none');
-          $('#iphone').css('display', 'block');
-        }
-        else {
-          location.href = "http://m.me/kickaboutapp";
-        }
-      }
-      else {
-
-        var phoneNumber = localStorage.getItem('phoneNumber');
-        if(phoneNumber){
-          $('#phoneNumber').val(phoneNumber);
-        }
-
-        $('#pnform').submit(function(e){
-          e.preventDefault();
-          var pn = $('#phoneNumber').val();
-          pn = validatePhoneNumber(pn);
-          if(pn === -1){
-            $('#warning').css('display', 'block')
-          }
-          else {
-            localStorage.setItem('phoneNumber', pn);
-            $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
-              console.log(data);
-              if(data === "sent message"){
-                document.getElementById('warning').innerHTML = "Check Facebook Messenger";
-                $('#warning').css('display', 'block');
-              }
-              else {
-                location.href = window.location.href + "&process=complete";
-              }
-            });
-          }
-        })
-
-      }
+      var a = isAndroidFacebookApp();
+      // if(getParameterByName('process')){
+      //   if(isAndroidFacebookApp()){
+      //     $('#controls').css('display', 'none');
+      //     $('#android').css('display', 'block');
+      //   }
+      //   else if(isIOSFacebookApp()){
+      //     $('#controls').css('display', 'none');
+      //     $('#iphone').css('display', 'block');
+      //   }
+      //   else {
+      //     location.href = "http://m.me/kickaboutapp";
+      //   }
+      // }
+      // else {
+      //
+      //   var phoneNumber = localStorage.getItem('phoneNumber');
+      //   if(phoneNumber){
+      //     $('#phoneNumber').val(phoneNumber);
+      //   }
+      //
+      //   $('#pnform').submit(function(e){
+      //     e.preventDefault();
+      //     var pn = $('#phoneNumber').val();
+      //     pn = validatePhoneNumber(pn);
+      //     if(pn === -1){
+      //       $('#warning').css('display', 'block')
+      //     }
+      //     else {
+      //       localStorage.setItem('phoneNumber', pn);
+      //       $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
+      //         console.log(data);
+      //         if(data === "sent message"){
+      //           document.getElementById('warning').innerHTML = "Check Facebook Messenger";
+      //           $('#warning').css('display', 'block');
+      //         }
+      //         else {
+      //           location.href = window.location.href + "&process=complete";
+      //         }
+      //       });
+      //     }
+      //   })
+      //
+      // }
 
     })
 
@@ -151,6 +153,9 @@
             <p class="gameaddress"><%= gameAddress %></p>
 
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+
+
+            <!-- shown when user enters invalid phone number -->
             <h3 id="warning" style="display:none">Please enter a valid phone number in this format: 07231324112</h3>
 
             <div class="formContainer">
@@ -166,7 +171,6 @@
               </form>
             </div>
           </div>
-
 
 
 
