@@ -91,33 +91,48 @@
 
     $(document).ready(function(){
 
-      if(getParameterByName('process'))
-
-      var phoneNumber = localStorage.getItem('phoneNumber');
-      if(phoneNumber){
-        $('#phoneNumber').val(phoneNumber);
-      }
-
-      $('#pnform').submit(function(e){
-        e.preventDefault();
-        var pn = $('#phoneNumber').val();
-        pn = validatePhoneNumber(pn);
-        if(pn === -1){
-          $('#warning').css('display', 'block')
+      if(getParameterByName('process')){
+        if(isAndroidFacebookApp()){
+          $('#controls').css('display', 'none');
+          $('#android').css('display', 'block');
+        }
+        else if(isIOSFacebookApp()){
+          $('#controls').css('display', 'none');
+          $('#iphone').css('display', 'block');
         }
         else {
-          localStorage.setItem('phoneNumber', pn);
-          $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
-            console.log(data);
-            if(data === "sent message"){
-              document.getElementById('warning').innerHTML = "Check Facebook Messenger"
-            }
-            else {
-              location.href = window.location.href + "&process=complete";
-            }
-          });
+          location.href = "http://m.me/kickaboutapp";
         }
-      })
+      }
+      else {
+        
+        var phoneNumber = localStorage.getItem('phoneNumber');
+        if(phoneNumber){
+          $('#phoneNumber').val(phoneNumber);
+        }
+
+        $('#pnform').submit(function(e){
+          e.preventDefault();
+          var pn = $('#phoneNumber').val();
+          pn = validatePhoneNumber(pn);
+          if(pn === -1){
+            $('#warning').css('display', 'block')
+          }
+          else {
+            localStorage.setItem('phoneNumber', pn);
+            $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
+              console.log(data);
+              if(data === "sent message"){
+                document.getElementById('warning').innerHTML = "Check Facebook Messenger"
+              }
+              else {
+                location.href = window.location.href + "&process=complete";
+              }
+            });
+          }
+        })
+
+      }
 
     })
 
