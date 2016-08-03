@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const M = require('./../server/schemas.js')
-// const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+//const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const send = require('./../server/send.js')
 
@@ -14,13 +14,13 @@ router.get('/payment', function(req, res){
   M.Button.update({name:"Book"},
     {$push: {activity: {userId:userId, time: new Date()}}},
     {upsert: true},
-    function(err){
-      console.log(err);
+    function (error) {
+      console.log('Error logging Book analytics:', error);
     })
 
   M.Game.find({_id:gameId}, function(err, result){
-    if(err){
-      console.log(err);
+    if (err) {
+      console.log('Error looking for game', err);
     }
     if(result.length > 0){
       let gameprice = result[0].price;
@@ -35,6 +35,7 @@ router.get('/payment', function(req, res){
     }
     else {
       console.log("Can't find game");
+      res.send('Game not found');
     }
   })
 })
@@ -55,7 +56,7 @@ router.post('/custompayment', function(req, res){
     if (err && err.type === 'StripeCardError') {
       // The card has been declined
       res.send(err.message)
-      console.log(err);
+      console.log('Error with stripe charge', err);
     } else {
       res.send("Success")
     }
@@ -81,7 +82,7 @@ router.post('/charge', function(req, res) {
 		} else {
       M.User.find({userId:sender}, function(err, users){
         if(err){
-          console.log(err);
+          console.log('Error finding user:', err);
         }
         if(users.length > 0){
           M.Game.find({_id:gameId}, function(err, result){
@@ -95,7 +96,7 @@ router.post('/charge', function(req, res) {
                   amount: price
                 }
               }}, {upsert: true}, (err) => {
-                console.log(err);
+                console.log('Error logging Payments analytics', err);
               });
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
                 send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
