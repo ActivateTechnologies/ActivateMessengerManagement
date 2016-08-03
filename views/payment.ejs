@@ -78,25 +78,33 @@
         }
       }
 
+
+      //if user not coming from bot, could be existing
       $('#pnform').submit(function(e){
+
         e.preventDefault();
-        var pn = $('#phoneNumber').val();
-        pn = validatePhoneNumber(pn);
+        var pn = validatePhoneNumber($('#phoneNumber').val());
         if(pn === -1){
           $('#warning').css('display', 'block');
         }
         else {
           localStorage.setItem('phoneNumber', pn);
-          let phoneNumber = pn;
-          if('<%= gameprice %>' === 0){
-            $.post(ROOT_URL + "/charge?type=free&pn=" + phoneNumber, function(data){
 
+          //if free game
+          if('<%= gameprice %>' === 0){
+            $.post(ROOT_URL + "/charge?type=free&pn=" + pn, function(data){
+              if(data){
+
+              }
             })
           }
+
+          // if paid game, everything is handled in /charge
           else {
             $('.payWithCardButtonContainer').css('display', 'block');
           }
         }
+
       })
     })
   </script>
