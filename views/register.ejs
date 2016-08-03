@@ -34,9 +34,14 @@
       }
 
       $(document).ready(function(){
+        var phoneNumber = localStorage.getItem('phoneNumber');
+        if(phoneNumber){
+          $('#phoneNumber').val(phoneNumber);
+        }
         $('#pnform').submit(function(e){
           e.preventDefault();
           var pn = $('#phoneNumber').val();
+          localStorage.setItem('phoneNumber', pn);
           $.post( ROOT_URL + "/register?mid=" + getParameterByName('mid') + "&pn=" + pn, function( data ) {
             console.log("registered");
             location.href = "http://m.me/kickaboutapp";
@@ -56,11 +61,11 @@
               <form class="form-horizontal" id="pnform">
                 <div class="input-group centre-group">
                   <div class="input-group-addon custom-width">Phone Number</div>
-                  <input placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                  <input name="phone" autocomplete="tel" placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
                 </div>
                 <br/>
                 <div class="form-group">
-                  <button type="submit" class="btn btn-primary" value="Submit Payment">Submit</button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
