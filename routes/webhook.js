@@ -42,6 +42,13 @@ router.post('/webhook/', function (req, res) {
         else if (text.substring(0, 9) == "More Info") {
           send.more_info(sender, text);
         }
+        else if (text.substring(0, 11) == "phoneNumber") {
+          let arr = text.split('|');
+          let phoneNumber = arr[1];
+          let gameId = arr[2];
+
+          send.register_user(sender, phoneNumber, gameId);
+        }
         else {
           switch(text.toLowerCase()){
 
