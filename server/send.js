@@ -7,36 +7,36 @@ const W = require('./wit.js');
 const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
-function start(sender){
-
-  let messageData = {
-    "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":"Yep",
-        "payload":"yep"
-      }
-    ]
-  }
-
-
-  request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
-  }, function(error, response, body) {
-      if (error) {
-          console.log('Error in start(): ', error)
-      } else if (response.body.error) {
-          console.log('Error in start(): ', response.body.error)
-      }
-  })
-}
+// function start(sender){
+//
+//   let messageData = {
+//     "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
+//     "quick_replies":[
+//       {
+//         "content_type":"text",
+//         "title":"Yep",
+//         "payload":"yep"
+//       }
+//     ]
+//   }
+//
+//
+//   request({
+//       url: 'https://graph.facebook.com/v2.6/me/messages',
+//       qs: {access_token:VERIFICATION_TOKEN},
+//       method: 'POST',
+//       json: {
+//           recipient: {id:sender},
+//           message: messageData,
+//       }
+//   }, function(error, response, body) {
+//       if (error) {
+//           console.log('Error in start(): ', error)
+//       } else if (response.body.error) {
+//           console.log('Error in start(): ', response.body.error)
+//       }
+//   })
+// }
 
 function start_with_phoneNumber(phoneNumber, gameId){
   return new Promise(function(resolve, reject){
@@ -800,42 +800,42 @@ function my_games(sender){
   })
 }
 
-// function start(sender){
-//
-//   let messageData = {
-//     "attachment": {
-//       "type": "template",
-//       "payload": {
-//         "template_type": "generic",
-//         "elements": [{
-//           "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-//           "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
-//           "buttons": [{
-//             "title": "Login",
-//             "type": "web_url",
-//             "url": ( config.ROOT_URL + "/register?mid=" + sender)
-//           }]
-//         }]
-//       }
-//     }
-//   }
-//
-//   request({
-//     url: 'https://graph.facebook.com/v2.6/me/messages',
-//     qs: {access_token:VERIFICATION_TOKEN},
-//     method: 'POST',
-//     json: {
-//       recipient: {id:sender},
-//       message: messageData,
-//     }
-//   }, function(error, response, body) {
-//     if (error) {
-//       console.log('Error in start(): ', error)
-//     } else if (response.body.error) {
-//       console.log('Error in start(): ', response.body.error)
-//     }
-//   })
-// }
+function start(sender){
+
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [{
+          "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
+          "buttons": [{
+            "title": "Login",
+            "type": "web_url",
+            "url": ( config.ROOT_URL + "/register?mid=" + sender)
+          }]
+        }]
+      }
+    }
+  }
+
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error in start(): ', error)
+    } else if (response.body.error) {
+      console.log('Error in start(): ', response.body.error)
+    }
+  })
+}
 
 function start2(sender){
 
