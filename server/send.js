@@ -100,6 +100,7 @@ function register_user(sender, phoneNumber, gameId) {
             console.log("saved user");
           }
         })
+      }
   })
 }
 
