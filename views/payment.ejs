@@ -69,7 +69,7 @@
         $('#pnform').css('display', 'none');
         // if free game
         if('<%= gameprice %>' === 0){
-          $.post(ROOT_URL + "/charge?&gid=<%=gid%>type=free&pn=" + phoneNumber, function(data){
+          $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>type=free&pn=" + phoneNumber, function(data){
 
           })
         }
@@ -92,7 +92,7 @@
 
           //if free game
           if('<%= gameprice %>' === 0){
-            $.post(ROOT_URL + "/charge?&gid=<%=gid%>type=free&pn=" + pn, function(data){
+            $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>type=free&pn=" + pn, function(data){
               if(data){
 
               }

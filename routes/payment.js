@@ -44,15 +44,55 @@ router.post('/charge', function(req, res) {
 
   let phoneNumber = req.body.pn;
   let gameId = req.query.gid;
+  let price = parseFloat(req.query.gameprice) / 100;
 
   M.User.find({phoneNumber: phoneNumber}, function(err, results){
     if(err) console.log(err);
 
     //if existing user
     if(results[0].length > 0){
-      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
-        send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
-      });
+      //if free game
+      if(req.body.type){
+        M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
+          // send thanks for booking and details
+        });
+      }
+      //else make him pay
+      else {
+        let stripeToken = req.body.stripeToken;
+
+        let charge = stripe.charges.create({
+          amount: req.query.gameprice, // amount in cents, again
+          currency: "gbp",
+          card: stripeToken,
+          description: "",
+          metadata: {_id:results[0]._id, gameId: gameId}
+        }, function(err, charge) {
+          if (err && err.type === 'StripeCardError') {
+            res.send("Your payment wasn't processed");
+          }
+          else {
+
+            M.Game.find({_id:gameId}, function(err2, result2){
+              if(result2.length > 0){
+                M.Analytics.update({name:"Payments"},{$push: {
+                  activity: {
+                    userId: results[0]._id,
+                    time: new Date(),
+                    gid: gameId,
+                    amount: price
+                  }
+                }}, {upsert: true}, (err) => {console.log(err);});
+
+                M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err3, d){
+                  send.booked(sender, results[0].firstname + " " + results[0].lastname, price, d.name, d.address, d.image_url, stripeToken);
+                });
+              }
+            })
+
+          }
+        });
+      }
     }
 
     // if new user
@@ -69,58 +109,55 @@ router.post('/charge', function(req, res) {
           if(req.body.type){
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
-              
+
+
+              //if success then send him receipt
+
+              //else send him text message
             });
+          }
+
+          // if paid game
+          else {
+            //make him pay
+            let stripeToken = req.body.stripeToken;
+
+          	let charge = stripe.charges.create({
+          		amount: req.query.gameprice, // amount in cents, again
+          		currency: "gbp",
+          		card: stripeToken,
+          		description: "",
+              metadata: {_id:doc._id, gameId: gameId}
+          	}, function(err, charge) {
+          		if (err && err.type === 'StripeCardError') {
+                res.send("Your payment wasn't processed");
+          		}
+              else {
+
+                    M.Game.find({_id:gameId}, function(err, result){
+                        M.Analytics.update({name:"Payments"},{$push: {
+                          activity: {
+                            userId: doc._id,
+                            time: new Date(),
+                            gid: gameId,
+                            amount: price
+                          }
+                        }}, {upsert: true}, (err) => {console.log(err);});
+                        M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+                          //send him details of game for confirmation
+
+                        });
+                    })
+
+          		}
+          	});
+
           }
         }
       })
 
     }
   })
-
-	let stripeToken = req.body.stripeToken;
-  let sender = req.query.mid;
-  let price = parseFloat(req.query.gameprice) / 100;
-
-	let charge = stripe.charges.create({
-		amount: req.query.gameprice, // amount in cents, again
-		currency: "gbp",
-		card: stripeToken,
-		description: "",
-    metadata: {userId:sender, gameId: gameId}
-	}, function(err, charge) {
-		if (err && err.type === 'StripeCardError') {
-      res.send("Your payment wasn't processed");
-		} else {
-      M.User.find({userId:sender}, function(err, users){
-        if(err){
-          console.log(err);
-        }
-        if(users.length > 0){
-          M.Game.find({_id:gameId}, function(err, result){
-            let check = true;
-            if(result.length > 0){
-              M.Analytics.update({name:"Payments"},{$push: {
-                activity: {
-                  userId: userId,
-                  time: new Date(),
-                  gid: gameId,
-                  amount: price
-                }
-              }}, {upsert: true}, (err) => {
-                console.log(err);
-              });
-              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err, doc){
-                send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
-              });
-            }
-          })
-        }
-      })
-      res.redirect('http://m.me/kickaboutapp');
-		}
-	});
-
 });
 
 router.get('/custompayment', function(req, res){
