@@ -1,6 +1,6 @@
 'use strict'
 
-var status = 'production'; //'produciton' or 'test' or 'avi'
+var status = 'test'; //'produciton' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 var PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
