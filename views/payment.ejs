@@ -15,6 +15,92 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
   </head>
   <body>
+  <script src="js/config.js"></script>
+  <script type="text/javascript">
+
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    function validatePhoneNumber(phoneNumber){
+      phoneNumber = phoneNumber.replace(/\D/gm, '');
+      if(phoneNumber.substring(0, 2) === "44"){
+        if(phoneNumber.length === 12){
+          return "+44" + phoneNumber.substring(2)
+        }
+        else {
+          return -1;
+        }
+      }
+      else if(phoneNumber.substring(0, 4) === "0044"){
+        if(phoneNumber.length === 14){
+          return "+44" + phoneNumber.substring(4)
+        }
+        else {
+          return -1;
+        }
+      }
+      else if(phoneNumber.substring(0, 1) === "0"){
+        if(phoneNumber.length === 11){
+          return "+44" + phoneNumber.substring(1)
+        }
+        else {
+          return -1;
+        }
+      }
+      else if(phoneNumber.length == 10){
+        return "+44" + phoneNumber
+      }
+      else {
+        return -1;
+      }
+    }
+
+    $(document).ready(function(){
+      let phoneNumber = getParameterByName('pn');
+      // if user is coming from bot (existing user)
+      if(phoneNumber){
+        $('#pnform').css('display', 'none');
+        // if free game
+        if('<%= gameprice %>' === 0){
+          $.post(ROOT_URL + "/charge?type=free&pn=" + phoneNumber, function(data){
+
+          })
+        }
+        else{
+          $('.payWithCardButtonContainer').css('display', 'block');
+        }
+      }
+
+      $('#pnform').submit(function(e){
+        e.preventDefault();
+        var pn = $('#phoneNumber').val();
+        pn = validatePhoneNumber(pn);
+        if(pn === -1){
+          $('#warning').css('display', 'block');
+        }
+        else {
+          localStorage.setItem('phoneNumber', pn);
+          let phoneNumber = pn;
+          if('<%= gameprice %>' === 0){
+            $.post(ROOT_URL + "/charge?type=free&pn=" + phoneNumber, function(data){
+
+            })
+          }
+          else {
+            $('.payWithCardButtonContainer').css('display', 'block');
+          }
+        }
+      })
+    })
+  </script>
+
   <div class="site-wrapper-payment">
 
       <div class="site-wrapper-inner2">
@@ -33,9 +119,27 @@
               <p class="gameaddress">
                 <%= gameAddress %>
               </p>
+              <p>
+                <%= gameDescription %>
+              </p>
 
+              <!-- shown when user enters invalid phone number -->
+              <h3 id="warning" style="display:none">Please enter a valid phone number in this format: 07231324112</h3>
 
-            <div class="payWithCardButtonContainer">
+              <div class="formContainer">
+                <form class="form-horizontal" id="pnform">
+                  <div class="input-group centre-group">
+                    <div class="input-group-addon custom-width">Phone Number</div>
+                    <input name="phone" autocomplete="tel" placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                  </div>
+                  <br/>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
+
+            <div style="display:none" class="payWithCardButtonContainer">
                 <form action="/charge?mid=<%=mid%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>" method="POST">
                   <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
@@ -63,7 +167,7 @@
                 www.activatetechnologies.co.uk
           </p>
         </div>
-            
+
     </div>
 
   </div>

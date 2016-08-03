@@ -30,6 +30,7 @@ router.get('/payment', function(req, res){
         gameprice: gameprice,
         gameName: result[0].name,
         gameAddress: result[0].address,
+        gameDescription: result[0].desc,
         imageLink: result[0].image_url
       });
     }
@@ -39,32 +40,16 @@ router.get('/payment', function(req, res){
   })
 })
 
-router.get('/custompayment', function(req, res){
-  res.render('custom_payment');
-})
-
-router.post('/custompayment', function(req, res){
-  var stripeToken = req.body.stripeToken;
-
-  var charge = stripe.charges.create({
-    amount: (parseFloat(req.body.amount)) * 100, // amount in cents, again
-    currency: "gbp",
-    source: stripeToken,
-    description: req.body.reference
-  }, function(err, charge) {
-    if (err && err.type === 'StripeCardError') {
-      // The card has been declined
-      res.send(err.message)
-      console.log(err);
-    } else {
-      res.send("Success")
-    }
-  });
-})
-
 router.post('/charge', function(req, res) {
 
-	var stripeToken = req.body.stripeToken;
+  let phoneNumber = req.body.pn;
+
+  //free game
+  if(req.body.type){
+
+  }
+
+	let stripeToken = req.body.stripeToken;
   let sender = req.query.mid;
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
@@ -89,7 +74,7 @@ router.post('/charge', function(req, res) {
             if(result.length > 0){
               M.Analytics.update({name:"Payments"},{$push: {
                 activity: {
-                  userId: userId, 
+                  userId: userId,
                   time: new Date(),
                   gid: gameId,
                   amount: price
@@ -109,5 +94,28 @@ router.post('/charge', function(req, res) {
 	});
 
 });
+
+router.get('/custompayment', function(req, res){
+  res.render('custom_payment');
+})
+
+router.post('/custompayment', function(req, res){
+  var stripeToken = req.body.stripeToken;
+
+  var charge = stripe.charges.create({
+    amount: (parseFloat(req.body.amount)) * 100, // amount in cents, again
+    currency: "gbp",
+    source: stripeToken,
+    description: req.body.reference
+  }, function(err, charge) {
+    if (err && err.type === 'StripeCardError') {
+      // The card has been declined
+      res.send(err.message)
+      console.log(err);
+    } else {
+      res.send("Success")
+    }
+  });
+})
 
 module.exports = router
