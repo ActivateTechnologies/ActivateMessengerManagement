@@ -30,11 +30,12 @@
 
     function isAndroidFacebookApp() {
         var ua = navigator.userAgent || navigator.vendor || window.opera;
-        $('#warning').css('display', 'block');
-        document.getElementById('warning').innerHTML = ua;
+        // $('#warning').css('display', 'block');
+        // document.getElementById('warning').innerHTML = ua;
+        ua = ua.toLowerCase();
         return (
-            ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1))
-            && (ua.indexOf("Android") > -1 || ua.indexOf("android") > -1)
+            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
+            && (ua.indexOf("android") > -1)
         );
     }
 
@@ -42,7 +43,7 @@
         var ua = navigator.userAgent || navigator.vendor || window.opera;
         ua = ua.toLowerCase();
         return (
-            ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1))
+            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
             && (ua.indexOf("iphone") > -1 || ua.indexOf("safari") > -1)
         );
     }
@@ -92,50 +93,49 @@
     }
 
     $(document).ready(function(){
-      var a = isAndroidFacebookApp();
-      // if(getParameterByName('process')){
-      //   if(isAndroidFacebookApp()){
-      //     $('#controls').css('display', 'none');
-      //     $('#android').css('display', 'block');
-      //   }
-      //   else if(isIOSFacebookApp()){
-      //     $('#controls').css('display', 'none');
-      //     $('#iphone').css('display', 'block');
-      //   }
-      //   else {
-      //     location.href = "http://m.me/kickaboutapp";
-      //   }
-      // }
-      // else {
-      //
-      //   var phoneNumber = localStorage.getItem('phoneNumber');
-      //   if(phoneNumber){
-      //     $('#phoneNumber').val(phoneNumber);
-      //   }
-      //
-      //   $('#pnform').submit(function(e){
-      //     e.preventDefault();
-      //     var pn = $('#phoneNumber').val();
-      //     pn = validatePhoneNumber(pn);
-      //     if(pn === -1){
-      //       $('#warning').css('display', 'block')
-      //     }
-      //     else {
-      //       localStorage.setItem('phoneNumber', pn);
-      //       $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
-      //         console.log(data);
-      //         if(data === "sent message"){
-      //           document.getElementById('warning').innerHTML = "Check Facebook Messenger";
-      //           $('#warning').css('display', 'block');
-      //         }
-      //         else {
-      //           location.href = window.location.href + "&process=complete";
-      //         }
-      //       });
-      //     }
-      //   })
-      //
-      // }
+      if(getParameterByName('process')){
+        if(isAndroidFacebookApp()){
+          $('#controls').css('display', 'none');
+          $('#android').css('display', 'block');
+        }
+        else if(isIOSFacebookApp()){
+          $('#controls').css('display', 'none');
+          $('#iphone').css('display', 'block');
+        }
+        else {
+          location.href = "http://m.me/kickaboutapp";
+        }
+      }
+      else {
+
+        var phoneNumber = localStorage.getItem('phoneNumber');
+        if(phoneNumber){
+          $('#phoneNumber').val(phoneNumber);
+        }
+
+        $('#pnform').submit(function(e){
+          e.preventDefault();
+          var pn = $('#phoneNumber').val();
+          pn = validatePhoneNumber(pn);
+          if(pn === -1){
+            $('#warning').css('display', 'block')
+          }
+          else {
+            localStorage.setItem('phoneNumber', pn);
+            $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
+              console.log(data);
+              if(data === "sent message"){
+                document.getElementById('warning').innerHTML = "Check Facebook Messenger";
+                $('#warning').css('display', 'block');
+              }
+              else {
+                location.href = window.location.href + "&process=complete";
+              }
+            });
+          }
+        })
+
+      }
 
     })
 
