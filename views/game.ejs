@@ -105,7 +105,7 @@
         }
       }
       else {
-        
+
         var phoneNumber = localStorage.getItem('phoneNumber');
         if(phoneNumber){
           $('#phoneNumber').val(phoneNumber);
@@ -123,7 +123,8 @@
             $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
               console.log(data);
               if(data === "sent message"){
-                document.getElementById('warning').innerHTML = "Check Facebook Messenger"
+                document.getElementById('warning').innerHTML = "Check Facebook Messenger";
+                $('#warning').css('display', 'block');
               }
               else {
                 location.href = window.location.href + "&process=complete";

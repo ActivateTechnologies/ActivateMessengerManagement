@@ -97,6 +97,7 @@ function register_user(sender, phoneNumber, gameId) {
           if(err){
             console.log(err);
           } else {
+            game(sender, gameId);
             console.log("saved user");
           }
         })
