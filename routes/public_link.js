@@ -32,38 +32,39 @@ router.get('/game', function(req, res){
   })
 });
 
-// function validatePhoneNumber(number){
-//   number.replace(/\D/gm, '');
-// }
-
 router.post('/check', function(req, res){
-  console.log("Reached check");
   let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
 
-  phoneNumber = "+44" + phoneNumber.substring(1);
-
-  console.log(phoneNumber);
+  phoneNumber = "+44" + phoneNumber;
 
   M.User.find({phoneNumber:phoneNumber}, function(err, result){
     if(result.length > 0){
       send.game(result[0].userId, gameId)
-      res.send("Cool")
+      res.send("sent message")
     }
     else {
-      let user = M.User({
-        phoneNumber: phoneNumber,
-        publicLink: gameId
-      })
 
-      user.save(function(err){
-        if(err){
-          console.log(err);
-          res.send("Not Cool")
-        } else {
-          console.log("saved user");
-          res.send("Cool")
-        }
+      send.start_with_phoneNumber(phoneNumber, gameId)
+      .then(()=>{
+        res.send("sent message")
+      })
+      .catch((e)=>{
+
+        let user = M.User({
+          phoneNumber: phoneNumber,
+          publicLink: gameId
+        })
+
+        user.save(function(err){
+          if(err){
+            console.log(err);
+            res.send("err")
+          } else {
+            res.send("saved doc")
+          }
+        })
+
       })
     }
   })
@@ -169,3 +170,14 @@ router.post('/register', function(req, res){
 })
 
 module.exports = router
+
+
+
+// curl -X POST -H "Content-Type: application/json" -d '{
+//   "recipient":{
+//     "phone_number":"+447415633330"
+//   },
+//   "message":{
+//     "text":"hello, world!"
+//   }
+// }' "https://graph.facebook.com/v2.6/me/messages?access_token=EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"

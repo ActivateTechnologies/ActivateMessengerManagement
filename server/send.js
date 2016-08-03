@@ -38,6 +38,71 @@ function start(sender){
   })
 }
 
+function start_with_phoneNumber(phoneNumber, gameId){
+  return new Promise(function(resolve, reject){
+    let messageData = {
+      "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
+      "quick_replies":[
+        {
+          "content_type":"text",
+          "title":"Yep",
+          "payload":("phoneNumber|" + phoneNumber + "|" + gameId)
+        }
+      ]
+    }
+
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+            recipient: {phone_number:phoneNumber},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error in start(): ', error)
+            reject(error);
+        }
+        else if (response.body.error) {
+            console.log('Error in start(): ', response.body.error)
+            reject(error);
+        }
+        else {
+          resolve();
+        }
+
+    })
+  })
+}
+
+function register_user(sender, phoneNumber, gameId) {
+  var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+  request(get_url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        body = JSON.parse(body);
+
+        let user = M.User({
+          userId: sender,
+          phoneNumber: phoneNumber,
+          firstname: body.first_name,
+          lastname: body.last_name,
+          profile_pic: body.profile_pic,
+          locale: body.locale,
+          gender: body.gender
+        })
+
+        user.save(function(err){
+          if(err){
+            console.log(err);
+          } else {
+            console.log("saved user");
+          }
+        })
+  })
+}
+
 function menu(sender){
 
   let messageData = {
@@ -698,34 +763,6 @@ function game(sender, gameId){
   })
 }
 
-function game_phoneNumber(sender, gameId){
-  M.Game.find({_id:gameId}, function(err, result){
-    if(result.length > 0){
-      let data = [];
-      let item = result[0];
-      let now = new Date();
-      now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
-      console.log(now);
-      if(item.when > now){
-        let booked = false;
-        let join = item.joined;
-
-        join.forEach(function(i){
-          if(i.userId === sender){
-            booked = true;
-          }
-        });
-        data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
-        data = generate_card(data);
-        cards_phoneNumber(sender, data, "Here is your game: ");
-      }
-      else {
-        text_phoneNumber(sender, "That game has finished")
-      }
-    }
-  })
-}
-
 function my_games(sender){
   let now = new Date();
   let query = {when:{
@@ -838,6 +875,8 @@ function start2(sender){
 module.exports = {
   start: start,
   start2: start2,
+  start_with_phoneNumber: start_with_phoneNumber,
+  register_user: register_user,
   menu: menu,
   notifications: notifications,
   notifications_change: notifications_change,
