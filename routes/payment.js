@@ -43,15 +43,43 @@ router.get('/payment', function(req, res){
 router.post('/charge', function(req, res) {
 
   let phoneNumber = req.body.pn;
+  let gameId = req.query.gid;
 
-  //free game
-  if(req.body.type){
+  M.User.find({phoneNumber: phoneNumber}, function(err, results){
+    if(err) console.log(err);
 
-  }
+    //if existing user
+    if(results[0].length > 0){
+      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
+        send.booked(sender, users[0].firstname + " " + users[0].lastname, price, doc.name, doc.address, doc.image_url, stripeToken);
+      });
+    }
+
+    // if new user
+    else {
+      //create new user
+      let user = M.User({
+        phoneNumber: phoneNumber
+      })
+
+      user.save(function(e, doc){
+        if(e) console.log(e);
+        else {
+          //free game
+          if(req.body.type){
+            M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
+              // try sending message on messenger
+              
+            });
+          }
+        }
+      })
+
+    }
+  })
 
 	let stripeToken = req.body.stripeToken;
   let sender = req.query.mid;
-  let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
 
 	let charge = stripe.charges.create({
