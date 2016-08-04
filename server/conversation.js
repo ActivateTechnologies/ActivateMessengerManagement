@@ -60,6 +60,9 @@ function executeTreeNode(uid, conversationName, node, message) {
        conversationName, node, message);
     } else if (node.type == 'jumpToId') {
       executeTreeNodefromId(uid, conversationName, node.jumpToId);
+    } else if (node.type == 'jumpToExternalId') {
+      executeTreeNodefromId(uid, node.jumpToExternalId.conversationName,
+       node.jumpToExternalId.nodeId);
     }
   } else if (node.sender == 'user') {
     saveUserConversationLocation(uid, conversationName, node.id)
@@ -106,8 +109,8 @@ function handleQuickReply(uid, payload) {
   Saves the users current conversation to his user object, saving
   conversationName and nodeId. */
 function saveUserConversationLocation(uid, conversationName, nodeId) {
-  /*console.log('saveUserConversationLocation(' + uid + ', ' 
-    + conversationName + ', ' + nodeId + ')');*/
+  console.log('saveUserConversationLocation(' + uid._id + ', ' 
+    + conversationName + ', ' + nodeId + ')');
   let updateObject = {
     conversationLocation: {
       conversationName: conversationName,
@@ -198,6 +201,10 @@ var showGames = function(uid, conversationName, node, message) {
 
 let functionsIndex = {
   onboarding: {
+    collectPhoneNumber: collectPhoneNumber,
+    showGames: showGames
+  },
+  collectPhoneNumber: {
     collectPhoneNumber: collectPhoneNumber,
     showGames: showGames
   }

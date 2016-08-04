@@ -37,14 +37,16 @@ router.get('/webhook', function (req, res) {
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
   messaging_events.forEach((event) => {
-    if (event.message && !event.message.is_echo) {
+    if ((!event.message || !event.message.is_echo) && !event.read && !event.delivery) {
+      console.log(event);
+      console.log("--------------------------------")
       let uid = {
         mid: event.sender.id
       };
       let user;
       M.User.find({userId: uid.mid}, (error, results) => {
         if (error) {
-          consol.log('Error getting user object: ', error);
+          console.log('Error getting user object: ', error);
         } else if (results.length == 0) {
           console.log('No users with userId "' + uid.mid + '" found.');
         } else if (results.length > 1) {
@@ -56,25 +58,30 @@ router.post('/webhook/', function (req, res) {
             uid.phoneNumber = user.phoneNumber;
           }
         }
-        //if text message or quick reply
-        if (event.message && event.message.text) {
-          if (user.conversationLocation
-           && user.conversationLocation.conversationName) {
-            Conversation.executeTreeNodefromId(uid, 
-              user.conversationLocation.conversationName,
-              user.conversationLocation.nodeId + '.1',
-              event.message.text);
-          } else {
-            if (event.message.quick_reply) {
-              processQuickReply(event, uid);
+        if (user && !uid.phoneNumber 
+         && user.conversationLocation.conversationName != 'onboarding'
+         && user.conversationLocation.conversationName != 'collectPhoneNumber') {
+          Conversation.startConversation(uid, 'collectPhoneNumber');
+        } else {
+          if (event.message && event.message.text) {
+            if (user.conversationLocation
+             && user.conversationLocation.conversationName) {
+              Conversation.executeTreeNodefromId(uid, 
+                user.conversationLocation.conversationName,
+                user.conversationLocation.nodeId + '.1',
+                event.message.text);
             } else {
-              processTextMessage(event, uid);
+              if (event.message.quick_reply) {
+                processQuickReply(event, uid);
+              } else {
+                processTextMessage(event, uid);
+              }
             }
+          } else if(event.message && event.message.attachments){
+            processAttachment(event, uid);
+          } else if (event.postback) {
+            processPostback(event, uid);
           }
-        } else if(event.message && event.message.attachments){
-          processAttachment(event, uid);
-        } else if (event.postback) {
-          processPostback(event, uid);
         }
       });
     }
