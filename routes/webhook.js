@@ -36,50 +36,53 @@ router.get('/webhook', function (req, res) {
 
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
-  messaging_events.forEach(function(event){
-    let sender = event.sender.id;
-    M.User.find({userId: sender}, (error, results) => {
-      if (error) {
-        consol.log('Error getting user object: ', error);
-      } else if (results.length == 0) {
-        console.log('No users with userId "' + sender + '" found.');
-      } else if (results.length > 1) {
-        console.log('Multiple users with userId "' + sender + '" found.');
-      } else { 
-        let user = results[0];
-        let uid = {
-          _id: user._id,
-          mid: sender
-        }
-        if (user.phoneNumber) {
-          uid.phoneNumber = user.phoneNumber;
+  messaging_events.forEach((event) => {
+    if (event.message && !event.message.is_echo) {
+      let uid = {
+        mid: event.sender.id
+      };
+      let user;
+      M.User.find({userId: uid.mid}, (error, results) => {
+        if (error) {
+          consol.log('Error getting user object: ', error);
+        } else if (results.length == 0) {
+          console.log('No users with userId "' + uid.mid + '" found.');
+        } else if (results.length > 1) {
+          console.log('Multiple users with userId "' + uid.mid + '" found.');
+        } else { 
+          user = results[0];
+          uid._id = user._id;
+          if (user.phoneNumber) {
+            uid.phoneNumber = user.phoneNumber;
+          }
         }
         //if text message or quick reply
-        if (event.message && event.message.text && !event.message.is_echo) {
-          if (user.conversationLocation && user.conversationLocation.conversationName) {
+        if (event.message && event.message.text) {
+          if (user.conversationLocation
+           && user.conversationLocation.conversationName) {
             Conversation.executeTreeNodefromId(uid, 
               user.conversationLocation.conversationName,
               user.conversationLocation.nodeId + '.1',
               event.message.text);
           } else {
             if (event.message.quick_reply) {
-              processQuickReply(event, user, uid);
+              processQuickReply(event, uid);
             } else {
-              processTextMessage(event, user, uid);
+              processTextMessage(event, uid);
             }
           }
-        } else if(event.message && event.message.attachments && !event.message.is_echo){
-          processAttachment(event, user, uid);
+        } else if(event.message && event.message.attachments){
+          processAttachment(event, uid);
         } else if (event.postback) {
-          processPostback(event, user, uid);
+          processPostback(event, uid);
         }
-      }
-    });
+      });
+    }
   });
   res.sendStatus(200);
 })
 
-function processQuickReply(event, user, uid) {
+function processQuickReply(event, uid) {
   let payload = event.message.quick_reply.payload;
   if (payload.substring(0, 16) == "conversationName") {
     Conversation.handleQuickReply(uid, payload);
@@ -127,7 +130,7 @@ function processQuickReply(event, user, uid) {
   }
 }
 
-function processTextMessage(event, user, uid) {
+function processTextMessage(event, uid) {
   /*send.processReceivedMessage(uid, event.message.text, () => {
     //LUIS Did not find anything, so default response
     console.log('Got message: ' + event.message.text + ' from ' + uid.mid);
@@ -148,7 +151,7 @@ function processTextMessage(event, user, uid) {
   send.allGames(uid);
 }
 
-function processAttachment(event, user, uid) {
+function processAttachment(event, uid) {
   //Handling like button
   console.log("Detected Attachment");
   //console.log(event.message.attachments);
@@ -159,7 +162,7 @@ function processAttachment(event, user, uid) {
   }
 }
 
-function processPostback(event, user, uid) {
+function processPostback(event, uid) {
   let text = event.postback.payload;
   if (text.substring(0, 4) == "Book") {
     send.book(uid, text);
@@ -174,7 +177,14 @@ function processPostback(event, user, uid) {
 
       case('start'):
       //send.start(uid);
-      Conversation.startConversation(uid, 'onboarding');
+      createUser(uid.mid, (error) => {
+        if (error) {
+          //TODO Handle Error
+          console.log('Error creating user:', error);
+        } else {
+          Conversation.startConversation(uid, 'onboarding');
+        }
+      });
       break;
 
       case("my games"):
@@ -189,6 +199,33 @@ function processPostback(event, user, uid) {
       send.allGames(uid);
     }
   }
+}
+
+function createUser(mid, callback) {
+  var get_url = "https://graph.facebook.com/v2.6/" + mid 
+   + "?fields=first_name,last_name,profile_pic,locale,timezone,gender" 
+   + "&access_token=" + VERIFICATION_TOKEN;
+  request(get_url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      body = JSON.parse(body);
+      let user = M.User({
+        userId: mid,
+        firstname: body.first_name,
+        lastname: body.last_name,
+        profile_pic: body.profile_pic,
+        locale: body.locale,
+        gender: body.gender
+      });
+      user.save((err) => {
+        if (err) {
+          console.log('Error creating user: ', err);
+          callback(err);
+        } else {
+          callback();
+        }
+      });
+    }
+  });
 }
 
 module.exports = router

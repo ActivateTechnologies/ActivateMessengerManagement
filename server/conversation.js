@@ -34,7 +34,6 @@ function executeTreeNode(uid, conversationName, node, message) {
     clearUserConversationLocation(uid);
     if (node.type == 'text') {
       if (node.quickReplies && node.quickReplies.length) {
-        console.log(1);
         let quickReplies = [];
         node.quickReplies.forEach((textString, index) => {
           quickReplies.push({
@@ -44,7 +43,6 @@ function executeTreeNode(uid, conversationName, node, message) {
               + "|nodeId~" + node.id + "." + (index + 1)
           });
         });
-        console.log(2);
         send.textWithQuickReplies(uid, node.text, quickReplies).then(() => {
           saveUserConversationLocation(uid, conversationName, node.id);
         });
@@ -134,12 +132,6 @@ function clearUserConversationLocation(uid) {
 }
 
 /* CONVERSATION FUNCTIONS */
-let functionsIndex = {
-  onboarding: {
-    collectPhoneNumber: collectPhoneNumber,
-    showGames: showGames
-  }
-}
 
 /*
   If user's phone number is correct, saves it to his user document and
@@ -151,8 +143,19 @@ var collectPhoneNumber = function(uid, conversationName, node, message) {
   if (processedPhoneNumber == -1) {
     executeTreeNode(uid, conversationName, node.next[1]);
   } else {
+    /*createUser(uid, (error) => {
+      if (error) {
+        //TODO Handle error, send user some text message
+      } else {
+        executeTreeNode(uid, conversationName, node.next[0]);
+      }
+    });*/
     savePhoneNumber(uid, processedPhoneNumber, (error) => {
-      executeTreeNode(uid, conversationName, node.next[0]);
+      if (error) {
+        //TODO Handle error, send user some text message
+      } else {
+        executeTreeNode(uid, conversationName, node.next[0]);
+      }
     });
   }
 
@@ -191,6 +194,13 @@ var collectPhoneNumber = function(uid, conversationName, node, message) {
 /* Calls send.allGames */
 var showGames = function(uid, conversationName, node, message) {
   send.allGames(uid);
+}
+
+let functionsIndex = {
+  onboarding: {
+    collectPhoneNumber: collectPhoneNumber,
+    showGames: showGames
+  }
 }
 
 module.exports = {

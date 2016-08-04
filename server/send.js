@@ -363,12 +363,9 @@ function text (uid, text) {
 }
 
 function textWithQuickReplies (uid, text, quickReplies) {
-  console.log(3);
   return new Promise((resolve, reject) => {
-    console.log(4);
     let quickRepliesObjects = [];
     if (quickReplies.length && typeof quickReplies[0] === 'string') {
-      console.log(5);
       quickReplies.forEach((textString) => {
         quickRepliesObjects.push({
           "content_type": "text",
@@ -377,10 +374,8 @@ function textWithQuickReplies (uid, text, quickReplies) {
         });
       });
     } else {
-      console.log(6);
       quickRepliesObjects = quickReplies;
     }
-    console.log(2);
     request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
