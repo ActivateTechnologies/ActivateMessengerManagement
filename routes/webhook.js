@@ -40,12 +40,12 @@ router.post('/webhook/', function (req, res) {
     let sender = event.sender.id;
     M.User.find({userId: sender}, (error, results) => {
       if (error) {
-        consol.log('Error getting user object: ', error);
+        console.log('Error getting user object: ', error);
       } else if (results.length == 0) {
         console.log('No users with userId "' + sender + '" found.');
       } else if (results.length > 1) {
         console.log('Multiple users with userId "' + sender + '" found.');
-      } else { 
+      } else {
         let user = results[0];
         let uid = {
           _id: user._id,
@@ -54,10 +54,11 @@ router.post('/webhook/', function (req, res) {
         if (user.phoneNumber) {
           uid.phoneNumber = user.phoneNumber;
         }
+
         //if text message or quick reply
         if (event.message && event.message.text && !event.message.is_echo) {
           if (user.conversationLocation && user.conversationLocation.conversationName) {
-            Conversation.executeTreeNodefromId(uid, 
+            Conversation.executeTreeNodefromId(uid,
               user.conversationLocation.conversationName,
               user.conversationLocation.nodeId + '.1',
               event.message.text);
@@ -72,12 +73,18 @@ router.post('/webhook/', function (req, res) {
           processAttachment(event, user, uid);
         } else if (event.postback) {
           processPostback(event, user, uid);
+        } else if(event.optin){
+          processOptin(event.optin);
         }
       }
     });
   });
   res.sendStatus(200);
 })
+
+function processOptin(optin){
+  console.log(optin);
+}
 
 function processQuickReply(event, user, uid) {
   let payload = event.message.quick_reply.payload;
@@ -152,7 +159,7 @@ function processAttachment(event, user, uid) {
   //Handling like button
   console.log("Detected Attachment");
   //console.log(event.message.attachments);
-  if (event.message.attachments[0].payload.url 
+  if (event.message.attachments[0].payload.url
     === "https://scontent.xx.fbcdn.net/t39.1997-6/"
     + "851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
     send.menu(uid);

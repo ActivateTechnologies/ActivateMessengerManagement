@@ -9,6 +9,16 @@ const send = require('./../server/send.js')
 
 const VERIFICATION_TOKEN = require('./../config').VERIFICATION_TOKEN
 
+router.get('/send_to_messenger', function(req, res){
+  let gameId = req.query.gid;
+  let phoneNumber = req.query.pn;
+
+  res.render('send_to_messenger', {
+    gameId: gameId,
+    phoneNumber: phoneNumber,
+  })
+})
+
 router.get('/game', function(req, res){
   M.Game.find({_id:req.query.gid}, function(err, result){
     if(err){
@@ -171,14 +181,3 @@ router.post('/register', function(req, res){
 })
 
 module.exports = router
-
-
-
-// curl -X POST -H "Content-Type: application/json" -d '{
-//   "recipient":{
-//     "phone_number":"+447415633330"
-//   },
-//   "message":{
-//     "text":"hello, world!"
-//   }
-// }' "https://graph.facebook.com/v2.6/me/messages?access_token=EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD"
