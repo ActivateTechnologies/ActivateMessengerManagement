@@ -14,8 +14,7 @@ router.get('/send_to_messenger', function(req, res){
   let phoneNumber = req.query.pn;
 
   res.render('send_to_messenger', {
-    gameId: gameId,
-    phoneNumber: phoneNumber,
+    optinref: encodeURIComponent(gameId + "|" + phoneNumber)
   })
 })
 
