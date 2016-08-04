@@ -20,7 +20,6 @@ const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 //     ]
 //   }
 //
-//
 //   request({
 //       url: 'https://graph.facebook.com/v2.6/me/messages',
 //       qs: {access_token:VERIFICATION_TOKEN},
@@ -31,7 +30,6 @@ const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 //       }
 //   }, function(error, response, body) {
 //       if (error) {
-//           console.log('Error in start(): ', error)
 //       } else if (response.body.error) {
 //           console.log('Error in start(): ', response.body.error)
 //       }
@@ -230,8 +228,7 @@ function notifications(sender){
         "content_type":"text",
         "title":"Yes",
         "payload":"notifications on"
-      },
-      {
+      }, {
         "content_type":"text",
         "title":"No",
         "payload":"notifications off"
@@ -426,7 +423,7 @@ function directions(sender, name, address, latlong){
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
       + latlong + "&zoom=15&size=300x300&markers=" + latlong;
 
-    let directions_link = "http://maps.google.com/?q=" + address
+    let directions_link = "http://maps.google.com/?q=" + address;
 
     let messageData = {
       "attachment": {
@@ -547,8 +544,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
     address = address + " (You're going)";
   }
 
-  if(attending == capacity){
-    if(attending == capacity){
+  if (attending == capacity) {
+    if (attending == capacity) {
       address = address + " (fully booked)";
     }
     let template = {
@@ -558,21 +555,18 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "item_url": directions_link,
     }
     return template;
-  }
-  else {
-
+  } else {
     let template = {
       "title": name,
       "subtitle": address,
       "image_url": image_url,
       "item_url": directions_link,
       "buttons": [{
-          "type": "postback",
-          "title": "More Info",
-          "payload": pl,
-      }],
+        "type": "postback",
+        "title": "More Info",
+        "payload": pl
+      }]
     }
-
     return template;
   }
 }
@@ -648,14 +642,14 @@ function generate_card(array){
   });
 
   var template = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": elements
-            }
-        }
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": elements
+      }
     }
+  }
 
   return template;
 }
@@ -707,25 +701,24 @@ function yep (sender) {
     else {
       var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            body = JSON.parse(body);
-
-            let user = M.User({
-              userId: sender,
-              firstname: body.first_name,
-              lastname: body.last_name,
-              profile_pic: body.profile_pic,
-              locale: body.locale,
-              gender: body.gender
-            })
-            user.save(function(err){
-              if(err){
-                console.log(err);
-              } else {
-                allGames(sender);
-              }
-            })
-          }
+        if (!error && response.statusCode == 200) {
+          body = JSON.parse(body);
+          let user = M.User({
+            userId: sender,
+            firstname: body.first_name,
+            lastname: body.last_name,
+            profile_pic: body.profile_pic,
+            locale: body.locale,
+            gender: body.gender
+          });
+          user.save(function(err){
+            if(err){
+              console.log(err);
+            } else {
+              allGames(sender);
+            }
+          });
+        }
       });
     }
   })

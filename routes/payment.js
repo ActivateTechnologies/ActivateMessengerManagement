@@ -3,7 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const M = require('./../server/schemas.js')
-// const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+//const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const send = require('./../server/send.js')
 
@@ -14,13 +14,13 @@ router.get('/payment', function(req, res){
   M.Button.update({name:"Book"},
     {$push: {activity: {userId:userId, time: new Date()}}},
     {upsert: true},
-    function(err){
-      console.log(err);
+    function (error) {
+      console.log('Error logging Book analytics:', error);
     })
 
   M.Game.find({_id:gameId}, function(err, result){
-    if(err){
-      console.log(err);
+    if (err) {
+      console.log('Error looking for game', err);
     }
     if(result.length > 0){
       let gameprice = result[0].price;
@@ -36,6 +36,7 @@ router.get('/payment', function(req, res){
     }
     else {
       console.log("Can't find game");
+      res.send('Game not found');
     }
   })
 })
@@ -185,7 +186,7 @@ router.post('/custompayment', function(req, res){
     if (err && err.type === 'StripeCardError') {
       // The card has been declined
       res.send(err.message)
-      console.log(err);
+      console.log('Error with stripe charge', err);
     } else {
       res.send("Success")
     }

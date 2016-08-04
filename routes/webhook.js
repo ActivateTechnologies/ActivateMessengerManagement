@@ -5,6 +5,7 @@ const router = express.Router();
 const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
 const sendNew = require('./../server/sendnew.js');
+const twilio = require('./../server/twilio.js');
 const request = require('request');
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
@@ -19,12 +20,30 @@ router.get('/webhook', function (req, res) {
   }
 });
 
+/*router.get('/sendsms', (req, res) => {
+  console.log(req.query.to, req.query.message);
+  let phone = (req.query.to) ? req.query.to : '+447415633330';
+  let message = (req.query.message) ? req.query.message : 'Hello';
+  twilio.sendSms(phone, message, (error) => {
+    if (error) {
+      res.status(200).send('Sms sending error:', error.message);
+    } else {
+      res.status(200).send('Sms sent!');
+    }
+  });
+}); */
+
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
 
   messaging_events.forEach(function(event){
 
     let sender = event.sender.id;
+
+    if (event.optin) {
+      console.log('Got an optin');
+      console.log(event.optin);
+    }
 
     //if text message or quick reply
     if (event.message && event.message.text && !event.message.is_echo) {
