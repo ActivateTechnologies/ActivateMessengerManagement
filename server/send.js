@@ -127,6 +127,32 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
   })
 }
 
+function text_with_phoneNumber(phoneNumber, text) {
+  return new Promise(function(resolve, reject){
+    let messageData = { text: text }
+
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {phone_number:phoneNumber},
+        message: messageData
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending text messages: ', error)
+        reject(err);
+      } else if (response.body.error) {
+        console.log('Error sending text messages: ', response.body.error)
+        reject(err);
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
 function register_user(sender, phoneNumber, gameId) {
   var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
   request(get_url, function (error, response, body) {
@@ -928,6 +954,7 @@ module.exports = {
   start: start,
   start2: start2,
   start_with_phoneNumber: start_with_phoneNumber,
+  text_with_phoneNumber: text_with_phoneNumber,
   booked_with_phoneNumber: booked_with_phoneNumber,
   register_user: register_user,
   menu: menu,

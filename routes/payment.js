@@ -54,7 +54,7 @@ router.post('/charge', function(req, res) {
       //if free game
       if(req.body.type){
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
-          // send thanks for booking and details
+          send.text(results[0].userId, "Thanks for booking");
         });
       }
       //else make him pay
@@ -85,7 +85,7 @@ router.post('/charge', function(req, res) {
                 }}, {upsert: true}, (err) => {console.log(err);});
 
                 M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(err3, d){
-                  send.booked(sender, results[0].firstname + " " + results[0].lastname, price, d.name, d.address, d.image_url, stripeToken);
+                  send.booked(results[0].userId, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
                 });
               }
             })
@@ -109,11 +109,12 @@ router.post('/charge', function(req, res) {
           if(req.body.type){
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
-              send.booked_with_phoneNumber()
+              send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
+              .then(()=>{res.send("text")})
+              .catch((e2)=>{
+                //function for sending text
+              })
 
-              //if success then send him receipt
-
-              //else send him text message
             });
           }
 
@@ -145,7 +146,15 @@ router.post('/charge', function(req, res) {
                     }}, {upsert: true}, (err) => {console.log(err);});
                     M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
                       //send him details of game for confirmation
-
+                      send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
+                      //if success
+                      .then(()=>{
+                        res.send('sent message');
+                      })
+                      //else send him text message
+                      .catch((e2)=>{
+                        //function for sending text
+                      })
                     });
                 })
 
