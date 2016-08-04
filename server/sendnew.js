@@ -6,7 +6,7 @@ const config = require('./../config');
 const W = require('./wit.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
-function text(sender, text, callback) {
+function text(uid, text, callback) {
   let messageData = { text: text }
 
   request({
@@ -14,20 +14,20 @@ function text(sender, text, callback) {
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-        recipient: {id:sender},
+        recipient: {id:uid.mid},
         message: messageData,
     }
   }, function(error, response, body) {
 		let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
       console.log('Error sending messages (to user ' 
-      	+ sender + '): ', errorObject);
+      	+ uid.mid + '): ', errorObject);
     }
     (callback) ? ((errorObject) ? callback(errorObject) : callback()) : null;
   });
 }
 
-function textWithQuickReplies(sender, text, quickReplies) {
+function textWithQuickReplies(uid, text, quickReplies) {
 	let quickRepliesObjects = [];
 	quickReplies.forEach((textString) => {
 		quickRepliesObjects.push({
@@ -47,7 +47,7 @@ function textWithQuickReplies(sender, text, quickReplies) {
       qs: {access_token:VERIFICATION_TOKEN},
       method: 'POST',
       json: {
-          recipient: {id:sender},
+          recipient: {id:uid.mid},
           message: messageData,
       }
   }, function(error, response, body) {
@@ -59,26 +59,26 @@ function textWithQuickReplies(sender, text, quickReplies) {
   });
 }
 
-function typingIndicator(sender, onOrOff) {
+function typingIndicator(uid, onOrOff) {
   let typingStatus = (onOrOff) ? 'typing_on' : 'typing_off';
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-        recipient: {id:sender},
+        recipient: {id:uid.mid},
         sender_action: typingStatus
     }
   }, function(error, response, body) {
   	let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
-      console.log('Error setting typing indicator (for sender: ' 
-      	+ sender + '): ', errorObject);
+      console.log('Error setting typing indicator (for uid.mi: ' 
+      	+ uid.mid + '): ', errorObject);
     }
   })
 }
 
-function allGames(sender, broadcast, queryDates, dateEntityText){
+function allGames(uid, broadcast, queryDates, dateEntityText){
   let temp = "today"
   if (broadcast) {
     temp = broadcast;
@@ -95,7 +95,7 @@ function allGames(sender, broadcast, queryDates, dateEntityText){
 	      let booked = false;
 	      let join = item.joined;
 	      join.forEach(function (i) {
-	        if(i.userId === sender){
+	        if(i.uid === uid._id){
 	          booked = true;
 	        }
 	      });
@@ -106,9 +106,9 @@ function allGames(sender, broadcast, queryDates, dateEntityText){
 	  	//console.log(data);
 	  	if (data.length == 0) {
     		if (dateEntityText) {
-					text(sender, "There are no games on " + dateEntityText + " currently");
+					text(uid.mid, "There are no games on " + dateEntityText + " currently");
 	    	} else {
-	    		textWithQuickReplies(sender, "Sadly there are no upcoming games currently. "
+	    		textWithQuickReplies(uid, "Sadly there are no upcoming games currently. "
 		  			+ "Would you like to be notified when the next one is created?",
 		  			["Yes! (not coded)", "No thanks"]);
 	    	}
@@ -123,13 +123,13 @@ function allGames(sender, broadcast, queryDates, dateEntityText){
 	    	} else {
 	    		text = 'Here are some upcoming games: ';
 	    	}
-	      cards(sender, generate_card(data), text);
+	      cards(uid, generate_card(data), text);
 	    }
     }
   })
 }
 
-function my_games(sender, queryDates, dateEntityText){
+function my_games(uid, queryDates, dateEntityText){
   let now = new Date();
   let query = (queryDates) ? 
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
@@ -140,7 +140,7 @@ function my_games(sender, queryDates, dateEntityText){
       let join = item.joined;
 
       join.forEach(function(i){
-        if(i.userId === sender){
+        if(i.uid === uid._id){
           data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
         }
       });
@@ -148,9 +148,9 @@ function my_games(sender, queryDates, dateEntityText){
 
     if (data.length == 0) {
     	if (dateEntityText) {
-				text(sender, "You don't any games on " + dateEntityText);
+				text(uid, "You don't any games on " + dateEntityText);
     	} else {
-    		text(sender, "You haven't joined any games. Type 'play' to find games")
+    		text(uid, "You haven't joined any games. Type 'play' to find games")
     	}
     } else {
     	let text = '';
@@ -163,7 +163,7 @@ function my_games(sender, queryDates, dateEntityText){
     	} else {
     		text = 'Here are the games you\'ve joined: ';
     	}
-      cards(sender, generate_card(data), text);
+      cards(uid, generate_card(data), text);
     }
   });
 }
@@ -190,13 +190,13 @@ function generate_card(array){
   return template;
 }
 
-function cards(sender, data, message){
+function cards(uid, data, message){
 
   if (message == "today") {
-    text(sender, "(sendnew) Here are some upcoming games to join. "
+    text(uid, "(sendnew) Here are some upcoming games to join. "
     	+ "Tap the card for directions or 'More Info' to book.");
   } else if (message) {
-    text(sender, message);
+    text(uid, message);
   }
 
   let messageData = data;
@@ -206,7 +206,7 @@ function cards(sender, data, message){
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-        recipient: {id:sender},
+        recipient: {id:uid.mid},
         message: messageData,
     }
   }, function(error, response, body) {

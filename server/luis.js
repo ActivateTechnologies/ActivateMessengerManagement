@@ -7,10 +7,10 @@ const sendNew = require('./sendnew.js');
 
 const INTENT_THRESHHOLD = 0.2;
 
-function processTextMessage(sender, message, defaultCallback) {
-	sendNew.typingIndicator(sender, true);
+function processTextMessage(uid, message, defaultCallback) {
+	sendNew.typingIndicator(uid, true);
 	postToLuis(message, (body) => {
-		sendNew.typingIndicator(sender, false);
+		sendNew.typingIndicator(uid, false);
 		let data = JSON.parse(body);
 		let firstIntent = data.intents[0];
 		//let time = getTimeEntity(data.entities);
@@ -19,23 +19,23 @@ function processTextMessage(sender, message, defaultCallback) {
 		if (firstIntent.score > INTENT_THRESHHOLD) {
 			switch(firstIntent.intent) {
 	      case("Greeting"):
-	      processGreetings(sender, firstIntent);
+	      processGreetings(uid, firstIntent);
 	      break;
 
 	      case("Help"):
-	      processHelp(sender, firstIntent);
+	      processHelp(uid, firstIntent);
 	      break;
 
 	      case("ShowGames"):
-	      processShowGames(sender, firstIntent, data.entities);
+	      processShowGames(uid, firstIntent, data.entities);
 	      break;
 
 	      case("MyGames"):
-	      processMyGames(sender, firstIntent, data.entities);
+	      processMyGames(uid, firstIntent, data.entities);
 	      break;
 
 	      case("Feedback"):
-	      processFeedback(sender, firstIntent, data.entities);
+	      processFeedback(uid, firstIntent, data.entities);
 	      break;
 
 	      default:
@@ -80,44 +80,44 @@ function postToLuis(message, callback) {
   });
 }
 
-function processGreetings(sender, intent) {
-	sendNew.text(sender, 'Hello there!', (error) => {
+function processGreetings(uid, intent) {
+	sendNew.text(uid, 'Hello there!', (error) => {
 		if (!error) {
-			sendNew.textWithQuickReplies(sender, 'Looking for games to play?',
+			sendNew.textWithQuickReplies(uid, 'Looking for games to play?',
 			  ['Sure thing!', 'Nah not now']);
 		}
 	});
 }
 
-function processHelp(sender, intent) {
-	sendNew.text(sender, 'Sure, someone from our team will '
+function processHelp(uid, intent) {
+	sendNew.text(uid, 'Sure, someone from our team will '
 		+ 'get in touch with you soon', (error) => {
 		if (!error) {
-			sendNew.textWithQuickReplies(sender,
+			sendNew.textWithQuickReplies(uid,
 				'Meanwhile continue looking for games to play?',
 			  ['Sure thing!', 'Nah not now']);
 		}
 	});
 }
 
-function processShowGames(sender, intent, entities) {
+function processShowGames(uid, intent, entities) {
 	let queryDates = getDateQuery(resolveTime(entities));
 	let dateEntityText = (entities.length) ? entities[0].entity : null;
-	sendNew.allGames(sender, null, queryDates, dateEntityText);
+	sendNew.allGames(uid, null, queryDates, dateEntityText);
 }
 
-function processMyGames(sender, intent, entities) {
+function processMyGames(uid, intent, entities) {
 	let queryDates = getDateQuery(resolveTime(entities));
 	let dateEntityText = (entities.length) ? entities[0].entity : null;
 	console.log(intent, queryDates, dateEntityText);
-	sendNew.my_games(sender, queryDates, dateEntityText);
+	sendNew.my_games(uid, queryDates, dateEntityText);
 }
 
-function processFeedback(sender, intent, entities) {
+function processFeedback(uid, intent, entities) {
 	/*let queryDates = getDateQuery(resolveTime(entities));
 	let dateEntityText = (entities.length) ? entities[0].entity : null;
 	console.log(intent, queryDates, dateEntityText);
-	sendNew.my_games(sender, queryDates, dateEntityText);*/
+	sendNew.my_games(uid, queryDates, dateEntityText);*/
 }
 
 /*

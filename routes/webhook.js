@@ -6,6 +6,7 @@ const M = require('./../server/schemas.js');
 const send = require('./../server/send.js');
 const sendNew = require('./../server/sendnew.js');
 const twilio = require('./../server/twilio.js');
+const Conversation = require('./../server/conversation.js');
 const request = require('request');
 const config = require('./../config');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
@@ -35,157 +36,159 @@ router.get('/webhook', function (req, res) {
 
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
-
   messaging_events.forEach(function(event){
-
     let sender = event.sender.id;
-
-    if (event.optin) {
-      console.log('Got an optin');
-      console.log(event.optin);
-    }
-
-    //if text message or quick reply
-    if (event.message && event.message.text && !event.message.is_echo) {
-
-      //if quick reply
-      if (event.message.quick_reply) {
-        let text = event.message.quick_reply.payload;
-
-        if (text.substring(0, 4) == "Book") {
-          send.book(sender, text);
+    M.User.find({userId: sender}, (error, results) => {
+      if (error) {
+        consol.log('Error getting user object: ', error);
+      } else if (results.length == 0) {
+        console.log('No users with userId "' + sender + '" found.');
+      } else if (results.length > 1) {
+        console.log('Multiple users with userId "' + sender + '" found.');
+      } else { 
+        let user = results[0];
+        let uid = {
+          _id: user._id,
+          mid: sender
         }
-        else if (text.substring(0, 6) == "Cancel") {
-          send.cancel_booking(sender, text);
+        if (user.phoneNumber) {
+          uid.phoneNumber = user.phoneNumber;
         }
-        else if (text.substring(0, 9) == "More Info") {
-          send.more_info(sender, text);
-        }
-        else if (text.substring(0, 11) == "phoneNumber") {
-          let arr = text.split('|');
-          let phoneNumber = arr[1];
-          let gameId = arr[2];
-
-          send.register_user(sender, phoneNumber, gameId);
-        }
-        else {
-          switch(text.toLowerCase()){
-
-            case('start'):
-            send.start(sender);
-            break;
-
-            case('yep'):
-            send.yep(sender);
-            break;
-
-            case("notifications"):
-            send.notifications(sender);
-            break;
-
-            case("my games"):
-            send.my_games(sender);
-            break;
-
-            case("notifications on"):
-            send.notifications_change(sender, "on");
-            break;
-
-            case("notifications off"):
-            send.notifications_change(sender, "off");
-            break;
-
-            default:
-            send.allGames(sender);
+        //if text message or quick reply
+        if (event.message && event.message.text && !event.message.is_echo) {
+          if (user.conversationLocation && user.conversationLocation.conversationName) {
+            Conversation.executeTreeNodefromId(uid, 
+              user.conversationLocation.conversationName,
+              user.conversationLocation.nodeId + '.1',
+              event.message.text);
+          } else {
+            if (event.message.quick_reply) {
+              processQuickReply(event, user, uid);
+            } else {
+              processTextMessage(event, user, uid);
+            }
           }
+        } else if(event.message && event.message.attachments && !event.message.is_echo){
+          processAttachment(event, user, uid);
+        } else if (event.postback) {
+          processPostback(event, user, uid);
         }
       }
-
-      // if message
-      else {
-        /*send.processReceivedMessage(sender, event.message.text, () => {
-          //LUIS Did not find anything, so default response
-          console.log('Got message: ' + event.message.text + ' from ' + sender);
-          sendNew.text(sender, "I didn't quite understand that sorry. "
-           + "Here are all upcoming games. Alternatively, just say 'help'"
-           + " if you wanna talk to our support team", () => {
-            M.User.find({userId: sender}, function(err, result){
-              if(result.length > 0 && result[0].facebookID){
-                send.allGames(sender);
-              }
-              else {
-                send.start(sender);
-              }
-            })
-          });
-        });
-        */
-
-        M.User.find({userId: sender}, function(err, result){
-          if(result.length > 0){
-            send.allGames(sender);
-          }
-          else {
-            send.start(sender);
-          }
-        })
-
-        // M.User.find({userId: sender}, function(err, result){
-        //   if(result.length > 0 && result[0].phoneNumber){
-        //     send.allGames(sender);
-        //   }
-        //   else {
-        //     send.start(sender);
-        //   }
-        // })
-
-      }
-    }
-
-    else if(event.message && event.message.attachments && !event.message.is_echo){
-      console.log("Detected Attachment");
-      //handling like button
-      //console.log(event.message.attachments);
-      if(event.message.attachments[0].payload.url === "https://scontent.xx.fbcdn.net/t39.1997-6/851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
-        send.menu(sender);
-      }
-    }
-
-    else if (event.postback) {
-      let text = event.postback.payload;
-
-      if (text.substring(0, 4) == "Book") {
-        send.book(sender, text);
-      } else if(text.substring(0, 6) == "Cancel") {
-        send.cancel_booking(sender, text);
-      } else if(text.substring(0, 5) == "Share") {
-        send.shareGame(sender, text);
-      } else if(text.substring(0, 9) == "More Info") {
-        send.more_info(sender, text);
-      } else {
-        switch(text.toLowerCase()) {
-
-          case('start'):
-          send.start(sender);
-          break;
-
-          case("my games"):
-          send.my_games(sender);
-          break;
-
-          case("notifications"):
-          send.notifications(sender);
-          break;
-
-          default:
-          send.allGames(sender);
-
-        }
-      }
-    }
-  })
-
+    });
+  });
   res.sendStatus(200);
 })
+
+function processQuickReply(event, user, uid) {
+  let payload = event.message.quick_reply.payload;
+  if (payload.substring(0, 16) == "conversationName") {
+    Conversation.handleQuickReply(uid, payload);
+  } else if (payload.substring(0, 4) == "Book") {
+    send.book(uid, payload);
+  } else if (payload.substring(0, 6) == "Cancel") {
+    send.cancel_booking(uid, payload);
+  } else if (payload.substring(0, 9) == "More Info") {
+    send.more_info(uid, payload);
+  } else if (payload.substring(0, 11) == "phoneNumber") {
+    let arr = text.split('|');
+    let phoneNumber = arr[1];
+    let gameId = arr[2];
+    send.register_user(uid, phoneNumber, gameId);
+  } else {
+    switch(payload.toLowerCase()){
+
+      case('start'):
+      send.start(uid);
+      break;
+
+      case('yep'):
+      send.yep(uid);
+      break;
+
+      case("notifications"):
+      send.notifications(uid);
+      break;
+
+      case("my games"):
+      send.my_games(uid);
+      break;
+
+      case("notifications on"):
+      send.notifications_change(uid, "on");
+      break;
+
+      case("notifications off"):
+      send.notifications_change(uid, "off");
+      break;
+
+      default:
+      send.allGames(uid);
+    }
+  }
+}
+
+function processTextMessage(event, user, uid) {
+  /*send.processReceivedMessage(uid, event.message.text, () => {
+    //LUIS Did not find anything, so default response
+    console.log('Got message: ' + event.message.text + ' from ' + uid.mid);
+    sendNew.text(uid.mid, "I didn't quite understand that sorry. "
+     + "Here are all upcoming games. Alternatively, just say 'help'"
+     + " if you wanna talk to our support team", () => {
+      M.User.find({userId: uid.mid}, function(err, result){
+        if(result.length > 0 && result[0].facebookID){
+          send.allGames(uid);
+        }
+        else {
+          send.start(uid);
+        }
+      })
+    });
+  });
+  */
+  send.allGames(uid);
+}
+
+function processAttachment(event, user, uid) {
+  //Handling like button
+  console.log("Detected Attachment");
+  //console.log(event.message.attachments);
+  if (event.message.attachments[0].payload.url 
+    === "https://scontent.xx.fbcdn.net/t39.1997-6/"
+    + "851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
+    send.menu(uid);
+  }
+}
+
+function processPostback(event, user, uid) {
+  let text = event.postback.payload;
+  if (text.substring(0, 4) == "Book") {
+    send.book(uid, text);
+  } else if(text.substring(0, 6) == "Cancel") {
+    send.cancel_booking(uid, text);
+  } else if(text.substring(0, 5) == "Share") {
+    send.shareGame(uid, text);
+  } else if(text.substring(0, 9) == "More Info") {
+    send.more_info(uid, text);
+  } else {
+    switch(text.toLowerCase()) {
+
+      case('start'):
+      //send.start(uid);
+      Conversation.startConversation(uid, 'onboarding');
+      break;
+
+      case("my games"):
+      send.my_games(uid);
+      break;
+
+      case("notifications"):
+      send.notifications(uid);
+      break;
+
+      default:
+      send.allGames(uid);
+    }
+  }
+}
 
 module.exports = router

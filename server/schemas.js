@@ -15,11 +15,14 @@ let userSchema = new Schema({
   locale: String,
   gender: String,
   notifications: String,
-  publicLink: String
+  publicLink: String,
+  conversationLocation: {
+    conversationName: String,
+    nodeId: String
+  }
 })
 
 let User = mongoose.model('User', userSchema);
-
 
 let gameSchema = new Schema({
   name: String,
@@ -62,9 +65,18 @@ let analyticsSchema = new Schema({
 
 let Analytics = mongoose.model('Analytics', analyticsSchema);
 
+
+let ConversationsSchema = new Schema({
+  name: String,
+  next: Array
+})
+
+let Conversations = mongoose.model('Conversations', ConversationsSchema);
+
 module.exports = {
   User: User,
   Game: Game,
   Button: Button,
-  Analytics: Analytics
+  Analytics: Analytics,
+  Conversations: Conversations
 }

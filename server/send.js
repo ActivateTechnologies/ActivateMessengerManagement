@@ -7,189 +7,169 @@ const W = require('./wit.js');
 const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
-function start(sender){
+function start(uid) {
 
   let messageData = {
     "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":"Yep",
-        "payload":"yep"
-      }
-    ]
+    "quick_replies":[{
+      "content_type":"text",
+      "title":"Yep",
+      "payload":"yep"
+    }]
   }
 
   request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-          recipient: {id:sender},
-          message: messageData,
-      }
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:uid.mid},
+      message: messageData,
+    }
   }, function(error, response, body) {
-      if (error) {
-      } else if (response.body.error) {
-          console.log('Error in start(): ', response.body.error)
-      }
-  })
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error in start(): ', response.body.error);
+    }
+  });
 }
 
 function start_with_phoneNumber(phoneNumber, gameId){
   return new Promise(function(resolve, reject){
     let messageData = {
       "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
-      "quick_replies":[
-        {
-          "content_type":"text",
-          "title":"Yep",
-          "payload":("phoneNumber|" + phoneNumber + "|" + gameId)
-        }
-      ]
+      "quick_replies":[{
+        "content_type":"text",
+        "title":"Yep",
+        "payload":("phoneNumber|" + phoneNumber + "|" + gameId)
+      }]
     }
 
-
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {phone_number:phoneNumber},
-            message: messageData,
-        }
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {phone_number:phoneNumber},
+        message: messageData
+      }
     }, function(error, response, body) {
-        if (error) {
-            console.log('Error in start(): ', error)
-            reject(error);
-        }
-        else if (response.body.error) {
-            console.log('Error in start(): ', response.body.error)
-            reject(error);
-        }
-        else {
-          resolve();
-        }
-
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error in start_with_phoneNumber(): ', errorObject);
+        reject(errorObject);
+      } else {
+        resolve();
+      }
     })
   })
 }
 
-function register_user(sender, phoneNumber, gameId) {
-  var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+function register_user (uid, phoneNumber, gameId) {
+  var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
+   + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
+   + VERIFICATION_TOKEN;
   request(get_url, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        body = JSON.parse(body);
+    if (!error && response.statusCode == 200) {
+      body = JSON.parse(body);
 
-        let user = M.User({
-          userId: sender,
-          phoneNumber: phoneNumber,
-          firstname: body.first_name,
-          lastname: body.last_name,
-          profile_pic: body.profile_pic,
-          locale: body.locale,
-          gender: body.gender
-        })
+      let user = M.User({
+        userId: uid.mid,
+        phoneNumber: phoneNumber,
+        firstname: body.first_name,
+        lastname: body.last_name,
+        profile_pic: body.profile_pic,
+        locale: body.locale,
+        gender: body.gender
+      })
 
-        user.save(function(err){
-          if(err){
-            console.log(err);
-          } else {
-            console.log("saved user");
-          }
-        })
-      }
+      user.save((err) => {
+        if (err) {
+          console.log('Error registering user: ', err);
+        } else {
+          console.log("saved user");
+        }
+      })
+    }
   })
 }
 
-function menu(sender){
-
+function menu (uid) {
   let messageData = {
     "text":"Hi there, what do you want to do?",
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":"Show Games",
-        "payload":"show games"
-      },
-      {
-        "content_type":"text",
-        "title":"My Games",
-        "payload":"my games"
-      },
-      {
-        "content_type":"text",
-        "title":"Notifications",
-        "payload":"notifications"
-      }
-    ]
+    "quick_replies":[{
+      "content_type": "text",
+      "title": "Show Games",
+      "payload": "show games"
+    }, {
+      "content_type": "text",
+      "title": "My Games",
+      "payload": "my games"
+    }, {
+      "content_type": "text",
+      "title": "Notifications",
+      "payload": "notifications"
+    }]
   }
-
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData,
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error in menu(): ', error)
-    } else if (response.body.error) {
-      console.log('Error in menu(): ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error in menu(): ', errorObject)
     }
-  })
+  });
 }
 
-function notifications(sender){
-
+function notifications (uid) {
   let messageData = {
     "text":"Do you want to receive weekly game updates?",
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":"Yes",
-        "payload":"notifications on"
-      }, {
-        "content_type":"text",
-        "title":"No",
-        "payload":"notifications off"
-      }
-    ]
+    "quick_replies":[{
+      "content_type": "text",
+      "title": "Yes",
+      "payload": "notifications on"
+    }, {
+      "content_type": "text",
+      "title": "No",
+      "payload": "notifications off"
+    }]
   }
-
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error in notifications(): ', error)
-    } else if (response.body.error) {
-      console.log('Error in notifications(): ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error in notifications(): ', errorObject)
     }
   })
 }
 
-function notifications_change(sender, set){
-  M.User.update({userId:sender}, {notifications: set}, function(err){
+function notifications_change (uid, set) {
+  M.User.update({userId:uid.mid}, {notifications: set}, (err) => {
     if (err) {
       console.log(err);
     }
     if (set === "on") {
-      text(sender, "You will receive weekly notifications");
+      text(uid, "You will receive weekly notifications");
     } else {
-      text(sender, "You won't receive weekly notifications");
+      text(uid, "You won't receive weekly notifications");
     }
-  })
+  });
 }
 
-function booked(sender, name, price, gameName, address, image_url, order_number){
+function booked (uid, name, price, gameName, address, image_url, order_number) {
   order_number = order_number;
   let messageData = {
     "attachment": {
@@ -200,16 +180,16 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
         "currency": "GBP",
         "payment_method": "Stripe",
         "order_number": order_number,
-        "elements":[{
+        "elements": [{
           "title": gameName,
           "subtitle": address,
           "quantity": 1,
           "price": price,
-          "currency":"GBP",
-          "image_url":image_url
+          "currency": "GBP",
+          "image_url": image_url
         }],
-        "summary":{
-          "total_cost":price
+        "summary": {
+          "total_cost": price
         }
       }
     }
@@ -220,19 +200,18 @@ function booked(sender, name, price, gameName, address, image_url, order_number)
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending booked message: ', error)
-    } else if (response.body.error) {
-      console.log('Error sending booked message: ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending booked message: ', errorObject)
     }
   })
 }
 
-function booked_for_free_games(sender){
+function booked_for_free_games (uid) {
   let messageData = {
     "text":"Thanks for booking. Do you want to continue looking?",
     "quick_replies":[
@@ -249,42 +228,38 @@ function booked_for_free_games(sender){
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData,
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending booked free message: ', error)
-    } else if (response.body.error) {
-      console.log('Error sending booked free message: ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending booked for free message: ', errorObject)
     }
   })
 }
 
-function processReceivedMessage(sender, message, defaultCallback) {
-  //W.sendConversationMessage(sender, message);
-  L.processTextMessage(sender, message, defaultCallback);
+function processReceivedMessage(uid, message, defaultCallback) {
+  //W.sendConversationMessage(uid, message);
+  L.processTextMessage(uid, message, defaultCallback);
 }
 
-function text_promise(sender, text){
+function text_promise (uid, text) {
   return new Promise(function(resolve, reject){
     let messageData = { text: text }
-
     request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
       method: 'POST',
       json: {
-        recipient: {id:sender},
+        recipient: {id:uid.mid},
         message: messageData
       }
     }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending text messages: ', error)
-        reject(err);
-      } else if (response.body.error) {
-        console.log('Error sending text messages: ', response.body.error)
-        reject(err);
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending text messages: ', errorObject)
+        reject(errorObject);
       } else {
         resolve();
       }
@@ -292,7 +267,7 @@ function text_promise(sender, text){
   })
 }
 
-function text(sender, text) {
+function text (uid, text) {
   let messageData = { text: text }
 
   request({
@@ -300,48 +275,79 @@ function text(sender, text) {
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending text messages: ', error)
-    } else if (response.body.error) {
-      console.log('Error sending text messages: ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending text messages: ', errorObject)
     }
   })
 }
 
-function cards(sender, data, message){
+function textWithQuickReplies (uid, text, quickReplies) {
+  return new Promise((resolve, reject) => {
+    let quickRepliesObjects = [];
+    if (quickReplies.length && typeof quickReplies[0] === 'string') {
+      quickReplies.forEach((textString) => {
+        quickRepliesObjects.push({
+          "content_type": "text",
+          "title": textString,
+          "payload": "staticTempPayLoad~" + textString
+        });
+      });
+    } else {
+      quickRepliesObjects = quickReplies;
+    }
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {id: mid.uid},
+        message: {
+          text: text,
+          quick_replies: quickRepliesObjects
+        }
+      }
+    }, function(error, response, body) {
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending messages with quick replies: ', errorObject);
+        reject(errorObject);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
 
+function cards (uid, data, message) {
   if (message === undefined) {
-    text(sender, "Here are some upcoming games to join. "
+    text(uid, "Here are some upcoming games to join. "
      + "Tap the card for directions or 'More Info' to book.");
   } else {
-    text(sender, message);
+    text(uid, message);
   }
-
-  let messageData = data;
 
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
-      message: messageData
+      recipient: {id:uid.mid},
+      message: data
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending cards: ', error)
-    } else if (response.body.error) {
-      console.log('Error sending cards: ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending cards: ', errorObject)
     }
   })
 }
 
-function directions(sender, name, address, latlong){
-
+function directions (uid, name, address, latlong) {
   return new Promise(function (resolve, reject) {
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
       + latlong + "&zoom=15&size=300x300&markers=" + latlong;
@@ -353,18 +359,16 @@ function directions(sender, name, address, latlong){
         "type": "template",
         "payload": {
           "template_type": "generic",
-          "elements": [
-            {
-              "title": name,
-              "image_url": image_link,
-              "item_url": directions_link,
-              "buttons": [{
-                "type": "web_url",
-                "title": "Directions",
-                "url": directions_link,
-              }]
-            }
-          ]
+          "elements": [{
+            "title": name,
+            "image_url": image_link,
+            "item_url": directions_link,
+            "buttons": [{
+              "type": "web_url",
+              "title": "Directions",
+              "url": directions_link
+            }]
+          }]
         }
       }
     }
@@ -374,27 +378,23 @@ function directions(sender, name, address, latlong){
       qs: {access_token:VERIFICATION_TOKEN},
       method: 'POST',
       json: {
-        recipient: {id:sender},
+        recipient: {id:uid.mid},
         message: messageData
       }
     }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending directinos: ', error)
-        reject(err);
-      } else if (response.body.error) {
-        console.log('Error sending directinos: ', response.body.error);
-        reject(err);
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending directinos: ', errorObject)
+        reject(errorObject);
       } else {
         resolve("success");
       }
-    })
+    });
   })
 }
 
-function shareGame(sender, text){
-
+function shareGame (uid, text) {
   let gid = text.split("|")[1];
-
   M.Game.find({_id:gid}, function(err, results){
     if (results.length > 0) {
       let game = results[0];
@@ -405,36 +405,33 @@ function shareGame(sender, text){
       if (numAttending > 0){
         description = description + " | " + numAttending + " attending";
       }
-
       let messageData = {
         "attachment": {
           "type": "template",
           "payload": {
             "template_type": "generic",
-            "elements": [
-              {
-                "title": game.name,
-                "subtitle": description,
-                "image_url": game.image_url,
-                "item_url": game.publicLink,
-                "buttons": [{
-                  "type": "web_url",
-                  "title": "More Info",
-                  "url": publicLink,
-                }]
-              }
-            ]
+            "elements": [{
+              "title": game.name,
+              "subtitle": description,
+              "image_url": game.image_url,
+              "item_url": game.publicLink,
+              "buttons": [{
+                "type": "web_url",
+                "title": "More Info",
+                "url": publicLink,
+              }]
+            }]
           }
         }
       }
-      text_promise(sender, "If you're on your phone, forward the following"
+      text_promise(uid, "If you're on your phone, forward the following"
        + " message to a friend or group!").then(()=>{
         request({
           url: 'https://graph.facebook.com/v2.6/me/messages',
           qs: {access_token:VERIFICATION_TOKEN},
           method: 'POST',
           json: {
-            recipient: {id:sender},
+            recipient: {id:uid.mid},
             message: messageData
           }
         }, function(error, response, body) {
@@ -451,19 +448,20 @@ function shareGame(sender, text){
   })
 }
 
-function generate_card_element(name, address, image_url, latlong, gameId, attending, capacity, booked, description, when, price){
+function generate_card_element (name, address, image_url, latlong,
+ gameId, attending, capacity, booked, description, when, price) {
 
   let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description + "|" + price + "|" + booked;
 
   let directions_link = "http://maps.google.com/?q=" + address;
 
-  if (attending > 0){
+  if (attending > 0) {
     address = address + " (" + attending + " attending)";
   }
 
   address = when.toString().substring(0, 10) + "\n" + address;
 
-  if(booked){
+  if (booked) {
     address = address + " (You're going)";
   }
 
@@ -475,7 +473,7 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
       "title": name,
       "subtitle": address,
       "image_url": image_url,
-      "item_url": directions_link,
+      "item_url": directions_link
     }
     return template;
   } else {
@@ -494,10 +492,8 @@ function generate_card_element(name, address, image_url, latlong, gameId, attend
   }
 }
 
-function card_for_booking(sender, gameId, description, price, booked){
-
+function card_for_booking (uid, gameId, description, price, booked) {
   let bookOrCancelButton = {}
-
   if (booked === "true") {
     bookOrCancelButton = {
       "type": "postback",
@@ -509,7 +505,7 @@ function card_for_booking(sender, gameId, description, price, booked){
       "type": "web_url",
       "title": "BOOK",
       "url": "limitless-sierra-68694.herokuapp.com/payment"
-        + "?mid=" + sender + "&gid=" + gameId
+        + "?mid=" + uid.mid + "&gid=" + gameId
     }
   } else {
     bookOrCancelButton = {
@@ -545,25 +541,25 @@ function card_for_booking(sender, gameId, description, price, booked){
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
+      recipient: {id:uid.mid},
       message: messageData,
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending cards: ', error)
-    } else if (response.body.error) {
-      console.log('Error sending cards: ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error sending cards: ', errorObject)
     }
-  })
+  });
 }
 
-function generate_card(array){
+function generate_card (array) {
   let elements = [];
-  array.forEach(function(item){
-    //name, address, image_url, latlong, gameId, attending, capacity, booked, description, when, price
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10]));
+  array.forEach((item) => {
+    //name, address, image_url, latlong, gameId,
+    //attending, capacity, booked, description, when, price
+    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4],
+     item[5], item[6], item[7], item[8], item[9], item[10]));
   });
-
   var template = {
     "attachment": {
       "type": "template",
@@ -573,11 +569,10 @@ function generate_card(array){
       }
     }
   }
-
   return template;
 }
 
-function allGames(sender, broadcast){
+function allGames (uid, broadcast) {
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
@@ -589,56 +584,58 @@ function allGames(sender, broadcast){
       let booked = false;
       let join = item.joined;
       join.forEach(function(i){
-        if(i.userId === sender){
+        if(i._id === uid._id){
           booked = true;
         }
       });
-      data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, booked, item.desc, item.when, item.price]);
-    })
+      data.push([item.name, item.address, item.image_url, item.latlong, 
+        item._id, item.joined.length + item.non_members_attending, item.capacity, 
+        booked, item.desc, item.when, item.price]);
+    });
 
     data = generate_card(data);
-    if(broadcast === undefined){
-      cards(sender, data);
+    if (broadcast === undefined) {
+      cards(uid, data);
+    } else {
+      cards(uid, data, broadcast);
     }
-    else {
-      cards(sender, data, broadcast);
-    }
-  })
+  });
 }
 
-function yep (sender) {
+function yep (uid) {
   M.Button.update({name:"Yep"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
+    {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
     function(err){
       console.log(err);
     })
-  M.User.find({userId:sender}, function(err, result){
+  M.User.find({userId:uid.mid}, function(err, result){
     if (err) {
       console.log(err);
     }
     if(result.length > 0){
       console.log("User is already registered");
-      allGames(sender);
-    }
-    else {
-      var get_url = "https://graph.facebook.com/v2.6/" + sender + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=" + VERIFICATION_TOKEN;
+      allGames(uid);
+    } else {
+      var get_url = "https://graph.facebook.com/v2.6/" + uid.mid 
+       + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
+       + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           body = JSON.parse(body);
           let user = M.User({
-            userId: sender,
+            userId: uid.mid,
             firstname: body.first_name,
             lastname: body.last_name,
             profile_pic: body.profile_pic,
             locale: body.locale,
             gender: body.gender
           });
-          user.save(function(err){
-            if(err){
+          user.save((err) => {
+            if (err) {
               console.log(err);
             } else {
-              allGames(sender);
+              allGames(uid);
             }
           });
         }
@@ -647,7 +644,7 @@ function yep (sender) {
   })
 }
 
-function book (sender, rest) {
+function book (uid, rest) {
 
   let arr = rest.split('|');
   let gameId = arr[1];
@@ -655,7 +652,7 @@ function book (sender, rest) {
   /*
     //This was here only for testing purposes
     M.Button.update({name:"Book"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
+    {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
     function(err){
       console.log(err);
@@ -664,7 +661,7 @@ function book (sender, rest) {
 
   M.Button.update({name:"Payments"},{$push: {
     activity: {
-      userId: sender,
+      uid: uid._id,
       time: new Date(),
       gid: gameId,
       amount: 10
@@ -673,40 +670,42 @@ function book (sender, rest) {
     console.log(err);
   });
 
-  M.Game.find({_id:gameId}, function(err, result){
+  M.Game.find({_id:gameId}, (err, result) => {
     let check = true;
     if(result.length > 0){
-      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: sender}}}, function(){
-        booked_for_free_games(sender);
+      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: uid._id}}},
+      () => {
+        booked_for_free_games(uid);
       });
     }
   })
 }
 
-function cancel_booking (sender, rest) {
+function cancel_booking (uid, rest) {
   M.Button.update({name:"Cancel"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
+    {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
     function(err){
       console.log(err);
-    })
+    });
 
   let arr = rest.split('|');
   let gameId = arr[1];
 
   M.Game.find({_id:gameId}, function(err, result){
     let check = true;
-    if(result.length > 0){
-      M.Game.findOneAndUpdate({_id:gameId}, {$pull: {joined: {userId: sender}}}, function(){
-        text(sender, "Your booking has been cancelled");
+    if (result.length > 0) {
+      M.Game.findOneAndUpdate({_id:gameId}, {$pull: {joined: {uid: uid._id}}},
+      () => {
+        text(uid, "Your booking has been cancelled");
       });
     }
   })
 }
 
-function more_info (sender, text) {
+function more_info (uid, text) {
   M.Button.update({name:"More Info"},
-    {$push: {activity: {userId:sender, time: new Date()}}},
+    {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
     function (err) {
       console.log(err);
@@ -721,16 +720,16 @@ function more_info (sender, text) {
   let price = arr[6];
   let booked = arr[7]
 
-  directions(sender, name, address, latlong)
+  directions(uid, name, address, latlong)
   .then(function(success){
-    card_for_booking(sender, gameId, description, price, booked);
+    card_for_booking(uid, gameId, description, price, booked);
   })
   .catch(function(err){
     console.log(err);
   })
 }
 
-function game(sender, gameId){
+function game (uid, gameId) {
   M.Game.find({_id:gameId}, function(err, result){
     if(result.length > 0){
       let data = [];
@@ -742,22 +741,23 @@ function game(sender, gameId){
         let join = item.joined;
 
         join.forEach(function(i){
-          if(i.userId === sender){
+          if(i.uid === uid._id){
             booked = true;
           }
         });
-        data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length, item.capacity, booked, item.desc, item.when, item.price]);
+        data.push([item.name, item.address, item.image_url, item.latlong,
+         item._id, item.joined.length, item.capacity, booked, item.desc,
+         item.when, item.price]);
         data = generate_card(data);
-        cards(sender, data, "Here is your game: ");
-      }
-      else {
-        text(sender, "That game has finished")
+        cards(uid, data, "Here is your game: ");
+      } else {
+        text(uid, "That game has finished")
       }
     }
   })
 }
 
-function my_games(sender){
+function my_games (uid) {
   let now = new Date();
   let query = {when:{
     $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
@@ -765,11 +765,13 @@ function my_games(sender){
   M.Game.find(query).sort('when').exec(function(err, result){
 
     let data = [];
-    result.forEach(function(item){
+    result.forEach((item) => {
       let join = item.joined;
-      join.forEach(function(i){
-        if(i.userId === sender){
-          data.push([item.name, item.address, item.image_url, item.latlong, item._id, item.joined.length + item.non_members_attending, item.capacity, true, item.desc, item.when, item.price]);
+      join.forEach((i) => {
+        if (i.uid === uid._id) {
+          data.push([item.name, item.address, item.image_url, item.latlong,
+           item._id, item.joined.length + item.non_members_attending,
+           item.capacity, true, item.desc, item.when, item.price]);
         }
       });
     })
@@ -777,59 +779,56 @@ function my_games(sender){
     //console.log(data);
 
     if (data.length === 0) {
-      text_promise(sender, "You haven't joined any games.")
-      .then(()=>{
-        allGames(sender);
-      })
-      .catch((e)=>{
+      text_promise(uid, "You haven't joined any games.").then(() => {
+        allGames(uid);
+      }).catch((e) => {
         console.log(e);
       })
-    }
-    else {
+    } else {
       data = generate_card(data);
-      cards(sender, data, "Here are the games you've joined: ");
+      cards(uid, data, "Here are the games you've joined: ");
     }
   })
 }
 
-// function start(sender){
-//
-//   let messageData = {
-//     "attachment": {
-//       "type": "template",
-//       "payload": {
-//         "template_type": "generic",
-//         "elements": [{
-//           "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-//           "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
-//           "buttons": [{
-//             "title": "Login",
-//             "type": "web_url",
-//             "url": ( config.ROOT_URL + "/register?mid=" + sender)
-//           }]
-//         }]
-//       }
-//     }
-//   }
-//
-//   request({
-//     url: 'https://graph.facebook.com/v2.6/me/messages',
-//     qs: {access_token:VERIFICATION_TOKEN},
-//     method: 'POST',
-//     json: {
-//       recipient: {id:sender},
-//       message: messageData,
-//     }
-//   }, function(error, response, body) {
-//     if (error) {
-//       console.log('Error in start(): ', error)
-//     } else if (response.body.error) {
-//       console.log('Error in start(): ', response.body.error)
-//     }
-//   })
-// }
+/*function start(uid){
 
-function start2(sender){
+  let messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": [{
+          "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
+          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
+          "buttons": [{
+            "title": "Login",
+            "type": "web_url",
+            "url": ( config.ROOT_URL + "/register?mid=" + uid.mid)
+          }]
+        }]
+      }
+    }
+  }
+
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:uid.mid},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error in start(): ', error)
+    } else if (response.body.error) {
+      console.log('Error in start(): ', response.body.error)
+    }
+  })
+}*/
+
+function start2 (uid) {
 
   let messageData = {
     "attachment": {
@@ -842,7 +841,7 @@ function start2(sender){
           "buttons": [{
             "title": "Login",
             "type": "web_url",
-            "url": ( config.ROOT_URL + "/register?mid=" + sender)
+            "url": ( config.ROOT_URL + "/register?mid=" + uid.mid)
           }]
         }]
       }
@@ -854,16 +853,15 @@ function start2(sender){
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:sender},
-      message: messageData,
+      recipient: {id:uid.mid},
+      message: messageData
     }
   }, function(error, response, body) {
-    if (error) {
-      console.log('Error in start(): ', error)
-    } else if (response.body.error) {
-      console.log('Error in start(): ', response.body.error)
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error in start(): ', errorObject);
     }
-  })
+  });
 }
 
 module.exports = {
@@ -878,6 +876,7 @@ module.exports = {
   processReceivedMessage: processReceivedMessage,
   text: text,
   text_promise: text_promise,
+  textWithQuickReplies: textWithQuickReplies,
   game: game,
   cards: cards,
   allGames: allGames,
