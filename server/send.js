@@ -65,6 +65,82 @@ function start_with_phoneNumber(phoneNumber, gameId){
   })
 }
 
+function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, image_url, order_number){
+  return new Promise(function(resolve, reject){
+    let messageData = {
+      "attachment": {
+        "type":"template",
+        "payload": {
+          "template_type": "receipt",
+          "recipient_name": name,
+          "currency": "GBP",
+          "payment_method": "Stripe",
+          "order_number": order_number,
+          "elements":[{
+            "title": gameName,
+            "subtitle": address,
+            "quantity": 1,
+            "price": price,
+            "currency":"GBP",
+            "image_url":image_url
+          }],
+          "summary":{
+            "total_cost":price
+          }
+        }
+      }
+    }
+
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {phone_number:phoneNumber},
+        message: messageData
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending booked message: ', error)
+        reject(err);
+      }
+      else if (response.body.error) {
+        console.log('Error sending booked message: ', response.body.error)
+        reject(err)
+      }
+      else {
+        resolve();
+      }
+    })
+  })
+}
+
+function text_with_phoneNumber(phoneNumber, text) {
+  return new Promise(function(resolve, reject){
+    let messageData = { text: text }
+
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {phone_number:phoneNumber},
+        message: messageData
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending text messages: ', error)
+        reject(err);
+      } else if (response.body.error) {
+        console.log('Error sending text messages: ', response.body.error)
+        reject(err);
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
 function register_user (uid, phoneNumber, gameId) {
   var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
    + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
@@ -791,83 +867,11 @@ function my_games (uid) {
   })
 }
 
-/*function start(uid){
-
-  let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [{
-          "title": "Hey there! We at Kickabout are all about playing football. Sound Good?",
-          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
-          "buttons": [{
-            "title": "Login",
-            "type": "web_url",
-            "url": ( config.ROOT_URL + "/register?mid=" + uid.mid)
-          }]
-        }]
-      }
-    }
-  }
-
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    if (error) {
-      console.log('Error in start(): ', error)
-    } else if (response.body.error) {
-      console.log('Error in start(): ', response.body.error)
-    }
-  })
-}*/
-
-function start2 (uid) {
-
-  let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": [{
-          "title": "Hey there! We've implemented a login system'",
-          "image_url": "https://limitless-sierra-68694.herokuapp.com/img/logo.png",
-          "buttons": [{
-            "title": "Login",
-            "type": "web_url",
-            "url": ( config.ROOT_URL + "/register?mid=" + uid.mid)
-          }]
-        }]
-      }
-    }
-  }
-
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error in start(): ', errorObject);
-    }
-  });
-}
-
 module.exports = {
   start: start,
-  start2: start2,
   start_with_phoneNumber: start_with_phoneNumber,
+  text_with_phoneNumber: text_with_phoneNumber,
+  booked_with_phoneNumber: booked_with_phoneNumber,
   register_user: register_user,
   menu: menu,
   notifications: notifications,

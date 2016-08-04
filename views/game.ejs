@@ -31,9 +31,12 @@
     /*
     function isAndroidFacebookApp() {
         var ua = navigator.userAgent || navigator.vendor || window.opera;
+        // $('#warning').css('display', 'block');
+        // document.getElementById('warning').innerHTML = ua;
+        ua = ua.toLowerCase();
         return (
-            ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1))
-            && (ua.indexOf("Android") > -1 || ua.indexOf("android") > -1)
+            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
+            && (ua.indexOf("android") > -1)
         );
     }
 
@@ -41,7 +44,7 @@
         var ua = navigator.userAgent || navigator.vendor || window.opera;
         ua = ua.toLowerCase();
         return (
-            ((ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1))
+            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
             && (ua.indexOf("iphone") > -1 || ua.indexOf("safari") > -1)
         );
     }
@@ -91,7 +94,6 @@
     }
 
     $(document).ready(function(){
-
       if(getParameterByName('process')){
         if(isAndroidFacebookApp()){
           $('#controls').css('display', 'none');
@@ -102,12 +104,13 @@
           $('#iphone').css('display', 'block');
         }
         else {
-          location.href = "http://m.me/kickaboutapp";
+          // location.href = "http://m.me/kickaboutapp";
+          location.href = "http://m.me/245261069180348";
         }
       }
       else {
-        
-        var phoneNumber = localStorage.getItem('phoneNumber');
+
+        var phoneNumber = "0" + localStorage.getItem('phoneNumber');
         if(phoneNumber){
           $('#phoneNumber').val(phoneNumber);
         }
@@ -117,14 +120,15 @@
           var pn = $('#phoneNumber').val();
           pn = validatePhoneNumber(pn);
           if(pn === -1){
-            $('#warning').css('display', 'block')
+            $('#warning').css('display', 'block');
           }
           else {
             localStorage.setItem('phoneNumber', pn);
             $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
               console.log(data);
               if(data === "sent message"){
-                document.getElementById('warning').innerHTML = "Check Facebook Messenger"
+                document.getElementById('warning').innerHTML = "Check Facebook Messenger";
+                $('#warning').css('display', 'block');
               }
               else {
                 location.href = window.location.href + "&process=complete";
@@ -173,6 +177,9 @@
             <p class="gameaddress"><%= gameAddress %></p>
 
             <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+
+
+            <!-- shown when user enters invalid phone number -->
             <h3 id="warning" style="display:none">Please enter a valid phone number in this format: 07231324112</h3>
 
             <div class="fb-send-to-messenger" 
@@ -196,7 +203,6 @@
               </form>
             </div> -->
           </div>
-
 
 
 

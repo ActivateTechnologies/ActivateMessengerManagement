@@ -40,11 +40,12 @@ router.post('/check', function(req, res){
 
   M.User.find({phoneNumber:phoneNumber}, function(err, result){
     if(result.length > 0){
+      console.log("found existing user");
       send.game(result[0].userId, gameId)
       res.send("sent message")
     }
     else {
-
+      console.log("trying to send message using phoneNumber");
       send.start_with_phoneNumber(phoneNumber, gameId)
       .then(()=>{
         res.send("sent message")

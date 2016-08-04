@@ -44,7 +44,8 @@
           localStorage.setItem('phoneNumber', pn);
           $.post( ROOT_URL + "/register?mid=" + getParameterByName('mid') + "&pn=" + pn, function( data ) {
             console.log("registered");
-            location.href = "http://m.me/kickaboutapp";
+            $('.formContainer').css('display', 'none');
+            $('#message').css('display', 'block');
           });
         })
       })
@@ -57,6 +58,7 @@
 
           <div class="inner cover">
             <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br/>
+            <h3 id="message" style="display:none">Check Facebook Messenger</h3>
             <div class="formContainer">
               <form class="form-horizontal" id="pnform">
                 <div class="input-group centre-group">
