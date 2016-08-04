@@ -1,6 +1,6 @@
 'use strict'
 
-var status = 'avi'; //'production' or 'test' or 'avi'
+var status = 'test'; //'production' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 var PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -96,7 +96,7 @@ var AWSaccessKeyId =  "AKIAIAQYS6UTUGDGOUPA";
 var AWSsecretAccessKey = "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";
 
 //Stripe Payments
-//Test Public Key: pk_test_p3GX2e0V1P9FteC3qz29z4YK 
+//Test Public Key: pk_test_p3GX2e0V1P9FteC3qz29z4YK
 //Live Public Key: pk_live_Dey0ulbB4AOL81fmpzWnFKYa
 
 // CHANGE REMOTE ON HEROKU ACCORDINGLY BEFORE DEPLOYING
