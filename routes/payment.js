@@ -109,7 +109,7 @@ router.post('/charge', function(req, res) {
           if(req.body.type){
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
-
+              send.booked_with_phoneNumber()
 
               //if success then send him receipt
 
@@ -134,20 +134,20 @@ router.post('/charge', function(req, res) {
           		}
               else {
 
-                    M.Game.find({_id:gameId}, function(err, result){
-                        M.Analytics.update({name:"Payments"},{$push: {
-                          activity: {
-                            userId: doc._id,
-                            time: new Date(),
-                            gid: gameId,
-                            amount: price
-                          }
-                        }}, {upsert: true}, (err) => {console.log(err);});
-                        M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
-                          //send him details of game for confirmation
+                M.Game.find({_id:gameId}, function(err, result){
+                    M.Analytics.update({name:"Payments"},{$push: {
+                      activity: {
+                        userId: doc._id,
+                        time: new Date(),
+                        gid: gameId,
+                        amount: price
+                      }
+                    }}, {upsert: true}, (err) => {console.log(err);});
+                    M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+                      //send him details of game for confirmation
 
-                        });
-                    })
+                    });
+                })
 
           		}
           	});
