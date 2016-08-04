@@ -496,7 +496,7 @@ function card_for_booking (uid, gameId, description, price, booked) {
     bookOrCancelButton = {
       "type": "web_url",
       "title": "BOOK",
-      "url": "limitless-sierra-68694.herokuapp.com/payment"
+      "url": config.ROOT_URL + "/payment"
         + "?mid=" + uid.mid + "&gid=" + gameId
     }
   } else {
