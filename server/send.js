@@ -7,6 +7,24 @@ const W = require('./wit.js');
 const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
 
+
+function send(mid, messageData){
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:VERIFICATION_TOKEN},
+    method: 'POST',
+    json: {
+      recipient: {id:mid},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    let errorObject = (error) ? error : response.body.error;
+    if (errorObject) {
+      console.log('Error in sending message: ', response.body.error);
+    }
+  });
+}
+
 function start(uid) {
 
   let messageData = {
@@ -18,20 +36,7 @@ function start(uid) {
     }]
   }
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error in start(): ', response.body.error);
-    }
-  });
+  send(uid.mid, messageData);
 }
 
 function start_with_phoneNumber(phoneNumber, gameId){
@@ -187,20 +192,8 @@ function menu (uid) {
       "payload": "notifications"
     }]
   }
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error in menu(): ', errorObject)
-    }
-  });
+
+  send(uid.mid, messageData);
 }
 
 function notifications (uid) {
@@ -216,20 +209,8 @@ function notifications (uid) {
       "payload": "notifications off"
     }]
   }
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error in notifications(): ', errorObject)
-    }
-  })
+
+  send(uid.mid, messageData);
 }
 
 function notifications_change (uid, set) {
@@ -246,7 +227,6 @@ function notifications_change (uid, set) {
 }
 
 function booked (uid, name, price, gameName, address, image_url, order_number) {
-  order_number = order_number;
   let messageData = {
     "attachment": {
       "type":"template",
@@ -271,20 +251,7 @@ function booked (uid, name, price, gameName, address, image_url, order_number) {
     }
   }
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error sending booked message: ', errorObject)
-    }
-  })
+  send(uid.mid, messageData);
 }
 
 function booked_for_free_games (uid) {
@@ -299,20 +266,7 @@ function booked_for_free_games (uid) {
     ]
   }
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error sending booked for free message: ', errorObject)
-    }
-  })
+  send(uid.mid, messageData);
 }
 
 function processReceivedMessage(uid, message, defaultCallback) {
@@ -345,21 +299,7 @@ function text_promise (uid, text) {
 
 function text (uid, text) {
   let messageData = { text: text }
-
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error sending text messages: ', errorObject)
-    }
-  })
+  send(uid.mid, messageData);
 }
 
 function textWithQuickReplies (uid, text, quickReplies) {
@@ -407,20 +347,7 @@ function cards (uid, data, message) {
     text(uid, message);
   }
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: data
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error sending cards: ', errorObject)
-    }
-  })
+  send(uid.mid, data);
 }
 
 function directions (uid, name, address, latlong) {
@@ -501,22 +428,11 @@ function shareGame (uid, text) {
         }
       }
       text_promise(uid, "If you're on your phone, forward the following"
-       + " message to a friend or group!").then(()=>{
-        request({
-          url: 'https://graph.facebook.com/v2.6/me/messages',
-          qs: {access_token:VERIFICATION_TOKEN},
-          method: 'POST',
-          json: {
-            recipient: {id:uid.mid},
-            message: messageData
-          }
-        }, function(error, response, body) {
-          let errorObject = (error) ? error : response.body.error;
-          if (errorObject) {
-            console.log('Error sending share card: ', errorObject)
-          }
-        })
-      }).catch((e)=>{
+       + " message to a friend or group!")
+      .then(()=>{
+        send(uid.mid, messageData);
+      })
+      .catch((e)=>{
         console.log('Error sending text, ' + e);
       });
 
@@ -612,20 +528,7 @@ function card_for_booking (uid, gameId, description, price, booked) {
     }
   }
 
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:VERIFICATION_TOKEN},
-    method: 'POST',
-    json: {
-      recipient: {id:uid.mid},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    let errorObject = (error) ? error : response.body.error;
-    if (errorObject) {
-      console.log('Error sending cards: ', errorObject)
-    }
-  });
+  send(uid.mid, messageData);
 }
 
 function generate_card (array) {
@@ -664,8 +567,8 @@ function allGames (uid, broadcast) {
           booked = true;
         }
       });
-      data.push([item.name, item.address, item.image_url, item.latlong, 
-        item._id, item.joined.length + item.non_members_attending, item.capacity, 
+      data.push([item.name, item.address, item.image_url, item.latlong,
+        item._id, item.joined.length + item.non_members_attending, item.capacity,
         booked, item.desc, item.when, item.price]);
     });
 
@@ -693,7 +596,7 @@ function yep (uid) {
       console.log("User is already registered");
       allGames(uid);
     } else {
-      var get_url = "https://graph.facebook.com/v2.6/" + uid.mid 
+      var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
        + VERIFICATION_TOKEN;
       request(get_url, function (error, response, body) {
