@@ -9,11 +9,11 @@ const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
 
 function send(uid, messageData, callback) {
-  let receipt;
+  let recipient;
   if (uid.mid) {
-    receipt = {id:uid.mid}
+    recipient = {id:uid.mid}
   } else if (uid.phoneNumber) {
-    receipt = {phone_number:uid.phoneNumber};
+    recipient = {phone_number:uid.phoneNumber};
   } else {
     console.log('send not executed, as neither mid nor phone number exist');
     return;
@@ -23,14 +23,15 @@ function send(uid, messageData, callback) {
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:uid.mid},
+      recipient: recipient,
       message: messageData
     }
   }, (error, response, body) => {
     let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
-      console.log('Error sending messages to mid "'
-        + uid.mid + '": ', errorObject);
+      console.log('Error sending message (' + JSON.stringify(messageData) 
+       + ') to recipient "' + JSON.stringify(recipient) 
+       + '": ', JSON.stringify(errorObject));
       if (callback) {
         callback(errorObject);
       }

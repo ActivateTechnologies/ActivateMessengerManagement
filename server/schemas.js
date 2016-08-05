@@ -48,7 +48,7 @@ let Game = mongoose.model('Game', gameSchema);
 let buttonSchema = new Schema({
   name: String,
   activity: [{
-    userId: String,
+    uid: String,
     time: Date
   }]
 })
@@ -58,7 +58,7 @@ let Button = mongoose.model('Button', buttonSchema);
 let analyticsSchema = new Schema({
   name: String,
   activity: [{
-    userId: String,
+    uid: String,
     time: Date,
     gid: String,
     amount: Number

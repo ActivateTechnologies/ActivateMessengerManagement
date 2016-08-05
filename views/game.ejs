@@ -63,7 +63,7 @@
     }
 
     $(document).ready(function(){
-      let phoneNumber = getParameterByName('pn');
+      var phoneNumber = getParameterByName('pn');
       // if user is coming from bot (existing user)
       if(phoneNumber){
         // if free game
@@ -80,12 +80,14 @@
         }
       }
 
+      if (localStorage.getItem('phoneNumber')) {
+        $('#phoneNumber').val('+44' + localStorage.getItem('phoneNumber'));
+      }
 
       //if user not coming from bot, could be existing
       $('#pnform').submit(function(e){
         e.preventDefault();
         var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
-
         if(phoneNumber === -1){
           $('#warning').css('display', 'block');
         }
