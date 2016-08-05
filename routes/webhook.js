@@ -38,8 +38,8 @@ router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
   messaging_events.forEach((event) => {
     if ((!event.message || !event.message.is_echo) && !event.read && !event.delivery) {
-      console.log(event);
-      console.log("--------------------------------")
+      /*console.log(event);
+      console.log("--------------------------------");*/
       let uid = {
         mid: event.sender.id
       };
