@@ -60,22 +60,25 @@ router.post('/charge', function(req, res) {
     //if existing user
     if(results.length > 0){
       console.log("existing user");
+      let uid = {
+        mid: = results[0].userId
+      }
       //if free game
       if(price === 0){
         console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
           //need to add game details to message
-          send.text(results[0].userId, "Thanks for booking");
+          send.text(uid, "Thanks for booking");
         });
       }
       //else make him pay
       else {
         console.log("paid game");
-        // makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
-        //   M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
-        //     send.booked(results[0].userId, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
-        //   });
-        // });
+        makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
+          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
+            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
+          });
+        });
       }
       res.send("sent message")
     }
