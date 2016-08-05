@@ -2,86 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Kickabout | Book</title>
+    <title>Kickabout | Pay</title>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link href="css/coded.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link rel="stylesheet" href="css/input.css">
     <link rel="icon" href="img/favicon.png">
-
-    <meta property="og:title" content="<%= gameName %>" />
-    <meta property="og:description" content="<%= gameAddress %>" />
-    <meta property="fb:app_id" content="144481079297226">
-    <meta property="og:image" content="<%= imageLink %>" />
-    <meta property="og:image:secure_url" content="<%= imageLink %>" />
+    <link href="css/coded.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-
-    <style>
-      a {
-        text-shadow: none;
-      }
-    </style>
   </head>
   <body>
-    <script src="js/config.js"></script>
-    <script>
-
-    /*
-    function isAndroidFacebookApp() {
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        // $('#warning').css('display', 'block');
-        // document.getElementById('warning').innerHTML = ua;
-        ua = ua.toLowerCase();
-        return (
-            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
-            && (ua.indexOf("android") > -1)
-        );
-    }
-
-    function isIOSFacebookApp() {
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        ua = ua.toLowerCase();
-        return (
-            ((ua.indexOf("fban") > -1) || (ua.indexOf("fbav") > -1))
-            && (ua.indexOf("iphone") > -1 || ua.indexOf("safari") > -1)
-        );
-    }
-
-    function validatePhoneNumber(phoneNumber){
-      phoneNumber = phoneNumber.replace(/\D/gm, '');
-      if(phoneNumber.substring(0, 2) === "44"){
-        if(phoneNumber.length === 12){
-          return phoneNumber.substring(2)
-        }
-        else {
-          return -1;
-        }
-      }
-      else if(phoneNumber.substring(0, 4) === "0044"){
-        if(phoneNumber.length === 14){
-          return phoneNumber.substring(4)
-        }
-        else {
-          return -1;
-        }
-      }
-      else if(phoneNumber.substring(0, 1) === "0"){
-        if(phoneNumber.length === 11){
-          return phoneNumber.substring(1)
-        }
-        else {
-          return -1;
-        }
-      }
-      else if(phoneNumber.length == 10){
-        return phoneNumber
-      }
-      else {
-        return -1;
-      }
-    }
+  <script src="js/config.js"></script>
+  <script type="text/javascript">
 
     function getParameterByName(name, url) {
       if (!url) url = window.location.href;
@@ -93,146 +28,143 @@
       return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-    $(document).ready(function(){
-      if(getParameterByName('process')){
-        if(isAndroidFacebookApp()){
-          $('#controls').css('display', 'none');
-          $('#android').css('display', 'block');
-        }
-        else if(isIOSFacebookApp()){
-          $('#controls').css('display', 'none');
-          $('#iphone').css('display', 'block');
+    function validatePhoneNumber(phoneNumber){
+      phoneNumber = phoneNumber.replace(/\D/gm, '');
+      if(phoneNumber.substring(0, 2) === "44"){
+        if(phoneNumber.length === 12){
+          return "+44" + phoneNumber.substring(2)
         }
         else {
-          // location.href = "http://m.me/kickaboutapp";
-          location.href = "http://m.me/245261069180348";
+          return -1;
         }
+      }
+      else if(phoneNumber.substring(0, 4) === "0044"){
+        if(phoneNumber.length === 14){
+          return "+44" + phoneNumber.substring(4)
+        }
+        else {
+          return -1;
+        }
+      }
+      else if(phoneNumber.substring(0, 1) === "0"){
+        if(phoneNumber.length === 11){
+          return "+44" + phoneNumber.substring(1)
+        }
+        else {
+          return -1;
+        }
+      }
+      else if(phoneNumber.length == 10){
+        return "+44" + phoneNumber
       }
       else {
+        return -1;
+      }
+    }
 
-        var phoneNumber = "0" + localStorage.getItem('phoneNumber');
-        if(phoneNumber){
-          $('#phoneNumber').val(phoneNumber);
+    $(document).ready(function(){
+      let phoneNumber = getParameterByName('pn');
+      // if user is coming from bot (existing user)
+      if(phoneNumber){
+        // if free game
+        if(<%= gameprice %> === 0){
+          console.log("free game");
+          $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + phoneNumber, function(data){
+            console.log(data);
+          })
         }
-
-        $('#pnform').submit(function(e){
-          e.preventDefault();
-          var pn = $('#phoneNumber').val();
-          pn = validatePhoneNumber(pn);
-          if(pn === -1){
-            $('#warning').css('display', 'block');
-          }
-          else {
-            localStorage.setItem('phoneNumber', pn);
-            $.post( ROOT_URL + "/check?pn=" + pn + "&gid=" + getParameterByName('gid'), function( data ) {
-              console.log(data);
-              if(data === "sent message"){
-                document.getElementById('warning').innerHTML = "Check Facebook Messenger";
-                $('#warning').css('display', 'block');
-              }
-              else {
-                location.href = window.location.href + "&process=complete";
-              }
-            });
-          }
-        })
-
+        //if paid game
+        else{
+          //redirect to payment
+          location.href = ROOT_URL + "/payment?gid=<%= gid %>&gp=<% gameprice %>&pn=" + phoneNumber;
+        }
       }
 
+
+      //if user not coming from bot, could be existing
+      $('#pnform').submit(function(e){
+        e.preventDefault();
+        var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
+
+        if(phoneNumber === -1){
+          $('#warning').css('display', 'block');
+        }
+        else {
+          localStorage.setItem('phoneNumber', phoneNumber);
+
+          //if free game
+          if(<%= gameprice %> === 0){
+            $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + pn, function(data){
+              if(data){
+                console.log(data);
+              }
+            })
+          }
+
+          // if paid game
+          else {
+            //redirect to payment
+            location.href = ROOT_URL + "/payment?gid=<%= gid %>&gp=<%= gameprice %>&pn=" + phoneNumber;
+          }
+        }
+
+      })
     })
-    */
+  </script>
 
-    </script>
+  <div class="site-wrapper-payment">
 
-    <script>
-
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId: "APP_ID",
-          xfbml: true,
-          version: "v2.6"
-        });
-
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) { return; }
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-
-    </script>
-
-    <div class="site-wrapper-payment">
       <div class="site-wrapper-inner2">
+
         <div class="cover-container2">
 
-          <div id="controls" class="inner cover">
-            <img src="img/logoUnbinded-white.png" class="logoLead-payment">
-            <br/>
-            <img src="<%= imageLink %>" class="gamePic">
-            <p class="gametitlegame"><%= gameName %></p>
-            <p class="gameaddress"><%= gameAddress %></p>
-
-            <p id="text" class="title-text-useMessenger">Use Facebook Messenger to book your game:</p>
+          <div class="inner cover">
 
 
-            <!-- shown when user enters invalid phone number -->
-            <h3 id="warning" style="display:none">Please enter a valid phone number in this format: 07231324112</h3>
+              <img src="img/logoUnbinded-white.png" class="logoLead-payment">
 
-            <div class="fb-send-to-messenger" 
-              messenger_app_id="954912331274478" 
-              page_id="631474433673481" 
-              data-ref="PASS_THROUGH_PARAM" 
-              color="blue" 
-              size="standard">
-            </div>  
+              <br/>
+              <!-- game image -->
+              <img src="<%= imageLink %>" class="gamePic">
+              <p class="gametitle"><%= gameName %></p>
+              <p class="gameaddress">
+                <%= gameAddress %>
+              </p>
+              <p>
+                <%= gameDescription %>
+              </p>
 
-            <!-- <div class="formContainer">
-              <form class="form-horizontal" id="pnform">
-                <div class="input-group centre-group">
-                  <div class="input-group-addon custom-width">Phone Number</div>
-                  <input name="phone" autocomplete="tel" placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
-                </div>
-                <br/>
-                <div class="form-group">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-              </form>
-            </div> -->
-          </div>
+              <!-- shown when user enters invalid phone number -->
+              <h3 id="warning" style="display:none">Please enter a valid phone number in this format: 07231324112</h3>
 
+              <div class="formContainer">
+                <form class="form-horizontal" id="pnform">
+                  <div class="input-group centre-group">
+                    <div class="input-group-addon custom-width">Phone Number</div>
+                    <input name="phone" autocomplete="tel" placeholder="Eg: 07231324112" id="phoneNumber" type="text" class="form-control" required>
+                  </div>
+                  <br/>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
 
-
-
-
-          <div id="android" style="display:none">
-            <p>
-              Click on the three dots and choose open in chrome
-            </p>
-          </div>
-
-          <div id="iphone" style="display:none">
-            <p>
-              Click on Share and choose open in Safari
-            </p>
-          </div>
-
-
-
-
-          <div class="footerDiv">
-            <p class="footertext">
-              Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
-              <br>www.activatetechnologies.co.uk
-            </p>
           </div>
 
         </div>
-      </div>
+
+        <div class="footerDiv">
+          <p class="footertext">
+                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+                <br>
+                www.activatetechnologies.co.uk
+          </p>
+        </div>
+
     </div>
+
+  </div>
 
   </body>
 </html>

@@ -108,8 +108,7 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending booked message to phoneNumber "'
-          + uid.mid + '": ', errorObject);
+        console.log('Error sending booked message to phoneNumber "' + errorObject);
         reject(errorObject);
       } else {
         resolve();
