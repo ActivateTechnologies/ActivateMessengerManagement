@@ -5,22 +5,23 @@ const M = require('./schemas.js');
 const config = require('./../config');
 const W = require('./wit.js');
 const L = require('./luis.js');
-const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN
+const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
 
-function send(mid, messageData){
+function send (uid, messageData) {
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
     method: 'POST',
     json: {
-      recipient: {id:mid},
-      message: messageData,
+      recipient: {id:uid.mid},
+      message: messageData
     }
-  }, function(error, response, body) {
+  }, (error, response, body) => {
     let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
-      console.log('Error in sending message: ', response.body.error);
+      console.log('Error sending messages to mid "' 
+        + uid.mid + '": ', errorObject);
     }
   });
 }
@@ -36,7 +37,7 @@ function start(uid) {
     }]
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function start_with_phoneNumber(phoneNumber, gameId){
@@ -58,7 +59,7 @@ function start_with_phoneNumber(phoneNumber, gameId){
         recipient: {phone_number:phoneNumber},
         message: messageData
       }
-    }, function(error, response, body) {
+    }, (error, response, body) => {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
         console.log('Error in start_with_phoneNumber(): ', errorObject);
@@ -105,15 +106,12 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
         message: messageData
       }
     }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending booked message: ', error)
-        reject(err);
-      }
-      else if (response.body.error) {
-        console.log('Error sending booked message: ', response.body.error)
-        reject(err)
-      }
-      else {
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending booked message to phoneNumber "' 
+          + uid.mid + '": ', errorObject);
+        reject(errorObject);
+      } else {
         resolve();
       }
     })
@@ -133,12 +131,11 @@ function text_with_phoneNumber(phoneNumber, text) {
         message: messageData
       }
     }, function(error, response, body) {
-      if (error) {
-        console.log('Error sending text messages: ', error)
-        reject(err);
-      } else if (response.body.error) {
-        console.log('Error sending text messages: ', response.body.error)
-        reject(err);
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending text messages to phoneNumber "' 
+          + phoneNumber + '": ', errorObject);
+        reject(errorObject);
       } else {
         resolve();
       }
@@ -193,7 +190,7 @@ function menu (uid) {
     }]
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function notifications (uid) {
@@ -210,7 +207,7 @@ function notifications (uid) {
     }]
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function notifications_change (uid, set) {
@@ -251,7 +248,7 @@ function booked (uid, name, price, gameName, address, image_url, order_number) {
     }
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function booked_for_free_games (uid) {
@@ -266,7 +263,7 @@ function booked_for_free_games (uid) {
     ]
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function processReceivedMessage(uid, message, defaultCallback) {
@@ -288,7 +285,8 @@ function text_promise (uid, text) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending text messages: ', errorObject)
+        console.log('Error sending text messages to mid "' 
+          + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
         resolve();
@@ -299,7 +297,7 @@ function text_promise (uid, text) {
 
 function text (uid, text) {
   let messageData = { text: text }
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function textWithQuickReplies (uid, text, quickReplies) {
@@ -330,7 +328,8 @@ function textWithQuickReplies (uid, text, quickReplies) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending messages with quick replies: ', errorObject);
+        console.log('Error sending messages with quickReplies to mid "' 
+          + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
         resolve();
@@ -347,7 +346,7 @@ function cards (uid, data, message) {
     text(uid, message);
   }
 
-  send(uid.mid, data);
+  send(uid, data);
 }
 
 function directions (uid, name, address, latlong) {
@@ -387,7 +386,8 @@ function directions (uid, name, address, latlong) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending directinos: ', errorObject)
+        console.log('Error sending directions to mid "' 
+          + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
         resolve("success");
@@ -430,7 +430,7 @@ function shareGame (uid, text) {
       text_promise(uid, "If you're on your phone, forward the following"
        + " message to a friend or group!")
       .then(()=>{
-        send(uid.mid, messageData);
+        send(uid, messageData);
       })
       .catch((e)=>{
         console.log('Error sending text, ' + e);
@@ -528,7 +528,7 @@ function card_for_booking (uid, gameId, description, price, booked) {
     }
   }
 
-  send(uid.mid, messageData);
+  send(uid, messageData);
 }
 
 function generate_card (array) {
