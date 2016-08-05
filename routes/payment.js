@@ -92,6 +92,7 @@ router.post('/charge', function(req, res) {
 
     // if new user
     else {
+      console.log("new user");
       //create new user
       let user = M.User({
         phoneNumber: phoneNumber
@@ -102,6 +103,7 @@ router.post('/charge', function(req, res) {
         else {
           //free game
           if(price === 0){
+            console.log("free game");
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
               send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
@@ -118,6 +120,7 @@ router.post('/charge', function(req, res) {
 
           // if paid game
           else {
+            console.log("paid game");
             //make him pay
 
             // makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
