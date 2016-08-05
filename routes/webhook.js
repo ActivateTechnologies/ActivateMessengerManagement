@@ -58,29 +58,37 @@ router.post('/webhook/', function (req, res) {
           }
         }
 
-        if (user && !uid.phoneNumber
+        /*console.log(11, user.conversationLocation);
+        console.log(22, user.conversationLocation.conversationName);
+        console.log(33, user.conversationLocation.nodeId);
+        console.log(44, user.conversationLocation.type);
+        console.log(55, user.conversationLocation.userErrorText);*/
+
+        if (user && !uid.phoneNumber && user.conversationLocation
          && user.conversationLocation.conversationName != 'onboarding'
          && user.conversationLocation.conversationName != 'collectPhoneNumber') {
           Conversation.startConversation(uid, 'collectPhoneNumber');
         } else {
           if (!Conversation.consumeEvent(event, uid, user)) {
             if (event.message && event.message.text) {
-              if (user.conversationLocation
+              /*if (user.conversationLocation
                && user.conversationLocation.conversationName) {
                 Conversation.executeTreeNodefromId(uid,
                   user.conversationLocation.conversationName,
                   user.conversationLocation.nodeId + '.1',
                   event.message.text);
+              } else {*/
+              if (event.message.quick_reply) {
+                processQuickReply(event, uid);
               } else {
-                if (event.message.quick_reply) {
-                  processQuickReply(event, uid);
-                } else {
-                  processTextMessage(event, uid);
-                }
+                processTextMessage(event, uid);
               }
+              //}
             } else if(event.message && event.message.attachments){
+              console.log('Processing Attachment');
               processAttachment(event, uid);
             } else if (event.postback) {
+              console.log('Processing postback');
               processPostback(event, uid);
             }
           }

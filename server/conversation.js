@@ -26,17 +26,58 @@ function startConversation(uid, conversationName) {
 }
 
 function consumeEvent(event, uid, user) {
-  return false;
-  //TODO
-  if (!user || user.conversationLocation) {
+  //return false;
+  //console.log(uid, user, event);
+  if (!user || !user.conversationLocation) {
     return false;
   }
-  let userMessageType = user.conversationName.type;
-  /*if (userMessageType == 'text' && ) 
-  Conversation.executeTreeNodefromId(uid,
-    user.conversationLocation.conversationName,
-    user.conversationLocation.nodeId + '.1',
-    event.message.text);*/
+  let userMessageType = user.conversationLocation.nodeType;
+
+  if (userMessageType == 'text') {
+    console.log(1)
+    if (!event.message || !event.message.text) {
+      console.log(2)
+      sendUserErrorMessage(event, uid, user);
+      return true;
+    } else {
+      console.log(3)
+      executeTreeNodefromId(uid,
+        user.conversationLocation.conversationName,
+        user.conversationLocation.nodeId + '.1',
+        event.message.text);
+      return true;
+    }
+  } else if (userMessageType == 'quickReplies') {
+    console.log(4)
+    if (!event.message || !event.message.quick_reply) {
+      console.log(5)
+      sendUserErrorMessage(event, uid, user);
+      return true;
+    } else {
+      console.log(6)
+      let payload = event.message.quick_reply.payload;
+      if (payload.substring(0, 16) == "conversationName") {
+        console.log(7)
+        handleQuickReply(uid, payload);
+        return true;
+      } else {
+        console.log(8)
+        sendUserErrorMessage(event, uid, user);
+        return true;
+      }
+    }
+  }
+}
+
+/*
+  Called when user replies with a type of message that's not expected;
+  sends the user the saved error message from that node. */
+function sendUserErrorMessage (event, uid, user) {
+  let message = user.conversationLocation.userErrorText;
+  send.text_promise(uid, message).then(() => {
+    executeTreeNodefromId(uid, user.conversationLocation.conversationName,
+     user.conversationLocation.nodeId);
+  });
 }
 
 /*
@@ -46,40 +87,38 @@ function executeTreeNode(uid, conversationName, node, message) {
   //console.log('executeTreeNode', uid, conversationName, node);
   if (node.sender == 'bot') {
     clearUserConversationLocation(uid);
-    if (node.type == 'text') {
-      if (node.quickReplies && node.quickReplies.length) {
-        let quickReplies = [];
-        node.quickReplies.forEach((textString, index) => {
-          quickReplies.push({
-            "content_type": "text",
-            "title": textString,
-            "payload": "conversationName~" + conversationName
-              + "|nodeId~" + node.id + "." + (index + 1)
-          });
+    if (node.nodeType == 'text') {
+      send.text_promise(uid, node.text).then(() => {
+        if (node.next && node.next.length) {
+          executeTreeNode(uid, conversationName, node.next[0]);
+        } else {
+          console.log('No nodes found in next, assuming end of tree.');
+        }
+      });
+    } else if (node.nodeType == 'quickReplies') {
+      let quickReplies = [];
+      node.quickReplies.forEach((textString, index) => {
+        quickReplies.push({
+          "content_type": "text",
+          "title": textString,
+          "payload": "conversationName~" + conversationName
+            + "|nodeId~" + node.id + "." + (index + 1)
         });
-        send.textWithQuickReplies(uid, node.text, quickReplies).then(() => {
-          saveUserConversationLocation(uid, conversationName, node.id);
-        });
-      } else {
-        send.text_promise(uid, node.text).then(() => {
-          if (node.next && node.next.length) {
-            executeTreeNode(uid, conversationName, node.next[0]);
-          } else {
-            console.log('No nodes found in next, assuming end of tree.');
-          }
-        });
-      }
-    } else if (node.type == 'function') {
+      });
+      send.textWithQuickReplies(uid, node.text, quickReplies).then(() => {
+        saveUserConversationLocation(uid, conversationName, node);
+      });
+    } else if (node.nodeType == 'function') {
       functionsIndex[conversationName][node.function](uid,
        conversationName, node, message);
-    } else if (node.type == 'jumpToId') {
+    } else if (node.nodeType == 'jumpToId') {
       executeTreeNodefromId(uid, conversationName, node.jumpToId);
-    } else if (node.type == 'jumpToExternalId') {
+    } else if (node.nodeType == 'jumpToExternalId') {
       executeTreeNodefromId(uid, node.jumpToExternalId.conversationName,
        node.jumpToExternalId.nodeId);
     }
   } else if (node.sender == 'user') {
-    saveUserConversationLocation(uid, conversationName, node.id)
+    saveUserConversationLocation(uid, conversationName, node)
   }
 }
 
@@ -120,15 +159,19 @@ function handleQuickReply(uid, payload) {
 }
 
 /*
-  Saves the users current conversation to his user object, saving
-  conversationName and nodeId. */
-function saveUserConversationLocation(uid, conversationName, nodeId) {
-  console.log('saveUserConversationLocation(' + uid._id + ', ' 
-    + conversationName + ', ' + nodeId + ')');
+  Usually called when it's at a node with "sender" == "user".
+  Saves the users current conversation location to his user object,
+  saving conversationName, nodeId, type and userErrorText. */
+function saveUserConversationLocation(uid, conversationName, node) {
+  /*console.log('saveUserConversationLocation(' + uid._id + ', ' 
+    + conversationName + ', ' + node.id + ', ' + node.nodeType
+    + ', ' + node.userErrorText + ')');*/
   let updateObject = {
     conversationLocation: {
       conversationName: conversationName,
-      nodeId: nodeId
+      nodeId: node.id,
+      nodeType: node.nodeType,
+      userErrorText: (node.userErrorText) ? node.userErrorText : ''
     }
   }
   M.User.update({userId: uid.mid}, updateObject, (error, result) => {

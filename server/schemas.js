@@ -18,7 +18,9 @@ let userSchema = new Schema({
   publicLink: String,
   conversationLocation: {
     conversationName: String,
-    nodeId: String
+    nodeId: String,
+    nodeType: String,
+    userErrorText: String
   }
 })
 
