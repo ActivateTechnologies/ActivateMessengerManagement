@@ -8,7 +8,7 @@ const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
 
-function send (uid, messageData) {
+function send(uid, messageData) {
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
@@ -20,7 +20,7 @@ function send (uid, messageData) {
   }, (error, response, body) => {
     let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
-      console.log('Error sending messages to mid "' 
+      console.log('Error sending messages to mid "'
         + uid.mid + '": ', errorObject);
     }
   });
@@ -108,7 +108,7 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending booked message to phoneNumber "' 
+        console.log('Error sending booked message to phoneNumber "'
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
@@ -133,7 +133,7 @@ function text_with_phoneNumber(phoneNumber, text) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending text messages to phoneNumber "' 
+        console.log('Error sending text messages to phoneNumber "'
           + phoneNumber + '": ', errorObject);
         reject(errorObject);
       } else {
@@ -285,7 +285,7 @@ function text_promise (uid, text) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending text messages to mid "' 
+        console.log('Error sending text messages to mid "'
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
@@ -295,7 +295,7 @@ function text_promise (uid, text) {
   })
 }
 
-function text (uid, text) {
+function text(uid, text) {
   let messageData = { text: text }
   send(uid, messageData);
 }
@@ -328,7 +328,7 @@ function textWithQuickReplies (uid, text, quickReplies) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending messages with quickReplies to mid "' 
+        console.log('Error sending messages with quickReplies to mid "'
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
@@ -386,7 +386,7 @@ function directions (uid, name, address, latlong) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending directions to mid "' 
+        console.log('Error sending directions to mid "'
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {

@@ -60,6 +60,7 @@ router.post('/charge', function(req, res) {
     //if existing user
     if(results.length > 0){
       console.log("existing user");
+      console.log("userId: " + results[0].userId);
       let uid = {
         mid: results[0].userId
       }
@@ -68,6 +69,7 @@ router.post('/charge', function(req, res) {
         console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
           //need to add game details to message
+          console.log("send to " + uid.mid);
           send.text(uid, "Thanks for booking");
         });
       }
