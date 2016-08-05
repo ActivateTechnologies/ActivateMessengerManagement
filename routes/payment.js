@@ -11,7 +11,7 @@ const twilio = require('./../server/twilio.js')
 router.get('/payment', function(req, res){
   let gameId = req.query.gid;
   let pn = req.query.pn;
-  
+
   M.Game.find({_id:gameId}, function(err, result){
     if (err) {
       console.log('Error looking for game', err);
@@ -57,7 +57,7 @@ router.post('/charge', function(req, res) {
     if(err) console.log(err);
 
     //if existing user
-    if(results[0].length > 0){
+    if(results.length > 0){
       //if free game
       if(req.body.type){
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
