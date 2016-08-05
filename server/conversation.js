@@ -25,6 +25,19 @@ function startConversation(uid, conversationName) {
   });
 }
 
+function consumeEvent(event, uid, user) {
+  //TODO
+  if (!user || user.conversationLocation) {
+    return false;
+  }
+  let userMessageType = user.conversationName.type;
+  if (userMessageType == 'text' && ) 
+  Conversation.executeTreeNodefromId(uid,
+    user.conversationLocation.conversationName,
+    user.conversationLocation.nodeId + '.1',
+    event.message.text);
+}
+
 /*
   Executes given node and calls itself or relevant functions 
   when required */
