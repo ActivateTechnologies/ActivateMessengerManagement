@@ -1,4 +1,4 @@
-const status = 'avi'; //'production' or 'test' or 'avi'
+const status = 'test'; //'production' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -102,37 +102,6 @@ exports.AWSsecretAccessKey = "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O";
 //MONTY MESSENGER 245261069180348
 //KICKABOUT 1625739117677522
 
-//still need to change
-//redirect link in payment.js
-//booking link generator in send.js inside generate_card_for_booking
-//need to change app id and page id in game.ejs
-// > also need to change cors request on /check
-
 
 //Alex's real account
 // 10153573553662304
-
-
-// For setting up Persistent Menu
-
-// curl -X POST -H "Content-Type: application/json" -d '{
-//   "setting_type" : "call_to_actions",
-//   "thread_state" : "existing_thread",
-//   "call_to_actions":[
-//     {
-//       "type":"postback",
-//       "title":"Show Games",
-//       "payload":"play"
-//     },
-//     {
-//       "type":"postback",
-//       "title":"My Games",
-//       "payload":"my games"
-//     },
-// 		{
-//       "type":"postback",
-//       "title":"Notifications",
-//       "payload":"notifications"
-//     }
-//   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"

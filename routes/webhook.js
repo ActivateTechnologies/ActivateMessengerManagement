@@ -36,6 +36,7 @@ router.get('/webhook', function (req, res) {
 
 router.post('/webhook/', function (req, res) {
   let messaging_events = req.body.entry[0].messaging;
+
   messaging_events.forEach((event) => {
     if ((!event.message || !event.message.is_echo) && !event.read && !event.delivery) {
       /*console.log(event);
@@ -51,14 +52,14 @@ router.post('/webhook/', function (req, res) {
           console.log('No users with userId "' + uid.mid + '" found.');
         } else if (results.length > 1) {
           console.log('Multiple users with userId "' + uid.mid + '" found.');
-        } else { 
+        } else {
           user = results[0];
           uid._id = user._id;
           if (user.phoneNumber) {
             uid.phoneNumber = user.phoneNumber;
           }
         }
-        if (user && !uid.phoneNumber 
+        if (user && !uid.phoneNumber
          && user.conversationLocation.conversationName != 'onboarding'
          && user.conversationLocation.conversationName != 'collectPhoneNumber') {
           Conversation.startConversation(uid, 'collectPhoneNumber');
@@ -66,7 +67,7 @@ router.post('/webhook/', function (req, res) {
           if (event.message && event.message.text) {
             if (user.conversationLocation
              && user.conversationLocation.conversationName) {
-              Conversation.executeTreeNodefromId(uid, 
+              Conversation.executeTreeNodefromId(uid,
                 user.conversationLocation.conversationName,
                 user.conversationLocation.nodeId + '.1',
                 event.message.text);
@@ -88,6 +89,10 @@ router.post('/webhook/', function (req, res) {
   });
   res.sendStatus(200);
 })
+
+function processOptin(optin){
+  console.log(optin.ref);
+}
 
 function processQuickReply(event, uid) {
   let payload = event.message.quick_reply.payload;
@@ -162,7 +167,7 @@ function processAttachment(event, uid) {
   //Handling like button
   console.log("Detected Attachment");
   //console.log(event.message.attachments);
-  if (event.message.attachments[0].payload.url 
+  if (event.message.attachments[0].payload.url
     === "https://scontent.xx.fbcdn.net/t39.1997-6/"
     + "851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
     send.menu(uid);
@@ -209,8 +214,8 @@ function processPostback(event, uid) {
 }
 
 function createUser(mid, callback) {
-  var get_url = "https://graph.facebook.com/v2.6/" + mid 
-   + "?fields=first_name,last_name,profile_pic,locale,timezone,gender" 
+  var get_url = "https://graph.facebook.com/v2.6/" + mid
+   + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
    + "&access_token=" + VERIFICATION_TOKEN;
   request(get_url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
