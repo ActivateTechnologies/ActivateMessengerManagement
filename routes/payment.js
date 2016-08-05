@@ -52,6 +52,7 @@ router.post('/charge', function(req, res) {
   let phoneNumber = req.body.pn;
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
+  console.log("price: " + price);
 
   M.User.find({phoneNumber: phoneNumber}, function(err, results){
     if(err) console.log(err);
@@ -60,7 +61,7 @@ router.post('/charge', function(req, res) {
     if(results.length > 0){
       console.log("existing user");
       //if free game
-      if(req.body.type){
+      if(price === 0){
         console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
           //need to add game details to message
@@ -90,7 +91,7 @@ router.post('/charge', function(req, res) {
         if(e) console.log(e);
         else {
           //free game
-          if(req.body.type){
+          if(price === 0){
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
               send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
