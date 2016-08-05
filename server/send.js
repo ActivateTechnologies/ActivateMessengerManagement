@@ -321,7 +321,7 @@ function textWithQuickReplies (uid, text, quickReplies) {
       qs: {access_token:VERIFICATION_TOKEN},
       method: 'POST',
       json: {
-        recipient: {id: mid.uid},
+        recipient: {id: uid.mid},
         message: {
           text: text,
           quick_replies: quickRepliesObjects
