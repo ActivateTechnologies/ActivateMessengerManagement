@@ -1,4 +1,4 @@
-const status = 'avi'; //'production' or 'test' or 'avi'
+const status = 'test'; //'production' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -25,7 +25,7 @@ const TEST_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
 const TEST_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
 const TEST_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
 const TEST_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
-const TEST_ROOT_URL = "https://kickabouttest.herokuapp.com/"
+const TEST_ROOT_URL = "https://kickabouttest.herokuapp.com"
 const TEST_TWILIO_ACCOUNT_SID = "ACc456f2ee8565e5af8c02a6357e4a9a9e";
 const TEST_TWILIO_AUTH_TOKEN = "57357afaccfe2a344c5cd54fb74f725c";
 const TEST_TWILIO_NUMBER = "+441273917139";

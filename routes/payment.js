@@ -11,7 +11,7 @@ const twilio = require('./../server/twilio.js')
 router.get('/payment', function(req, res){
   let gameId = req.query.gid;
   let pn = req.query.pn;
-  
+
   M.Game.find({_id:gameId}, function(err, result){
     if (err) {
       console.log('Error looking for game', err);
@@ -53,26 +53,41 @@ router.post('/charge', function(req, res) {
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
 
+  console.log("price: " + price);
+  console.log("phoneNumber: " + phoneNumber);
+
   M.User.find({phoneNumber: phoneNumber}, function(err, results){
     if(err) console.log(err);
 
     //if existing user
-    if(results[0].length > 0){
+    if(results.length > 0){
+      console.log(JSON.stringify(results[0]));
+      console.log("existing user");
+      console.log("userId: " + results[0].userId);
+      console.log("firstname: " + results[0].firstname);
+      console.log("phoneNumber: " + results[0].phoneNumber);
+      let uid = {
+        mid: results[0].userId
+      }
       //if free game
-      if(req.body.type){
+      if(price === 0){
+        console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
           //need to add game details to message
-          send.text(results[0].userId, "Thanks for booking");
+          console.log("send to " + uid.mid);
+          send.text(uid, "Thanks for booking");
         });
       }
       //else make him pay
       else {
+        console.log("paid game");
         makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
           M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
-            send.booked(results[0].userId, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
+            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
           });
         });
       }
+      res.send("sent message")
     }
 
     // if new user
@@ -86,7 +101,7 @@ router.post('/charge', function(req, res) {
         if(e) console.log(e);
         else {
           //free game
-          if(req.body.type){
+          if(price === 0){
             M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, function(err, doc){
               // try sending message on messenger
               send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
@@ -104,21 +119,23 @@ router.post('/charge', function(req, res) {
           // if paid game
           else {
             //make him pay
-            makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
-              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
-                //send him details of game for confirmation
-                send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
-                //if success
-                .then(()=>{res.send('sent message');})
-                //else send him text message
-                .catch((e2)=>{
-                  //need to add game details
-                  twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
-                    res.send("sent text")
-                  })
-                })
-              });
-            });
+
+            // makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
+            //   M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+            //     //send him details of game for confirmation
+            //     send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
+            //     //if success
+            //     .then(()=>{res.send('sent message');})
+            //     //else send him text message
+            //     .catch((e2)=>{
+            //       //need to add game details
+            //       twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
+            //         res.send("sent text")
+            //       })
+            //     })
+            //   });
+            // });
+            res.send("something")
           }
         }
       })
@@ -163,8 +180,8 @@ function makeCharge(gameprice, stripeToken, userId, gameId, callback){
       res.send("Your payment wasn't processed");
     }
     else {
-      M.Game.find({_id:gameId}, function(err2, result2){
-        if(result2.length > 0){
+      M.Game.find({_id:gameId}, function(err, result){
+        if(result.length > 0){
           M.Analytics.update({name:"Payments"},{$push: {
             activity: {
               userId: userId,
@@ -172,11 +189,10 @@ function makeCharge(gameprice, stripeToken, userId, gameId, callback){
               gid: gameId,
               amount: price
             }
-          }}, {upsert: true}, (err) => {console.log(err);});
-
-          callback();
+          }}, {upsert: true}, (e) => {console.log(e);});
         }
       })
+      callback();
     }
   });
 }
