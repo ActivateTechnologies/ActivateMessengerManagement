@@ -11,14 +11,7 @@ const twilio = require('./../server/twilio.js')
 router.get('/payment', function(req, res){
   let gameId = req.query.gid;
   let pn = req.query.pn;
-
-  M.Button.update({name:"Book"},
-    {$push: {activity: {userId:userId, time: new Date()}}},
-    {upsert: true},
-    function (error) {
-      console.log('Error logging Book analytics:', error);
-    })
-
+  
   M.Game.find({_id:gameId}, function(err, result){
     if (err) {
       console.log('Error looking for game', err);
