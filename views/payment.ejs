@@ -85,6 +85,7 @@
       $('#pnform').submit(function(e){
         e.preventDefault();
         var pn = validatePhoneNumber($('#phoneNumber').val());
+        console.log(pn);
         if(pn === -1){
           $('#warning').css('display', 'block');
         }
