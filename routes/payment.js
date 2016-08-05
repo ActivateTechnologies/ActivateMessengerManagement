@@ -52,13 +52,16 @@ router.post('/charge', function(req, res) {
   let phoneNumber = req.body.pn;
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
+
   console.log("price: " + price);
+  console.log("phoneNumber: " + phoneNumber);
 
   M.User.find({phoneNumber: phoneNumber}, function(err, results){
     if(err) console.log(err);
 
     //if existing user
     if(results.length > 0){
+      console.log(JSON.stringify(results[0]));
       console.log("existing user");
       console.log("userId: " + results[0].userId);
       let uid = {
