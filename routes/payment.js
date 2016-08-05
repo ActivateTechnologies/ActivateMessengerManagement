@@ -10,7 +10,7 @@ const twilio = require('./../server/twilio.js')
 
 router.get('/payment', function(req, res){
   let gameId = req.query.gid;
-  let userId = req.query.mid;
+  let pn = req.query.pn;
 
   M.Button.update({name:"Book"},
     {$push: {activity: {userId:userId, time: new Date()}}},
@@ -25,15 +25,27 @@ router.get('/payment', function(req, res){
     }
     if(result.length > 0){
       let gameprice = result[0].price;
-      res.render('payment', {
-        mid:userId,
-        gid: gameId,
-        gameprice: gameprice,
-        gameName: result[0].name,
-        gameAddress: result[0].address,
-        gameDescription: result[0].desc,
-        imageLink: result[0].image_url
-      });
+      if(pn){
+        res.render('payment', {
+          pn: pn,
+          gid: gameId,
+          gameprice: gameprice,
+          gameName: result[0].name,
+          gameAddress: result[0].address,
+          gameDescription: result[0].desc,
+          imageLink: result[0].image_url
+        });
+      }
+      else {
+        res.render('payment', {
+          gid: gameId,
+          gameprice: gameprice,
+          gameName: result[0].name,
+          gameAddress: result[0].address,
+          gameDescription: result[0].desc,
+          imageLink: result[0].image_url
+        });
+      }
     }
     else {
       console.log("Can't find game");

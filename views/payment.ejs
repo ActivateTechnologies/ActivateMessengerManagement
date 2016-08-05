@@ -70,7 +70,7 @@
         // if free game
         if('<%= gameprice %>' === 0){
           $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>type=free&pn=" + phoneNumber, function(data){
-
+            console.log(data);
           })
         }
         else{
@@ -103,7 +103,7 @@
           else {
             $('.payWithCardButtonContainer').css('display', 'block');
             document.getElementById('paymentForm').innerHTML =
-            '<form action="/charge?mid=<%=mid%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>&pn=' + pn + '" method="POST">
+            '<form action="/charge?gid=<%=gid%>&gameprice=<%= gameprice*100 %>&pn=' + pn + '" method="POST">
               <script
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
                 data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
