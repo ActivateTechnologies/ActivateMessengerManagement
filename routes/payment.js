@@ -132,13 +132,16 @@ router.post('/charge', function(req, res) {
             //make him pay
 
             makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
+              console.log("made charge");
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+                console.log("sending game detail using phoneNumber");
                 //send him details of game for confirmation
                 send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, req.body.stripeToken)
                 //if success
                 .then(()=>{res.send('sent message');})
                 //else send him text message
                 .catch((e2)=>{
+                  console.log("sending text");
                   //need to add game details
                   twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
                     res.send("sent text")
@@ -146,7 +149,6 @@ router.post('/charge', function(req, res) {
                 })
               });
             });
-            res.send("something")
           }
         }
       })
@@ -179,13 +181,15 @@ router.post('/custompayment', function(req, res){
 })
 
 function makeCharge(gameprice, stripeToken, userId, gameId, callback){
+  console.log("inside charge");
+  console.log(userId);
   let price = parseFloat(gameprice) / 100;
   let charge = stripe.charges.create({
     amount: gameprice, // amount in cents, again
     currency: "gbp",
     card: stripeToken,
     description: "",
-    metadata: {_id:userId, gameId: gameId}
+    metadata: {_id:(userId + ""), gameId: gameId}
   }, function(err, charge) {
     if (err && err.type === 'StripeCardError') {
       res.send("Your payment wasn't processed");
