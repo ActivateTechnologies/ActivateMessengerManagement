@@ -61,7 +61,7 @@ router.post('/charge', function(req, res) {
     if(results.length > 0){
       console.log("existing user");
       let uid = {
-        mid: = results[0].userId
+        mid: results[0].userId
       }
       //if free game
       if(price === 0){
