@@ -8,7 +8,7 @@ const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const send = require('./../server/send.js')
 const twilio = require('./../server/twilio.js')
 
-router.get('/payment', function(req, res){
+router.get('/game', function(req, res){
   let gameId = req.query.gid;
   let pn = req.query.pn;
 
@@ -19,7 +19,7 @@ router.get('/payment', function(req, res){
     if(result.length > 0){
       let gameprice = result[0].price;
       if(pn){
-        res.render('payment', {
+        res.render('game', {
           pn: pn,
           gid: gameId,
           gameprice: gameprice,
@@ -30,7 +30,7 @@ router.get('/payment', function(req, res){
         });
       }
       else {
-        res.render('payment', {
+        res.render('game', {
           gid: gameId,
           gameprice: gameprice,
           gameName: result[0].name,
@@ -44,6 +44,19 @@ router.get('/payment', function(req, res){
       console.log("Can't find game");
       res.send('Game not found');
     }
+  })
+})
+
+
+router.get('/payment', function(req, res){
+  let gameId = req.query.gid;
+  let pn = req.query.pn;
+  let gameprice = req.query.gp;
+
+  res.render('payment', {
+    gid: gameId,
+    gameprice: gameprice,
+    pn: pn
   })
 })
 
@@ -61,11 +74,6 @@ router.post('/charge', function(req, res) {
 
     //if existing user
     if(results.length > 0){
-      console.log(JSON.stringify(results[0]));
-      console.log("existing user");
-      console.log("userId: " + results[0].userId);
-      console.log("firstname: " + results[0].firstname);
-      console.log("phoneNumber: " + results[0].phoneNumber);
       let uid = {
         mid: results[0].userId
       }
@@ -123,21 +131,21 @@ router.post('/charge', function(req, res) {
             console.log("paid game");
             //make him pay
 
-            // makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
-            //   M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
-            //     //send him details of game for confirmation
-            //     send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
-            //     //if success
-            //     .then(()=>{res.send('sent message');})
-            //     //else send him text message
-            //     .catch((e2)=>{
-            //       //need to add game details
-            //       twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
-            //         res.send("sent text")
-            //       })
-            //     })
-            //   });
-            // });
+            makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
+              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+                //send him details of game for confirmation
+                send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
+                //if success
+                .then(()=>{res.send('sent message');})
+                //else send him text message
+                .catch((e2)=>{
+                  //need to add game details
+                  twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
+                    res.send("sent text")
+                  })
+                })
+              });
+            });
             res.send("something")
           }
         }
