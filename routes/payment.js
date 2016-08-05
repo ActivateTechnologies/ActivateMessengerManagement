@@ -91,7 +91,7 @@ router.post('/charge', function(req, res) {
         console.log("paid game");
         makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
           M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
-            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
+            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url, req.body.stripeToken);
           });
         });
       }
@@ -134,7 +134,7 @@ router.post('/charge', function(req, res) {
             makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
                 //send him details of game for confirmation
-                send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
+                send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, req.body.stripeToken)
                 //if success
                 .then(()=>{res.send('sent message');})
                 //else send him text message
