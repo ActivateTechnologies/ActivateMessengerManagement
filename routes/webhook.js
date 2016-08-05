@@ -91,7 +91,7 @@ router.post('/webhook/', function (req, res) {
 })
 
 function processOptin(optin){
-  console.log(decodeURIComponent(optin));
+  console.log(optin.ref);
 }
 
 function processQuickReply(event, uid) {
