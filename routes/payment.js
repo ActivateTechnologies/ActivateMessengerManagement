@@ -3,8 +3,8 @@
 const express = require('express')
 const router = express.Router()
 const M = require('./../server/schemas.js')
-//const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
-const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
+const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+// const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const send = require('./../server/send.js')
 const twilio = require('./../server/twilio.js')
 
@@ -56,13 +56,13 @@ router.post('/charge', function(req, res) {
       //if free game
       if(req.body.type){
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
+          //need to add game details to message
           send.text(results[0].userId, "Thanks for booking");
         });
       }
       //else make him pay
       else {
-        let stripeToken = req.body.stripeToken;
-        makeCharge(req.query.gameprice, stripeToken, results[0]._id, gameId, function(){
+        makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
           M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
             send.booked(results[0].userId, results[0].name, price, d.name, d.address, d.image_url, stripeToken);
           });
@@ -87,7 +87,7 @@ router.post('/charge', function(req, res) {
               send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
               .then(()=>{res.send("text")})
               .catch((e2)=>{
-                //function for sending text
+                //function for sending text (need to add game details)
                 twilio.sendSms(phoneNumber, "Thanks for booking", function(){
                   res.send("sent text")
                 })
@@ -98,25 +98,22 @@ router.post('/charge', function(req, res) {
 
           // if paid game
           else {
-
             //make him pay
             makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
                 //send him details of game for confirmation
                 send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, stripeToken)
                 //if success
-                .then(()=>{
-                  res.send('sent message');
-                })
+                .then(()=>{res.send('sent message');})
                 //else send him text message
                 .catch((e2)=>{
+                  //need to add game details
                   twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
                     res.send("sent text")
                   })
                 })
               });
             });
-
           }
         }
       })
