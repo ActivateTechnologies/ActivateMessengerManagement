@@ -49,7 +49,7 @@ router.get('/payment', function(req, res){
 
 router.post('/charge', function(req, res) {
 
-  let phoneNumber = req.body.pn;
+  let phoneNumber = req.query.pn;
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
 

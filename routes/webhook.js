@@ -65,19 +65,19 @@ router.post('/webhook/', function (req, res) {
         } else {
           if (!Conversation.consumeEvent(event, uid, user)) {
             if (event.message && event.message.text) {
-              /*if (user.conversationLocation
+              if (user.conversationLocation
                && user.conversationLocation.conversationName) {
                 Conversation.executeTreeNodefromId(uid,
                   user.conversationLocation.conversationName,
                   user.conversationLocation.nodeId + '.1',
                   event.message.text);
-              } else {*/
-              if (event.message.quick_reply) {
-                processQuickReply(event, uid);
               } else {
-                processTextMessage(event, uid);
+                if (event.message.quick_reply) {
+                  processQuickReply(event, uid);
+                } else {
+                  processTextMessage(event, uid);
+                }
               }
-              //}
             } else if(event.message && event.message.attachments){
               processAttachment(event, uid);
             } else if (event.postback) {
