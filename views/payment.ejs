@@ -69,6 +69,7 @@
         $('#pnform').css('display', 'none');
         // if free game
         if('<%= gameprice %>' === 0){
+          console.log("free game");
           $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>type=free&pn=" + phoneNumber, function(data){
             console.log(data);
           })
@@ -81,7 +82,6 @@
 
       //if user not coming from bot, could be existing
       $('#pnform').submit(function(e){
-
         e.preventDefault();
         var pn = validatePhoneNumber($('#phoneNumber').val());
         if(pn === -1){
@@ -89,9 +89,9 @@
         }
         else {
           localStorage.setItem('phoneNumber', pn);
-
+          console.log("free game");
           //if free game
-          if('<%= gameprice %>' === 0){
+          if(<%= gameprice %> === 0){
             $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>type=free&pn=" + pn, function(data){
               if(data){
                 console.log(data);
@@ -102,20 +102,7 @@
           // if paid game, everything is handled in /charge
           else {
             $('.payWithCardButtonContainer').css('display', 'block');
-            document.getElementById('paymentForm').innerHTML =
-            '<form action="/charge?gid=<%=gid%>&gameprice=<%= gameprice*100 %>&pn=' + pn + '" method="POST">
-              <script
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-                data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
-                data-amount="<%= gameprice*100 %>"
-                data-name="Kickabout"
-                data-description=""
-                data-image="img/logo.png"
-                data-locale="auto"
-                data-zip-code="false"
-                data-currency="gbp">
-              </script>
-            </form>'
+            document.getElementById('paymentForm').innerHTML = '<form action="/charge?gid=<%=gid%>&pn='  + pn + `&gameprice=<%= gameprice*100 %>" method="POST">` + `<script src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;" data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK" data-amount="<%= gameprice*100 %>" data-name="Kickabout" data-description="" data-image="img/logo.png" data-locale="auto" data-zip-code="false" data-currency="gbp">` + "</scr" + "ipt></fo"+ "rm>";
           }
         }
 
