@@ -36,7 +36,7 @@ let gameSchema = new Schema({
   when: Date,
   desc: String,
   joined: [{
-    userId: String
+    uid: String
   }],
   capacity: Number,
   non_members_attending: Number

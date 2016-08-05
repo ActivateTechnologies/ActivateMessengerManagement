@@ -103,8 +103,8 @@ router.post('/charge', function(req, res) {
       //else make him pay
       else {
         console.log("paid game");
-        makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
-          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: uid.mid}}}, function(err3, d){
+        makeCharge(req.query.gameprice, req.body.stripeToken, uid, gameId, function(){
+          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: uid._id}}}, function(err3, d){
             send.booked(uid, results[0].name, price, d.name, d.address, d.image_url,
              req.body.stripeToken, (error) => {
               console.log('User not found on db or via fb linked phonenumber.');
@@ -127,6 +127,10 @@ router.post('/charge', function(req, res) {
       })
 
       user.save(function(e, doc){
+        let uid = {
+          _id: doc._id,
+          phoneNumber: phoneNumber
+        }
         if(e) console.log(e);
         else {
           //free game
@@ -151,9 +155,9 @@ router.post('/charge', function(req, res) {
             console.log("paid game");
             //make him pay
 
-            makeCharge(req.query.gameprice, req.body.stripeToken, doc._id, gameId, function(){
+            makeCharge(req.query.gameprice, req.body.stripeToken, uid, gameId, function(){
               console.log("made charge");
-              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: doc._id}}}, function(err3, d){
+              M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: doc._id}}}, function(err3, d){
                 console.log("sending game detail using phoneNumber");
                 //send him details of game for confirmation
                 send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, d.address, d.image_url, req.body.stripeToken)
@@ -200,16 +204,16 @@ router.post('/custompayment', function(req, res){
   });
 })
 
-function makeCharge(gameprice, stripeToken, userId, gameId, callback){
+function makeCharge(gameprice, stripeToken, uid, gameId, callback){
   console.log("inside charge");
-  console.log(userId);
+  console.log(uid);
   let price = parseFloat(gameprice) / 100;
   let charge = stripe.charges.create({
     amount: gameprice, // amount in cents, again
     currency: "gbp",
     card: stripeToken,
     description: "",
-    metadata: {_id:(userId + ""), gameId: gameId}
+    metadata: {_id:(uid._id + ""), gameId: gameId}
   }, function(err, charge) {
     if (err && err.type === 'StripeCardError') {
       res.send("Your payment wasn't processed");
@@ -219,7 +223,7 @@ function makeCharge(gameprice, stripeToken, userId, gameId, callback){
         if(result.length > 0){
           M.Analytics.update({name:"Payments"},{$push: {
             activity: {
-              userId: userId,
+              uid: uid._id,
               time: new Date(),
               gid: gameId,
               amount: price
