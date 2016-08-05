@@ -59,7 +59,6 @@ router.post('/charge', function(req, res) {
   M.User.find({phoneNumber: phoneNumber}, function(err, results){
     if(err) console.log(err);
 
-    console.log(results.length);
     //if existing user
     if(results.length > 0){
       console.log(JSON.stringify(results[0]));
@@ -67,7 +66,6 @@ router.post('/charge', function(req, res) {
       console.log("userId: " + results[0].userId);
       console.log("firstname: " + results[0].firstname);
       console.log("phoneNumber: " + results[0].phoneNumber);
-      console.log("");
       let uid = {
         mid: results[0].userId
       }
