@@ -85,12 +85,12 @@
       $('#pnform').submit(function(e){
         e.preventDefault();
         var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
-        
+
         if(phoneNumber === -1){
           $('#warning').css('display', 'block');
         }
         else {
-          localStorage.setItem('phoneNumber', pn);
+          localStorage.setItem('phoneNumber', phoneNumber);
 
           //if free game
           if(<%= gameprice %> === 0){
