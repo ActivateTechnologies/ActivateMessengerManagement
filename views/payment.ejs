@@ -24,16 +24,7 @@
           <div class="inner cover">
 
 
-              <img src="img/logoUnbinded-white.png" class="logoLead-payment">
-
-              <br/>
-              <!-- game image -->
-              <img src="<%= imageLink %>" class="gamePic">
-              <p class="gametitle"><%= gameName %></p>
-              <p class="gameaddress">
-                <%= gameAddress %>
-              </p>
-
+            <img src="img/logoUnbinded-white.png" class="logoLead-payment">
 
             <div class="payWithCardButtonContainer">
                 <form action="/charge?pn=<%=pn%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>" method="POST">
