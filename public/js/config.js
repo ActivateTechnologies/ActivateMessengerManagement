@@ -1,6 +1,6 @@
 'use strict'
 
-var status = 'test'; //'production' or 'test' or 'avi'
+var status = 'avi'; //'production' or 'test' or 'avi'
 
 //PRODUCTION - heroku git:remote -a limitless-sierra-68694
 var PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD"
@@ -43,7 +43,7 @@ var AVI_MS_BOT_PASSWORD = "KnOUo3FUkR1eupbaoJO1qMk";
 var AVI_MS_BOT_APP_ID = "9e8a1b04-9a93-441c-9d94-aad81df5e294"; //App name: Kickabout Test
 var AVI_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
 var AVI_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
-var AVI_ROOT_URL = "https://df901940.ngrok.io";
+var AVI_ROOT_URL = "https://b91c2964.ngrok.io";
 var AVI_TWILIO_ACCOUNT_SID = "ACc456f2ee8565e5af8c02a6357e4a9a9e";
 var AVI_TWILIO_AUTH_TOKEN = "57357afaccfe2a344c5cd54fb74f725c";
 var AVI_TWILIO_NUMBER = "+441273917139";
