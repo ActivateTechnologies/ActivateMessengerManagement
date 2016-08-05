@@ -32,7 +32,7 @@
       phoneNumber = phoneNumber.replace(/\D/gm, '');
       if(phoneNumber.substring(0, 2) === "44"){
         if(phoneNumber.length === 12){
-          return "+44" + phoneNumber.substring(2)
+          return phoneNumber.substring(2)
         }
         else {
           return -1;
@@ -40,7 +40,7 @@
       }
       else if(phoneNumber.substring(0, 4) === "0044"){
         if(phoneNumber.length === 14){
-          return "+44" + phoneNumber.substring(4)
+          return phoneNumber.substring(4)
         }
         else {
           return -1;
@@ -48,14 +48,14 @@
       }
       else if(phoneNumber.substring(0, 1) === "0"){
         if(phoneNumber.length === 11){
-          return "+44" + phoneNumber.substring(1)
+          return phoneNumber.substring(1)
         }
         else {
           return -1;
         }
       }
       else if(phoneNumber.length == 10){
-        return "+44" + phoneNumber
+        return phoneNumber
       }
       else {
         return -1;
@@ -69,7 +69,7 @@
         // if free game
         if(<%= gameprice %> === 0){
           console.log("free game");
-          $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + phoneNumber, function(data){
+          $.post(ROOT_URL + "/charge" + "?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + phoneNumber, function(data){
             console.log(data);
           })
         }
@@ -94,7 +94,7 @@
 
           //if free game
           if(<%= gameprice %> === 0){
-            $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + pn, function(data){
+            $.post(ROOT_URL + "/charge?&gameprice=<%= gameprice*100 %>&gid=<%=gid%>&pn=" + phoneNumber, function(data){
               if(data){
                 console.log(data);
               }

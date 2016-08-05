@@ -8,7 +8,16 @@ const L = require('./luis.js');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
 
-function send(uid, messageData) {
+function send(uid, messageData, callback) {
+  let receipt;
+  if (uid.mid) {
+    receipt = {id:uid.mid}
+  } else if (uid.phoneNumber) {
+    receipt = {phone_number:uid.phoneNumber};
+  } else {
+    console.log('send not executed, as neither mid nor phone number exist');
+    return;
+  }
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {access_token:VERIFICATION_TOKEN},
@@ -22,6 +31,11 @@ function send(uid, messageData) {
     if (errorObject) {
       console.log('Error sending messages to mid "'
         + uid.mid + '": ', errorObject);
+      if (callback) {
+        callback(errorObject);
+      }
+    } else if (callback) {
+      callback();
     }
   });
 }
@@ -108,7 +122,7 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending booked message to phoneNumber "' + errorObject);
+        console.log('Error sending booked message to phoneNumber "' + JSON.stringify(errorObject));
         reject(errorObject);
       } else {
         resolve();
@@ -222,7 +236,7 @@ function notifications_change (uid, set) {
   });
 }
 
-function booked (uid, name, price, gameName, address, image_url, order_number) {
+function booked (uid, name, price, gameName, address, image_url, order_number, callback) {
   let messageData = {
     "attachment": {
       "type":"template",
@@ -247,7 +261,7 @@ function booked (uid, name, price, gameName, address, image_url, order_number) {
     }
   }
 
-  send(uid, messageData);
+  send(uid, messageData, callback);
 }
 
 function booked_for_free_games (uid) {
@@ -294,9 +308,9 @@ function text_promise (uid, text) {
   })
 }
 
-function text(uid, text) {
+function text(uid, text, callback) {
   let messageData = { text: text }
-  send(uid, messageData);
+  send(uid, messageData, callback);
 }
 
 function textWithQuickReplies (uid, text, quickReplies) {

@@ -62,7 +62,7 @@ router.get('/payment', function(req, res){
 
 router.post('/charge', function(req, res) {
 
-  let phoneNumber = req.query.pn;
+  let phoneNumber = '+44' + req.query.pn;
   let gameId = req.query.gid;
   let price = parseFloat(req.query.gameprice) / 100;
 
@@ -73,25 +73,45 @@ router.post('/charge', function(req, res) {
     if(err) console.log(err);
 
     //if existing user
-    if(results.length > 0){
+    if (results.length > 0) {
       let uid = {
-        mid: results[0].userId
+        _id: results[0]._id
       }
+      if (results[0].userId) {
+        uid.mid = results[0].userId;
+      }
+      if (results[0].phoneNumber) {
+        uid.phoneNumber = results[0].phoneNumber;
+      }
+
       //if free game
       if(price === 0){
         console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: results[0]._id}}}, function(err, doc){
           //need to add game details to message
           console.log("send to " + uid.mid);
-          send.text(uid, "Thanks for booking");
+          send.text(uid, "Thanks for booking", (error) => {
+            if (error) {
+              console.log('User not found on db or via fb linked phonenumber.');
+              twilio.sendSms(phoneNumber, "Thanks for booking", function(){
+                console.log('Sms sent');
+              });
+            }
+          });
         });
       }
       //else make him pay
       else {
         console.log("paid game");
         makeCharge(req.query.gameprice, req.body.stripeToken, results[0]._id, gameId, function(){
-          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: userId}}}, function(err3, d){
-            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url, req.body.stripeToken);
+          M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {userId: uid.mid}}}, function(err3, d){
+            send.booked(uid, results[0].name, price, d.name, d.address, d.image_url,
+             req.body.stripeToken, (error) => {
+              console.log('User not found on db or via fb linked phonenumber.');
+              twilio.sendSms(phoneNumber, "Thanks for booking paid game", function(){
+                console.log('Sms sent');
+              })
+             });
           });
         });
       }
