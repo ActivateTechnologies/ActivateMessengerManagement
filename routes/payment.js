@@ -69,105 +69,92 @@ router.post('/charge', function(req, res) {
   console.log("price: " + price);
   console.log("phoneNumber: " + phoneNumber);
 
-  M.User.find({phoneNumber: phoneNumber}, function(err, results){
-    if(err) console.log(err);
+  M.User.find({phoneNumber: phoneNumber}, (err, users) => {
+    if (err) {
+      console.log('Error querying for user with phoneNumber:', err);
+    }
 
-    //if existing user
-    if (results.length > 0) {
+    if (users.length > 0) { //EXISTING USER
       let uid = {
-        _id: results[0]._id
+        _id: users[0]._id
       }
-      if (results[0].userId) {
-        uid.mid = results[0].userId;
+      if (users[0].userId) {
+        uid.mid = users[0].userId;
       }
-      if (results[0].phoneNumber) {
-        uid.phoneNumber = results[0].phoneNumber;
+      if (users[0].phoneNumber) {
+        uid.phoneNumber = users[0].phoneNumber;
       }
 
-      //if free game
-      if(price === 0){
+      if (price === 0) { //FREE GAME
         console.log("free game");
         M.Game.findOneAndUpdate({_id:gameId}, 
-          {$push: {joined: {_id: results[0]._id}}}, (err, doc) => {
+          {$push: {joined: {_id: uid._id}}}, (err, game) => {
           //need to add game details to message
           console.log("send to " + uid.mid);
           send.text(uid, "Thanks for booking", (error) => {
             if (error) {
               console.log('User not found on db or via fb linked phonenumber,'
                 + ' sending sms.');
-              sendSmsMessage(uid, results[0], true, false);
+              sendSmsMessage(uid, game, true, false);
             }
           });
         });
-      }
-      //else make him pay
-      else {
+      } else { //PAID GAME
         console.log("paid game");
         makeCharge(req.query.gameprice, req.body.stripeToken, uid, gameId, () => {
           M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: uid._id}}}, 
-           (err3, d) => {
-            send.booked(uid, results[0].firstname + ' ' + results[0].lastname,
-             price, d.name, d.address, d.image_url, req.body.stripeToken, (error) => {
+           (err3, game) => {
+            send.booked(uid, users[0].firstname + ' ' + users[0].lastname,
+             price, game.name, game.address, game.image_url, req.body.stripeToken,
+             (error) => {
               if (error) {
                 console.log('User not found on db or via fb linked phonenumber,'
                   + ' sending sms.');
-                sendSmsMessage(uid, results[0], true, true);
+                sendSmsMessage(uid, game, true, true);
               }
              });
           });
         });
       }
       res.send("sent message")
-    }
-
-    // if new user
-    else {
+    } else { //NEW USER
       console.log("new user");
       //create new user
       let user = M.User({
         phoneNumber: phoneNumber
       })
-      user.save(function(e, doc){
+      user.save((error, user) => {
         let uid = {
-          _id: doc._id,
+          _id: user._id,
           phoneNumber: phoneNumber
         }
-        if(e) console.log(e);
-        else {
-          //free game
-          if(price === 0){
+        if (error) {
+          console.log('Error saving user\'s phone number:', error);
+        } else {
+          if (price === 0) { //FREE GAME
             console.log("free game");
-            M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: doc._id}}}, 
-             (err, doc) => {
+            M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {_id: user._id}}}, 
+             (err, game) => {
               // try sending message on messenger
               send.text_with_phoneNumber(phoneNumber, "Thanks for booking.")
-              .then(()=>{res.send("text")})
-              .catch((e2)=>{
+              .then(() => {
+                res.send("text")
+              }).catch((e2)=>{
                 console.log('User not found on db or via fb linked phonenumber,'
                   + ' sending sms.');
-                sendSmsMessage(uid, results[0], false, false);
+                sendSmsMessage(uid, game, false, false);
               })
-
             });
-          }
-
-          // if paid game
-          else {
+          } else { //PAID GAME
             console.log("paid game");
-            //make him pay
-
             makeCharge(req.query.gameprice, req.body.stripeToken, uid, gameId, () => {
-              console.log("made charge");
               M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: doc._id}}}, 
                (err3, d) => {
                 console.log("sending game detail using phoneNumber");
-                //send him details of game for confirmation
                 send.booked_with_phoneNumber(phoneNumber, phoneNumber, price, d.name, 
-                  d.address, d.image_url, req.body.stripeToken)
-                //if success
-                .then(()=>{res.send('sent message');})
-                //else send him text message
-                .catch((e2)=>{
+                 d.address, d.image_url, req.body.stripeToken).then(() => {
+                    res.send('sent message');
+                }).catch((e2)=>{
                   console.log('User not found on db or via fb linked phonenumber,'
                     + ' sending sms.');
                   sendSmsMessage(uid, results[0], false, true);
@@ -241,14 +228,26 @@ function makeCharge(gameprice, stripeToken, uid, gameId, callback){
 
 function sendSmsMessage(uid, game, existingUser, paidGame) {
   if (paidGame) {
-    twilio.sendSms(phoneNumber, "Payment Confirmed! Here's your game details:/n", () => {
+    twilio.sendSms(uid.phoneNumber, "Payment of " + priceToString(game.price) 
+      + " confirmed! Here're your game details:\n"
+      + game.name + "\n"
+      + game.address + "\n"
+      + game.when.toString().substring(0,10) + "\n", () => {
       console.log('Sms sent');
     });
   } else {
-    twilio.sendSms(phoneNumber, "Thanks for booking", () => {
+    twilio.sendSms(uid.phoneNumber, "Thank you for booking with kickabout!"
+      + "Here're your game details:\n"
+      + game.name + "\n"
+      + game.address + "\n"
+      + game.when.toString().substring(0,10) + "\n", () => {
       console.log('Sms sent');
     });
   }
+}
+
+function priceToString(amount) {
+  return "£" + amount.toFixed(2);
 }
 
 module.exports = router;

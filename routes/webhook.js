@@ -58,12 +58,6 @@ router.post('/webhook/', function (req, res) {
           }
         }
 
-        /*console.log(11, user.conversationLocation);
-        console.log(22, user.conversationLocation.conversationName);
-        console.log(33, user.conversationLocation.nodeId);
-        console.log(44, user.conversationLocation.type);
-        console.log(55, user.conversationLocation.userErrorText);*/
-
         if (user && !uid.phoneNumber && user.conversationLocation
          && user.conversationLocation.conversationName != 'onboarding'
          && user.conversationLocation.conversationName != 'collectPhoneNumber') {
