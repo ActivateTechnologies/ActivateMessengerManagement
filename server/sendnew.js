@@ -78,7 +78,7 @@ function typingIndicator(uid, onOrOff) {
   })
 }
 
-function allGames(uid, broadcast, queryDates, dateEntityText){
+function allEvents(uid, broadcast, queryDates, dateEntityText){
   let temp = "today"
   if (broadcast) {
     temp = broadcast;
@@ -88,10 +88,10 @@ function allGames(uid, broadcast, queryDates, dateEntityText){
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
   	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
   console.log('Query: ' + JSON.stringify(query));
-  M.Game.find(query).sort('when').exec(function(err, games) {
+  M.Event.find(query).sort('when').exec(function(err, events) {
     let data = [];
-    if (games) {
-    	games.forEach(function(item) {
+    if (events) {
+    	events.forEach(function(item) {
 	      let booked = false;
 	      let join = item.joined;
 	      join.forEach(function (i) {
@@ -106,22 +106,22 @@ function allGames(uid, broadcast, queryDates, dateEntityText){
 	  	//console.log(data);
 	  	if (data.length == 0) {
     		if (dateEntityText) {
-					text(uid.mid, "There are no games on " + dateEntityText + " currently");
+					text(uid.mid, "There are no events on " + dateEntityText + " currently");
 	    	} else {
-	    		textWithQuickReplies(uid, "Sadly there are no upcoming games currently. "
+	    		textWithQuickReplies(uid, "Sadly there are no upcoming events currently. "
 		  			+ "Would you like to be notified when the next one is created?",
 		  			["Yes! (not coded)", "No thanks"]);
 	    	}
 	    } else {
 	    	let text = '';
 	    	if (data.length == 1 && dateEntityText) {
-	      	text = 'Here is an upcoming game on ' + dateEntityText + ':';
+	      	text = 'Here is an upcoming event on ' + dateEntityText + ':';
 		    } else if (data.length == 1 && !dateEntityText) {
-	    		text = 'Here is an upcoming game:';
+	    		text = 'Here is an upcoming event:';
 	    	} else if (dateEntityText) {
-	      	text = 'Here are some upcoming games for ' + dateEntityText + ':';
+	      	text = 'Here are some upcoming events for ' + dateEntityText + ':';
 	    	} else {
-	    		text = 'Here are some upcoming games: ';
+	    		text = 'Here are some upcoming events: ';
 	    	}
 	      cards(uid, generate_card(data), text);
 	    }
@@ -129,12 +129,12 @@ function allGames(uid, broadcast, queryDates, dateEntityText){
   })
 }
 
-function my_games(uid, queryDates, dateEntityText){
+function my_events(uid, queryDates, dateEntityText){
   let now = new Date();
   let query = (queryDates) ? 
   	{when:{$gt: queryDates.startDate, $lt: queryDates.endDate}}
   	: {when:{$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
-  M.Game.find(query).sort('when').exec(function(err, result){
+  M.Event.find(query).sort('when').exec(function(err, result){
     let data = [];
     result.forEach(function(item){
       let join = item.joined;
@@ -148,20 +148,20 @@ function my_games(uid, queryDates, dateEntityText){
 
     if (data.length == 0) {
     	if (dateEntityText) {
-				text(uid, "You don't any games on " + dateEntityText);
+				text(uid, "You don't any events on " + dateEntityText);
     	} else {
-    		text(uid, "You haven't joined any games. Type 'play' to find games")
+    		text(uid, "You haven't joined any events. Type 'play' to find events")
     	}
     } else {
     	let text = '';
     	if (data.length == 1 && dateEntityText) {
-      	text = 'Here is the game you have on ' + dateEntityText + ':';
+      	text = 'Here is the event you have on ' + dateEntityText + ':';
 	    } else if (data.length == 1 && !dateEntityText) {
     		text = 'You only have one booking for now:';
     	} else if (dateEntityText) {
-      	text = 'Here are your games for ' + dateEntityText + ':';
+      	text = 'Here are your events for ' + dateEntityText + ':';
     	} else {
-    		text = 'Here are the games you\'ve joined: ';
+    		text = 'Here are the events you\'ve joined: ';
     	}
       cards(uid, generate_card(data), text);
     }
@@ -171,7 +171,7 @@ function my_games(uid, queryDates, dateEntityText){
 function generate_card(array){
   let elements = [];
   array.forEach(function(item){
-    //name, address, image_url, latlong, gameId,
+    //name, address, image_url, latlong, eventId,
     //attending, capacity, booked, description, when, price
     elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4],
      item[5], item[6], item[7], item[8], item[9], item[10]));
@@ -193,7 +193,7 @@ function generate_card(array){
 function cards(uid, data, message){
 
   if (message == "today") {
-    text(uid, "(sendnew) Here are some upcoming games to join. "
+    text(uid, "(sendnew) Here are some upcoming events to join. "
     	+ "Tap the card for directions or 'More Info' to book.");
   } else if (message) {
     text(uid, message);
@@ -218,10 +218,10 @@ function cards(uid, data, message){
   });
 }
 
-function generate_card_element(name, address, image_url, latlong, gameId, 
+function generate_card_element(name, address, image_url, latlong, eventId, 
  attending, capacity, booked, description, when, price){
   let pl = "More Info" + "|" + name + "|" + address + "|" + latlong 
-  	+ "|" + gameId + "|" + description + "|" + price + "|" + booked;
+  	+ "|" + eventId + "|" + description + "|" + price + "|" + booked;
   let directions_link = "http://maps.google.com/?q=" + address;
   if (attending > 0){
     address = address + " (" + attending + " attending)";
@@ -261,6 +261,6 @@ module.exports = {
   text: text,
   typingIndicator: typingIndicator,
   textWithQuickReplies: textWithQuickReplies,
-  allGames: allGames,
-  my_games: my_games
+  allEvents: allEvents,
+  my_events: my_events
 }

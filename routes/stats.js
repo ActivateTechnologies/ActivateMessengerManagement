@@ -26,26 +26,6 @@ router.get('/analytics', function(req, res){
   });
 })
 
-router.get('/visualize', function (req, res) {
-  let now = new Date();
-  let currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  Promise.all([
-    A.getNewUsersWeekly(currentDate),
-    A.getButtonHitsWeekly(currentDate),
-    A.getNewUsersMonthly(currentDate),
-    A.getButtonHitsMonthly(currentDate)
-  ]).then(function(answers){
-    res.render('visualize', {
-      newUsersWeekly: answers[0],
-      buttonHitsWeekly: answers[1],
-      newUsersMonthly: answers[2],
-      buttonHitsMonthly: answers[3]
-    });
-  }).catch(function(err){
-    console.log(err);
-  })
-})
-
 router.get('/table', (req, res) => {
   res.render('table')
 })
@@ -59,15 +39,15 @@ router.get('/tabledata', (req, res) => {
       return tup[0];
     })
 
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr),
+    Promise.all([getEventsAttendedByUsers(arr), getButtonHitsByUsers(arr),
      getPaymentsByUsers(arr)])
     .then((values) => {
       let data = [];
       for(let i = 0; i<values[0].length; i++){
         data.push({
-          userId: arr[i],
+          mid: arr[i],
           name: users[i][1],
-          gamesAttended: values[0][i],
+          eventsAttended: values[0][i],
           buttonHits: values[1][i],
           payments: values[2][i]
         })
@@ -81,6 +61,12 @@ router.get('/tabledata', (req, res) => {
   })
 })
 
+router.get('/userAnalyticsData', (req, res) => {
+  M.User.find({}, (err, users) => {
+    res.json({'users': users})
+  });
+});
+
 router.get('/tablecsv', (req, res) => {
   getUsers()
   .then((users)=>{
@@ -90,9 +76,9 @@ router.get('/tablecsv', (req, res) => {
       return tup[0];
     })
 
-    Promise.all([getGamesAttendedByUsers(arr), getButtonHitsByUsers(arr),
+    Promise.all([getEventsAttendedByUsers(arr), getButtonHitsByUsers(arr),
      getPaymentsByUsers(arr)]).then((values) => {
-      let data = "User Id,Name,Games Attended,Button Hits,Payments";
+      let data = "User Id,Name,Events Attended,Button Hits,Payments";
       for(let i = 0; i < values[0].length; i++){
         data += "\r\n" + arr[i] + "," + users[i][1] + "," 
           + values[0][i] + "," + values[1][i] + "," + values[2][i];
@@ -106,34 +92,34 @@ router.get('/tablecsv', (req, res) => {
   .catch((e)=>{
     res.render('table', {'data': "You should not be seeing this"})
   })
-})
+});
 
 function getUsers(){
   return new Promise((resolve, reject) => {
     M.User.find({}, function(err, results){
       let ret = [];
       _.each(results, (i) => {
-        ret.push([i.userId, i.firstname + " " + i.lastname]);
+        ret.push([i.mid, i.firstName + " " + i.lastName]);
       })
       resolve(ret)
     })
   })
 }
 
-function getGamesAttendedByUsers(userIds){
+function getEventsAttendedByUsers(mids){
   return new Promise((resolve, reject)=>{
     let ret = [];
 
     //prefilling ret
-    for(let i = 0; i<userIds.length; i++){
+    for(let i = 0; i<mids.length; i++){
       ret.push(0);
     }
 
     //filling ret
-    M.Game.find({}, function(err, results){
+    M.Event.find({}, function(err, results){
       _.each(results, (item)=>{
         _.each(item.joined, (joiner)=>{
-          let ind = userIds.indexOf(joiner.userId);
+          let ind = mids.indexOf(joiner.mid);
           if(ind != -1){
             ret[ind] += 1;
           }
@@ -144,12 +130,12 @@ function getGamesAttendedByUsers(userIds){
   })
 }
 
-function getButtonHitsByUsers(userIds){
+function getButtonHitsByUsers(mids){
   return new Promise((resolve, reject)=>{
     let ret = [];
 
     //prefilling ret
-    for(let i = 0; i<userIds.length; i++){
+    for(let i = 0; i<mids.length; i++){
       ret.push(0);
     }
 
@@ -157,7 +143,7 @@ function getButtonHitsByUsers(userIds){
     M.Button.find({}, function(err, results){
       _.each(results, (item)=>{
         _.each(item.activity, (hitter)=>{
-          let ind = userIds.indexOf(hitter.userId);
+          let ind = mids.indexOf(hitter.mid);
           if(ind != -1){
             ret[ind] += 1;
           }
@@ -168,12 +154,12 @@ function getButtonHitsByUsers(userIds){
   })
 }
 
-function getPaymentsByUsers(userIds){
+function getPaymentsByUsers(mids){
   return new Promise((resolve, reject) => {
     let ret = [];
 
     //prefilling ret
-    for(let i = 0; i < userIds.length; i++){
+    for(let i = 0; i < mids.length; i++){
       ret.push(0);
     }
 
@@ -184,7 +170,7 @@ function getPaymentsByUsers(userIds){
       }
       let payments = results[0];
       _.each(payments.activity, (payment)=>{
-        let index = userIds.indexOf(payment.userId);
+        let index = mids.indexOf(payment.mid);
         if(index != -1){
           ret[index] += payment.amount;
         }

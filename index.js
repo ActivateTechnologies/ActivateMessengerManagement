@@ -28,24 +28,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.use(require('./routes/broadcast'))
-app.use(require('./routes/input'))
-app.use(require('./routes/payment'))
 app.use(require('./routes/stats'))
-app.use(require('./routes/webhook'))
-app.use(require('./routes/public_link'))
-
+app.use(require('./routes/routerMain'))
 
 app.get('/login', (req, res) => {
   res.render('login')
 })
 
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/broadcast',
-                                   failureRedirect: '/login'
-                                 })
-);
+app.post('/login', passport.authenticate('local', {
+	successRedirect: '/broadcast',
+  failureRedirect: '/login'
+}));
 
 app.get('/', function(req, res){
   res.render('home')

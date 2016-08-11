@@ -22,6 +22,10 @@ function sendSms(phoneNumber, message, callback) {
       callback();
     }
   });
+  /*console.log('Sms disabled, sms not sent.');
+  if (callback) {
+    callback();
+  }*/
 }
 
 module.exports = {

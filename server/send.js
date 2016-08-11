@@ -5,8 +5,8 @@ const M = require('./schemas.js');
 const config = require('./../config');
 const W = require('./wit.js');
 const L = require('./luis.js');
+const H = require('./helperFunctions');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
-
 
 function send(uid, messageData, callback) {
   let recipient;
@@ -29,8 +29,9 @@ function send(uid, messageData, callback) {
   }, (error, response, body) => {
     let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
-      console.log('Error sending message (' + JSON.stringify(messageData) 
-       + ') to recipient "' + JSON.stringify(recipient) 
+      console.log('Error sending message'
+       //+ ' (' + JSON.stringify(messageData) + ')'
+       + ' to recipient "' + JSON.stringify(recipient) 
        + '": ', JSON.stringify(errorObject));
       if (callback) {
         callback(errorObject);
@@ -42,7 +43,6 @@ function send(uid, messageData, callback) {
 }
 
 function start(uid) {
-
   let messageData = {
     "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
     "quick_replies":[{
@@ -51,21 +51,19 @@ function start(uid) {
       "payload":"yep"
     }]
   }
-
   send(uid, messageData);
 }
 
-function start_with_phoneNumber(phoneNumber, gameId){
+function startWithPhoneNumber(phoneNumber, eventId) {
   return new Promise(function(resolve, reject){
     let messageData = {
       "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
       "quick_replies":[{
         "content_type":"text",
         "title":"Yep",
-        "payload":("phoneNumber|" + phoneNumber + "|" + gameId)
+        "payload":("phoneNumber|" + phoneNumber + "|" + eventId)
       }]
     }
-
     request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {access_token:VERIFICATION_TOKEN},
@@ -77,7 +75,7 @@ function start_with_phoneNumber(phoneNumber, gameId){
     }, (error, response, body) => {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error in start_with_phoneNumber(): ', errorObject);
+        console.log('Error in startWithPhoneNumber(): ', errorObject);
         reject(errorObject);
       } else {
         resolve();
@@ -86,8 +84,8 @@ function start_with_phoneNumber(phoneNumber, gameId){
   })
 }
 
-function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, image_url, order_number){
-  return new Promise(function(resolve, reject){
+function bookedWithPhoneNumber(phoneNumber, name, price, eventName, strapline, image_url, order_number) {
+  return new Promise((resolve, reject) => {
     let messageData = {
       "attachment": {
         "type":"template",
@@ -98,8 +96,8 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
           "payment_method": "Stripe",
           "order_number": order_number,
           "elements":[{
-            "title": gameName,
-            "subtitle": address,
+            "title": eventName,
+            "subtitle": strapline,
             "quantity": 1,
             "price": price,
             "currency":"GBP",
@@ -120,10 +118,11 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
         recipient: {phone_number:phoneNumber},
         message: messageData
       }
-    }, function(error, response, body) {
+    }, (error, response, body) => {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending booked message to phoneNumber "' + JSON.stringify(errorObject));
+        console.log('Error sending booked message to phoneNumber "'
+          + phoneNumber + '": ', errorObject);
         reject(errorObject);
       } else {
         resolve();
@@ -132,7 +131,7 @@ function booked_with_phoneNumber(phoneNumber, name, price, gameName, address, im
   })
 }
 
-function text_with_phoneNumber(phoneNumber, text) {
+function textWithPhoneNumber(phoneNumber, text) {
   return new Promise(function(resolve, reject){
     let messageData = { text: text }
 
@@ -157,28 +156,35 @@ function text_with_phoneNumber(phoneNumber, text) {
   })
 }
 
-function register_user (uid, phoneNumber, gameId) {
+function registerUser (uid, phoneNumber, eventId) {
   var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
    + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
    + VERIFICATION_TOKEN;
   request(get_url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       body = JSON.parse(body);
-
       let user = M.User({
-        userId: uid.mid,
+        mid: uid.mid,
         phoneNumber: phoneNumber,
-        firstname: body.first_name,
-        lastname: body.last_name,
-        profile_pic: body.profile_pic,
+        firstName: body.first_name,
+        lastName: body.last_name,
+        profilePic: body.profile_pic,
         locale: body.locale,
-        gender: body.gender
+        gender: body.gender,
+        signedUpDate: new Date()
       })
 
       user.save((err) => {
         if (err) {
           console.log('Error registering user: ', err);
         } else {
+          M.Analytics.update({name:"NewUsers"},
+          {$push: {activity: {uid:uid._id, time: new Date()}}},
+          {upsert: true}, (err) => {
+            if (err) {
+              console.log('Error saving analytics for "NewUsers":', err);
+            }
+          });
           console.log("saved user");
         }
       })
@@ -191,25 +197,24 @@ function menu (uid) {
     "text":"Hi there, what do you want to do?",
     "quick_replies":[{
       "content_type": "text",
-      "title": "Show Games",
-      "payload": "show games"
+      "title": "Show Events",
+      "payload": "show events"
     }, {
       "content_type": "text",
-      "title": "My Games",
-      "payload": "my games"
+      "title": "My Events",
+      "payload": "my events"
     }, {
       "content_type": "text",
       "title": "Notifications",
       "payload": "notifications"
     }]
   }
-
   send(uid, messageData);
 }
 
 function notifications (uid) {
   let messageData = {
-    "text":"Do you want to receive weekly game updates?",
+    "text":"Do you want to receive weekly event updates?",
     "quick_replies":[{
       "content_type": "text",
       "title": "Yes",
@@ -224,10 +229,10 @@ function notifications (uid) {
   send(uid, messageData);
 }
 
-function notifications_change (uid, set) {
-  M.User.update({userId:uid.mid}, {notifications: set}, (err) => {
+function notificationsChange (uid, set) {
+  M.User.update({mid:uid.mid}, {notifications: set}, (err) => {
     if (err) {
-      console.log(err);
+      console.log('Error changing user\'s notification settings:', err);
     }
     if (set === "on") {
       text(uid, "You will receive weekly notifications");
@@ -237,7 +242,7 @@ function notifications_change (uid, set) {
   });
 }
 
-function booked (uid, name, price, gameName, address, image_url, order_number, callback) {
+function booked (uid, name, price, eventName, strapline, image_url, order_number, callback) {
   let messageData = {
     "attachment": {
       "type":"template",
@@ -248,8 +253,8 @@ function booked (uid, name, price, gameName, address, image_url, order_number, c
         "payment_method": "Stripe",
         "order_number": order_number,
         "elements": [{
-          "title": gameName,
-          "subtitle": address,
+          "title": eventName,
+          "subtitle": strapline,
           "quantity": 1,
           "price": price,
           "currency": "GBP",
@@ -265,18 +270,15 @@ function booked (uid, name, price, gameName, address, image_url, order_number, c
   send(uid, messageData, callback);
 }
 
-function booked_for_free_games (uid) {
+function bookedForFreeEvents (uid) {
   let messageData = {
     "text":"Thanks for booking. Do you want to continue looking?",
-    "quick_replies":[
-      {
-        "content_type":"text",
-        "title":"Yes",
-        "payload":"continue"
-      }
-    ]
+    "quick_replies":[{
+      "content_type":"text",
+      "title":"Yes",
+      "payload":"continue"
+    }]
   }
-
   send(uid, messageData);
 }
 
@@ -285,7 +287,7 @@ function processReceivedMessage(uid, message, defaultCallback) {
   L.processTextMessage(uid, message, defaultCallback);
 }
 
-function text_promise (uid, text) {
+function textPromise (uid, text) {
   return new Promise(function(resolve, reject){
     let messageData = { text: text }
     request({
@@ -299,7 +301,8 @@ function text_promise (uid, text) {
     }, function(error, response, body) {
       let errorObject = (error) ? error : response.body.error;
       if (errorObject) {
-        console.log('Error sending text messages to mid "'
+        console.log('Error sending text message ' + JSON.stringify(messageData)
+          + ' to mid "'
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
@@ -309,12 +312,13 @@ function text_promise (uid, text) {
   })
 }
 
-function text(uid, text, callback) {
+function text (uid, text, callback) {
   let messageData = { text: text }
   send(uid, messageData, callback);
 }
 
 function textWithQuickReplies (uid, text, quickReplies) {
+  //console.log('textWithQuickReplies', uid, text, quickReplies);
   return new Promise((resolve, reject) => {
     let quickRepliesObjects = [];
     if (quickReplies.length && typeof quickReplies[0] === 'string') {
@@ -354,21 +358,20 @@ function textWithQuickReplies (uid, text, quickReplies) {
 
 function cards (uid, data, message) {
   if (message === undefined) {
-    text(uid, "Here are some upcoming games to join. "
+    text(uid, "Here are some upcoming events to join. "
      + "Tap the card for directions or 'More Info' to book.");
   } else {
     text(uid, message);
   }
-
   send(uid, data);
 }
 
-function directions (uid, name, address, latlong) {
+function directions (uid, name, latlong) {
   return new Promise(function (resolve, reject) {
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
       + latlong + "&zoom=15&size=300x300&markers=" + latlong;
 
-    let directions_link = "http://maps.google.com/?q=" + address;
+    let directions_link = "http://maps.google.com/?q=" + latlong;
 
     let messageData = {
       "attachment": {
@@ -410,15 +413,15 @@ function directions (uid, name, address, latlong) {
   })
 }
 
-function shareGame (uid, text) {
-  let gid = text.split("|")[1];
-  M.Game.find({_id:gid}, function(err, results){
+function shareEvent (uid, text) {
+  let eid = text.split("|")[1];
+  M.Event.find({_id:eid}, function(err, results){
     if (results.length > 0) {
-      let game = results[0];
-      let publicLink = "http://localhost:3000/game?gid=" + gid;
-      let description = game.when.toString().substring(0, 10)
-       + " | " + game.address;
-      let numAttending = game.non_members_attending + game.joined.length;
+      let event = results[0];
+      let publicLink = "http://localhost:3000/event?eid=" + eid;
+      let description = event.when.toString().substring(0, 10)
+       + " | " + event.strapline;
+      let numAttending = event.non_members_attending + event.joined.length;
       if (numAttending > 0){
         description = description + " | " + numAttending + " attending";
       }
@@ -428,10 +431,10 @@ function shareGame (uid, text) {
           "payload": {
             "template_type": "generic",
             "elements": [{
-              "title": game.name,
+              "title": event.name,
               "subtitle": description,
-              "image_url": game.image_url,
-              "item_url": game.publicLink,
+              "image_url": event.image_url,
+              "item_url": event.publicLink,
               "buttons": [{
                 "type": "web_url",
                 "title": "More Info",
@@ -441,7 +444,7 @@ function shareGame (uid, text) {
           }
         }
       }
-      text_promise(uid, "If you're on your phone, forward the following"
+      textPromise(uid, "If you're on your phone, forward the following"
        + " message to a friend or group!")
       .then(()=>{
         send(uid, messageData);
@@ -454,30 +457,19 @@ function shareGame (uid, text) {
   })
 }
 
-function generate_card_element (name, address, image_url, latlong,
- gameId, attending, capacity, booked, description, when, price) {
+function generateCardElement (name, strapline, image_url, latlong,
+ eventId, attending, capacity, booked, description, when, price) {
 
-  let pl = "More Info" + "|" + name + "|" + address + "|" + latlong + "|" + gameId + "|" + description + "|" + price + "|" + booked;
+  let con = "|||.|";
+  let pl = "More Info" + con + name + con + strapline + con + latlong + con 
+   + eventId + con + description + con + price + con + booked;
 
-  let directions_link = "http://maps.google.com/?q=" + address;
-
-  if (attending > 0) {
-    address = address + " (" + attending + " attending)";
-  }
-
-  address = when.toString().substring(0, 10) + "\n" + address;
-
-  if (booked) {
-    address = address + " (You're going)";
-  }
+  let directions_link = "http://maps.google.com/?q=" + latlong;
 
   if (attending == capacity) {
-    if (attending == capacity) {
-      address = address + " (fully booked)";
-    }
     let template = {
       "title": name,
-      "subtitle": address,
+      "subtitle": description + " (fully booked)",
       "image_url": image_url,
       "item_url": directions_link
     }
@@ -485,7 +477,7 @@ function generate_card_element (name, address, image_url, latlong,
   } else {
     let template = {
       "title": name,
-      "subtitle": address,
+      "subtitle": strapline,
       "image_url": image_url,
       "item_url": directions_link,
       "buttons": [{
@@ -498,26 +490,28 @@ function generate_card_element (name, address, image_url, latlong,
   }
 }
 
-function card_for_booking (uid, gameId, description, price, booked) {
+function cardForBooking (uid, eventId, description, price, booked) {
   let bookOrCancelButton = {}
+  let phoneNumber = uid.phoneNumber.substr(uid.phoneNumber.length - 10, 10);
+  console.log('phoneNumber:', phoneNumber);
   if (booked === "true") {
     bookOrCancelButton = {
       "type": "postback",
       "title": "Cancel Booking",
-      "payload": "Cancel" + "|" + gameId
+      "payload": "Cancel" + "|" + eventId
     }
   } else if (parseFloat(price) > 0) {
     bookOrCancelButton = {
       "type": "web_url",
       "title": "BOOK",
       "url": config.ROOT_URL + "/payment"
-        + "?mid=" + uid.mid + "&gid=" + gameId
+        + "?pn=" + phoneNumber + "&eid=" + eventId + "&eventPrice=" + price
     }
   } else {
     bookOrCancelButton = {
       "type": "postback",
       "title": "BOOK",
-      "payload": "Book" + "|" + gameId
+      "payload": "Book" + "|" + eventId
     }
   }
 
@@ -532,11 +526,11 @@ function card_for_booking (uid, gameId, description, price, booked) {
             "type": "postback",
             "title": "Keep Looking",
             "payload": "No, thanks",
-          }, {
+          }/*, {
             "type": "postback",
             "title": "Share",
-            "payload": "Share" + "|" + gameId
-          }
+            "payload": "Share" + "|" + eventId
+          }*/
         ]
       }
     }
@@ -545,12 +539,12 @@ function card_for_booking (uid, gameId, description, price, booked) {
   send(uid, messageData);
 }
 
-function generate_card (array) {
+function generateCard (array) {
   let elements = [];
   array.forEach((item) => {
-    //name, address, image_url, latlong, gameId,
+    //name, strapline, image_url, latlong, eventId,
     //attending, capacity, booked, description, when, price
-    elements.push(generate_card_element(item[0], item[1], item[2], item[3], item[4],
+    elements.push(generateCardElement(item[0], item[1], item[2], item[3], item[4],
      item[5], item[6], item[7], item[8], item[9], item[10]));
   });
   var template = {
@@ -565,28 +559,26 @@ function generate_card (array) {
   return template;
 }
 
-function allGames (uid, broadcast) {
+function allEvents (uid, broadcast) {
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
 
-  M.Game.find(query).sort('when').exec(function(err, result){
-
+  M.Event.find(query).sort('when').exec((err, events) => {
     let data = [];
-    result.forEach(function(item){
+    events.forEach((event) =>{
       let booked = false;
-      let join = item.joined;
-      join.forEach(function(i){
-        if(i._id === uid._id){
+      let attendees = event.joined;
+      attendees.forEach((user) => {
+        if (user.uid == uid._id) {
           booked = true;
         }
       });
-      data.push([item.name, item.address, item.image_url, item.latlong,
-        item._id, item.joined.length + item.non_members_attending, item.capacity,
-        booked, item.desc, item.when, item.price]);
+      data.push([event.name, event.strapline, event.image_url, event.latlong,
+        event._id, event.joined.length + event.non_members_attending, event.capacity,
+        booked, event.desc, event.when, event.price]);
     });
-
-    data = generate_card(data);
+    data = generateCard(data);
     if (broadcast === undefined) {
       cards(uid, data);
     } else {
@@ -596,19 +588,21 @@ function allGames (uid, broadcast) {
 }
 
 function yep (uid) {
-  M.Button.update({name:"Yep"},
+  M.Analytics.update({name:"Button:Yep"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    function(err){
-      console.log(err);
-    })
-  M.User.find({userId:uid.mid}, function(err, result){
+    (err) => {
+      if (err) {
+        console.log('Error saving analytics for "Button:Yep":', err);
+      }
+    });
+  M.User.find({mid:uid.mid}, (err, result) => {
     if (err) {
-      console.log(err);
+      console.log('Error finding user with mid "' + uid.mid + '":', err);
     }
     if(result.length > 0){
       console.log("User is already registered");
-      allGames(uid);
+      allEvents(uid);
     } else {
       var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
@@ -617,18 +611,26 @@ function yep (uid) {
         if (!error && response.statusCode == 200) {
           body = JSON.parse(body);
           let user = M.User({
-            userId: uid.mid,
-            firstname: body.first_name,
-            lastname: body.last_name,
-            profile_pic: body.profile_pic,
+            mid: uid.mid,
+            firstName: body.first_name,
+            lastName: body.last_name,
+            profilePic: body.profile_pic,
             locale: body.locale,
-            gender: body.gender
+            gender: body.gender,
+            signedUpDate: new Date()
           });
           user.save((err) => {
             if (err) {
-              console.log(err);
+              console.log('Error saving user:', err);
             } else {
-              allGames(uid);
+              M.Analytics.update({name:"NewUsers"},
+              {$push: {activity: {uid:uid._id, time: new Date()}}},
+              {upsert: true}, (err) => {
+                if (err) {
+                  console.log('Error saving analytics for "NewUsers":', err);
+                }
+              });
+              allEvents(uid);
             }
           });
         }
@@ -638,92 +640,75 @@ function yep (uid) {
 }
 
 function book (uid, rest) {
-
   let arr = rest.split('|');
-  let gameId = arr[1];
-
-  /*
-    //This was here only for testing purposes
-    M.Button.update({name:"Book"},
-    {$push: {activity: {uid:uid._id, time: new Date()}}},
-    {upsert: true},
-    function(err){
-      console.log(err);
-    })
-  */
-
-  M.Button.update({name:"Payments"},{$push: {
-    activity: {
-      uid: uid._id,
-      time: new Date(),
-      gid: gameId,
-      amount: 10
-    }
-  }}, {upsert: true}, (err) => {
-    console.log(err);
+  let eventId = arr[1];
+  H.updateUserEventAnalytics(uid, eventId, 0, (event, error) => {
+    bookedForFreeEvents(uid);
   });
-
-  M.Game.find({_id:gameId}, (err, result) => {
-    let check = true;
-    if(result.length > 0){
-      M.Game.findOneAndUpdate({_id:gameId}, {$push: {joined: {uid: uid._id}}},
-      () => {
-        booked_for_free_games(uid);
-      });
-    }
-  })
 }
 
-function cancel_booking (uid, rest) {
-  M.Button.update({name:"Cancel"},
+function cancelBooking (uid, rest) {
+  M.Analytics.update({name:"Button:Cancel"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    function(err){
-      console.log(err);
+    (err) => {
+      if (err) {
+        console.log('Error saving analytics for "Button:Cancel":', err);
+      }
     });
 
   let arr = rest.split('|');
-  let gameId = arr[1];
-
-  M.Game.find({_id:gameId}, function(err, result){
-    let check = true;
+  let eventId = arr[1];
+  M.Event.find({_id:eventId}, (err, result) => {
     if (result.length > 0) {
-      M.Game.findOneAndUpdate({_id:gameId}, {$pull: {joined: {uid: uid._id}}},
-      () => {
+      M.Event.findOneAndUpdate({_id:eventId}, {$pull: {joined: {uid: uid._id}}},
+      (err, data) => {
+        if (err) {
+          console.log('Error removing user from game\'s joined:', err);
+        }
         text(uid, "Your booking has been cancelled");
+      });
+      M.User.findOneAndUpdate({_id:uid}, {$pull: {events: {eid:eventId}}},
+      (err, data) => {
+        if (err) {
+          console.log('Error pulling eid from users\'s events:', err);
+        }
+        bookedForFreeEvents(uid);
       });
     }
   })
 }
 
-function more_info (uid, text) {
-  M.Button.update({name:"More Info"},
+function moreInfo (uid, text) {
+  M.Analytics.update({name:"Button:More Info"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    function (err) {
-      console.log(err);
-    })
+    (err) => {
+      if (err) {
+        console.log('Error saving analytics for "Button:More Info":', err);
+      }
+    });
 
-  let arr = text.split('|');
+  let arr = text.split("|||.|");
+  //console.log('moreInfo', text, arr[5]);
   let name = arr[1];
-  let address = arr[2];
+  let strapline = arr[2];
   let latlong = arr[3];
-  let gameId = arr[4];
+  let eventId = arr[4];
   let description = arr[5];
   let price = arr[6];
   let booked = arr[7]
 
-  directions(uid, name, address, latlong)
-  .then(function(success){
-    card_for_booking(uid, gameId, description, price, booked);
-  })
-  .catch(function(err){
-    console.log(err);
+  directions(uid, name, latlong)
+  .then((success) => {
+    cardForBooking(uid, eventId, description, price, booked);
+  }).catch((err) => {
+    console.log('Error sending directions:', err);
   })
 }
 
-function game (uid, gameId) {
-  M.Game.find({_id:gameId}, function(err, result){
+function event (uid, eventId) {
+  M.Event.find({_id:eventId}, function(err, result){
     if(result.length > 0){
       let data = [];
       let item = result[0];
@@ -738,73 +723,72 @@ function game (uid, gameId) {
             booked = true;
           }
         });
-        data.push([item.name, item.address, item.image_url, item.latlong,
+        data.push([item.name, item.strapline, item.image_url, item.latlong,
          item._id, item.joined.length, item.capacity, booked, item.desc,
          item.when, item.price]);
-        data = generate_card(data);
-        cards(uid, data, "Here is your game: ");
+        data = generateCard(data);
+        cards(uid, data, "Here is your event: ");
       } else {
-        text(uid, "That game has finished")
+        text(uid, "That event has finished")
       }
     }
   })
 }
 
-function my_games (uid) {
+function myEvents (uid) {
   let now = new Date();
   let query = {when:{
     $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
 
-  M.Game.find(query).sort('when').exec(function(err, result){
-
+  M.Event.find(query).sort('when').exec((err, events) => {
     let data = [];
-    result.forEach((item) => {
-      let join = item.joined;
-      join.forEach((i) => {
-        if (i.uid === uid._id) {
-          data.push([item.name, item.address, item.image_url, item.latlong,
-           item._id, item.joined.length + item.non_members_attending,
-           item.capacity, true, item.desc, item.when, item.price]);
+    events.forEach((event) => {
+      let join = event.joined;
+      join.forEach((user) => {
+        if (user.uid == uid._id) {
+          data.push([event.name, event.strapline, event.image_url, event.latlong,
+           event._id, event.joined.length + event.non_members_attending,
+           event.capacity, true, event.desc, event.when, event.price]);
         }
       });
-    })
+    });
 
     //console.log(data);
 
     if (data.length === 0) {
-      text_promise(uid, "You haven't joined any games.").then(() => {
-        allGames(uid);
+      textPromise(uid, "You haven't joined any events.").then(() => {
+        allEvents(uid);
       }).catch((e) => {
-        console.log(e);
-      })
+        console.log('Error finding user\'s games:', e);
+      });
     } else {
-      data = generate_card(data);
-      cards(uid, data, "Here are the games you've joined: ");
+      data = generateCard(data);
+      cards(uid, data, "Here are the events you've joined: ");
     }
   })
 }
 
 module.exports = {
   start: start,
-  start_with_phoneNumber: start_with_phoneNumber,
-  text_with_phoneNumber: text_with_phoneNumber,
-  booked_with_phoneNumber: booked_with_phoneNumber,
-  register_user: register_user,
+  startWithPhoneNumber: startWithPhoneNumber,
+  textWithPhoneNumber: textWithPhoneNumber,
+  bookedWithPhoneNumber: bookedWithPhoneNumber,
+  registerUser: registerUser,
   menu: menu,
   notifications: notifications,
-  notifications_change: notifications_change,
+  notificationsChange: notificationsChange,
   booked: booked,
   processReceivedMessage: processReceivedMessage,
   text: text,
-  text_promise: text_promise,
+  textPromise: textPromise,
   textWithQuickReplies: textWithQuickReplies,
-  game: game,
+  event: event,
   cards: cards,
-  allGames: allGames,
-  my_games: my_games,
+  allEvents: allEvents,
+  myEvents: myEvents,
   yep: yep,
   book: book,
-  cancel_booking: cancel_booking,
-  more_info: more_info,
-  shareGame: shareGame
+  cancelBooking: cancelBooking,
+  moreInfo: moreInfo,
+  shareEvent: shareEvent
 }

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <a href="dashboard"><title>Wicked Tickets</title></a>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/dashboardCoded.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="dashboard">Wicked Tickets</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="dashboard">Overview</a></li>
+            <li><a href="events">Events</a></li>
+            <li><a href="message">Message</a></li>
+            <li><a href="users">Members</a></li>
+          </ul>
+          <!--
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+          -->
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="main">
+          <a href="dashboard"><h1 class="page-header">Wicked Student Nights</h1></a>
+          <div class="row">
+            <div class="col-md-4">
+              <h2 class="sub-header total-text">Total Members</h2>
+              <p class="lead total-text"><a href="users"><%=totalNoOfMembers%></a></p>
+            </div>
+            <div class="col-md-4">
+              <h2 class="sub-header total-text">Total Revenues</h2>
+              <p class="lead total-text">£<%=totalRevenue%></p>
+            </div>
+            <div class="col-md-4">
+              <h2 class="sub-header total-text">Total Tickets Sold</h2>
+              <p class="lead total-text"><%=totalNoOfTickets%></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <h2 class="sub-header total-text">Day Stats</h2>
+          </div>
+
+          <div class="col-md-4">
+            <h2 class="sub-header total-text">Week Stats</h2>
+          </div>
+
+          <div class="col-md-4">
+            <h2 class="sub-header total-text">Month Stats</h2>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <p class="lead total-text">Tickets Sold</p>
+            <canvas id="ticketsSoldDay" height="170px;"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">Tickets Sold</p>
+            <canvas id="ticketsSoldWeek" height="200px;"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">Tickets Sold</p>
+            <canvas id="ticketsSoldMonth" height="170px;"></canvas>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <p class="lead total-text">New Members</p>
+            <canvas id="newMembersDay" height="170px;"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">New Members</p>
+            <canvas id="newMembersWeek" height="200px;"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">New Members</p>
+            <canvas id="newMembersMonth" height="170px;"></canvas>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <p class="lead total-text">Button Hits</p>
+            <canvas id="buttonsHitsDay" height="170px;"></canvas>
+
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">Button Hits</p>
+            <canvas id="buttonsHitsWeek" height="200px;"></canvas>
+          </div>
+
+          <div class="col-md-4">
+            <p class="lead total-text">Button Hits</p>
+            <canvas id="buttonsHitsMonth" height="170px;"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script>
+
+      let dayLabels = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+      let monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+       'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      let weekLabels = [];
+      let modifiedMonthLabels = [];
+      $(document).ready(() => {
+        initMonthAndWeekLabels();
+        $.get('/dashboardData?requiredData=getTicketsSoldOverTime',
+         (data, status) => {
+          console.log('getTicketsSoldOverTime', data);
+          initChart('ticketsSoldDay', data.daysArray, dayLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+          initChart('ticketsSoldWeek', data.weeksArray, weekLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+          initChart('ticketsSoldMonth', data.monthsArray, modifiedMonthLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+        });
+        $.get('/dashboardData?requiredData=getNewMembersOverTime',
+         (data, status) => {
+          console.log('getNewMembersOverTime', data);
+          initChart('newMembersDay', data.daysArray, dayLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          initChart('newMembersWeek', data.weeksArray, weekLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          initChart('newMembersMonth', data.monthsArray, modifiedMonthLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+        });
+        $.get('/dashboardData?requiredData=getButtonHitsOverTime',
+         (data, status) => {
+          console.log('getButtonHitsOverTime', data);
+          initChart('buttonsHitsDay', data.daysArray, dayLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          initChart('buttonsHitsWeek', data.weeksArray, weekLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          initChart('buttonsHitsMonth', data.monthsArray, modifiedMonthLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+        });
+      });
+
+      function initChart (divId, data, labels, backgroundColor,
+        borderColor, highlightFill, highlightStroke) {
+        let ctx = document.getElementById(divId).getContext("2d");
+        let chartData = {
+          labels: labels,
+          datasets: [{
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            highlightFill: highlightFill,
+            highlightStroke: highlightStroke,
+            data: data
+          }]
+        };
+        new Chart(ctx, {
+          type: 'bar',
+          data: chartData, 
+          options: {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                gridLines: {
+                  display: false
+                }
+              }],
+              yAxes: [{
+                gridLines: {
+                  display: false
+                }
+              }]
+            }
+          }
+        }); 
+      }
+
+      function initMonthAndWeekLabels () {
+        //Month Labels
+        let currentMonth = (new Date()).getMonth();
+        for (let i = currentMonth + 1; modifiedMonthLabels.length < 12; i++) {
+          modifiedMonthLabels.push(monthLabels[i]);
+          if (i == 11) {
+            i = -1;
+          }
+        }
+        //Week Labels
+        let msDay = 86400 * 1000;
+        let firstMonday = new Date(); //Now
+        firstMonday = new Date(firstMonday.getTime() //This week's Monday
+          - (firstMonday.getDay() - 1) * msDay);
+        firstMonday = new  Date(firstMonday.getTime() - 11 * 7 * msDay);
+        for (let i = 0; i < 12; i++) {
+          let mon = new Date(firstMonday.getTime() + i * 7 * msDay);
+          let sun = new Date(mon.getTime() + 6 * msDay);
+          weekLabels.push(mon.getDate() + '/' + (mon.getMonth() + 1)
+            + ' - ' + sun.getDate() + '/' + (sun.getMonth() + 1));
+        }
+      }
+
+    </script>
+  </body>
+</html>

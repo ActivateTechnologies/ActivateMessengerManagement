@@ -4,18 +4,27 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const config = require('./../config')
 
-mongoose.connect(config.MONGODB_URI);
+mongoose.connect(config.MONGODB_URI, (error) => {
+  if (error) {
+    console.log('Error connecting to mongoose:', error);
+  }
+});
 
 let userSchema = new Schema({
-  userId: String,
+  mid: String,
   phoneNumber: String,
-  firstname: String,
-  lastname: String,
-  profile_pic: String,
+  firstName: String,
+  lastName: String,
+  profilePic: String,
   locale: String,
   gender: String,
   notifications: String,
   publicLink: String,
+  signedUpDate: Date,
+  events: [{
+    eid: String,
+    joinDate: Date
+  }],
   conversationLocation: {
     conversationName: String,
     nodeId: String,
@@ -26,9 +35,9 @@ let userSchema = new Schema({
 
 let User = mongoose.model('User', userSchema);
 
-let gameSchema = new Schema({
+let eventSchema = new Schema({
   name: String,
-  address: String,
+  strapline: String,
   image_name: String,
   image_url: String,
   latlong: String,
@@ -36,16 +45,17 @@ let gameSchema = new Schema({
   when: Date,
   desc: String,
   joined: [{
-    uid: String
+    uid: String,
+    joinDate: Date
   }],
   capacity: Number,
   non_members_attending: Number
 })
 
-let Game = mongoose.model('Game', gameSchema);
+let Event = mongoose.model('Events', eventSchema);
 
 
-let buttonSchema = new Schema({
+/*let buttonSchema = new Schema({
   name: String,
   activity: [{
     uid: String,
@@ -53,10 +63,11 @@ let buttonSchema = new Schema({
   }]
 })
 
-let Button = mongoose.model('Button', buttonSchema);
+let Button = mongoose.model('Button', buttonSchema);*/
 
 let analyticsSchema = new Schema({
   name: String,
+  total: Number,
   activity: [{
     uid: String,
     time: Date,
@@ -77,8 +88,7 @@ let Conversations = mongoose.model('Conversations', ConversationsSchema);
 
 module.exports = {
   User: User,
-  Game: Game,
-  Button: Button,
+  Event: Event,
   Analytics: Analytics,
   Conversations: Conversations
 }

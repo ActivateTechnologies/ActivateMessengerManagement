@@ -25,7 +25,7 @@ function startConversation(uid, conversationName) {
   });
 }
 
-function consumeEvent(event, uid, user) {
+function consumeWebhookEvent(event, uid, user) {
   //return false;
   //console.log(uid, user, event);
   if (!user || !user.conversationLocation) {
@@ -34,13 +34,10 @@ function consumeEvent(event, uid, user) {
   let userMessageType = user.conversationLocation.nodeType;
 
   if (userMessageType == 'text') {
-    console.log(1)
     if (!event.message || !event.message.text) {
-      console.log(2)
       sendUserErrorMessage(event, uid, user);
       return true;
     } else {
-      console.log(3)
       executeTreeNodefromId(uid,
         user.conversationLocation.conversationName,
         user.conversationLocation.nodeId + '.1',
@@ -48,20 +45,19 @@ function consumeEvent(event, uid, user) {
       return true;
     }
   } else if (userMessageType == 'quickReplies') {
-    console.log(4)
     if (!event.message || !event.message.quick_reply) {
-      console.log(5)
-      sendUserErrorMessage(event, uid, user);
+      if (user.conversationLocation.userErrorText) {
+        sendUserErrorMessage(event, uid, user);
+      } else {
+        executeErrorForNode(event, uid, user);
+      }
       return true;
     } else {
-      console.log(6)
       let payload = event.message.quick_reply.payload;
       if (payload.substring(0, 16) == "conversationName") {
-        console.log(7)
         handleQuickReply(uid, payload);
         return true;
       } else {
-        console.log(8)
         sendUserErrorMessage(event, uid, user);
         return true;
       }
@@ -73,10 +69,41 @@ function consumeEvent(event, uid, user) {
   Called when user replies with a type of message that's not expected;
   sends the user the saved error message from that node. */
 function sendUserErrorMessage (event, uid, user) {
+  //console.log('sendUserErrorMessage', event, uid, user);
   let message = user.conversationLocation.userErrorText;
-  send.text_promise(uid, message).then(() => {
+  send.textPromise(uid, message).then(() => {
     executeTreeNodefromId(uid, user.conversationLocation.conversationName,
      user.conversationLocation.nodeId);
+  });
+}
+
+/*
+  Called when user replies with a type of message that's not expected;
+  executes the last of 'next's for that node. */
+function executeErrorForNode (event, uid, user) {
+  //console.log('executeErrorForNode', event, uid, user);
+  executeTreeNodefromId(uid, user.conversationLocation.conversationName,
+   user.conversationLocation.nodeId);
+
+  let conversationName = user.conversationLocation.conversationName;
+  let nodeId = user.conversationLocation.nodeId;
+
+  let nodeIdArray = nodeId.split(".");
+  M.Conversations.find({name: conversationName}, (error, results) => {
+    if (error) {
+      consol.log('Error getting conversation: ', error);
+    } else if (results.length == 0) {
+      console.log('No conversations with name "' + conversationName + '" found.');
+    } else {
+      let conversation = results[0];
+      let i = 1, node = conversation.next[0];
+      while (i < nodeIdArray.length) {
+        //console.log('Going to id next[' + (nodeIdArray[i] - 1) + ']');
+        node = node.next[nodeIdArray[i] - 1];
+        i++;
+      }
+      executeTreeNode(uid, conversationName, node.next[node.next.length - 1]);
+    }
   });
 }
 
@@ -88,13 +115,21 @@ function executeTreeNode(uid, conversationName, node, message) {
   if (node.sender == 'bot') {
     clearUserConversationLocation(uid);
     if (node.nodeType == 'text') {
-      send.text_promise(uid, node.text).then(() => {
+      if (node.text.trim().length > 0) {
+        send.textPromise(uid, node.text).then(() => {
+          if (node.next && node.next.length) {
+            executeTreeNode(uid, conversationName, node.next[0]);
+          } else {
+            console.log('No nodes found in next, assuming end of tree.');
+          }
+        });
+      } else {
         if (node.next && node.next.length) {
           executeTreeNode(uid, conversationName, node.next[0]);
         } else {
           console.log('No nodes found in next, assuming end of tree.');
         }
-      });
+      }
     } else if (node.nodeType == 'quickReplies') {
       let quickReplies = [];
       node.quickReplies.forEach((textString, index) => {
@@ -109,8 +144,14 @@ function executeTreeNode(uid, conversationName, node, message) {
         saveUserConversationLocation(uid, conversationName, node);
       });
     } else if (node.nodeType == 'function') {
-      functionsIndex[conversationName][node.function](uid,
-       conversationName, node, message);
+      if (functionsIndex[conversationName]
+       && functionsIndex[conversationName][node.function]) {
+        functionsIndex[conversationName][node.function](uid,
+         conversationName, node, message);
+      } else {
+        console.log('Error: Function "' + node.function 
+          + '" for conversation "' + conversationName + '" not found')
+      }
     } else if (node.nodeType == 'jumpToId') {
       executeTreeNodefromId(uid, conversationName, node.jumpToId);
     } else if (node.nodeType == 'jumpToExternalId') {
@@ -149,12 +190,11 @@ function executeTreeNodefromId(uid, conversationName, nodeId, message) {
   Called from webhook.js when the user hits a quick reply button and payload 
   starts with 'conversationName...'. */
 function handleQuickReply(uid, payload) {
-  console.log('handleQuickReply(' + payload + ')');
+  /*console.log('handleQuickReply(' + payload + ')');*/
   let conversationName = payload.split('|')[0].split('~')[1];
   let nodeId = payload.split('|')[1].split('~')[1];
   /*console.log('conversationName: ' + conversationName
    + ', nodeId: ' + nodeId + ')');*/
-
   executeTreeNodefromId(uid, conversationName, nodeId);
 }
 
@@ -174,7 +214,7 @@ function saveUserConversationLocation(uid, conversationName, node) {
       userErrorText: (node.userErrorText) ? node.userErrorText : ''
     }
   }
-  M.User.update({userId: uid.mid}, updateObject, (error, result) => {
+  M.User.update({mid: uid.mid}, updateObject, (error, result) => {
     if (error) {
       console.log('Error saving user\'s conversationLocation: ', error);
     }
@@ -182,9 +222,9 @@ function saveUserConversationLocation(uid, conversationName, node) {
 }
 
 /* Clears the conversationLocation from the user */
-function clearUserConversationLocation(uid) {
+function clearUserConversationLocation (uid) {
   let updateObject = {$unset: {conversationLocation: 1 }};
-  M.User.update({userId: uid.mid}, updateObject, (error, result) => {
+  M.User.update({mid: uid.mid}, updateObject, (error, result) => {
     if (error) {
       console.log('Error clearing user\'s conversationLocation: ', error);
     }
@@ -199,17 +239,9 @@ function clearUserConversationLocation(uid) {
 var collectPhoneNumber = function(uid, conversationName, node, message) {
   
   let processedPhoneNumber = validatePhoneNumber(message);
-
   if (processedPhoneNumber == -1) {
     executeTreeNode(uid, conversationName, node.next[1]);
   } else {
-    /*createUser(uid, (error) => {
-      if (error) {
-        //TODO Handle error, send user some text message
-      } else {
-        executeTreeNode(uid, conversationName, node.next[0]);
-      }
-    });*/
     savePhoneNumber(uid, processedPhoneNumber, (error) => {
       if (error) {
         //TODO Handle error, send user some text message
@@ -240,7 +272,7 @@ var collectPhoneNumber = function(uid, conversationName, node, message) {
     let updateObject = {
       phoneNumber: '+44' + phoneNumber
     }
-    M.User.update({userId: uid.mid}, updateObject, (error, result) => {
+    M.User.update({mid: uid.mid}, updateObject, (error, result) => {
       if (error) {
         console.log('Error saving user\'s phone number: ', error);
         callback(error);
@@ -251,19 +283,27 @@ var collectPhoneNumber = function(uid, conversationName, node, message) {
   }
 }
 
-/* Calls send.allGames */
-var showGames = function(uid, conversationName, node, message) {
-  send.allGames(uid);
+/* Calls send.allEvents */
+var showEvents = function(uid, conversationName, node, message) {
+  send.allEvents(uid);
 }
 
 let functionsIndex = {
   onboarding: {
     collectPhoneNumber: collectPhoneNumber,
-    showGames: showGames
+    showEvents: showEvents
   },
   collectPhoneNumber: {
     collectPhoneNumber: collectPhoneNumber,
-    showGames: showGames
+    showEvents: showEvents
+  },
+  onboardingSkip: {
+    collectPhoneNumber: collectPhoneNumber,
+    showEvents: showEvents
+  },
+  collectPhoneNumberSkip: {
+    collectPhoneNumber: collectPhoneNumber,
+    showEvents: showEvents
   }
 }
 
@@ -271,5 +311,5 @@ module.exports = {
   startConversation: startConversation,
   handleQuickReply: handleQuickReply,
   executeTreeNodefromId: executeTreeNodefromId,
-  consumeEvent: consumeEvent
+  consumeWebhookEvent: consumeWebhookEvent
 }
