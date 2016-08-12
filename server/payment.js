@@ -30,71 +30,141 @@ function processGetEvent(req, res) {
   });
 }
 
-function processGetPayment(req, res) {
-  let eventId = req.query.eid;
-  let pn = req.query.pn;
-  let eventPrice = req.query.eventPrice;
+/*function processGetBookEvent(req, res) {
+  let eid = req.query.eid;
+  let phoneNumber = req.query.pn;
+  if (eid && phoneNumber) {
+    M.Event.find({_id: eid}).exec().catch((error) => {
+      console.log('Error quering for event with id ' + eid + ':', error);
+      renderPage(res, 'The event you are looking for does not exist',
+       null, phoneNumber, false);
+    }).then((events) => {
+      let url = '';
+      if (event.price > 0) {
+        url = "/charge?eid=" + eid + "&pn=" + phoneNumber;
+      } else {
+        url = "/charge?eid=" + eid + "&pn=" + phoneNumber;
+      }
 
-  if (eventId && pn && eventPrice) {
-    M.User.find({phoneNumber: '+44' + pn}, (err, users) => {
-      if (err || !users.length) {
-        console.log('/payment: Error finding users:', (err) ? err : 'No users found');
-        sendPaymentPageWithMessage(res, 'The event you are looking for does not exist', null, pn, false);
+      request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:VERIFICATION_TOKEN},
+        method: 'POST',
+        json: {
+          recipient: recipient,
+          message: messageData
+        }
+      }, (error, response, body) => {
+        let errorObject = (error) ? error : response.body.error;
+        if (errorObject) {
+          console.log('Error sending message'
+           //+ ' (' + JSON.stringify(messageData) + ')'
+           + ' to recipient "' + JSON.stringify(recipient) 
+           + '": ', JSON.stringify(errorObject));
+          if (callback) {
+            callback(errorObject);
+          }
+        } else if (callback) {
+          callback();
+        }
+      });
+
+
+    }).catch((error) => {
+      console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
+       error);
+      renderPage(res, 'The event you are looking for does not exist',
+       null, phoneNumber, false);
+    })
+  } else {
+    console.log('/bookEvent did not receive all required details:',
+     eid, phoneNumber);
+    renderPage(res, 'The event you are looking for does not exist',
+     null, phoneNumber, false);
+  }
+}*/
+
+function processGetPayment(req, res) {
+  let eid = req.query.eid;
+  let phoneNumber = '+44' + req.query.pn;
+  let eventObject, price;
+  console.log('processGetPayment', eid, phoneNumber);
+  if (eid && phoneNumber) {
+    M.Event.find({_id: eid}).exec().catch((error) => {
+      console.log('Error quering for event with id ' + eid + ':', error);
+    }).then((events) => {
+      eventObject = events[0];
+      price = eventObject.price;
+      return M.User.find({phoneNumber: phoneNumber}).exec();
+    }).catch((error) => {
+      console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
+       error);
+      renderPage(res, 'The event you are looking for does not exist',
+       null, phoneNumber, false);
+    }).then((users) => {
+      if (users.length == 0) {
+        console.log('No users found');
+        renderPage(res, 'The event you are looking for does not exist',
+         null, phoneNumber, false);
       } else {
         let userAlreadyAttending = false;
         for (let i = 0; i < users[0].events.length && !userAlreadyAttending; i++) {
-          userAlreadyAttending = users[0].events[i].eid == eventId;
+          userAlreadyAttending = users[0].events[i].eid == eid;
+          if (userAlreadyAttending) {
+            break;
+          }
         }
+        console.log(3, userAlreadyAttending, price, price > 0);
         if (userAlreadyAttending) {
-          sendPaymentPageWithMessage(res, 'You are already attending this event.', null, pn, false);
+          renderPage(res, 'You are already attending this event.',
+           null, phoneNumber, false);
+        } else if (price > 0) {
+          res.render('payment', {
+            eid: eid,
+            pn: req.query.pn,
+            event: eventObject
+          });
         } else {
-          M.Event.find({_id: eventId}, (err, events) => {
-            if (err || events.length == 0) {
-              console.log('Error getting event with id "' + eventId + '":'
-                + ((events.length != 0) ? JSON.stringify(err) : 'No events found'));
-              sendPaymentPageWithMessage(res, 'The event you are looking for does not exist', null, pn, false);
-            } else {
-              res.render('payment', {
-                eid: eventId,
-                eventPrice: eventPrice,
-                pn: pn,
-                event: events[0]
-              });
-            }
+          processGetCharge(req, res, {
+            pn: req.query.pn,
+            eid: req.query.eid
           });
         }
       }
     });
   } else {
     console.log('/payment did not receive all required details:',
-      eventId, pn, eventPrice);
-    sendPaymentPageWithMessage('The event you are looking for does not exist', null, pn, false);
+     eid, phoneNumber);
+    renderPage(res, 'The event you are looking for does not exist',
+     null, phoneNumber, false);
   }
 }
 
-function sendPaymentPageWithMessage(res, message, event, pn, showPayment) {
-  let paymentDivDisplay = (showPayment) ? '' : 'none';
-  let objectToSend = {
-    pn: pn,
-    message: message,
-    paymentDivDisplay: paymentDivDisplay
-  }
-  if (event) {
-    objectToSend.event = event;
-  }
-  res.render('payment_complete', objectToSend);
-}
+function processGetCharge(req, res, params) {
+  let phoneNumber = (params) ? '+44' + params.pn : '+44' + req.query.pn;
+  let eid = (params) ? params.eid : req.query.eid;
+  let eventObject;
+  let price;
 
-function processPostCharge(req, res) {
-  let phoneNumber = '+44' + req.query.pn;
-  let eventId = req.query.eid;
-  let price = parseFloat(req.query.eventPrice) / 100;
+  if (params) {
+    console.log('params.pn: ' + params.pn);
+  }
+  if (req.query.pn) {
+    console.log('+req.query.pn: ' + req.query.pn);
+  }
 
-  M.User.find({phoneNumber: phoneNumber}, (err, users) => {
-    if (err) {
-      console.log('Error querying for user with phoneNumber:', err);
-    }
+  M.Event.find({_id: eid}).exec().catch((error) => {
+    console.log('Error quering for event with id ' + eid + ':', error);
+  }).then((events) => {
+    eventObject = events[0];
+    price = eventObject.price;
+    return M.User.find({phoneNumber: phoneNumber}).exec();
+  }).catch((error) => {
+    console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
+     error);
+  }).then((users) => {
     if (users.length > 0) { //EXISTING USER
+      console.log('Existing User');
       let uid = {
         _id: users[0]._id,
         phoneNumber: users[0].phoneNumber
@@ -103,44 +173,47 @@ function processPostCharge(req, res) {
         uid.mid = users[0].mid;
       }
       if (price === 0) { //FREE GAME
-        console.log("Free Event");
-        H.updateUserEventAnalytics(uid, eventId, price, (event, error) => {
-          sendPaymentPageWithMessage(res, 'Your payment has gone through. '
-           + 'You should get a receipt in your Facebook messenger shortly.',
-           event, phoneNumber, false);
-          if (!error) {
-            console.log("Send to " + uid.mid);
-            Send.text(uid, "Thanks for booking", (error) => {
-              if (error) {
-                console.log('User not found on db or via fb linked pn, using sms.');
-                sendSmsMessage(uid, event, true, false);
-              }
-            });
-          }
-        })
+        console.log('Free Event');
+        H.updateUserEventAnalytics(uid, eid, price)
+        .catch((error) => {
+        }).then((event) => {
+          console.log("Send to " + uid.mid);
+          return Send.textPromise(uid,
+           "Booking successful! Thank you for booking :)");
+        }).catch((error) => {
+          console.log('User not found on db or via fb linked pn, using sms.');
+          sendSmsMessage(uid, event, true, false);
+          renderPage(res, 'Booking successful! We\'ve sent you a confirmation text'
+            + ' to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+        }).then(() => {
+          renderPage(res, 'Booking successful! You should get a confirmation in'
+           + ' your Facebook Messenger shortly.', eventObject, phoneNumber, false);
+        });
       } else { //PAID GAME
         console.log("Paid Event");
-        makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eventId,
-         () => {
-          H.updateUserEventAnalytics(uid, eventId, price, (event, error) => {
-            sendPaymentPageWithMessage(res, 'Your payment has gone through. '
-             + 'You should get a receipt in your Facebook messenger shortly.',
-             event, phoneNumber, false);
-            if (!error) {
-              Send.booked(uid, users[0].firstName + ' ' + users[0].lastName,
-               price, event.name, event.address, event.image_url, req.body.stripeToken,
-               (error) => {
-                if (error) {
-                  console.log('User not found on db or via fb linked pn, using sms.');
-                  sendSmsMessage(uid, event, true, true);
-                }
-              });
-            }
-          });
+        makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
+        .catch(() => {
+        }).then(() => {
+          return H.updateUserEventAnalytics(uid, eid, price);
+        }).catch((error) => {
+        }).then((event) => {
+          return Send.bookedPromise(uid, users[0].firstName + ' ' 
+           + users[0].lastName, price, event.name, event.address, event.image_url,
+           req.body.stripeToken);
+        }).catch((error) => {
+          console.log('User not found on db or via fb linked pn, using sms.');
+          sendSmsMessage(uid, event, true, true);
+          renderPage(res, 'Your payment has gone through. We\'ve sent you a '
+           + 'receipt to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+        }).then(() => {
+          console.log('Existing, paid, message sent');
+          renderPage(res, 'Your payment has gone through. You should get a'
+           + ' receipt in your Facebook Messenger shortly.', eventObject,
+           phoneNumber, false);
         });
       }
     } else { //NEW USER
-      console.log("New User");
+      console.log('New User');
       let user = M.User({
         phoneNumber: phoneNumber
       })
@@ -151,47 +224,67 @@ function processPostCharge(req, res) {
         }
         if (error) {
           console.log('Error saving user\'s phone number:', error);
-        } else {
-          if (price === 0) { //FREE GAME
-            console.log("Free Event");
-            H.updateUserEventAnalytics(uid, eventId, price, (event, error) => {
-              sendPaymentPageWithMessage(res, 'Your payment has gone through. '
-               + 'You should get a receipt in your Facebook messenger shortly.',
-               event, phoneNumber, false);
-              if (!error) {
-                Send.textWithPhoneNumber(uid.phoneNumber, "Thanks for booking.")
-                .then(() => {
-                  //res.send("Sent sms.")
-                }).catch((e2)=>{
-                  console.log('User not found on db or via fb linked pn, using sms.');
-                  sendSmsMessage(uid, event, false, false);
-                })
-              }
-            });
-          } else { //PAID GAME
-            console.log("Paid Event");
-            makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eventId,
-             () => {
-              H.updateUserEventAnalytics(uid, eventId, price, (event, error) => {
-                sendPaymentPageWithMessage(res, 'Your payment has gone through. '
-                 + 'You should get a receipt in your Facebook messenger shortly.',
-                 event, phoneNumber, false);
-                if (!error) {
-                  Send.bookedWithPhoneNumber(phoneNumber, phoneNumber, price, d.name, 
-                   d.address, d.image_url, req.body.stripeToken).then(() => {
-                    //res.send('Sent Message.');
-                  }).catch((e2)=>{
-                    console.log('User not found on db or via fb linked pn, using sms.');
-                    sendSmsMessage(uid, results[0], false, true);
-                  });
-                }
-              });
-            });
-          }
+        } else if (price === 0) { //FREE GAME
+          console.log("Free Event");
+          let eventObject;
+          H.updateUserEventAnalytics(uid, eid, price)
+          .catch((error) => {
+          }).then((event) => {
+            eventObject = event;
+            return Send.textWithPhoneNumber(uid.phoneNumber, 'Booking successful!'
+             + ' Thank you for booking :)');
+          }).catch((error)=>{
+            console.log('User not found on db or via fb linked pn, using sms.');
+            sendSmsMessage(uid, event, false, false);
+            renderPage(res, 'Booking successful! We\'ve sent you a confirmation'
+             + ' text to 0' + uid.phoneNumber + '.', event, phoneNumber, false);
+          }).then(() => {
+            renderPage(res, 'Booking successful! You should get a receipt in your'
+             + ' Facebook messenger shortly.', eventObject, phoneNumber, false);
+          })
+        } else { //PAID GAME
+          console.log("Paid Event");
+          let eventObject;
+          makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
+          .catch((error) => {
+          }).then(() => {
+            return H.updateUserEventAnalytics(uid, eid, price);
+          }).catch((error) => {
+          }).then((event) => {
+            eventObject = event;
+            return Send.bookedWithPhoneNumber(phoneNumber, phoneNumber, price,
+             d.name, d.address, d.image_url, req.body.stripeToken);
+          }).catch((error)=>{
+            console.log('User not found on db or via fb linked pn, using sms.');
+            sendSmsMessage(uid, results[0], false, true);
+            renderPage(res, 'Your payment has gone through. We\'ve sent you a'
+             + ' receipt to 0' + uid.phoneNumber + '.', eventObject,
+             phoneNumber, false);
+          }).then(() => {
+            renderPage(res, 'Your payment has gone through. '
+             + 'You should get a receipt in your Facebook messenger shortly.',
+             eventObject, phoneNumber, false);
+          });
         }
       });
     }
   });
+}
+
+/*
+  Render the custom_payment view with given message and other
+  options. */
+function renderPage(res, message, event, pn, showPayment) {
+  let paymentDivDisplay = (showPayment) ? '' : 'none';
+  let objectToSend = {
+    pn: pn,
+    message: message,
+    paymentDivDisplay: paymentDivDisplay
+  }
+  if (event) {
+    objectToSend.event = event;
+  }
+  res.render('payment_complete', objectToSend);
 }
 
 function processPostCustomPayment(req, res) {
@@ -212,22 +305,25 @@ function processPostCustomPayment(req, res) {
   });
 }
 
-function makeCharge(res, eventPrice, stripeToken, uid, eventId, callback){
-  let price = parseFloat(eventPrice) / 100;
-  let charge = stripe.charges.create({
-    amount: eventPrice, // amount in cents, again
-    currency: "gbp",
-    card: stripeToken,
-    description: "",
-    metadata: {_id:(uid._id + ""), eventId: eventId}
-  }, (err, charge) => {
-    if (err && err.type === 'StripeCardError') {
-      sendPaymentPageWithMessage(res, 'Your payment did not go through, '
-       + 'please try again.', null, uid.phoneNumber, true);
-    }
-    else {
-      callback();
-    }
+function makeCharge(res, eventPrice, stripeToken, uid, eid) {
+  return new Promise((resolve, reject) => {
+    let price = parseFloat(eventPrice) / 100;
+    let charge = stripe.charges.create({
+      amount: eventPrice, // amount in cents, again
+      currency: "gbp",
+      card: stripeToken,
+      description: "",
+      metadata: {_id:(uid._id + ""), eid: eid}
+    }, (err, charge) => {
+      if (err && err.type === 'StripeCardError') {
+        renderPage(res, 'Your payment did not go through, '
+         + 'please try again.', null, uid.phoneNumber, true);
+        reject();
+      }
+      else {
+        resolve();
+      }
+    });
   });
 }
 
@@ -254,6 +350,6 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
 module.exports = {
   processGetEvent: processGetEvent,
   processGetPayment: processGetPayment,
-  processPostCharge: processPostCharge,
+  processGetCharge: processGetCharge,
   processPostCustomPayment: processPostCustomPayment
 };

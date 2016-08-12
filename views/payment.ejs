@@ -15,49 +15,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
   </head>
   <body>
-  <div class="site-wrapper-payment">
+    <div class="site-wrapper-payment">
 
-      <div class="site-wrapper-inner2">
-
-        <div class="cover-container2">
-
-          <div class="inner cover">
-
-
-            <img src="img/logoUnbinded-white.png" class="logoLead-payment">
-
-            <div class="payWithCardButtonContainer">
-                <form action="/charge?pn=<%=pn%>&gid=<%=gid%>&gameprice=<%= gameprice*100 %>" method="POST">
-                  <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-                    data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
-                    data-amount="<%= gameprice*100 %>"
-                    data-name="Kickabout"
-                    data-description=""
-                    data-image="img/logo.png"
-                    data-locale="auto"
-                    data-zip-code="false"
-                    data-currency="gbp">
-                  </script>
-                </form>
-            </div>
-
-
+      <div class="cover-container2">
+        <div class="inner cover">
+          <img src="img/logoUnbinded-white.png" class="logoLead-payment">
+          <div class="payWithCardButtonContainer">
+              <form action="/charge?pn=<%=pn%>&eid=<%=eid%>" method="POST">
+                <script
+                  src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
+                  data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
+                  data-amount="<%= event.price*100 %>"
+                  data-name="Kickabout"
+                  data-description="<%= event.strapline %>"
+                  data-image="img/logo.png"
+                  data-locale="auto"
+                  data-zip-code="false"
+                  data-currency="gbp">
+                </script>
+              </form>
           </div>
-
         </div>
+      </div>
 
-        <div class="footerDiv">
-          <p class="footertext">
-                Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
-                <br>
-                www.activatetechnologies.co.uk
-          </p>
-        </div>
+      <div class="footerDiv">
+        <p class="footertext">
+          Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+          <br>
+          www.activatetechnologies.co.uk
+        </p>
+      </div>
 
     </div>
-
-  </div>
-
   </body>
 </html>

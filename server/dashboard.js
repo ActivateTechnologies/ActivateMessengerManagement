@@ -13,6 +13,14 @@ AWS.config.update({
 
 let s3 = new AWS.S3();
 
+function processGetEvents(req, res) {
+  res.render('events', {
+    config: {
+      ROOT_URL: config.ROOT_URL
+    }
+  });
+}
+
 function processGetDashboard(req, res) {
   Analytics.getDashboardStats((data, error) => {
     if (error) {
@@ -215,6 +223,7 @@ function processGetUsersData(req, res) {
 }
 
 module.exports = {
+  processGetEvents: processGetEvents,
   processGetDashboard: processGetDashboard,
   processGetDashboardData: processGetDashboardData,
   processPostEvents: processPostEvents,

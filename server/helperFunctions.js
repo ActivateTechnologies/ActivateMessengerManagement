@@ -10,39 +10,41 @@ const config = require('./../config');
   Updates event's joined array with joined user
   Updates Payments analytics document
   TO DO: WARNING: currently doesn't return any errors*/
-function updateUserEventAnalytics(uid, eid, price, callback) {
-  M.Analytics.update({name:"Payments"}, {
-    $push: {
-      activity: {
-        uid: uid._id,
-        time: new Date(),
-        eid: eid,
-        amount: price
-      }
-    },
-    $inc: {
-      total: price
-    }
-  }, {upsert: true}, (err, results) => {
-    if (err) {
-      console.log('Error logging payments analytics: ', err);
-    }
-    M.User.findOneAndUpdate({_id:uid._id}, {$push: {events: {
-      eid: eid,
-      joinDate: new Date()
-    }}}, (err, user) => {
-      if (err) {
-        console.log('Error pushing eid to users\'s events:', err);
-      }
-      M.Event.findOneAndUpdate({_id:eid}, 
-        {$push: {joined: {
+function updateUserEventAnalytics(uid, eid, price) {
+  return new Promise((resolve, reject) => {
+    M.Analytics.update({name:"Payments"}, {
+      $push: {
+        activity: {
           uid: uid._id,
-          joinDate: new Date()
-        }}}, (err, event) => {
-        if (err) {
-          console.log('Error pushing uid to users\'s events:', err);
+          time: new Date(),
+          eid: eid,
+          amount: price
         }
-        callback(event);
+      },
+      $inc: {
+        total: price
+      }
+    }, {upsert: true}, (err, results) => {
+      if (err) {
+        console.log('Error logging payments analytics: ', err);
+      }
+      M.User.findOneAndUpdate({_id:uid._id}, {$push: {events: {
+        eid: eid,
+        joinDate: new Date()
+      }}}, (err, user) => {
+        if (err) {
+          console.log('Error pushing eid to users\'s events:', err);
+        }
+        M.Event.findOneAndUpdate({_id:eid}, 
+          {$push: {joined: {
+            uid: uid._id,
+            joinDate: new Date()
+          }}}, (err, event) => {
+          if (err) {
+            console.log('Error pushing uid to users\'s events:', err);
+          }
+          resolve(event);
+        });
       });
     });
   });

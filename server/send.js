@@ -30,7 +30,7 @@ function send(uid, messageData, callback) {
     let errorObject = (error) ? error : response.body.error;
     if (errorObject) {
       console.log('Error sending message'
-       //+ ' (' + JSON.stringify(messageData) + ')'
+       + ' (' + JSON.stringify(messageData) + ')'
        + ' to recipient "' + JSON.stringify(recipient) 
        + '": ', JSON.stringify(errorObject));
       if (callback) {
@@ -270,6 +270,20 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
   send(uid, messageData, callback);
 }
 
+function bookedPromise (uid, name, price, eventName, strapline, image_url,
+ order_number) {
+  return new Promise((resolve, reject) => {
+    booked(uid, name, price, eventName, strapline, image_url, order_number,
+     (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 function bookedForFreeEvents (uid) {
   let messageData = {
     "text":"Thanks for booking. Do you want to continue looking?",
@@ -505,7 +519,7 @@ function cardForBooking (uid, eventId, description, price, booked) {
       "type": "web_url",
       "title": "BOOK",
       "url": config.ROOT_URL + "/payment"
-        + "?pn=" + phoneNumber + "&eid=" + eventId + "&eventPrice=" + price
+        + "?pn=" + phoneNumber + "&eid=" + eventId
     }
   } else {
     bookOrCancelButton = {
@@ -788,6 +802,7 @@ module.exports = {
   myEvents: myEvents,
   yep: yep,
   book: book,
+  bookedPromise: bookedPromise,
   cancelBooking: cancelBooking,
   moreInfo: moreInfo,
   shareEvent: shareEvent

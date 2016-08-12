@@ -34,23 +34,27 @@ router.get('/event', (req, res) => {
   Payment.processGetEvent(req, res);
 })
 
-router.get('/payment', function(req, res){
-  Payment.processGetPayment(req, res)
+router.get('/payment', (req, res) => {
+  Payment.processGetPayment(req, res);
 });
 
-router.post('/charge', function(req, res) {
-  Payment.processPostCharge(req, res);
+router.get('/charge', (req, res) => {
+  Payment.processGetCharge(req, res);
 });
 
-router.post('/custompayment', function(req, res){
+router.post('/charge', (req, res) => {
+  Payment.processGetCharge(req, res);
+});
+
+router.post('/custompayment', (req, res) => {
   Payment.processPostCustomPayment(req, res);
 });
 
-router.get('/message', function(req, res){
+router.get('/message', (req, res) => {
   res.render('message');
 });
 
-router.get('/custompayment', function(req, res){
+router.get('/custompayment', (req, res) => {
   res.render('custom_payment');
 });
 
@@ -68,7 +72,7 @@ router.get('/past', (req, res) => {
 });
 
 router.get('/events', (req, res) => {
-  res.render('events');
+  Dashboard.processGetEvents(req, res);
 });
 
 router.get('/dashboard', (req, res) => {

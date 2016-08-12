@@ -588,3 +588,26 @@ p {
   height: 10%;
   width: 100%;
 }
+
+/* DASHBOARD */
+
+.eventImagePayment {
+  width: 300px;
+
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin-bottom: 5px;
+
+  border-radius: 5px;
+}
+
+.eventNamePayment {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.eventSubtitlePayment {
+  font-weight: 300;
+  font-size: 14px;
+}
