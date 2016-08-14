@@ -88,7 +88,6 @@ function processGetPayment(req, res) {
   let eid = req.query.eid;
   let phoneNumber = '+44' + req.query.pn;
   let eventObject, price;
-  console.log('processGetPayment', eid, phoneNumber);
   if (eid && phoneNumber) {
     M.Event.find({_id: eid}).exec().catch((error) => {
       console.log('Error quering for event with id ' + eid + ':', error);
@@ -114,7 +113,6 @@ function processGetPayment(req, res) {
             break;
           }
         }
-        console.log(3, userAlreadyAttending, price, price > 0);
         if (userAlreadyAttending) {
           renderPage(res, 'You are already attending this event.',
            null, phoneNumber, false);
@@ -146,13 +144,6 @@ function processGetCharge(req, res, params) {
   let eventObject;
   let price;
 
-  if (params) {
-    console.log('params.pn: ' + params.pn);
-  }
-  if (req.query.pn) {
-    console.log('+req.query.pn: ' + req.query.pn);
-  }
-
   M.Event.find({_id: eid}).exec().catch((error) => {
     console.log('Error quering for event with id ' + eid + ':', error);
   }).then((events) => {
@@ -177,7 +168,6 @@ function processGetCharge(req, res, params) {
         H.updateUserEventAnalytics(uid, eid, price)
         .catch((error) => {
         }).then((event) => {
-          console.log("Send to " + uid.mid);
           return Send.textPromise(uid,
            "Booking successful! Thank you for booking :)");
         }).catch((error) => {

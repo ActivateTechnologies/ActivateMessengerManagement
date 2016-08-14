@@ -108,7 +108,11 @@ function processPostEvents(req, res) {
             if (err) {
               console.log(err);
             }
-            res.render('events');
+            res.render('events', {
+              config: {
+                ROOT_URL: config.ROOT_URL
+              }
+            });
           })
         } else {
           //console.log("Adding event with image");
@@ -117,7 +121,11 @@ function processPostEvents(req, res) {
             if (err) {
               console.log(err);
             }
-            res.render('events');
+            res.render('events', {
+              config: {
+                ROOT_URL: config.ROOT_URL
+              }
+            });
           })
         }
       }
@@ -142,7 +150,11 @@ function processPostEvents(req, res) {
         if (err) {
           console.log('Error editing event:', err);
         }
-        res.render('events');
+        res.render('events', {
+          config: {
+            ROOT_URL: config.ROOT_URL
+          }
+        });
       })
     } else {
       //console.log("Adding event without image");
@@ -152,7 +164,11 @@ function processPostEvents(req, res) {
           console.log('Error adding event:', err);
           res.send('Error saving event');
         } else {
-          res.render('events');
+          res.render('events', {
+            config: {
+              ROOT_URL: config.ROOT_URL
+            }
+          });
         }
       })
     }
@@ -166,7 +182,11 @@ function processDeleteEvents(req, res) {
       res.send('There was an error deleting event');
     } else {
       //console.log("deleted event");
-      res.render('events');
+      res.render('events', {
+        config: {
+          ROOT_URL: config.ROOT_URL
+        }
+      });
     }
   });
 }
