@@ -103,8 +103,20 @@ function processGetPayment(req, res) {
     }).then((users) => {
       if (users.length == 0) {
         console.log('No users found');
-        renderPage(res, 'The event you are looking for does not exist',
-         null, phoneNumber, false);
+        /*renderPage(res, 'The event you are looking for does not exist',
+         null, phoneNumber, false);*/
+        if (price > 0) {
+          res.render('payment', {
+            eid: eid,
+            pn: req.query.pn,
+            event: eventObject
+          });
+        } else {
+          processGetCharge(req, res, {
+            pn: req.query.pn,
+            eid: req.query.eid
+          });
+        }
       } else {
         let userAlreadyAttending = false;
         for (let i = 0; i < users[0].events.length && !userAlreadyAttending; i++) {
@@ -143,6 +155,7 @@ function processGetCharge(req, res, params) {
   let eid = (params) ? params.eid : req.query.eid;
   let eventObject;
   let price;
+  let pageRendered = false;
 
   M.Event.find({_id: eid}).exec().catch((error) => {
     console.log('Error quering for event with id ' + eid + ':', error);
@@ -172,12 +185,15 @@ function processGetCharge(req, res, params) {
            "Booking successful! Thank you for booking :)");
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
-          sendSmsMessage(uid, event, true, false);
+          sendSmsMessage(uid, eventObject, true, false);
           renderPage(res, 'Booking successful! We\'ve sent you a confirmation text'
             + ' to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+          pageRendered = true;
         }).then(() => {
-          renderPage(res, 'Booking successful! You should get a confirmation in'
-           + ' your Facebook Messenger shortly.', eventObject, phoneNumber, false);
+          if (!pageRendered) {
+            renderPage(res, 'Booking successful! You should get a confirmation in'
+             + ' your Facebook Messenger shortly.', eventObject, phoneNumber, false);
+          }
         });
       } else { //PAID GAME
         console.log("Paid Event");
@@ -192,14 +208,17 @@ function processGetCharge(req, res, params) {
            req.body.stripeToken);
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
-          sendSmsMessage(uid, event, true, true);
+          sendSmsMessage(uid, eventObject, true, true);
           renderPage(res, 'Your payment has gone through. We\'ve sent you a '
            + 'receipt to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+          pageRendered = true;
         }).then(() => {
           console.log('Existing, paid, message sent');
-          renderPage(res, 'Your payment has gone through. You should get a'
-           + ' receipt in your Facebook Messenger shortly.', eventObject,
-           phoneNumber, false);
+          if (!pageRendered) {
+            renderPage(res, 'Your payment has gone through. You should get a'
+             + ' receipt in your Facebook Messenger shortly.', eventObject,
+             phoneNumber, false);
+          }
         });
       }
     } else { //NEW USER
@@ -225,12 +244,15 @@ function processGetCharge(req, res, params) {
              + ' Thank you for booking :)');
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
-            sendSmsMessage(uid, event, false, false);
+            sendSmsMessage(uid, eventObject, false, false);
             renderPage(res, 'Booking successful! We\'ve sent you a confirmation'
-             + ' text to 0' + uid.phoneNumber + '.', event, phoneNumber, false);
+             + ' text to 0' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+            pageRendered = true;
           }).then(() => {
-            renderPage(res, 'Booking successful! You should get a receipt in your'
-             + ' Facebook messenger shortly.', eventObject, phoneNumber, false);
+            if (!pageRendered) {
+              renderPage(res, 'Booking successful! You should get a receipt in your'
+               + ' Facebook messenger shortly.', eventObject, phoneNumber, false);
+            }
           })
         } else { //PAID GAME
           console.log("Paid Event");
@@ -246,14 +268,17 @@ function processGetCharge(req, res, params) {
              d.name, d.address, d.image_url, req.body.stripeToken);
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
-            sendSmsMessage(uid, results[0], false, true);
+            sendSmsMessage(uid, eventObject, false, true);
             renderPage(res, 'Your payment has gone through. We\'ve sent you a'
-             + ' receipt to 0' + uid.phoneNumber + '.', eventObject,
+             + ' receipt to ' + uid.phoneNumber + '.', eventObject,
              phoneNumber, false);
+            pageRendered = true;
           }).then(() => {
-            renderPage(res, 'Your payment has gone through. '
-             + 'You should get a receipt in your Facebook messenger shortly.',
-             eventObject, phoneNumber, false);
+            if (!pageRendered) {
+              renderPage(res, 'Your payment has gone through. '
+               + 'You should get a receipt in your Facebook messenger shortly.',
+               eventObject, phoneNumber, false);
+            }
           });
         }
       });
@@ -273,6 +298,9 @@ function renderPage(res, message, event, pn, showPayment) {
   }
   if (event) {
     objectToSend.event = event;
+    objectToSend.event.priceString = event.price.toFixed(2);
+  } else {
+    console.log('Rendering page with no event object');
   }
   res.render('payment_complete', objectToSend);
 }
@@ -322,17 +350,25 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
     Twilio.sendSms(uid.phoneNumber, "Payment of £" + event.price.toFixed(2)
       + " confirmed! Here're your event details:\n"
       + event.name + "\n"
-      + event.address + "\n"
-      + event.when.toString().substring(0,10) + "\n", () => {
-      console.log('Sms sent');
+      + event.strapline + "\n"
+      + event.when.toString().substring(0,10) + "\n", (error) => {
+      if (error) {
+        console.log('Error sending sms:', error);
+      } else {
+        console.log('Sms sent');
+      }
     });
   } else {
     Twilio.sendSms(uid.phoneNumber, "Thank you for booking with kickabout!"
       + "Here're your event details:\n"
       + event.name + "\n"
-      + event.address + "\n"
-      + event.when.toString().substring(0,10) + "\n", () => {
-      console.log('Sms sent');
+      + event.strapline + "\n"
+      + event.when.toString().substring(0,10) + "\n", (error) => {
+      if (error) {
+        console.log('Error sending sms:', error);
+      } else {
+        console.log('Sms sent');
+      }
     });
   }
 }
