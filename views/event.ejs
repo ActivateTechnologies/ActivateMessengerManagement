@@ -62,17 +62,17 @@
     }
 
     function submitData() {
-      console.log(1)
+      alert(1)
       var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
       if (phoneNumber === -1) {
-        console.log(2)
+        alert(2)
         $('#warning').fadeIn(200);
       } else {
-        console.log(3)
+        alert(3)
         localStorage.setItem('phoneNumber', phoneNumber);
         location.href = "<%=config.ROOT_URL%>/payment?eid=<%=eid%>&pn="
          + phoneNumber;
-         console.log(4)
+         alert(4)
         /*
         if (<%= event.price %> === 0) {
           location.href = "<%=config.ROOT_URL%>/charge?&eventPrice=" 

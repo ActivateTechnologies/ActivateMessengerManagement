@@ -320,7 +320,7 @@ function processPostCustomPayment(req, res) {
     amount: (parseFloat(req.body.amount)) * 100, // amount in cents, again
     currency: "gbp",
     source: stripeToken,
-    description: req.body.reference
+    description: req.body.reference + ', User Name: ' + req.body.name
   }, function(err, charge) {
     if (err && err.type === 'StripeCardError') {
       // The card has been declined
