@@ -215,7 +215,7 @@ function createUser(mid, callback) {
             gender: body.gender,
             events: [],
             //TODO: Remove when actually using phone numbers:
-            phoneNumber: '+44' + mid.substring(0,10), 
+            //phoneNumber: '+44' + mid.substring(0,10), 
             signedUpDate: new Date()
           });
           user.save((err) => {

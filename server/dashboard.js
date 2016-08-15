@@ -29,7 +29,7 @@ function processGetDashboard(req, res) {
     } else {
       res.render('dashboard', {
         totalNoOfMembers: data.totalNoOfMembers,
-        totalRevenue: data.totalRevenue,
+        totalRevenue: data.totalRevenue.toFixed(2),
         totalNoOfTickets: data.totalNoOfTickets
       });
     }

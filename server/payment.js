@@ -231,6 +231,15 @@ function processGetCharge(req, res, params) {
           _id: user._id,
           phoneNumber: phoneNumber
         }
+        if (!error) {
+          M.Analytics.update({name:"NewUsers"},
+          {$push: {activity: {uid:user._id, time: new Date()}}},
+          {upsert: true}, (err) => {
+            if (err) {
+              console.log('Error saving analytics for "NewUsers":', err);
+            }
+          });
+        }
         if (error) {
           console.log('Error saving user\'s phone number:', error);
         } else if (price === 0) { //FREE GAME
@@ -246,7 +255,7 @@ function processGetCharge(req, res, params) {
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, false);
             renderPage(res, 'Booking successful! We\'ve sent you a confirmation'
-             + ' text to 0' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+             + ' text to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
             pageRendered = true;
           }).then(() => {
             if (!pageRendered) {
