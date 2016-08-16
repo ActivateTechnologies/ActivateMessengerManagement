@@ -84,7 +84,7 @@ function startWithPhoneNumber(phoneNumber, eventId) {
   })
 }
 
-function bookedWithPhoneNumber(phoneNumber, name, price, eventName, strapline, image_url, order_number) {
+/*function bookedWithPhoneNumber(phoneNumber, name, price, eventName, strapline, image_url, order_number) {
   return new Promise((resolve, reject) => {
     let messageData = {
       "attachment": {
@@ -129,7 +129,7 @@ function bookedWithPhoneNumber(phoneNumber, name, price, eventName, strapline, i
       }
     })
   })
-}
+}*/
 
 function textWithPhoneNumber(phoneNumber, text) {
   return new Promise(function(resolve, reject){
@@ -242,7 +242,9 @@ function notificationsChange (uid, set) {
   });
 }
 
-function booked (uid, name, price, eventName, strapline, image_url, order_number, callback) {
+/*
+  Send receipt for given game details to the user */
+function booked (uid, name, price, eventName, strapline, image_url, order_number, timestamp, callback) {
   let messageData = {
     "attachment": {
       "type":"template",
@@ -252,16 +254,17 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
         "currency": "GBP",
         "payment_method": "Stripe",
         "order_number": order_number,
+        "timestamp": timestamp,
         "elements": [{
           "title": eventName,
           "subtitle": strapline,
           "quantity": 1,
-          "price": price,
+          "price": price.toFixed(2),
           "currency": "GBP",
           "image_url": image_url
         }],
         "summary": {
-          "total_cost": price
+          "total_cost": price.toFixed(2)
         }
       }
     }
@@ -271,9 +274,9 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
 }
 
 function bookedPromise (uid, name, price, eventName, strapline, image_url,
- order_number) {
+ order_number, timestamp) {
   return new Promise((resolve, reject) => {
-    booked(uid, name, price, eventName, strapline, image_url, order_number,
+    booked(uid, name, price, eventName, strapline, image_url, order_number, timestamp,
      (error) => {
       if (error) {
         reject(error);
@@ -370,16 +373,6 @@ function textWithQuickReplies (uid, text, quickReplies) {
   });
 }
 
-function cards (uid, data, message) {
-  if (message === undefined) {
-    text(uid, "Here are some upcoming events to join. "
-     + "Tap the card for directions or 'More Info' to book.");
-  } else {
-    text(uid, message);
-  }
-  send(uid, data);
-}
-
 function directions (uid, name, latlong) {
   return new Promise(function (resolve, reject) {
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
@@ -432,7 +425,7 @@ function shareEvent (uid, text) {
   M.Event.find({_id:eid}, function(err, results){
     if (results.length > 0) {
       let event = results[0];
-      let publicLink = "http://localhost:3000/event?eid=" + eid;
+      let publicLink = config.ROOT_URL + "/event?eid=" + eid;
       let description = event.when.toString().substring(0, 10)
        + " | " + event.strapline;
       let numAttending = event.non_members_attending + event.joined.length;
@@ -448,7 +441,7 @@ function shareEvent (uid, text) {
               "title": event.name,
               "subtitle": description,
               "image_url": event.image_url,
-              "item_url": event.publicLink,
+              "item_url": publicLink,
               "buttons": [{
                 "type": "web_url",
                 "title": "More Info",
@@ -483,7 +476,7 @@ function generateCardElement (name, strapline, image_url, latlong,
   if (attending == capacity) {
     let template = {
       "title": name,
-      "subtitle": description + " (fully booked)",
+      "subtitle": strapline + " (fully booked)",
       "image_url": image_url,
       "item_url": directions_link
     }
@@ -507,7 +500,6 @@ function generateCardElement (name, strapline, image_url, latlong,
 function cardForBooking (uid, eventId, description, price, booked) {
   let bookOrCancelButton = {}
   let phoneNumber = uid.phoneNumber.substr(uid.phoneNumber.length - 10, 10);
-  console.log('phoneNumber:', phoneNumber);
   if (booked === "true") {
     bookOrCancelButton = {
       "type": "postback",
@@ -540,11 +532,11 @@ function cardForBooking (uid, eventId, description, price, booked) {
             "type": "postback",
             "title": "Keep Looking",
             "payload": "No, thanks",
-          }/*, {
+          }, {
             "type": "postback",
             "title": "Share",
             "payload": "Share" + "|" + eventId
-          }*/
+          }
         ]
       }
     }
@@ -573,6 +565,18 @@ function generateCard (array) {
   return template;
 }
 
+function cards (uid, data, message) {
+  if (message) {
+    textPromise(uid, message).then(() => {
+      send(uid, data);
+    }).catch((e) => {
+      console.log('Error sending text, ' + e);
+    });
+  } else {
+    send(uid, data);
+  }
+}
+
 function allEvents (uid, broadcast) {
   let now = new Date();
   let query = {when:
@@ -588,9 +592,10 @@ function allEvents (uid, broadcast) {
           booked = true;
         }
       });
+      let descString = (event.desc.trim().length > 0) ? event.desc : event.strapline;
       data.push([event.name, event.strapline, event.image_url, event.latlong,
         event._id, event.joined.length + event.non_members_attending, event.capacity,
-        booked, event.desc, event.when, event.price]);
+        booked, descString, event.when, event.price]);
     });
     data = generateCard(data);
     if (broadcast === undefined) {
@@ -616,7 +621,8 @@ function yep (uid) {
     }
     if(result.length > 0){
       console.log("User is already registered");
-      allEvents(uid);
+      allEvents(uid, "Here are some upcoming events to join. "
+       + "Tap the card for directions or 'More Info' to book.");
     } else {
       var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
@@ -644,7 +650,8 @@ function yep (uid) {
                   console.log('Error saving analytics for "NewUsers":', err);
                 }
               });
-              allEvents(uid);
+              allEvents(uid, "Here are some upcoming events to join. "
+               + "Tap the card for directions or 'More Info' to book.");
             }
           });
         }
@@ -656,8 +663,10 @@ function yep (uid) {
 function book (uid, rest) {
   let arr = rest.split('|');
   let eventId = arr[1];
-  H.updateUserEventAnalytics(uid, eventId, 0, (event, error) => {
+  H.updateUserEventAnalytics(uid, eventId, 0, null).then((event) => {
     bookedForFreeEvents(uid);
+  }).catch((error) => {
+    console.log('Error in updateUserEventAnalytics():', error);
   });
 }
 
@@ -771,7 +780,8 @@ function myEvents (uid) {
 
     if (data.length === 0) {
       textPromise(uid, "You haven't joined any events.").then(() => {
-        allEvents(uid);
+        allEvents(uid, "Here are some upcoming events to join. "
+         + "Tap the card for directions or 'More Info' to book.");
       }).catch((e) => {
         console.log('Error finding user\'s games:', e);
       });
@@ -786,7 +796,7 @@ module.exports = {
   start: start,
   startWithPhoneNumber: startWithPhoneNumber,
   textWithPhoneNumber: textWithPhoneNumber,
-  bookedWithPhoneNumber: bookedWithPhoneNumber,
+  //bookedWithPhoneNumber: bookedWithPhoneNumber,
   registerUser: registerUser,
   menu: menu,
   notifications: notifications,

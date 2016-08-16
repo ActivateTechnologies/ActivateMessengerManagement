@@ -13,8 +13,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-</head>
-<body>
   <script type="text/javascript">
 
     function getParameterByName(name, url) {
@@ -62,78 +60,26 @@
     }
 
     function submitData() {
-      alert(1)
       var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
       if (phoneNumber === -1) {
-        alert(2)
         $('#warning').fadeIn(200);
       } else {
-        alert(3)
         localStorage.setItem('phoneNumber', phoneNumber);
         location.href = "<%=config.ROOT_URL%>/payment?eid=<%=eid%>&pn="
          + phoneNumber;
-         alert(4)
-        /*
-        if (<%= event.price %> === 0) {
-          location.href = "<%=config.ROOT_URL%>/charge?&eventPrice=" 
-           + "<%=event.price*100%>&eid=<%=eid%>&pn=" + phoneNumber;
-        } else {
-          location.href = "<%=config.ROOT_URL%>/payment?eid=<%= eid %>"
-           + "&eventPrice=<%= event.price %>&pn=" + phoneNumber;
-        }
-        */
       }
     }
 
-    $(document).ready(() => {
+    //jquery $(document).ready was breaking the entire js
+    function init() {
       if (localStorage.getItem('phoneNumber')) {
         $('#phoneNumber').val('+44' + localStorage.getItem('phoneNumber'));
       }
-      
-      /*var phoneNumber = getParameterByName('pn');
-      // if user is coming from bot (existing user)
-      if (phoneNumber) {
-        if (<%= event.price %> === 0) { // if free event
-          console.log("free event");
-          $.post("<%=config.ROOT_URL%>/charge" + "?&eventprice="
-           + "<%= event.price*100 %>&eid=<%=eid%>&pn=" + phoneNumber, (data) => {
-            console.log(data);
-          })
-        } else { //if paid event, redirect to payment
-          location.href = "<%=config.ROOT_URL%>/payment?eid=<%= eid %>&gp="
-           + "<% event.price %>&pn=" + phoneNumber;
-        }
-      }*/
-
-      //if user not coming from bot, could be existing
-      $('#pnform').submit((e) => {
-        console.log(1)
-        e.preventDefault();
-        console.log(2)
-        var phoneNumber = validatePhoneNumber($('#phoneNumber').val());
-        if (phoneNumber === -1) {
-          console.log(3)
-          $('#warning').fadeIn(200);
-        } else {
-          console.log(4)
-          localStorage.setItem('phoneNumber', phoneNumber);
-
-          location.href = "<%=config.ROOT_URL%>/charge?eid=<%=eid%>&pn="
-           + phoneNumber;
-           console.log(5)
-          /*
-          if (<%= event.price %> === 0) {
-            location.href = "<%=config.ROOT_URL%>/charge?&eventPrice=" 
-             + "<%=event.price*100%>&eid=<%=eid%>&pn=" + phoneNumber;
-          } else {
-            location.href = "<%=config.ROOT_URL%>/payment?eid=<%= eid %>"
-             + "&eventPrice=<%= event.price %>&pn=" + phoneNumber;
-          }
-          */
-        }
-      });
-    });
+    }
   </script>
+</head>
+<body onload="init()">
+
 
   <div class="site-wrapper-payment">
 

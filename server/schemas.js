@@ -24,8 +24,10 @@ let userSchema = new Schema({
   notifications: String,
   publicLink: String,
   signedUpDate: Date,
+  messengerSignedUpDate: Date,
   events: [{
     eid: String,
+    bookingReference: String,
     joinDate: Date
   }],
   conversationLocation: {

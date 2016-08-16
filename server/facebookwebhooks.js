@@ -48,7 +48,7 @@ function processPostWebhook(req, res) {
           if (user && !uid.phoneNumber && user.conversationLocation
            && user.conversationLocation.conversationName != 'onboarding'
            && user.conversationLocation.conversationName != 'collectPhoneNumber') {
-            Conversation.startConversation(uid, 'collectPhoneNumber');
+            Conversation.startConversation(uid, 'collectPhoneNumber', user);
           } else if (!Conversation.consumeWebhookEvent(event, uid, user)) {
             if (event.message && event.message.text && event.message.quick_reply) {
                 processQuickReply(event, uid);
@@ -114,7 +114,8 @@ function processQuickReply(event, uid) {
       break;
 
       default:
-      Send.allEvents(uid);
+      Send.allEvents(uid, "Here are some upcoming events to join. "
+       + "Tap the card for directions or 'More Info' to book.");
     }
   }
 }
@@ -137,7 +138,8 @@ function processTextMessage(event, uid) {
     });
   });
   */
-  Send.allEvents(uid);
+  Send.allEvents(uid, "Here are some upcoming events to join. "
+   + "Tap the card for directions or 'More Info' to book.");
 }
 
 function processAttachment(event, uid) {
@@ -185,7 +187,8 @@ function processPostback(event, uid) {
       break;
 
       default:
-      Send.allEvents(uid);
+      Send.allEvents(uid, "Here are some upcoming events to join. "
+       + "Tap the card for directions or 'More Info' to book.");
     }
   }
 }

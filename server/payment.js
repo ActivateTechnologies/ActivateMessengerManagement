@@ -5,6 +5,7 @@ const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 // const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const Send = require('./../server/send.js');
 const Config = require('./../config');
+const Strs = require('./../strings');
 const H = require('./../server/helperFunctions');
 const Twilio = require('./../server/twilio.js');
 
@@ -29,60 +30,6 @@ function processGetEvent(req, res) {
     }
   });
 }
-
-/*function processGetBookEvent(req, res) {
-  let eid = req.query.eid;
-  let phoneNumber = req.query.pn;
-  if (eid && phoneNumber) {
-    M.Event.find({_id: eid}).exec().catch((error) => {
-      console.log('Error quering for event with id ' + eid + ':', error);
-      renderPage(res, 'The event you are looking for does not exist',
-       null, phoneNumber, false);
-    }).then((events) => {
-      let url = '';
-      if (event.price > 0) {
-        url = "/charge?eid=" + eid + "&pn=" + phoneNumber;
-      } else {
-        url = "/charge?eid=" + eid + "&pn=" + phoneNumber;
-      }
-
-      request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:VERIFICATION_TOKEN},
-        method: 'POST',
-        json: {
-          recipient: recipient,
-          message: messageData
-        }
-      }, (error, response, body) => {
-        let errorObject = (error) ? error : response.body.error;
-        if (errorObject) {
-          console.log('Error sending message'
-           //+ ' (' + JSON.stringify(messageData) + ')'
-           + ' to recipient "' + JSON.stringify(recipient) 
-           + '": ', JSON.stringify(errorObject));
-          if (callback) {
-            callback(errorObject);
-          }
-        } else if (callback) {
-          callback();
-        }
-      });
-
-
-    }).catch((error) => {
-      console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
-       error);
-      renderPage(res, 'The event you are looking for does not exist',
-       null, phoneNumber, false);
-    })
-  } else {
-    console.log('/bookEvent did not receive all required details:',
-     eid, phoneNumber);
-    renderPage(res, 'The event you are looking for does not exist',
-     null, phoneNumber, false);
-  }
-}*/
 
 function processGetPayment(req, res) {
   let eid = req.query.eid;
@@ -178,11 +125,14 @@ function processGetCharge(req, res, params) {
       }
       if (price === 0) { //FREE GAME
         console.log('Free Event');
-        H.updateUserEventAnalytics(uid, eid, price)
+        H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
         .catch((error) => {
         }).then((event) => {
-          return Send.textPromise(uid,
-           "Booking successful! Thank you for booking :)");
+          /*return Send.textPromise(uid,
+           "Booking successful! Thank you for booking :)");*/
+          return Send.bookedPromise(uid, users[0].firstName + ' ' 
+           + users[0].lastName, price, event.name, event.strapline, event.image_url,
+           uid._id + '-' + event._id, Math.round((new Date()).getTime()/1000));
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, false);
@@ -200,12 +150,12 @@ function processGetCharge(req, res, params) {
         makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
         .catch(() => {
         }).then(() => {
-          return H.updateUserEventAnalytics(uid, eid, price);
+          return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
         }).catch((error) => {
         }).then((event) => {
           return Send.bookedPromise(uid, users[0].firstName + ' ' 
-           + users[0].lastName, price, event.name, event.address, event.image_url,
-           req.body.stripeToken);
+           + users[0].lastName, price, event.name, event.strapline, event.image_url,
+           req.body.stripeToken, Math.round((new Date()).getTime()/1000));
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, true);
@@ -224,7 +174,8 @@ function processGetCharge(req, res, params) {
     } else { //NEW USER
       console.log('New User');
       let user = M.User({
-        phoneNumber: phoneNumber
+        phoneNumber: phoneNumber,
+        signedUpDate: new Date()
       })
       user.save((error, user) => {
         let uid = {
@@ -245,12 +196,15 @@ function processGetCharge(req, res, params) {
         } else if (price === 0) { //FREE GAME
           console.log("Free Event");
           let eventObject;
-          H.updateUserEventAnalytics(uid, eid, price)
+          H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
           .catch((error) => {
           }).then((event) => {
             eventObject = event;
-            return Send.textWithPhoneNumber(uid.phoneNumber, 'Booking successful!'
-             + ' Thank you for booking :)');
+            /*return Send.textWithPhoneNumber(uid.phoneNumber, 'Booking successful!'
+             + ' Thank you for booking :)');*/
+            return Send.bookedPromise(uid, phoneNumber, price, event.name,
+             event.strapline, event.image_url, uid._id + '-' + event._id,
+             Math.round((new Date()).getTime()/1000));
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, false);
@@ -269,12 +223,12 @@ function processGetCharge(req, res, params) {
           makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
           .catch((error) => {
           }).then(() => {
-            return H.updateUserEventAnalytics(uid, eid, price);
+            return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
           }).catch((error) => {
           }).then((event) => {
             eventObject = event;
-            return Send.bookedWithPhoneNumber(phoneNumber, phoneNumber, price,
-             d.name, d.address, d.image_url, req.body.stripeToken);
+            return Send.bookedPromise(uid, phoneNumber, price,event.name,
+              event.strapline, event.image_url, req.body.stripeToken);
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, true);
@@ -356,11 +310,13 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
 
 function sendSmsMessage(uid, event, existingUser, paidEvent) {
   if (paidEvent) {
-    Twilio.sendSms(uid.phoneNumber, "Payment of £" + event.price.toFixed(2)
-      + " confirmed! Here're your event details:\n"
-      + event.name + "\n"
-      + event.strapline + "\n"
-      + event.when.toString().substring(0,10) + "\n", (error) => {
+    let directionUrl = "http://maps.google.com/?q=" + event.latlong;
+    let textString = Strs.s.sms.paidEventConfirmation;
+    textString = textString.replace(Strs.h + 'name', event.name)
+     .replace(Strs.h + 'strapline', event.strapline)
+     .replace(Strs.h + 'mapsUrl', directionUrl)
+     .replace(Strs.h + 'messengerUrl', Config.MESSENGER_URL);
+    Twilio.sendSms(uid.phoneNumber, textString, (error) => {
       if (error) {
         console.log('Error sending sms:', error);
       } else {
@@ -368,11 +324,13 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
       }
     });
   } else {
-    Twilio.sendSms(uid.phoneNumber, "Thank you for booking with kickabout!"
-      + "Here're your event details:\n"
-      + event.name + "\n"
-      + event.strapline + "\n"
-      + event.when.toString().substring(0,10) + "\n", (error) => {
+    let directionUrl = "http://maps.google.com/?q=" + event.latlong;
+    let textString = Strs.s.sms.freeEventConfirmation;
+    textString = textString.replace(Strs.h + 'name', event.name)
+     .replace(Strs.h + 'strapline', event.strapline)
+     .replace(Strs.h + 'mapsUrl', directionUrl)
+     .replace(Strs.h + 'messengerUrl', Config.MESSENGER_URL);
+    Twilio.sendSms(uid.phoneNumber, textString, (error) => {
       if (error) {
         console.log('Error sending sms:', error);
       } else {
