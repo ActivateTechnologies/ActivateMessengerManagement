@@ -20,7 +20,15 @@ function duplicateUseridToMid(req, res) {
       users.forEach((user) => {
         ((user) => {
           if (user.userId) {
-            M.User.update({_id:user._id}, {$set:{mid: user.userId}}, (err, user) => {
+            let updateObject = {
+              mid: user.userId
+            };
+            /*let updateObject = {
+              firstName: user.firstname,
+              lastName: user.lastname,
+              profilePic: user.profile_pic
+            };*/
+            M.User.update({_id:user._id}, {$set:updateObject}, (err, user) => {
               if (err) {
                 console.log('Error updating user with _id ' + user._id + ':', err);
                 errorCount++;
