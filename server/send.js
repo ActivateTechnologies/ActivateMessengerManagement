@@ -696,7 +696,7 @@ function cancelBooking (uid, rest) {
         if (err) {
           console.log('Error pulling eid from users\'s events:', err);
         }
-        bookedForFreeEvents(uid);
+        allEvents(uid, "Looking for other games? Here are a few upcoming ones:");
       });
     }
   })

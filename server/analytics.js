@@ -90,7 +90,7 @@ function getButtonHitsOverTime (callback) {
   function returnData() {
     if (errors.length > 0) {
       callback(null, {message: 'Error retrieving button analytics: '
-        + errors.join(', ')});
+        + JSON.stringify(errors.join(', '))});
     } else {
       for (let i = 0; i < 7; i++) {
         dataToReturn.daysArray.push(cancelData.daysArray[i] + moreInfoData.daysArray[i]);
