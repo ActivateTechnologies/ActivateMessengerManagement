@@ -105,6 +105,10 @@ function processQuickReply(event, uid) {
       Send.myEvents(uid);
       break;
 
+      case("my games"):
+      Send.myEvents(uid);
+      break;
+
       case("notifications on"):
       Send.notificationsChange(uid, "on");
       break;
@@ -179,6 +183,10 @@ function processPostback(event, uid) {
       break;
 
       case("my events"):
+      Send.myEvents(uid);
+      break;
+
+      case("my games"):
       Send.myEvents(uid);
       break;
 
