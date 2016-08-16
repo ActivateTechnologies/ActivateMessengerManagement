@@ -1,0 +1,1 @@
+User-agent: * Disallow: /dashboard/ Disallow: /events/ Disallow: /users/ Disallow: /message/ Disallow: /tools/

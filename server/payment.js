@@ -1,8 +1,8 @@
 'use strict'
 
 const M = require('./../server/schemas.js')
-const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
-// const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
+//const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const Send = require('./../server/send.js');
 const Config = require('./../config');
 const Strs = require('./../strings');
@@ -56,7 +56,8 @@ function processGetPayment(req, res) {
           res.render('payment', {
             eid: eid,
             pn: req.query.pn,
-            event: eventObject
+            event: eventObject,
+            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
           });
         } else {
           processGetCharge(req, res, {
@@ -79,7 +80,8 @@ function processGetPayment(req, res) {
           res.render('payment', {
             eid: eid,
             pn: req.query.pn,
-            event: eventObject
+            event: eventObject,
+            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
           });
         } else {
           processGetCharge(req, res, {
@@ -257,7 +259,8 @@ function renderPage(res, message, event, pn, showPayment) {
   let objectToSend = {
     pn: pn,
     message: message,
-    paymentDivDisplay: paymentDivDisplay
+    paymentDivDisplay: paymentDivDisplay,
+    STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
   }
   if (event) {
     objectToSend.event = event;

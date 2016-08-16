@@ -35,7 +35,7 @@
           <form action="/charge?pn=<%=pn%>&eid=<%=event._id%>" method="POST">
             <script
               src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-              data-key="pk_test_p3GX2e0V1P9FteC3qz29z4YK"
+              data-key="<%= STRIPE_PUBLIC_KEY%>"
               data-amount="<%= event.price*100 %>"
               data-name="Student Club Tickets"
               data-description="<%= event.strapline %>"
