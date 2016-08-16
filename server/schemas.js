@@ -15,6 +15,7 @@ mongoose.connect(config.MONGODB_URI, (error) => {
 
 let userSchema = new Schema({
   mid: String,
+  userId: String,
   phoneNumber: String,
   firstName: String,
   lastName: String,

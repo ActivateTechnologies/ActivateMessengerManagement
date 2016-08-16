@@ -8,6 +8,7 @@ const FacebookWebhooks = require('./../server/facebookwebhooks.js');
 const Broadcast = require('./../server/broadcast.js');
 const Payment = require('./../server/payment.js');
 const Dashboard = require('./../server/dashboard.js');
+const Tools = require('./../server/tools.js');
 
 let upload = multer({dest:'uploads/'});
 
@@ -106,6 +107,12 @@ router.get('/pastEvents', (req, res) => {
 router.get('/usersData', (req, res) => {
   Dashboard.processGetUsersData(req, res);
 });
+
+/*// TOOLS
+router.get('/tools-uid-mid', (req, res) => {
+  Tools.duplicateUseridToMid(req, res);
+});*/
+
 
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
