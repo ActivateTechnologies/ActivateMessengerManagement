@@ -54,6 +54,12 @@ function updateUserEventAnalytics(uid, eid, price, bookingReference) {
   });
 }
 
+function removeEmojis(text) {
+  let regex = /([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g;
+  return text.replace(regex, '');
+}
+
 module.exports = {
   updateUserEventAnalytics: updateUserEventAnalytics,
+  removeEmojis: removeEmojis
 }

@@ -18,6 +18,7 @@ function processGetEvent(req, res) {
       res.render('event', {
         eid: req.query.eid,
         event: results[0],
+        eventStraplineEmojiFree: H.removeEmojis(results[0].strapline),
         config: {
           FACEBOOK_APP_ID: Config.FACEBOOK_APP_ID,
           FACEBOOK_PAGE_ID: Config.FACEBOOK_PAGE_ID,
