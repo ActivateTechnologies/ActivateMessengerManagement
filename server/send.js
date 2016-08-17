@@ -3,6 +3,7 @@
 const request = require('request');
 const M = require('./schemas.js');
 const config = require('./../config');
+const S = require('./../strings');
 const W = require('./wit.js');
 const L = require('./luis.js');
 const H = require('./helperFunctions');
@@ -44,10 +45,10 @@ function send(uid, messageData, callback) {
 
 function start(uid) {
   let messageData = {
-    "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
+    "text": S.s.bot.start.text,
     "quick_replies":[{
       "content_type":"text",
-      "title":"Yep",
+      "title": S.s.bot.start.quickReply,
       "payload":"yep"
     }]
   }
@@ -57,10 +58,10 @@ function start(uid) {
 function startWithPhoneNumber(phoneNumber, eventId) {
   return new Promise(function(resolve, reject){
     let messageData = {
-      "text":"Hey there! We at Kickabout are all about playing football. Sound Good?",
+      "text": S.s.bot.start.text,
       "quick_replies":[{
         "content_type":"text",
-        "title":"Yep",
+        "title": S.s.bot.start.quickReply,
         "payload":("phoneNumber|" + phoneNumber + "|" + eventId)
       }]
     }
@@ -194,18 +195,18 @@ function registerUser (uid, phoneNumber, eventId) {
 
 function menu (uid) {
   let messageData = {
-    "text":"Hi there, what do you want to do?",
+    "text": S.s.bot.menu.text,
     "quick_replies":[{
       "content_type": "text",
-      "title": "Show Events",
+      "title": S.s.bot.menu.showEventsText,
       "payload": "show events"
     }, {
       "content_type": "text",
-      "title": "My Events",
+      "title": S.s.bot.menu.myEventsText,
       "payload": "my events"
     }, {
       "content_type": "text",
-      "title": "Notifications",
+      "title": S.s.bot.menu.notificationsText,
       "payload": "notifications"
     }]
   }
@@ -214,18 +215,17 @@ function menu (uid) {
 
 function notifications (uid) {
   let messageData = {
-    "text":"Do you want to receive weekly event updates?",
+    "text":S.s.bot.menu.notifications.text,
     "quick_replies":[{
       "content_type": "text",
-      "title": "Yes",
+      "title": S.s.bot.menu.notifications.notificationsOnText,
       "payload": "notifications on"
     }, {
       "content_type": "text",
-      "title": "No",
+      "title": S.s.bot.menu.notifications.notificationsOffText,
       "payload": "notifications off"
     }]
   }
-
   send(uid, messageData);
 }
 
@@ -235,9 +235,9 @@ function notificationsChange (uid, set) {
       console.log('Error changing user\'s notification settings:', err);
     }
     if (set === "on") {
-      text(uid, "You will receive weekly notifications");
+      text(uid, S.s.bot.menu.notifications.onConfirmationText);
     } else {
-      text(uid, "You won't receive weekly notifications");
+      text(uid, S.s.bot.menu.notifications.offConfirmationText);
     }
   });
 }
@@ -289,10 +289,10 @@ function bookedPromise (uid, name, price, eventName, strapline, image_url,
 
 function bookedForFreeEvents (uid) {
   let messageData = {
-    "text":"Thanks for booking. Do you want to continue looking?",
+    "text": S.s.bot.booking.freeEventBookedConfirmation,
     "quick_replies":[{
       "content_type":"text",
-      "title":"Yes",
+      "title": S.s.bot.booking.quickReply,
       "payload":"continue"
     }]
   }
@@ -392,7 +392,7 @@ function directions (uid, name, latlong) {
             "item_url": directions_link,
             "buttons": [{
               "type": "web_url",
-              "title": "Directions",
+              "title": S.s.bot.eventCard.buttonDirections,
               "url": directions_link
             }]
           }]
@@ -449,15 +449,14 @@ function shareEvent (uid, text) {
               "item_url": publicLink,
               "buttons": [{
                 "type": "web_url",
-                "title": "More Info",
+                "title": S.s.bot.eventCard.buttonShareCardMoreInfo,
                 "url": publicLink,
               }]
             }]
           }
         }
       }
-      textPromise(uid, "If you're on your phone, forward the following"
-       + " message to a friend or group!")
+      textPromise(uid, S.s.bot.shareInstruction)
       .then(()=>{
         send(uid, messageData);
       })
@@ -495,7 +494,7 @@ function generateCardElement (name, strapline, image_url, latlong,
       "item_url": directions_link,
       "buttons": [{
         "type": "postback",
-        "title": "More Info",
+        "title": S.s.bot.eventCard.buttonMoreInfo,
         "payload": pl
       }]
     }
@@ -509,20 +508,20 @@ function cardForBooking (uid, eventId, description, price, booked) {
   if (booked === "true") {
     bookOrCancelButton = {
       "type": "postback",
-      "title": "Cancel Booking",
+      "title": S.s.bot.eventCard.buttonCancelBooking,
       "payload": "Cancel" + "|" + eventId
     }
   } else if (parseFloat(price) > 0) {
     bookOrCancelButton = {
       "type": "web_url",
-      "title": "BOOK",
+      "title": S.s.bot.eventCard.buttonBook,
       "url": config.ROOT_URL + "/payment"
         + "?pn=" + phoneNumber + "&eid=" + eventId
     }
   } else {
     bookOrCancelButton = {
       "type": "postback",
-      "title": "BOOK",
+      "title": S.s.bot.eventCard.buttonBook,
       "payload": "Book" + "|" + eventId
     }
   }
@@ -536,11 +535,11 @@ function cardForBooking (uid, eventId, description, price, booked) {
       "buttons": [
           bookOrCancelButton, {
             "type": "postback",
-            "title": "Keep Looking",
+            "title": S.s.bot.eventCard.buttonKeepLooking,
             "payload": "No, thanks",
           }, {
             "type": "postback",
-            "title": "Share",
+            "title": S.s.bot.eventCard.buttonShare,
             "payload": "Share" + "|" + eventId
           }
         ]
@@ -627,8 +626,7 @@ function yep (uid) {
     }
     if(result.length > 0){
       console.log("User is already registered");
-      allEvents(uid, "Here are some upcoming events to join. "
-       + "Tap the card for directions or 'More Info' to book.");
+      allEvents(uid, S.s.bot.allEventsDefault);
     } else {
       var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
@@ -656,8 +654,7 @@ function yep (uid) {
                   console.log('Error saving analytics for "NewUsers":', err);
                 }
               });
-              allEvents(uid, "Here are some upcoming events to join. "
-               + "Tap the card for directions or 'More Info' to book.");
+              allEvents(uid, S.s.bot.allEventsDefault);
             }
           });
         }
@@ -695,14 +692,14 @@ function cancelBooking (uid, rest) {
         if (err) {
           console.log('Error removing user from game\'s joined:', err);
         }
-        text(uid, "Your booking has been cancelled");
+        text(uid, S.s.bot.bookingCancelled);
       });
       M.User.findOneAndUpdate({_id:uid}, {$pull: {events: {eid:eventId}}},
       (err, data) => {
         if (err) {
           console.log('Error pulling eid from users\'s events:', err);
         }
-        allEvents(uid, "Looking for other games? Here are a few upcoming ones:");
+        allEvents(uid, S.s.bot.allEventsAfterCancel);
       });
     }
   })
@@ -756,9 +753,9 @@ function event (uid, eventId) {
          item._id, item.joined.length, item.capacity, booked, item.desc,
          item.when, item.price]);
         data = generateCard(data);
-        cards(uid, data, "Here is your event: ");
+        cards(uid, data, S.s.bot.publicLinkEvent);
       } else {
-        text(uid, "That event has finished")
+        text(uid, S.s.bot.publicLinkEventFinished)
       }
     }
   })
@@ -785,15 +782,14 @@ function myEvents (uid) {
     //console.log(data);
 
     if (data.length === 0) {
-      textPromise(uid, "You haven't joined any events.").then(() => {
-        allEvents(uid, "Here are some upcoming events to join. "
-         + "Tap the card for directions or 'More Info' to book.");
+      textPromise(uid, S.s.bot.myEventsHaventJoined).then(() => {
+        allEvents(uid, S.s.bot.allEventsDefault);
       }).catch((e) => {
         console.log('Error finding user\'s games:', e);
       });
     } else {
       data = generateCard(data);
-      cards(uid, data, "Here are the events you've joined: ");
+      cards(uid, data, S.s.bot.yourEvents);
     }
   })
 }

@@ -5,7 +5,7 @@ const M = require('./../server/schemas.js')
 const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const Send = require('./../server/send.js');
 const Config = require('./../config');
-const Strs = require('./../strings');
+const S = require('./../strings');
 const H = require('./../server/helperFunctions');
 const Twilio = require('./../server/twilio.js');
 
@@ -13,7 +13,7 @@ function processGetEvent(req, res) {
   M.Event.find({_id:req.query.eid}, (err, results) => {
     if (err) {
       console.log('Error finding event with eid "' + req.query.eid + '":', err);
-      res.send('The event you are looking for does not exist.');
+      res.send(S.s.payment.eventNotFound);
     } else if (results.length > 0) {
       res.render('event', {
         eid: req.query.eid,
@@ -26,7 +26,7 @@ function processGetEvent(req, res) {
       });
     } else {
       console.log('No events with eid "' + req.query.eid + '" found.');
-      res.send('The event you are looking for does not exist.');
+      res.send(S.s.payment.eventNotFound);
     }
   });
 }
@@ -45,7 +45,7 @@ function processGetPayment(req, res) {
     }).catch((error) => {
       console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
        error);
-      renderPage(res, 'The event you are looking for does not exist',
+      renderPage(res, S.s.payment.eventNotFound,
        null, phoneNumber, false);
     }).then((users) => {
       if (users.length == 0) {
@@ -74,7 +74,7 @@ function processGetPayment(req, res) {
           }
         }
         if (userAlreadyAttending) {
-          renderPage(res, 'You are already attending this event.',
+          renderPage(res, S.s.payment.alreadyAttending,
            null, phoneNumber, false);
         } else if (price > 0) {
           res.render('payment', {
@@ -94,7 +94,7 @@ function processGetPayment(req, res) {
   } else {
     console.log('/payment did not receive all required details:',
      eid, phoneNumber);
-    renderPage(res, 'The event you are looking for does not exist',
+    renderPage(res, S.s.payment.eventNotFound,
      null, phoneNumber, false);
   }
 }
@@ -138,13 +138,13 @@ function processGetCharge(req, res, params) {
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, false);
-          renderPage(res, 'Booking successful! We\'ve sent you a confirmation text'
-            + ' to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+          renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h 
+            + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
           pageRendered = true;
         }).then(() => {
           if (!pageRendered) {
-            renderPage(res, 'Booking successful! You should get a confirmation in'
-             + ' your Facebook Messenger shortly.', eventObject, phoneNumber, false);
+            renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
+             eventObject, phoneNumber, false);
           }
         });
       } else { //PAID GAME
@@ -161,15 +161,14 @@ function processGetCharge(req, res, params) {
         }).catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, true);
-          renderPage(res, 'Your payment has gone through. We\'ve sent you a '
-           + 'receipt to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+          renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h 
+            + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
           pageRendered = true;
         }).then(() => {
           console.log('Existing, paid, message sent');
           if (!pageRendered) {
-            renderPage(res, 'Your payment has gone through. You should get a'
-             + ' receipt in your Facebook Messenger shortly.', eventObject,
-             phoneNumber, false);
+            renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
+             eventObject, phoneNumber, false);
           }
         });
       }
@@ -210,13 +209,13 @@ function processGetCharge(req, res, params) {
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, false);
-            renderPage(res, 'Booking successful! We\'ve sent you a confirmation'
-             + ' text to ' + uid.phoneNumber + '.', eventObject, phoneNumber, false);
+            renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h 
+             + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
             pageRendered = true;
           }).then(() => {
             if (!pageRendered) {
-              renderPage(res, 'Booking successful! You should get a receipt in your'
-               + ' Facebook messenger shortly.', eventObject, phoneNumber, false);
+              renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
+               eventObject, phoneNumber, false);
             }
           })
         } else { //PAID GAME
@@ -234,14 +233,12 @@ function processGetCharge(req, res, params) {
           }).catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, true);
-            renderPage(res, 'Your payment has gone through. We\'ve sent you a'
-             + ' receipt to ' + uid.phoneNumber + '.', eventObject,
-             phoneNumber, false);
+            renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h 
+             + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
             pageRendered = true;
           }).then(() => {
             if (!pageRendered) {
-              renderPage(res, 'Your payment has gone through. '
-               + 'You should get a receipt in your Facebook messenger shortly.',
+              renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
                eventObject, phoneNumber, false);
             }
           });
@@ -322,8 +319,7 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
       metadata: {_id:(uid._id + ""), eid: eid}
     }, (err, charge) => {
       if (err && err.type === 'StripeCardError') {
-        renderPage(res, 'Your payment did not go through, '
-         + 'please try again.', null, uid.phoneNumber, true);
+        renderPage(res, S.s.payment.paymentError, null, uid.phoneNumber, true);
         reject();
       }
       else {
@@ -337,11 +333,11 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
   if (paidEvent) {
     let directionUrl = "http://maps.google.com/?q=" 
      + event.latlong.replace(/\s+/g, '');
-    let textString = Strs.s.sms.paidEventConfirmation;
-    textString = textString.replace(Strs.h + 'name', event.name)
-     .replace(Strs.h + 'strapline', event.strapline)
-     .replace(Strs.h + 'mapsUrl', directionUrl)
-     .replace(Strs.h + 'messengerUrl', Config.MESSENGER_URL);
+    let textString = S.s.sms.paidEventConfirmation;
+    textString = textString.replace(S.h + 'name', event.name)
+     .replace(S.h + 'strapline', event.strapline)
+     .replace(S.h + 'mapsUrl', directionUrl)
+     .replace(S.h + 'messengerUrl', Config.MESSENGER_URL);
     Twilio.sendSms(uid.phoneNumber, textString, (error) => {
       if (error) {
         console.log('Error sending sms:', error);
@@ -352,11 +348,11 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
   } else {
     let directionUrl = "http://maps.google.com/?q="
      + event.latlong.replace(/\s+/g, '');
-    let textString = Strs.s.sms.freeEventConfirmation;
-    textString = textString.replace(Strs.h + 'name', event.name)
-     .replace(Strs.h + 'strapline', event.strapline)
-     .replace(Strs.h + 'mapsUrl', directionUrl)
-     .replace(Strs.h + 'messengerUrl', Config.MESSENGER_URL);
+    let textString = S.s.sms.freeEventConfirmation;
+    textString = textString.replace(S.h + 'name', event.name)
+     .replace(S.h + 'strapline', event.strapline)
+     .replace(S.h + 'mapsUrl', directionUrl)
+     .replace(S.h + 'messengerUrl', Config.MESSENGER_URL);
     Twilio.sendSms(uid.phoneNumber, textString, (error) => {
       if (error) {
         console.log('Error sending sms:', error);

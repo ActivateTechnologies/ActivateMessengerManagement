@@ -5,6 +5,7 @@ const Send = require('./../server/send.js');
 const Twilio = require('./../server/twilio.js');
 const Conversation = require('./../server/conversation.js');
 const Config = require('./../config');
+const S = require('./../strings');
 const request = require('request');
 
 function processGetWebhook(req, res) {
@@ -118,8 +119,7 @@ function processQuickReply(event, uid) {
       break;
 
       default:
-      Send.allEvents(uid, "Here are some upcoming events to join. "
-       + "Tap the card for directions or 'More Info' to book.");
+      Send.allEvents(uid, S.s.bot.allEventsDefault);
     }
   }
 }
@@ -142,8 +142,7 @@ function processTextMessage(event, uid) {
     });
   });
   */
-  Send.allEvents(uid, "Here are some upcoming events to join. "
-   + "Tap the card for directions or 'More Info' to book.");
+  Send.allEvents(uid, S.s.bot.allEventsDefault);
 }
 
 function processAttachment(event, uid) {
@@ -195,8 +194,7 @@ function processPostback(event, uid) {
       break;
 
       default:
-      Send.allEvents(uid, "Here are some upcoming events to join. "
-       + "Tap the card for directions or 'More Info' to book.");
+      Send.allEvents(uid, S.s.bot.allEventsDefault);
     }
   }
 }

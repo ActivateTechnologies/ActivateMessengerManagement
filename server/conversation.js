@@ -95,7 +95,7 @@ function executeErrorForNode (event, uid, user) {
   let nodeIdArray = nodeId.split(".");
   M.Conversations.find({name: conversationName}, (error, results) => {
     if (error) {
-      consol.log('Error getting conversation: ', error);
+      console.log('Error getting conversation: ', error);
     } else if (results.length == 0) {
       console.log('No conversations with name "' + conversationName + '" found.');
     } else {
@@ -175,7 +175,7 @@ function executeTreeNodefromId(uid, conversationName, nodeId, message, user) {
   let nodeIdArray = nodeId.split(".");
   M.Conversations.find({name: conversationName}, (error, results) => {
     if (error) {
-      consol.log('Error getting conversation: ', error);
+      console.log('Error getting conversation: ', error);
     } else if (results.length == 0) {
       console.log('No conversations with name "' + conversationName + '" found.');
     } else {
