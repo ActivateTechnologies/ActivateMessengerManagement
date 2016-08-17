@@ -1,8 +1,8 @@
 'use strict'
 
 const M = require('./../server/schemas.js')
-//const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
-const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
+const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
+//const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const Send = require('./../server/send.js');
 const Config = require('./../config');
 const S = require('./../strings');
