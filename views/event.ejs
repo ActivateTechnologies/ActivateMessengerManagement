@@ -70,6 +70,54 @@
       }
     }
 
+    function getUserData(phoneNumber, callback) {
+      $.get('/userFromPhoneNumber?phoneNumber=' + phoneNumber, (user, status) => {
+        console.log(user, status);
+        if (status == 'success' && user._id) {
+          callback(user);
+        } else {
+          callback(false);
+        }
+      });
+    }
+
+    function onPhoneNumber(phoneNumber) {
+      if (!phoneNumber) {
+        phoneNumber = $('#phoneNumber').val();
+      }
+      var processedPhoneNumber = validatePhoneNumber(phoneNumber);
+      if (processedPhoneNumber != -1) {
+        $('#loadingImg').fadeIn(100);
+        getUserData(processedPhoneNumber, (user) => {
+          $('#loadingImg').fadeOut(0);
+          if (user) {
+            $('#phoneNumberInputDiv').fadeOut(200, () => {
+              var htmlString 
+              = '<table>'
+                + '<tr>'
+                  + '<td><img style="height:40px;" src="' + user.profilePic + '" /></td>'
+                  + '<td>'
+                    + '<span style="font-size:14px">' + user.firstName + ' ' + user.lastName + '</span>'
+                    + '<br><span style="font-size:12px">' + user.phoneNumber + '</span>'
+                  + '</td>'
+                + '</tr><tr>'
+                  + '<td colspan="2"><span style="cursor:pointer; font-size:8px; color:#e0e0e0;" onclick="notYou()">Not you?</span></td>'
+                + '</tr>'
+              + '</table>';
+              $('#existingUserDiv').html(htmlString);
+              $('#existingUserDiv').fadeIn(200);
+            });
+          }
+        });
+      }
+    }
+
+    function notYou() {
+      $('#existingUserDiv').fadeOut(200, () => {
+        $('#phoneNumberInputDiv').fadeIn(200);
+      });
+    }
+
     //jquery $(document).ready was breaking the entire js
     function init() {
       if (localStorage.getItem('phoneNumber')) {
@@ -102,9 +150,14 @@
         <!-- <form class="form-horizontal" id="pnform" action="/charge" method="POST"> -->
         <div class="input-group centre-group">
           <div class="input-group-addon custom-width">Phone Number</div>
-          <input name="phone" autocomplete="tel" 
-           placeholder="Eg: 07231324112" id="phoneNumber" type="text" 
-           class="form-control" required>
+          <div id="phoneNumberInputDiv">
+            <input name="phone" autocomplete="tel" 
+             placeholder="Eg: 07231324112" id="phoneNumber" type="text" 
+             class="form-control" onblur="onPhoneNumber()" required>
+            <img id="loadingImg" src="img/loading-gif.gif" style="display:none; height:30px" />
+          </div>
+          <div id="existingUserDiv" style="display:none;">
+          </div>
         </div>
         <br/>
         <div class="form-group">

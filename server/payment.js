@@ -289,6 +289,28 @@ function processPostCustomPayment(req, res) {
   });
 }
 
+function processGetUserFromPhoneNumber(req, res) {
+  var phoneNumber = req.query.phoneNumber;
+  console.log('phoneNumber:', phoneNumber);
+  if (!phoneNumber) {
+    console.log('processGetUserFromPhoneNumber did not receive phone number');
+    res.status(200).send('Error: phoneNumber not sent');
+  } else {
+    M.User.find({phoneNumber: '+44' + phoneNumber}, (error, users) => {
+      if (error) {
+        console.log('Error getting user with phoneNumber +44' 
+          + phoneNumber + ':', error);
+        res.status(200).send('Error: Error with db query');
+      } else if (users.length == 0) {
+        console.log('No Users found with phoneNumber +44' + phoneNumber);
+        res.status(200).send('Error: No users found with given phoneNumber');
+      } else {
+        res.status(200).send(users[0]);
+      }
+    });
+  }
+}
+
 function makeCharge(res, eventPrice, stripeToken, uid, eid) {
   return new Promise((resolve, reject) => {
     let price = parseFloat(eventPrice) / 100;
@@ -349,5 +371,6 @@ module.exports = {
   processGetEvent: processGetEvent,
   processGetPayment: processGetPayment,
   processGetCharge: processGetCharge,
-  processPostCustomPayment: processPostCustomPayment
+  processPostCustomPayment: processPostCustomPayment,
+  processGetUserFromPhoneNumber: processGetUserFromPhoneNumber
 };

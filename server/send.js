@@ -424,14 +424,18 @@ function directions (uid, name, latlong) {
 function shareEvent (uid, text) {
   let eid = text.split("|")[1];
   M.Event.find({_id:eid}, function(err, results){
+    if (err || results.length == 0) {
+      console.log('Error getting event to share:' + ((results.length == 0) 
+        ? "No events with id " + eid + " found." 
+        : JSON.stringify(err)));
+    }
     if (results.length > 0) {
       let event = results[0];
       let publicLink = config.ROOT_URL + "/event?eid=" + eid;
-      let description = event.when.toString().substring(0, 10)
-       + " | " + event.strapline;
+      let description = event.strapline;
       let numAttending = event.non_members_attending + event.joined.length;
-      if (numAttending > 0){
-        description = description + " | " + numAttending + " attending";
+      if (numAttending > 0) {
+        description = description + " | ☑ " + numAttending;
       }
       let messageData = {
         "attachment": {

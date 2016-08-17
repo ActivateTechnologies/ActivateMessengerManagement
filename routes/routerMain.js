@@ -51,6 +51,10 @@ router.post('/custompayment', (req, res) => {
   Payment.processPostCustomPayment(req, res);
 });
 
+router.get('/userFromPhoneNumber', (req, res) => {
+  Payment.processGetUserFromPhoneNumber(req, res);
+});
+
 router.get('/message', (req, res) => {
   res.render('message');
 });
