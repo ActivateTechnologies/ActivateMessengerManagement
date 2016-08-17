@@ -473,8 +473,12 @@ p {
   font-size: 10px;
   text-align: center;
   width: 100%;
+  padding-top: 0px;
+  margin-top: 0px;
   padding-bottom: 5px;
   padding-top: 15px;
+
+  color: #FFFFFF;
 }
 
 .footertext-customPayment {
@@ -611,3 +615,85 @@ p {
   font-weight: 300;
   font-size: 14px;
 }
+
+.imageGame {
+  width: 250px;
+  border-radius: 5px;
+}
+
+.eventtitle {
+  font-weight: 500;
+  font-size: 16px;
+
+  padding-top: 0px;
+  margin-top: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+
+  color: #FFFFFF;
+  padding-top: 5px;
+}
+
+.eventaddress {
+  font-weight: 300;
+  font-size: 12px;
+
+  margin-top: 0px;
+  padding-top: 0px;
+  color: #FFFFFF;
+  padding-top: 5px;
+  margin-bottom: 5px;
+}
+
+.findFacebook {
+  width: 100px;
+
+  margin-top: 50px;
+}
+
+.phoneNumber {
+  color: #FFFFFF;
+  font-size: 12px;
+
+  margin-top: 24px;
+}
+
+.inputNumber {
+  width: 200px !important;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  background: #000000;
+}
+
+.inputNumberContainer {
+  width: 200px ;
+  background: #444444;
+}
+
+.submitButton {
+  margin-top: 10px;
+}
+
+.phoneNumberInputOuterContainer {
+  background-color: rgba(0, 0, 0, .2);
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  width: 225px;
+
+  border-radius: 5px;
+
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+
+}
+
+
+
+
+
+
+
