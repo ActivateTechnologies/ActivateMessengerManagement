@@ -313,7 +313,8 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
 
 function sendSmsMessage(uid, event, existingUser, paidEvent) {
   if (paidEvent) {
-    let directionUrl = "http://maps.google.com/?q=" + event.latlong;
+    let directionUrl = "http://maps.google.com/?q=" 
+     + event.latlong.replace(/\s+/g, '');
     let textString = Strs.s.sms.paidEventConfirmation;
     textString = textString.replace(Strs.h + 'name', event.name)
      .replace(Strs.h + 'strapline', event.strapline)
@@ -327,7 +328,8 @@ function sendSmsMessage(uid, event, existingUser, paidEvent) {
       }
     });
   } else {
-    let directionUrl = "http://maps.google.com/?q=" + event.latlong;
+    let directionUrl = "http://maps.google.com/?q="
+     + event.latlong.replace(/\s+/g, '');
     let textString = Strs.s.sms.freeEventConfirmation;
     textString = textString.replace(Strs.h + 'name', event.name)
      .replace(Strs.h + 'strapline', event.strapline)

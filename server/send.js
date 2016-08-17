@@ -375,6 +375,7 @@ function textWithQuickReplies (uid, text, quickReplies) {
 
 function directions (uid, name, latlong) {
   return new Promise(function (resolve, reject) {
+    latlong = latlong.replace(/\s+/g, '');
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
       + latlong + "&zoom=15&size=300x300&markers=" + latlong;
 
@@ -467,11 +468,12 @@ function shareEvent (uid, text) {
 function generateCardElement (name, strapline, image_url, latlong,
  eventId, attending, capacity, booked, description, when, price) {
 
+  latlong = latlong.replace(/\s+/g, '')
   let con = "|||.|";
-  let pl = "More Info" + con + name + con + strapline + con + latlong + con 
-   + eventId + con + description + con + price + con + booked;
+  let pl = "More Info" + con + name + con + strapline + con + latlong
+   + con + eventId + con + description + con + price + con + booked;
 
-  let directions_link = "http://maps.google.com/?q=" + latlong;
+  let directions_link = "http://maps.google.com/?q=" + latlong
 
   if (attending == capacity) {
     let template = {
