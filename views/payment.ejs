@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Kickabout | Pay</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/input.css">
     <link rel="icon" href="img/favicon.png">
     <link href="css/coded.css" rel="stylesheet">
@@ -17,9 +17,16 @@
   <body>
     <div class="site-wrapper-payment">
 
+      <img src="img/logoUnbinded-white.png" class="logoLead-payment">
+      <br/>
+      <!-- event image -->
+      <img src="<%= event.image_url %>" class="imageGame">
+      <p class="eventtitle"><%= event.name %></p>
+      <p class="eventaddress" ><%= event.strapline %></p>
+      <p><%= event.description %></p>
+
       <div class="cover-container2">
         <div class="inner cover">
-          <img src="img/logoUnbinded-white.png" class="logoLead-payment">
           <div class="payWithCardButtonContainer">
               <form action="/charge?pn=<%=pn%>&eid=<%=eid%>" method="POST">
                 <script

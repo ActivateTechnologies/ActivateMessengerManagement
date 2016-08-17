@@ -5,7 +5,7 @@
     <title>Wicked Student Nights | Pay</title>
 
     <link rel="icon" href="img/favicon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/input.css">
     <link rel="stylesheet" href="css/coded.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli' type='text/css'>
@@ -20,15 +20,20 @@
       <div class="inner cover">
         <img src="img/logoUnbinded-white.png" class="logoLead-payment"><br>
         <% if (typeof event != 'undefined') {%>
-        <span style="color:white">
+        <!-- event image -->
+        <img src="<%= event.image_url %>" class="imageGame">
+        <p class="eventtitle"><%= event.name %></p>
+        <p class="eventaddress" ><%= event.strapline %></p>
+        <p><%= event.description %></p>
+        <!-- <span style="color:white">
           <img src="<%=event.image_url%>" class="eventImagePayment">
           <p class="eventNamePayment"><%=event.name%></p>
-          <p class="eventSubtitlePayment"><%=event.strapline%></p>
+          <p class="eventSubtitlePayment"><%=event.strapline%></p>-->
           <!-- <p class="eventSubtitlePayment"><%=event.desc%></p> -->
-          <% if (event.price && event.price> 0) { %>
+          <!-- <% if (event.price && event.price> 0) { %>
             <p class="eventSubtitlePayment">£<%=event.priceString%> tickets</p>
           <% } %>
-        </span>
+        </span> -->
         <br>
         <span style="color:white;"><%=message%></span>
         <div class="payWithCardButtonContainer" style="display:<%=paymentDivDisplay%>">
