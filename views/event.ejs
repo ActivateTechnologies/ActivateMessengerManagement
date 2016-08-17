@@ -89,7 +89,15 @@
       });
     }
 
-    function onPhoneNumber(phoneNumber) {
+    function onPhoneNumberKeyup() {
+      var phoneNumber = $('#phoneNumber').val().trim();
+      var l = phoneNumber.length;
+      if (l == 10 || l == 11 || l == 12 || l == 13 || l == 14) {
+        onPhoneNumber(phoneNumber);
+      }
+    }
+
+    function onPhoneNumber(phoneNumber, callback) {
       if (!phoneNumber) {
         phoneNumber = $('#phoneNumber').val();
       }
@@ -113,16 +121,26 @@
                 + '</tr>'
               + '</table>';
               $('#existingUserDiv').html(htmlString);
-              $('#existingUserDiv').fadeIn(200);
+              $('#existingUserDiv').fadeIn(200, () => {
+                if (callback) {
+                  callback(true);
+                }
+              });
             });
+          } else if (callback) {
+            callback(false);
           }
         });
+      } else if (callback) {
+        callback(false);
       }
     }
 
     function notYou() {
       $('#existingUserDiv').fadeOut(200, () => {
+        $('#loadingImg').fadeOut(0);
         $('#phoneNumberInputDiv').fadeIn(200);
+        $('#phoneNumber').fadeIn(0);
       });
     }
 
@@ -130,6 +148,11 @@
     function init() {
       if (localStorage.getItem('phoneNumber')) {
         $('#phoneNumber').val('+44' + localStorage.getItem('phoneNumber'));
+        onPhoneNumber(null, (success) => {
+          if (!success) {
+            notYou();
+          }
+        });
       }
     }
   </script>
@@ -158,8 +181,8 @@
         <div class="phoneNumberInputOuterContainer">
             <p class="phoneNumber">Book a place with your phone number</p>
             <div id="phoneNumberInputDiv">
-              <input name="phone" autocomplete="tel" 
-               placeholder="Phone number" id="phoneNumber"
+              <input name="phone" autocomplete="tel" style="display:none;"
+               placeholder="Phone number" id="phoneNumber" onkeyup="onPhoneNumberKeyup()" 
                type="text" class="form-control inputNumber" onblur="onPhoneNumber()" required>
               <img id="loadingImg" src="img/loading-gif.gif" style="display:none; height:30px" />
             </div>
