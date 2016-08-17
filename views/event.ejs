@@ -23,6 +23,8 @@
 
   <script type="text/javascript">
 
+    var ga = 'we';
+
     function getParameterByName(name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
@@ -79,7 +81,7 @@
     }
 
     function getUserData(phoneNumber, callback) {
-      $.get('/userFromPhoneNumber?phoneNumber=' + phoneNumber, (user, status) => {
+      $.get('/userFromPhoneNumber?phoneNumber=' + phoneNumber, function (user, status) {
         console.log(user, status);
         if (status == 'success' && user._id) {
           callback(user);
@@ -104,10 +106,10 @@
       var processedPhoneNumber = validatePhoneNumber(phoneNumber);
       if (processedPhoneNumber != -1) {
         $('#loadingImg').fadeIn(100);
-        getUserData(processedPhoneNumber, (user) => {
+        getUserData(processedPhoneNumber, function (user) {
           $('#loadingImg').fadeOut(0);
           if (user) {
-            $('#phoneNumberInputDiv').fadeOut(200, () => {
+            $('#phoneNumberInputDiv').fadeOut(200, function() {
               var htmlString 
               = '<div class="existingUserContainer">'
                 + '<table>'
@@ -123,7 +125,7 @@
                 + '</table>'
               + '</div>';
               $('#existingUserDiv').html(htmlString);
-              $('#existingUserDiv').fadeIn(200, () => {
+              $('#existingUserDiv').fadeIn(200, function () {
                 if (callback) {
                   callback(true);
                 }
@@ -139,7 +141,7 @@
     }
 
     function notYou() {
-      $('#existingUserDiv').fadeOut(200, () => {
+      $('#existingUserDiv').fadeOut(200, function () {
         $('#loadingImg').fadeOut(0);
         $('#phoneNumberInputDiv').fadeIn(200);
         $('#phoneNumber').fadeIn(0);
@@ -150,7 +152,7 @@
     function init() {
       if (localStorage.getItem('phoneNumber')) {
         $('#phoneNumber').val('+44' + localStorage.getItem('phoneNumber'));
-        onPhoneNumber(null, (success) => {
+        onPhoneNumber(null, function (success) {
           if (!success) {
             notYou();
           }
