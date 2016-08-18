@@ -1,4 +1,4 @@
-const status = 'test'; //'production' or 'test' or 'avi'
+const status = 'avi'; //'production' or 'test' or 'avi'
 
 //PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
@@ -13,7 +13,7 @@ const PRODUCTION_LUIS_ID = "0a8ae437-0ff1-44c4-af7c-cc94fd0baf11";
 const PRODUCTION_LUIS_SUBSCRIPTION_KEY = "a87263ffb22f4feb9a89aea610608ca7";
 const PRODUCTION_TWILIO_ACCOUNT_SID = "ACc456f2ee8565e5af8c02a6357e4a9a9e";
 const PRODUCTION_TWILIO_AUTH_TOKEN = "57357afaccfe2a344c5cd54fb74f725c";
-const PRODUCTION_TWILIO_NUMBER = "+441273917139";
+const PRODUCTION_TWILIO_NUMBER = "Kickabout"; //"+441273917139";
 const PRODUCTION_STRIPE_PUBLIC_KEY = "pk_live_Dey0ulbB4AOL81fmpzWnFKYa";
 
 //TEST | Monty Messenger | heroku git:remote -a kickabouttest

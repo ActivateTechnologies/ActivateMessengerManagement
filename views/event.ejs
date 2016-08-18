@@ -108,7 +108,7 @@
         $('#loadingImg').fadeIn(100);
         getUserData(processedPhoneNumber, function (user) {
           $('#loadingImg').fadeOut(0);
-          if (user) {
+          if (user && user.firstName) {
             $('#phoneNumberInputDiv').fadeOut(200, function() {
               var htmlString 
               = '<div class="existingUserContainer">'
@@ -189,7 +189,7 @@
             <div id="phoneNumberInputDiv">
               <input name="phone" autocomplete="tel" style="display:none;"
                placeholder="Phone number" id="phoneNumber" onkeyup="onPhoneNumberKeyup()" 
-               type="text" class="form-control inputNumber" onblur="onPhoneNumber()" required>
+               type="number" class="form-control inputNumber" required>
               <img id="loadingImg" src="img/loading-gif.gif" style="display:none; height:30px" />
             </div>
             <div id="existingUserDiv" style="display:none;">

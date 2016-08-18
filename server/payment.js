@@ -50,7 +50,7 @@ function processGetPayment(req, res) {
        null, phoneNumber, false);
     }).then((users) => {
       if (users.length == 0) {
-        console.log('No users found');
+        //console.log('No users found');
         /*renderPage(res, 'The event you are looking for does not exist',
          null, phoneNumber, false);*/
         if (price > 0) {
@@ -289,7 +289,6 @@ function processPostCustomPayment(req, res) {
 
 function processGetUserFromPhoneNumber(req, res) {
   var phoneNumber = req.query.phoneNumber;
-  console.log('phoneNumber:', phoneNumber);
   if (!phoneNumber) {
     console.log('processGetUserFromPhoneNumber did not receive phone number');
     res.status(200).send('Error: phoneNumber not sent');
@@ -300,7 +299,7 @@ function processGetUserFromPhoneNumber(req, res) {
           + phoneNumber + ':', error);
         res.status(200).send('Error: Error with db query');
       } else if (users.length == 0) {
-        console.log('No Users found with phoneNumber +44' + phoneNumber);
+        //console.log('No Users found with phoneNumber +44' + phoneNumber);
         res.status(200).send('Error: No users found with given phoneNumber');
       } else {
         res.status(200).send(users[0]);
