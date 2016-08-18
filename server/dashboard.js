@@ -229,7 +229,9 @@ function processGetPlayers(req, res) {
 }
 
 function processGetCurrentEvents(req, res) {
-  M.Event.find({when:{$gt: new Date()}}).sort('when').exec((err, result) => {
+  let now = new Date();
+  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  M.Event.find({when:{$gt: date}}).sort('when').exec((err, result) => {
     if (err) {
       console.log('Error finding events for soon:', err);
     } else {
