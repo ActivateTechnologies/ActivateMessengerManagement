@@ -1,10 +1,11 @@
-const status = 'production'; //'production' or 'test' or 'avi'
+const status = 'avi'; //'production' or 'test' or 'avi'
 
 //PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
 const PRODUCTION_FACEBOOK_APP_ID = "144481079297226";
 const PRODUCTION_FACEBOOK_APP_SECRET = "177f41bf5495e3673481700e4ec6995d";
 const PRODUCTION_FACEBOOK_PAGE_ID = "1625739117677522";
+const PRODUCTION_FACEBOOK_PAGE_URL = "http://wwww.facebook.com/kickaboutapp";
 const PRODUCTION_MONGODB_URI = 'mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot';
 const PRODUCTION_ROOT_URL = "http://www.kickabout.football"; //"https://limitless-sierra-68694.herokuapp.com";
 const PRODUCTION_MESSENGER_URL = "http://m.me/kickaboutapp"
@@ -22,6 +23,7 @@ const TEST_MESSENGER_URL = "http://m.me/245261069180348";
 const TEST_FACEBOOK_APP_ID = "159289771143437";
 const TEST_FACEBOOK_APP_SECRET = "56cabb5a4f98662b998e4849d01bb826";
 const TEST_FACEBOOK_PAGE_ID = "245261069180348";
+const TEST_FACEBOOK_PAGE_URL = PRODUCTION_FACEBOOK_PAGE_URL;
 const TEST_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
 const TEST_ROOT_URL = "https://kickabouttest.herokuapp.com"
 const TEST_WIT_TOKEN = PRODUCTION_WIT_TOKEN;
@@ -38,6 +40,7 @@ const AVI_MESSENGER_URL = "http://m.me/631474433673481";
 const AVI_FACEBOOK_APP_ID = "954912331274478";
 const AVI_FACEBOOK_APP_SECRET = "17da92fb8241cc4946689e284e64ce60";
 const AVI_FACEBOOK_PAGE_ID = "631474433673481";
+const AVI_FACEBOOK_PAGE_URL = PRODUCTION_FACEBOOK_PAGE_URL;
 const AVI_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
 const AVI_ROOT_URL = "https://31f939b3.ngrok.io";
 const AVI_WIT_TOKEN = PRODUCTION_WIT_TOKEN;
@@ -54,6 +57,7 @@ if (status == 'production') {
 	exports.FACEBOOK_APP_SECRET = PRODUCTION_FACEBOOK_APP_SECRET;
 	exports.MESSENGER_URL = PRODUCTION_MESSENGER_URL;
 	exports.FACEBOOK_PAGE_ID = PRODUCTION_FACEBOOK_PAGE_ID;
+	exports.FACEBOOK_PAGE_URL = PRODUCTION_FACEBOOK_PAGE_URL;
 	exports.MONGODB_URI = PRODUCTION_MONGODB_URI;
 	exports.WIT_TOKEN = PRODUCTION_WIT_TOKEN;
 	exports.LUIS_ID = PRODUCTION_LUIS_ID;
@@ -69,6 +73,7 @@ if (status == 'production') {
 	exports.FACEBOOK_APP_SECRET = TEST_FACEBOOK_APP_SECRET;
 	exports.MESSENGER_URL = TEST_MESSENGER_URL;
 	exports.FACEBOOK_PAGE_ID = TEST_FACEBOOK_PAGE_ID;
+	exports.FACEBOOK_PAGE_URL = TEST_FACEBOOK_PAGE_URL;
 	exports.MONGODB_URI = TEST_MONGODB_URI;
 	exports.WIT_TOKEN = TEST_WIT_TOKEN;
 	exports.LUIS_ID = TEST_LUIS_ID;
@@ -83,6 +88,7 @@ if (status == 'production') {
 	exports.FACEBOOK_APP_ID = AVI_FACEBOOK_APP_ID;
 	exports.FACEBOOK_APP_SECRET = AVI_FACEBOOK_APP_SECRET;
 	exports.FACEBOOK_PAGE_ID = AVI_FACEBOOK_PAGE_ID;
+	exports.FACEBOOK_PAGE_URL = AVI_FACEBOOK_PAGE_URL;
 	exports.MESSENGER_URL = AVI_MESSENGER_URL;
 	exports.MONGODB_URI = AVI_MONGODB_URI;
 	exports.WIT_TOKEN = AVI_WIT_TOKEN;

@@ -4,6 +4,11 @@ const platform = 'kickabout'; //'kickabout' or 'ticketing'
 const h = "#~*#";
 
 const kickabout = {
+  company: {
+    name: "Kickabout",
+    website: "www.kickabout.football",
+    address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP"
+  },
 	sms: {
 		paidEventConfirmation: "You just booked onto " + h + "name with Kickabout!\n\n"
 		  + h + "strapline\n\n"
@@ -70,6 +75,11 @@ const kickabout = {
 }
 
 const ticketing = {
+  company: {
+    name: "Student Tickets",
+    website: "http://www.wickedstudentnights.co.uk/",
+    address: "11 The Ivories, 6-18 Northampton Street, N1 2HY"
+  },
   sms: {
     paidEventConfirmation: "You just booked onto " + h + "name with Wicked Tickets!\n\n"
       + h + "strapline\n\n"

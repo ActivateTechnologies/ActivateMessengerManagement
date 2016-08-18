@@ -22,7 +22,10 @@ function processGetEvent(req, res) {
         config: {
           FACEBOOK_APP_ID: Config.FACEBOOK_APP_ID,
           FACEBOOK_PAGE_ID: Config.FACEBOOK_PAGE_ID,
+          FACEBOOK_PAGE_URL: Config.FACEBOOK_PAGE_URL,
           ROOT_URL: Config.ROOT_URL
+        }, s: {
+          company: S.s.company
         }
       });
     } else {
@@ -58,7 +61,9 @@ function processGetPayment(req, res) {
             eid: eid,
             pn: req.query.pn,
             event: eventObject,
-            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
+            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
+              company: S.s.company
+            }
           });
         } else {
           processGetCharge(req, res, {
@@ -82,7 +87,9 @@ function processGetPayment(req, res) {
             eid: eid,
             pn: req.query.pn,
             event: eventObject,
-            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
+            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
+              company: S.s.company
+            }
           });
         } else {
           processGetCharge(req, res, {
@@ -258,13 +265,13 @@ function renderPage(res, message, event, pn, showPayment) {
     pn: pn,
     message: message,
     paymentDivDisplay: paymentDivDisplay,
-    STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY
+    STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
+      company: S.s.company
+    }
   }
   if (event) {
     objectToSend.event = event;
     objectToSend.event.priceString = event.price.toFixed(2);
-  } else {
-    console.log('Rendering page with no event object');
   }
   res.render('payment_complete', objectToSend);
 }

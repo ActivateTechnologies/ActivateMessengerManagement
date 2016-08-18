@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 const M = require('./../server/schemas.js');
 const Analytics = require('./../server/analytics.js');
 const config = require('./../config');
+const S = require('./../strings');
 
 AWS.config.update({
   accessKeyId: config.AWSaccessKeyId,
@@ -17,6 +18,8 @@ function processGetEvents(req, res) {
   res.render('events', {
     config: {
       ROOT_URL: config.ROOT_URL
+    }, s: {
+      company: S.s.company
     }
   });
 }
@@ -30,7 +33,10 @@ function processGetDashboard(req, res) {
       res.render('dashboard', {
         totalNoOfMembers: data.totalNoOfMembers,
         totalRevenue: data.totalRevenue.toFixed(2),
-        totalNoOfTickets: data.totalNoOfTickets
+        totalNoOfTickets: data.totalNoOfTickets,
+        s: {
+          company: S.s.company
+        }
       });
     }
   });
@@ -111,6 +117,8 @@ function processPostEvents(req, res) {
             res.render('events', {
               config: {
                 ROOT_URL: config.ROOT_URL
+              }, s: {
+                company: S.s.company
               }
             });
           })
@@ -124,6 +132,8 @@ function processPostEvents(req, res) {
             res.render('events', {
               config: {
                 ROOT_URL: config.ROOT_URL
+              }, s: {
+                company: S.s.company
               }
             });
           })
@@ -153,6 +163,8 @@ function processPostEvents(req, res) {
         res.render('events', {
           config: {
             ROOT_URL: config.ROOT_URL
+          }, s: {
+            company: S.s.company
           }
         });
       })
@@ -167,6 +179,8 @@ function processPostEvents(req, res) {
           res.render('events', {
             config: {
               ROOT_URL: config.ROOT_URL
+            }, s: {
+              company: S.s.company
             }
           });
         }
@@ -185,6 +199,8 @@ function processDeleteEvents(req, res) {
       res.render('events', {
         config: {
           ROOT_URL: config.ROOT_URL
+        }, s: {
+          company: S.s.company
         }
       });
     }

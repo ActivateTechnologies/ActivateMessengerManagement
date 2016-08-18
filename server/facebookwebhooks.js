@@ -52,10 +52,10 @@ function processPostWebhook(req, res) {
             Conversation.startConversation(uid, 'collectPhoneNumber', user);
           } else if (!Conversation.consumeWebhookEvent(event, uid, user)) {
             if (event.message && event.message.text && event.message.quick_reply) {
-                processQuickReply(event, uid);
+              processQuickReply(event, uid);
             } else if (event.message && event.message.text && !event.message.quick_reply) {
-                processTextMessage(event, uid);
-            } else if(event.message && event.message.attachments){
+              processTextMessage(event, uid);
+            } else if (event.message && event.message.attachments){
               processAttachment(event, uid);
             } else if (event.postback) {
               processPostback(event, uid);

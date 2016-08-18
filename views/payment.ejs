@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Kickabout | Pay</title>
+    <title><%=s.company.name%> | Pay</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/input.css">
@@ -33,7 +33,7 @@
                   src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
                   data-key="<%= STRIPE_PUBLIC_KEY%>"
                   data-amount="<%= event.price*100 %>"
-                  data-name="Kickabout"
+                  data-name="<%=s.company.name%>"
                   data-description="<%= event.strapline %>"
                   data-image="img/logo.png"
                   data-locale="auto"
@@ -74,9 +74,9 @@
 
       <div class="footerDiv">
         <p class="footertext">
-          Activate Technologies Ltd, Gordon House, 29 Gordon Square, London, WC1H 0PP
+          <%=s.company.address%>
           <br>
-          www.activatetechnologies.co.uk
+          <%=s.company.website%>
         </p>
       </div>
 

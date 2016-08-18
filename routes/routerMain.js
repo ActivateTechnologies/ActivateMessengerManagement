@@ -9,6 +9,7 @@ const Broadcast = require('./../server/broadcast.js');
 const Payment = require('./../server/payment.js');
 const Dashboard = require('./../server/dashboard.js');
 const Tools = require('./../server/tools.js');
+const S = require('./../strings');
 
 let upload = multer({dest:'uploads/'});
 
@@ -27,7 +28,11 @@ router.post('/message', (req, res) => {
 });
 
 router.get('/broadcast', isLoggedIn, (req, res) => {
-  res.render('broadcast');
+  res.render('broadcast', {
+    s: {
+      company: S.s.company
+    }
+  });
 });
 
 // PAYMENT
@@ -56,24 +61,44 @@ router.get('/userFromPhoneNumber', (req, res) => {
 });
 
 router.get('/message', (req, res) => {
-  res.render('message');
+  res.render('message', {
+    s: {
+      company: S.s.company
+    }
+  });
 });
 
 router.get('/custompayment', (req, res) => {
-  res.render('custom_payment');
+  res.render('custom_payment', {
+    s: {
+      company: S.s.company
+    }
+  });
 });
 
 //DASHBOARD
 router.get('/input', (req, res) => {
-  res.render('input');
+  res.render('input', {
+    s: {
+      company: S.s.company
+    }
+  });
 })
 
 router.get('/users', (req, res) => {
-  res.render('users');
+  res.render('users', {
+    s: {
+      company: S.s.company
+    }
+  });
 });
 
 router.get('/past', (req, res) => {
-  res.render('past');
+  res.render('past', {
+    s: {
+      company: S.s.company
+    }
+  });
 });
 
 router.get('/events', (req, res) => {

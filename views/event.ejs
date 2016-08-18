@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Kickabout | Pay</title>
+  <title><%=s.company.name%> | Pay</title>
 
   <link rel="stylesheet" href="css/input.css">
   <link rel="icon" href="img/favicon.png">
@@ -165,7 +165,6 @@
 </head>
 <body onload="init()">
 
-
   <div class="site-wrapper-payment">
 
     <div class="site-wrapper-inner2">
@@ -201,14 +200,13 @@
         <!-- </form> -->
 
       <div class="footerDiv">
-      <a href="http://wwww.facebook.com/kickaboutapp" target="_blank">
+      <a href="<%=config.FACEBOOK_PAGE_URL%>" target="_blank">
         <img src="img/findFacebook.png" class="findFacebook">
       </a>
         <p class="footertext">
-          Kickabout, Gordon House, 29 Gordon Square, London,
-          WC1H 0PP
+          <%=s.company.address%>
           <br>
-          www.kickabout.football
+          <%=s.company.website%>
         </p>
       </div>
 

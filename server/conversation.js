@@ -86,8 +86,8 @@ function sendUserErrorMessage (event, uid, user) {
   executes the last of 'next's for that node. */
 function executeErrorForNode (event, uid, user) {
   //console.log('executeErrorForNode', event, uid, user);
-  executeTreeNodefromId(uid, user.conversationLocation.conversationName,
-   user.conversationLocation.nodeId, user);
+  /*executeTreeNodefromId(uid, user.conversationLocation.conversationName,
+   user.conversationLocation.nodeId, user);*/
 
   let conversationName = user.conversationLocation.conversationName;
   let nodeId = user.conversationLocation.nodeId;

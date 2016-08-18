@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Kickabout | Custom Payment</title>
+    <title><%=s.company.name%> | Custom Payment</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
@@ -71,10 +71,10 @@
         </div>
 
         <p class="footertext" style="margin-bottom:10px;padding-bottom:0px;">
-          Activate Technologies Ltd<br>
-          Gordon House, 29 Gordon Square, London, WC1H 0PP<br>
-          <a href="www.activatetechnologies.co.uk">
-            www.activatetechnologies.co.uk
+          <%=s.company.name%><br>
+          <%=s.company.address%><br>
+          <a href="<%=s.company.website%>">
+            <%=s.company.website%>
           </a>
         </p>
 
