@@ -19,7 +19,7 @@ function processGetWebhook(req, res) {
 function processPostWebhook(req, res) {
   let messaging_events = req.body.entry[0].messaging;
   messaging_events.forEach((event) => {
-    if ((!event.message || !event.message.is_echo) 
+    if ((!event.message || !event.message.is_echo)
      && !event.read && !event.delivery) {
       /*console.log(event);
       console.log("--------------------------------");*/
@@ -208,7 +208,7 @@ function createUser(mid, callback) {
         mid: mid
       })
     } else {
-      console.log('Going to create used with mid "' + mid + '"');
+      console.log('Going to create user with mid "' + mid + '"');
       var get_url = "https://graph.facebook.com/v2.6/" + mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
        + "&access_token=" + Config.VERIFICATION_TOKEN;
@@ -224,7 +224,7 @@ function createUser(mid, callback) {
             gender: body.gender,
             events: [],
             //TODO: Remove when actually using phone numbers:
-            //phoneNumber: '+44' + mid.substring(0,10), 
+            //phoneNumber: '+44' + mid.substring(0,10),
             signedUpDate: new Date()
           });
           user.save((err) => {
