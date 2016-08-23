@@ -27,8 +27,8 @@ router.post('/message', (req, res) => {
   Broadcast.processMessage(req, res);
 });
 
-router.get('/broadcast', isLoggedIn, (req, res) => {
-  res.render('broadcast', {
+router.get('/message', isLoggedIn, (req, res) => {
+  res.render('message', {
     s: {
       company: S.s.company
     }
@@ -60,14 +60,6 @@ router.get('/userFromPhoneNumber', (req, res) => {
   Payment.processGetUserFromPhoneNumber(req, res);
 });
 
-router.get('/message', (req, res) => {
-  res.render('message', {
-    s: {
-      company: S.s.company
-    }
-  });
-});
-
 router.get('/custompayment', (req, res) => {
   res.render('custom_payment', {
     s: {
@@ -77,7 +69,7 @@ router.get('/custompayment', (req, res) => {
 });
 
 //DASHBOARD
-router.get('/input', (req, res) => {
+router.get('/input', isLoggedIn, (req, res) => {
   res.render('input', {
     s: {
       company: S.s.company
@@ -85,7 +77,7 @@ router.get('/input', (req, res) => {
   });
 })
 
-router.get('/users', (req, res) => {
+router.get('/users', isLoggedIn, (req, res) => {
   res.render('users', {
     s: {
       company: S.s.company
@@ -93,19 +85,11 @@ router.get('/users', (req, res) => {
   });
 });
 
-router.get('/past', (req, res) => {
-  res.render('past', {
-    s: {
-      company: S.s.company
-    }
-  });
-});
-
-router.get('/events', (req, res) => {
+router.get('/events', isLoggedIn, (req, res) => {
   Dashboard.processGetEvents(req, res);
 });
 
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', isLoggedIn, (req, res) => {
   Dashboard.processGetDashboard(req, res);
 });
 
@@ -121,7 +105,7 @@ router.delete('/events', (req, res) => {
   Dashboard.processDeleteEvents(req, res);
 });
 
-router.get('/players', (req, res) => {
+router.get('/players', isLoggedIn, (req, res) => {
   Dashboard.processGetPlayers(req, res);
 });
 

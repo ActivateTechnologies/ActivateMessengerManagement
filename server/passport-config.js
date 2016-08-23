@@ -3,7 +3,6 @@ const LocalStrategy = require('passport-local').Strategy;
 module.exports = function(passport){
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      console.log("reached");
       if (username === "admin" && password === "letmebroadcast"){
         console.log("correct");
         return done(null, [])
