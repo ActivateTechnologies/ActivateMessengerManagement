@@ -4,7 +4,7 @@ const sensitive = require('./../sensitive.js')
 module.exports = function(passport){
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      if (username === sensitive.username && password === sensitive.password){
+      if (username === "alex@activatetechnologies.co.uk" && password === "activate098"){
         console.log("correct");
         return done(null, [])
       }
