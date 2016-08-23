@@ -15,51 +15,22 @@ describe('testing routes', function(){
       .expect(200, done)
   })
 
-  it('responds to /input', function(done){
+  it('responds to /dashboard', function(done){
     request(server)
-      .get('/input')
+      .get('/dashboard')
       .expect(200, done)
   })
 
-  it('responds to visualize', function(done){
+  it('responds to /message', function(done){
     request(server)
-      .get('/visualize')
+      .get('/message')
       .expect(200, done)
   })
 
-  it('responds to analytics', function(done){
+  it('responds to /users', function(done){
     request(server)
-      .get('/analytics')
-      .expect(200, done)
-  })
-})
-
-describe('helper routes', function(){
-
-  it('/check', function(done){
-    request(server)
-      .get('/check?fbid=1')
+      .get('/users')
       .expect(200, done)
   })
 
-})
-
-describe('testing games for input', function(){
-  it('today', function(done){
-    request(server)
-      .get('/today')
-      .expect(200, done)
-  })
-
-  it('tomorrow', function(done){
-    request(server)
-      .get('/tomorrow')
-      .expect(200, done)
-  })
-
-  it('soon', function(done){
-    request(server)
-      .get('/soon')
-      .expect(200, done)
-  })
 })

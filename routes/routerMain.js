@@ -69,14 +69,6 @@ router.get('/custompayment', (req, res) => {
 });
 
 //DASHBOARD
-router.get('/input', isLoggedIn, (req, res) => {
-  res.render('input', {
-    s: {
-      company: S.s.company
-    }
-  });
-})
-
 router.get('/users', isLoggedIn, (req, res) => {
   res.render('users', {
     s: {

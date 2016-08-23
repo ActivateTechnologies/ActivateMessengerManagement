@@ -3,7 +3,7 @@
 const request = require('request')
 const M = require('./schemas.js')
 const config = require('./../config')
-const sendNew = require('./sendnew.js');
+const sendNew = require('./send.js');
 
 const INTENT_THRESHHOLD = 0.2;
 
@@ -54,7 +54,7 @@ function getDateQuery (dateObject) {
 		dates.startDate = dateObject.date;
 		dates.startDate = new Date(dates.startDate.getTime()
 		 - (dates.startDate.getTime() % (86400 * 1000)) - 2 * 3600 * 1000);
-		dates.endDate = new Date(dates.startDate.getTime() 
+		dates.endDate = new Date(dates.startDate.getTime()
 		 + 86400 * 1000 * dateObject.durationInDays
 		 + 2 * 3600 * 1000);
 		return dates;
@@ -190,7 +190,7 @@ function resolveTime (entities) {
 	}
 
 	function pad(num) {
-    return (num < 10) ? '0' + num 
+    return (num < 10) ? '0' + num
     	: '' + num;
 	}
 

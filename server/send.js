@@ -4,7 +4,6 @@ const request = require('request');
 const M = require('./schemas.js');
 const config = require('./../config');
 const S = require('./../strings');
-const W = require('./wit.js');
 const L = require('./luis.js');
 const H = require('./helperFunctions');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
@@ -32,7 +31,7 @@ function send(uid, messageData, callback) {
     if (errorObject) {
       console.log('Error sending message'
        + ' (' + JSON.stringify(messageData) + ')'
-       + ' to recipient "' + JSON.stringify(recipient) 
+       + ' to recipient "' + JSON.stringify(recipient)
        + '": ', JSON.stringify(errorObject));
       if (callback) {
         callback(errorObject);
@@ -425,8 +424,8 @@ function shareEvent (uid, text) {
   let eid = text.split("|")[1];
   M.Event.find({_id:eid}, function(err, results){
     if (err || results.length == 0) {
-      console.log('Error getting event to share:' + ((results.length == 0) 
-        ? "No events with id " + eid + " found." 
+      console.log('Error getting event to share:' + ((results.length == 0)
+        ? "No events with id " + eid + " found."
         : JSON.stringify(err)));
     }
     if (results.length > 0) {

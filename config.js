@@ -1,4 +1,4 @@
-const status = 'production'; //'production' or 'test' or 'avi'
+const status = 'test'; //'production' or 'test' or 'avi'
 
 //PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
