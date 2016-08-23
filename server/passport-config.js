@@ -1,9 +1,10 @@
 const LocalStrategy = require('passport-local').Strategy;
+const sensitive = require('./../sensitive.js')
 
 module.exports = function(passport){
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      if (username === "admin" && password === "letmebroadcast"){
+      if (username === sensitive.username && password === sensitive.password){
         console.log("correct");
         return done(null, [])
       }
