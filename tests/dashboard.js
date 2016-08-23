@@ -17,6 +17,18 @@ describe('testing dashboard routes', function(){
       .expect(200, done)
   })
 
-  
+  it('should return tickets sold', function(done){
+    request(server)
+      .get('/dashboardData?requiredData=getTicketsSoldOverTime')
+      .expect('Content-Type', /json/)
+      .expect(200, done)
+  })
+
+  it('should return new members', function(done){
+    request(server)
+      .get('/dashboardData?requiredData=getNewMembersOverTime')
+      .expect('Content-Type', /json/)
+      .expect(200, done)
+  })
 
 })
