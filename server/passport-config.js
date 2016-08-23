@@ -1,5 +1,4 @@
 const LocalStrategy = require('passport-local').Strategy;
-const sensitive = require('./../sensitive.js')
 
 module.exports = function(passport){
   passport.use(new LocalStrategy(
