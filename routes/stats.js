@@ -26,9 +26,6 @@ router.get('/analytics', function(req, res){
   });
 })
 
-router.get('/table', (req, res) => {
-  res.render('table')
-})
 
 router.get('/tabledata', (req, res) => {
   getUsers()
@@ -80,10 +77,10 @@ router.get('/tablecsv', (req, res) => {
      getPaymentsByUsers(arr)]).then((values) => {
       let data = "User Id,Name,Events Attended,Button Hits,Payments";
       for(let i = 0; i < values[0].length; i++){
-        data += "\r\n" + arr[i] + "," + users[i][1] + "," 
+        data += "\r\n" + arr[i] + "," + users[i][1] + ","
           + values[0][i] + "," + values[1][i] + "," + values[2][i];
       }
-      res.setHeader('Content-disposition', 
+      res.setHeader('Content-disposition',
         'attachment; filename=KickaboutAnalytics.csv');
       res.set('Content-Type', 'text/csv');
       res.status(200).send(data);

@@ -8,7 +8,7 @@ const server = require('../index')
 const Event = require('./../server/schemas.js').Event
 require('sinon-mongoose')
 
-describe('testing dashboard', function(){
+describe('testing event routes', function(){
 
   it('should return all current events', function(done){
     request(server)
