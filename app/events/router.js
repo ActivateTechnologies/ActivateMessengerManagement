@@ -17,7 +17,7 @@ AWS.config.update({
 let s3 = new AWS.S3();
 
 function processGetEvents(req, res) {
-  res.render('events', {
+  res.render('events/events', {
     config: {
       ROOT_URL: config.ROOT_URL
     }, s: {
@@ -66,7 +66,7 @@ function processPostEvents(req, res) {
             if (err) {
               console.log(err);
             }
-            res.render('events', {
+            res.render('events/events', {
               config: {
                 ROOT_URL: config.ROOT_URL
               }, s: {
@@ -81,7 +81,7 @@ function processPostEvents(req, res) {
             if (err) {
               console.log(err);
             }
-            res.render('events', {
+            res.render('events/events', {
               config: {
                 ROOT_URL: config.ROOT_URL
               }, s: {
@@ -112,7 +112,7 @@ function processPostEvents(req, res) {
         if (err) {
           console.log('Error editing event:', err);
         }
-        res.render('events', {
+        res.render('events/events', {
           config: {
             ROOT_URL: config.ROOT_URL
           }, s: {
@@ -128,7 +128,7 @@ function processPostEvents(req, res) {
           console.log('Error adding event:', err);
           res.send('Error saving event');
         } else {
-          res.render('events', {
+          res.render('events/events', {
             config: {
               ROOT_URL: config.ROOT_URL
             }, s: {
@@ -148,7 +148,7 @@ function processDeleteEvents(req, res) {
       res.send('There was an error deleting event');
     } else {
       //console.log("deleted event");
-      res.render('events', {
+      res.render('events/events', {
         config: {
           ROOT_URL: config.ROOT_URL
         }, s: {

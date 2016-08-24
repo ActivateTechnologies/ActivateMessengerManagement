@@ -17,6 +17,7 @@ const FACEBOOK_APP_SECRET = config.FACEBOOK_APP_SECRET;
 
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
+app.set('views', __dirname)
 
 require('./passport-config')(passport);
 
@@ -30,7 +31,7 @@ app.use(express.static(path.join(__dirname, '/../public')));
 
 app.use(require('./broadcast/router'))
 app.use(require('./conversation/router'))
-app.use(require('./customPayment/router'))
+//app.use(require('./customPayment/router'))
 app.use(require('./dashboard/router'))
 app.use(require('./events/router'))
 app.use(require('./payment/router'))

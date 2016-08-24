@@ -18,7 +18,7 @@ function processGetEvent(req, res) {
       console.log('Error finding event with eid "' + req.query.eid + '":', err);
       res.send(S.s.payment.eventNotFound);
     } else if (results.length > 0) {
-      res.render('event', {
+      res.render('payment/event', {
         eid: req.query.eid,
         event: results[0],
         eventStraplineEmojiFree: H.removeEmojis(results[0].strapline),
@@ -60,7 +60,7 @@ function processGetPayment(req, res) {
         /*renderPage(res, 'The event you are looking for does not exist',
          null, phoneNumber, false);*/
         if (price > 0) {
-          res.render('payment', {
+          res.render('payment/payment', {
             eid: eid,
             pn: req.query.pn,
             event: eventObject,
@@ -86,7 +86,7 @@ function processGetPayment(req, res) {
           renderPage(res, S.s.payment.alreadyAttending,
            null, phoneNumber, false);
         } else if (price > 0) {
-          res.render('payment', {
+          res.render('payment/payment', {
             eid: eid,
             pn: req.query.pn,
             event: eventObject,
@@ -276,7 +276,7 @@ function renderPage(res, message, event, pn, showPayment) {
     objectToSend.event = event;
     objectToSend.event.priceString = event.price.toFixed(2);
   }
-  res.render('payment_complete', objectToSend);
+  res.render('payment/payment_complete', objectToSend);
 }
 
 function processGetUserFromPhoneNumber(req, res) {

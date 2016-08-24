@@ -13,7 +13,7 @@ function processGetDashboard(req, res) {
       res.send('There was an error retrieving data.');
       console.log('/dashboard error:', error);
     } else {
-      res.render('dashboard', {
+      res.render('dashboard/dashboard', {
         totalNoOfMembers: data.totalNoOfMembers,
         totalRevenue: data.totalRevenue.toFixed(2),
         totalNoOfTickets: data.totalNoOfTickets,

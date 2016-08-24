@@ -24,7 +24,7 @@ function processPostCustomPayment(req, res) {
 }
 
 router.get('/custompayment', (req, res) => {
-  res.render('custom_payment', {
+  res.render('customPayment/custom_payment', {
     s: {
       company: S.s.company
     }

@@ -61,7 +61,7 @@ router.post('/message', (req, res) => {
 });
 
 router.get('/message', isLoggedIn, (req, res) => {
-  res.render('message', {
+  res.render('broadcast/message', {
     s: {
       company: S.s.company
     }

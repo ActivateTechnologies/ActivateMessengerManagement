@@ -12,7 +12,7 @@ router.get('/userAnalyticsData', (req, res) => {
 });
 
 router.get('/users', isLoggedIn, (req, res) => {
-  res.render('./users', {
+  res.render('users/users', {
     s: {
       company: S.s.company
     }

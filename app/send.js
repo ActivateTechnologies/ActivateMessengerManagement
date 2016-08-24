@@ -754,7 +754,6 @@ module.exports = {
   notifications: notifications,
   notificationsChange: notificationsChange,
   booked: booked,
-  processReceivedMessage: processReceivedMessage,
   text: text,
   textPromise: textPromise,
   textWithQuickReplies: textWithQuickReplies,
