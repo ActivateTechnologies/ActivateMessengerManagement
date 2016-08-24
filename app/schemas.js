@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const config = require('./../config')
+const config = require('./config')
 
 //http://stackoverflow.com/a/38153706/2015362
 mongoose.Promise = global.Promise;

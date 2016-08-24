@@ -1,11 +1,14 @@
 'use strict'
 
-const M = require('./../server/schemas.js');
-const Send = require('./../server/send.js');
-const Twilio = require('./../server/twilio.js');
+const express = require('express');
+const router = express.Router();
+const S = require('./../strings');
+const M = require('./../schemas.js');
+const Send = require('./../send.js');
+const Twilio = require('./../twilio.js');
 
-/* 
-  Sends given message to user, with events if type is 
+/*
+  Sends given message to user, with events if type is
   "upcomingEvents" */
 function processMessage(req, res) {
   let type = req.query.type;
@@ -53,6 +56,25 @@ function processMessage(req, res) {
   }
 }
 
-module.exports = {
-  processMessage: processMessage
+router.post('/message', (req, res) => {
+  processMessage(req, res);
+});
+
+router.get('/message', isLoggedIn, (req, res) => {
+  res.render('message', {
+    s: {
+      company: S.s.company
+    }
+  });
+});
+
+function isLoggedIn(req, res, next) {
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  // if they aren't redirect them to the home page
+  res.redirect('/login');
 }
+
+module.exports = router

@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
-const M = require('./../server/schemas.js');
-const Analytics = require('./../server/analytics.js');
+const M = require('./../schemas.js');
+const Analytics = require('./../analytics.js');
 const config = require('./../config');
 const S = require('./../strings');
 

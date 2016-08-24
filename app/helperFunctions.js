@@ -2,9 +2,9 @@
 
 const request = require('request');
 const M = require('./schemas.js');
-const config = require('./../config');
+const config = require('./config');
 
-/* 
+/*
   Does three things:
   Updates user's events array with specified event
   Updates event's joined array with joined user
@@ -39,7 +39,7 @@ function updateUserEventAnalytics(uid, eid, price, bookingReference) {
         if (err) {
           console.log('Error pushing eid to users\'s events:', err);
         }
-        M.Event.findOneAndUpdate({_id:eid}, 
+        M.Event.findOneAndUpdate({_id:eid},
           {$push: {joined: {
             uid: uid._id,
             joinDate: new Date()

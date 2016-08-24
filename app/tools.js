@@ -2,7 +2,7 @@
 
 const request = require('request')
 const M = require('./schemas.js')
-const Config = require('./../config')
+const Config = require('./config')
 const Send = require('./send.js');
 
 /*

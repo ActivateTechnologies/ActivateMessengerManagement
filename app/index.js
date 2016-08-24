@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express()
 
-const M = require('./server/schemas.js')
+const M = require('./schemas.js')
 const config = require('./config')
 
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
@@ -18,7 +18,7 @@ const FACEBOOK_APP_SECRET = config.FACEBOOK_APP_SECRET;
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 
-require('./server/passport-config')(passport);
+require('./passport-config')(passport);
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}))
@@ -26,10 +26,10 @@ app.use(bodyParser.json())
 app.use(session({ secret: 'SECRET' }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/../public')));
 
-app.use(require('./routes/stats'))
-app.use(require('./routes/routerMain'))
+app.use(require('./broadcast/router'))
+app.use(require('./dashboard/router'))
 
 app.get('/login', (req, res) => {
   res.render('login')

@@ -2,7 +2,7 @@
 
 const request = require('request')
 const M = require('./schemas.js')
-const config = require('./../config')
+const config = require('./config')
 const twilio = require('twilio')(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN);
 
 function sendSms(phoneNumber, message, callback) {
