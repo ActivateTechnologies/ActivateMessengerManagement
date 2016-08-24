@@ -8,10 +8,11 @@ const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const Send = require('./../send.js');
 const Config = require('./../config');
 const S = require('./../strings');
-const H = require('./helperFunctions');
+const H = require('./../helperFunctions');
 const Twilio = require('./../twilio.js');
 
-
+/*
+  handles the /event route */
 function processGetEvent(req, res) {
   M.Event.find({_id:req.query.eid}, (err, results) => {
     if (err) {
@@ -45,20 +46,20 @@ function processGetPayment(req, res) {
   if (eid && phoneNumber) {
     M.Event.find({_id: eid}).exec().catch((error) => {
       console.log('Error quering for event with id ' + eid + ':', error);
-    }).then((events) => {
+    })
+    .then((events) => {
       eventObject = events[0];
       price = eventObject.price;
       return M.User.find({phoneNumber: phoneNumber}).exec();
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
        error);
       renderPage(res, S.s.payment.eventNotFound,
        null, phoneNumber, false);
-    }).then((users) => {
+    })
+    .then((users) => {
       if (users.length == 0) {
-        //console.log('No users found');
-        /*renderPage(res, 'The event you are looking for does not exist',
-         null, phoneNumber, false);*/
         if (price > 0) {
           res.render('payment/payment', {
             eid: eid,
@@ -102,11 +103,11 @@ function processGetPayment(req, res) {
         }
       }
     });
-  } else {
+  }
+  else {
     console.log('/payment did not receive all required details:',
      eid, phoneNumber);
-    renderPage(res, S.s.payment.eventNotFound,
-     null, phoneNumber, false);
+    renderPage(res, S.s.payment.eventNotFound, null, phoneNumber, false);
   }
 }
 
@@ -119,14 +120,17 @@ function processGetCharge(req, res, params) {
 
   M.Event.find({_id: eid}).exec().catch((error) => {
     console.log('Error quering for event with id ' + eid + ':', error);
-  }).then((events) => {
+  })
+  .then((events) => {
     eventObject = events[0];
     price = eventObject.price;
     return M.User.find({phoneNumber: phoneNumber}).exec();
-  }).catch((error) => {
+  })
+  .catch((error) => {
     console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
      error);
-  }).then((users) => {
+  })
+  .then((users) => {
     if (users.length > 0) { //EXISTING USER
       console.log('Existing User');
       let uid = {
@@ -139,43 +143,47 @@ function processGetCharge(req, res, params) {
       if (price === 0) { //FREE GAME
         console.log('Free Event');
         H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
-        .catch((error) => {
-        }).then((event) => {
-          /*return Send.textPromise(uid,
-           "Booking successful! Thank you for booking :)");*/
+        .catch((error) => {})
+        .then((event) => {
           return Send.bookedPromise(uid, users[0].firstName + ' '
            + users[0].lastName, price, event.name, event.strapline, event.image_url,
            uid._id + '-' + event._id, Math.round((new Date()).getTime()/1000));
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, false);
           renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h
             + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
           pageRendered = true;
-        }).then(() => {
+        })
+        .then(() => {
           if (!pageRendered) {
             renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
              eventObject, phoneNumber, false);
           }
         });
-      } else { //PAID GAME
+      }
+      else { //PAID GAME
         console.log("Paid Event");
         makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
-        .catch(() => {
-        }).then(() => {
+        .catch(() => {})
+        .then(() => {
           return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
-        }).catch((error) => {
-        }).then((event) => {
+        })
+        .catch((error) => {})
+        .then((event) => {
           return Send.bookedPromise(uid, users[0].firstName + ' '
            + users[0].lastName, price, event.name, event.strapline, event.image_url,
            req.body.stripeToken, Math.round((new Date()).getTime()/1000));
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.log('User not found on db or via fb linked pn, using sms.');
           sendSmsMessage(uid, eventObject, true, true);
           renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
             + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
           pageRendered = true;
-        }).then(() => {
+        })
+        .then(() => {
           console.log('Existing, paid, message sent');
           if (!pageRendered) {
             renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
@@ -209,21 +217,21 @@ function processGetCharge(req, res, params) {
           console.log("Free Event");
           let eventObject;
           H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
-          .catch((error) => {
-          }).then((event) => {
+          .catch((error) => {})
+          .then((event) => {
             eventObject = event;
-            /*return Send.textWithPhoneNumber(uid.phoneNumber, 'Booking successful!'
-             + ' Thank you for booking :)');*/
             return Send.bookedPromise(uid, phoneNumber, price, event.name,
              event.strapline, event.image_url, uid._id + '-' + event._id,
              Math.round((new Date()).getTime()/1000));
-          }).catch((error)=>{
+          })
+          .catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, false);
             renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h
              + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
             pageRendered = true;
-          }).then(() => {
+          })
+          .then(() => {
             if (!pageRendered) {
               renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
                eventObject, phoneNumber, false);
@@ -234,20 +242,25 @@ function processGetCharge(req, res, params) {
           let eventObject;
           makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
           .catch((error) => {
-          }).then(() => {
+          })
+          .then(() => {
             return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
-          }).catch((error) => {
-          }).then((event) => {
+          })
+          .catch((error) => {
+          })
+          .then((event) => {
             eventObject = event;
             return Send.bookedPromise(uid, phoneNumber, price,event.name,
               event.strapline, event.image_url, req.body.stripeToken);
-          }).catch((error)=>{
+          })
+          .catch((error)=>{
             console.log('User not found on db or via fb linked pn, using sms.');
             sendSmsMessage(uid, eventObject, false, true);
             renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
              + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
             pageRendered = true;
-          }).then(() => {
+          })
+          .then(() => {
             if (!pageRendered) {
               renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
                eventObject, phoneNumber, false);

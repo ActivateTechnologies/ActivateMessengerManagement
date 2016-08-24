@@ -1,6 +1,6 @@
 'use strict'
 
-const M = require('./schemas.js')
+const M = require('./../schemas.js')
 
 /*
   Returns the basic dashboard stats, called when the dashboard is rendered.
@@ -25,7 +25,7 @@ function getDashboardStats (callback) {
       returnObject.totalRevenue = 0;
       returnObject.totalNoOfTickets = 0;
       if (err) {
-        errors.push('Error getting totalRevenue & totalNoOfTickets: ' 
+        errors.push('Error getting totalRevenue & totalNoOfTickets: '
          + JSON.stringify(err));
       }
     } else {
@@ -36,7 +36,7 @@ function getDashboardStats (callback) {
   });
 
   function returnData() {
-    if (returnObject.totalNoOfMembers != undefined && returnObject.totalRevenue 
+    if (returnObject.totalNoOfMembers != undefined && returnObject.totalRevenue
      != undefined && returnObject.totalNoOfTickets != undefined) {
       if (errors.length) {
         callback(returnObject, {

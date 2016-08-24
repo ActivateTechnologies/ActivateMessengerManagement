@@ -53,61 +53,6 @@ function start(uid) {
   send(uid, messageData);
 }
 
-function startWithPhoneNumber(phoneNumber, eventId) {
-  return new Promise(function(resolve, reject){
-    let messageData = {
-      "text": S.s.bot.start.text,
-      "quick_replies":[{
-        "content_type":"text",
-        "title": S.s.bot.start.quickReply,
-        "payload":("phoneNumber|" + phoneNumber + "|" + eventId)
-      }]
-    }
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-        recipient: {phone_number:phoneNumber},
-        message: messageData
-      }
-    }, (error, response, body) => {
-      let errorObject = (error) ? error : response.body.error;
-      if (errorObject) {
-        console.log('Error in startWithPhoneNumber(): ', errorObject);
-        reject(errorObject);
-      } else {
-        resolve();
-      }
-    })
-  })
-}
-
-function textWithPhoneNumber(phoneNumber, text) {
-  return new Promise(function(resolve, reject){
-    let messageData = { text: text }
-
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-        recipient: {phone_number:phoneNumber},
-        message: messageData
-      }
-    }, function(error, response, body) {
-      let errorObject = (error) ? error : response.body.error;
-      if (errorObject) {
-        console.log('Error sending text messages to phoneNumber "'
-          + phoneNumber + '": ', errorObject);
-        reject(errorObject);
-      } else {
-        resolve();
-      }
-    })
-  })
-}
-
 function registerUser (uid, phoneNumber, eventId) {
   var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
    + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
@@ -562,7 +507,7 @@ function allEvents (uid, broadcast) {
   });
 }
 
-function yep (uid) {
+function yep(uid) {
   M.Analytics.update({name:"Button:Yep"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
@@ -747,8 +692,6 @@ function myEvents (uid) {
 
 module.exports = {
   start: start,
-  startWithPhoneNumber: startWithPhoneNumber,
-  textWithPhoneNumber: textWithPhoneNumber,
   registerUser: registerUser,
   menu: menu,
   notifications: notifications,

@@ -21,14 +21,13 @@ function processPostWebhook(req, res) {
   messaging_events.forEach((event) => {
     if ((!event.message || !event.message.is_echo)
      && !event.read && !event.delivery) {
-      /*console.log(event);
-      console.log("--------------------------------");*/
       let uid = { mid: event.sender.id };
       let user;
       M.User.find({mid: uid.mid}, (error, results) => {
         if (error) {
           console.log('Error getting user object: ', error);
-        } else if (results.length == 0) {
+        }
+        else if (results.length == 0) {
           console.log('No users with mid "' + uid.mid + '" found.');
           createUser(uid.mid, (newUid, error) => {
             if (error) {
@@ -38,9 +37,11 @@ function processPostWebhook(req, res) {
               Conversation.startConversation(newUid, 'onboarding');
             }
           });
-        } else if (results.length > 1) {
+        }
+        else if (results.length > 1) {
           console.log('Multiple users with mid "' + uid.mid + '" found.');
-        } else {
+        }
+        else {
           user = results[0];
           uid._id = user._id;
           if (user.phoneNumber) {
