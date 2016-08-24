@@ -3,8 +3,13 @@
 const express = require('express');
 const router = express.Router();
 const S = require('./../strings');
-const User = require('./users.js');
+const M = require('./../schemas');
 
+router.get('/userAnalyticsData', (req, res) => {
+  M.User.find({}, (err, users) => {
+    res.json({'users': users})
+  });
+});
 
 router.get('/users', isLoggedIn, (req, res) => {
   res.render('./users', {
@@ -13,15 +18,6 @@ router.get('/users', isLoggedIn, (req, res) => {
     }
   });
 });
-
-router.get('/usersData', (req, res) => {
-  Dashboard.processGetUsersData(req, res);
-});
-
-router.get('/players', isLoggedIn, (req, res) => {
-  Dashboard.processGetPlayers(req, res);
-});
-
 
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on

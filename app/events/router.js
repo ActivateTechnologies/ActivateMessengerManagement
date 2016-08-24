@@ -6,8 +6,8 @@ const S = require('./../strings');
 const AWS = require('aws-sdk');
 const M = require('./../schemas.js');
 const config = require('./../config');
-const S = require('./../strings');
-
+const multer = require('multer');
+const upload = multer({dest:'uploads/'});
 
 AWS.config.update({
   accessKeyId: config.AWSaccessKeyId,
@@ -185,23 +185,23 @@ function processGetPastEvents(req, res) {
 
 
 router.get('/events', isLoggedIn, (req, res) => {
-  Dashboard.processGetEvents(req, res);
+  processGetEvents(req, res);
 });
 
 router.post('/events', upload.single('image'), (req, res) => {
-  Dashboard.processPostEvents(req, res);
+  processPostEvents(req, res);
 });
 
 router.delete('/events', (req, res) => {
-  Dashboard.processDeleteEvents(req, res);
+  processDeleteEvents(req, res);
 });
 
 router.get('/currentEvents', (req, res) => {
-  Dashboard.processGetCurrentEvents(req, res);
+  processGetCurrentEvents(req, res);
 });
 
 router.get('/pastEvents', (req, res) => {
-  Dashboard.processGetPastEvents(req, res);
+  processGetPastEvents(req, res);
 });
 
 function isLoggedIn(req, res, next) {

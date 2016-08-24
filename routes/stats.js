@@ -58,12 +58,6 @@ router.get('/tabledata', (req, res) => {
   })
 })
 
-router.get('/userAnalyticsData', (req, res) => {
-  M.User.find({}, (err, users) => {
-    res.json({'users': users})
-  });
-});
-
 router.get('/tablecsv', (req, res) => {
   getUsers()
   .then((users)=>{
