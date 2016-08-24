@@ -4,7 +4,6 @@ const request = require('request');
 const M = require('./schemas.js');
 const config = require('./config');
 const S = require('./strings');
-const L = require('./luis.js');
 const H = require('./helperFunctions');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
@@ -298,10 +297,10 @@ function bookedForFreeEvents (uid) {
   send(uid, messageData);
 }
 
-function processReceivedMessage(uid, message, defaultCallback) {
-  //W.sendConversationMessage(uid, message);
-  L.processTextMessage(uid, message, defaultCallback);
-}
+// function processReceivedMessage(uid, message, defaultCallback) {
+//   //W.sendConversationMessage(uid, message);
+//   L.processTextMessage(uid, message, defaultCallback);
+// }
 
 function textPromise (uid, text) {
   return new Promise(function(resolve, reject){

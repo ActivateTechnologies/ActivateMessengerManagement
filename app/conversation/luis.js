@@ -1,9 +1,9 @@
 'use strict'
 
 const request = require('request')
-const M = require('./schemas.js')
-const config = require('./config')
-const sendNew = require('./send.js');
+const M = require('./../schemas.js')
+const config = require('./../config')
+const sendNew = require('./../send.js');
 
 const INTENT_THRESHHOLD = 0.2;
 
