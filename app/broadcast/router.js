@@ -73,7 +73,7 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  // if they aren't redirect them to the home page
+  // if they aren't redirect them to login
   res.redirect('/login');
 }
 

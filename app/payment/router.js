@@ -8,7 +8,7 @@ const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 const Send = require('./../send.js');
 const Config = require('./../config');
 const S = require('./../strings');
-const H = require('./../helperFunctions');
+const H = require('./helperFunctions');
 const Twilio = require('./../twilio.js');
 
 

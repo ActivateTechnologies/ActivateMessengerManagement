@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const S = require('./../strings');
 const fs = require('fs');
-const Analytics = require('./../analytics.js');
+const Analytics = require('./analytics.js');
 
 
 function processGetDashboard(req, res) {
@@ -72,7 +72,7 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  // if they aren't redirect them to the home page
+  // if they aren't redirect them to login
   res.redirect('/login');
 }
 
