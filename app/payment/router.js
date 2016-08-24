@@ -279,24 +279,6 @@ function renderPage(res, message, event, pn, showPayment) {
   res.render('payment_complete', objectToSend);
 }
 
-function processPostCustomPayment(req, res) {
-  var stripeToken = req.body.stripeToken;
-  var charge = stripe.charges.create({
-    amount: (parseFloat(req.body.amount)) * 100, // amount in cents, again
-    currency: "gbp",
-    source: stripeToken,
-    description: req.body.reference + ', User Name: ' + req.body.name
-  }, function(err, charge) {
-    if (err && err.type === 'StripeCardError') {
-      // The card has been declined
-      res.send(err.message)
-      console.log('Error with stripe charge', err);
-    } else {
-      res.send("Success")
-    }
-  });
-}
-
 function processGetUserFromPhoneNumber(req, res) {
   var phoneNumber = req.query.phoneNumber;
   if (!phoneNumber) {
@@ -391,20 +373,8 @@ router.post('/charge', (req, res) => {
   processGetCharge(req, res);
 });
 
-router.post('/custompayment', (req, res) => {
-  processPostCustomPayment(req, res);
-});
-
 router.get('/userFromPhoneNumber', (req, res) => {
   processGetUserFromPhoneNumber(req, res);
-});
-
-router.get('/custompayment', (req, res) => {
-  res.render('custom_payment', {
-    s: {
-      company: S.s.company
-    }
-  });
 });
 
 

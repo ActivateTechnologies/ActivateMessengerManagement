@@ -34,37 +34,37 @@
           <form class="form-horizontal" action="/custompayment" method="POST" id="payment-form">
             <span class="payment-errors"></span>
             <div class="form-group">
-              <input type="text" class="form-control" id="amountInput" 
+              <input type="text" class="form-control" id="amountInput"
                 placeholder="Amount (£)" name="amount">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="amountInput" 
+              <input type="text" class="form-control" id="amountInput"
                 placeholder="Reference (eg. Katy's Powerleague Payment)" name="reference">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="nameInput" 
+              <input type="text" class="form-control" id="nameInput"
                 placeholder="Card Holder Name" name="name">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="numberInput" 
+              <input type="text" class="form-control" id="numberInput"
                 placeholder="Card Number" data-stripe="number"" name="number">
             </div>
             <div class="form-group">
               <table>
                 <tr>
                   <td style="padding-right:12px">
-                    <input type="text" class="form-control" id="expiryInput" 
+                    <input type="text" class="form-control" id="expiryInput"
                       placeholder="MM/YY" data-stripe="expiry" name="expiry">
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="cvvInput" 
+                    <input type="text" class="form-control" id="cvvInput"
                       placeholder="CVV" data-stripe="cvc">
                   </td>
                 </tr>
               </table>
             </div>
             <div class="form-group">
-              <button type="submit" class="btn btn-primary" 
+              <button type="submit" class="btn btn-primary"
                 value="Submit Payment">Pay with Card</button>
             </div>
           </form>
@@ -84,8 +84,8 @@
 
     <script src="js/card.js"></script>
     <script type="text/javascript">
-      // Stripe.setPublishableKey('pk_test_p3GX2e0V1P9FteC3qz29z4YK');
-      Stripe.setPublishableKey('pk_live_Dey0ulbB4AOL81fmpzWnFKYa');
+      Stripe.setPublishableKey('pk_test_p3GX2e0V1P9FteC3qz29z4YK');
+      // Stripe.setPublishableKey('pk_live_Dey0ulbB4AOL81fmpzWnFKYa');
 
       $(function() {
         var $form = $('#payment-form');
