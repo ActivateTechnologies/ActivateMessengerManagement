@@ -59,7 +59,8 @@ const kickabout = {
     publicLinkEventFinished: "That game has finished",
     myEventsHaventJoined: "You haven't joined any games.",
     yourEvents: "Here are the games you've joined: "
-	}, payment: {
+	},
+  payment: {
 		eventNotFound: "The game you are looking for does not exist.",
 		alreadyAttending: "You are already attending this game.",
 		bookingSuccessFreeSms: "Booking successful! We\'ve sent you a confirmation text"
