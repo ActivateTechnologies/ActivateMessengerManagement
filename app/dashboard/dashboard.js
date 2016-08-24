@@ -1,9 +1,8 @@
 'use strict'
 
-const fs = require('fs');
+
 const AWS = require('aws-sdk');
 const M = require('./../schemas.js');
-const Analytics = require('./../analytics.js');
 const config = require('./../config');
 const S = require('./../strings');
 
@@ -22,56 +21,6 @@ function processGetEvents(req, res) {
       company: S.s.company
     }
   });
-}
-
-function processGetDashboard(req, res) {
-  Analytics.getDashboardStats((data, error) => {
-    if (error) {
-      res.send('There was an error retrieving data.');
-      console.log('/dashboard error:', error);
-    } else {
-      res.render('dashboard', {
-        totalNoOfMembers: data.totalNoOfMembers,
-        totalRevenue: data.totalRevenue.toFixed(2),
-        totalNoOfTickets: data.totalNoOfTickets,
-        s: {
-          company: S.s.company
-        }
-      });
-    }
-  });
-}
-
-function processGetDashboardData(req, res) {
-  let requiredData = req.query.requiredData;
-  if (requiredData == 'getTicketsSoldOverTime') {
-    Analytics.getTicketsSoldOverTime((data, error) => {
-      if (error) {
-        console.log('/dashboardData error with getTicketsSoldOverTime:', error);
-        res.send('Error');
-      } else {
-        res.send(data);
-      }
-    })
-  } else if (requiredData == 'getNewMembersOverTime') {
-    Analytics.getNewMembersOverTime((data, error) => {
-      if (error) {
-        console.log('/dashboardData error with getNewMembersOverTime:', error);
-        res.send('Error');
-      } else {
-        res.send(data);
-      }
-    })
-  } else if (requiredData == 'getButtonHitsOverTime') {
-    Analytics.getButtonHitsOverTime((data, error) => {
-      if (error) {
-        console.log('/dashboardData error with getButtonHitsOverTime:', error);
-        res.send('Error');
-      } else {
-        res.send(data);
-      }
-    })
-  }
 }
 
 function processPostEvents(req, res) {
@@ -262,8 +211,6 @@ function processGetUsersData(req, res) {
 
 module.exports = {
   processGetEvents: processGetEvents,
-  processGetDashboard: processGetDashboard,
-  processGetDashboardData: processGetDashboardData,
   processPostEvents: processPostEvents,
   processDeleteEvents: processDeleteEvents,
   processGetPlayers: processGetPlayers,
