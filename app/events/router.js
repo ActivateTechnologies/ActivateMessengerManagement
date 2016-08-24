@@ -6,6 +6,7 @@ const S = require('./../strings');
 const AWS = require('aws-sdk');
 const M = require('./../schemas.js');
 const config = require('./../config');
+const fs = require('fs')
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 

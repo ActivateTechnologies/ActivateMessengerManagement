@@ -111,6 +111,9 @@ function processGetPayment(req, res) {
   }
 }
 
+/*
+  this function will receive phoneNumber and eid as params
+  it will then use these to complete the payment*/
 function processGetCharge(req, res, params) {
   let phoneNumber = (params) ? '+44' + params.pn : '+44' + req.query.pn;
   let eid = (params) ? params.eid : req.query.eid;
@@ -118,18 +121,21 @@ function processGetCharge(req, res, params) {
   let price;
   let pageRendered = false;
 
+  //get event details
   M.Event.find({_id: eid}).exec().catch((error) => {
     console.log('Error quering for event with id ' + eid + ':', error);
   })
   .then((events) => {
     eventObject = events[0];
     price = eventObject.price;
+    //now get user details
     return M.User.find({phoneNumber: phoneNumber}).exec();
   })
   .catch((error) => {
     console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
      error);
   })
+  //got user details
   .then((users) => {
     if (users.length > 0) { //EXISTING USER
       console.log('Existing User');
@@ -166,7 +172,9 @@ function processGetCharge(req, res, params) {
       else { //PAID GAME
         console.log("Paid Event");
         makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
-        .catch(() => {})
+        .catch((err) => {
+          console.log(err);
+        })
         .then(() => {
           return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
         })
@@ -325,7 +333,7 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
     }, (err, charge) => {
       if (err && err.type === 'StripeCardError') {
         renderPage(res, S.s.payment.paymentError, null, uid.phoneNumber, true);
-        reject();
+        reject(err);
       }
       else {
         resolve();
@@ -376,10 +384,6 @@ router.get('/event', (req, res) => {
 
 router.get('/payment', (req, res) => {
   processGetPayment(req, res);
-});
-
-router.get('/charge', (req, res) => {
-  processGetCharge(req, res);
 });
 
 router.post('/charge', (req, res) => {

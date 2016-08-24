@@ -401,20 +401,25 @@ function generateCardElement (name, strapline, image_url, latlong,
 function cardForBooking (uid, eventId, description, price, booked) {
   let bookOrCancelButton = {}
   let phoneNumber = uid.phoneNumber.substr(uid.phoneNumber.length - 10, 10);
+  // if user has already booked the event
   if (booked === "true") {
     bookOrCancelButton = {
       "type": "postback",
       "title": S.s.bot.eventCard.buttonCancelBooking,
       "payload": "Cancel" + "|" + eventId
     }
-  } else if (parseFloat(price) > 0) {
+  }
+  // if it is a paid event then button with weblink
+  else if (parseFloat(price) > 0) {
     bookOrCancelButton = {
       "type": "web_url",
       "title": S.s.bot.eventCard.buttonBook,
       "url": config.ROOT_URL + "/payment"
         + "?pn=" + phoneNumber + "&eid=" + eventId
     }
-  } else {
+  }
+  // free event so normal button
+  else {
     bookOrCancelButton = {
       "type": "postback",
       "title": S.s.bot.eventCard.buttonBook,
