@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
 // const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
+const S = require('./../strings')
 
 function processPostCustomPayment(req, res) {
   var stripeToken = req.body.stripeToken;
@@ -34,3 +35,5 @@ router.get('/custompayment', (req, res) => {
 router.post('/custompayment', (req, res) => {
   processPostCustomPayment(req, res);
 });
+
+module.exports = router
