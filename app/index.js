@@ -34,19 +34,10 @@ app.use(require('./conversation/router'))
 app.use(require('./customPayment/router'))
 app.use(require('./dashboard/router'))
 app.use(require('./events/router'))
+app.use(require('./login/router'))
 app.use(require('./payment/router'))
 app.use(require('./site/router'))
 app.use(require('./users/router'))
-
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-
-app.post('/login', passport.authenticate('local', {
-	successRedirect: '/dashboard',
-  failureRedirect: '/login'
-}));
-
 
 let server = app.listen(app.get('port'), function() {
   console.log('running on port', app.get('port'));
