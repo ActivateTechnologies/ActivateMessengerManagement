@@ -28,6 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, '/../public')));
 
+app.use(require('./site/router'))
 app.use(require('./broadcast/router'))
 app.use(require('./dashboard/router'))
 app.use(require('./events/router'))
@@ -41,14 +42,6 @@ app.post('/login', passport.authenticate('local', {
 	successRedirect: '/dashboard',
   failureRedirect: '/login'
 }));
-
-app.get('/', function(req, res){
-  res.render('home')
-})
-
-app.get('/policy', function(req, res){
-  res.render('policy');
-})
 
 
 let server = app.listen(app.get('port'), function() {
