@@ -111,7 +111,7 @@ function processGetPayment(req, res) {
   }
 }
 
-function handleExistingUserFree(res, req, uid, eid, price, users, eventObject, phoneNumber){
+function handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNumber){
   H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
   .catch((error) => {console.log(error);})
   .then((event) => {
@@ -131,7 +131,7 @@ function handleExistingUserFree(res, req, uid, eid, price, users, eventObject, p
   });
 }
 
-function handleExistingUserPaid(res, req, uid, eid, price, users, eventObject, phoneNumber){
+function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNumber){
   makeCharge(res, price, req.body.stripeToken, uid, eid)
   .catch((err) => {
     console.log(err);
@@ -216,7 +216,7 @@ function processGetCharge(req, res, params) {
   })
   .catch(console.log)
   .then((users) => {
-    
+
     //EXISTING USER
     if (users.length > 0) {
       console.log('Existing User');
@@ -250,9 +250,12 @@ function processGetCharge(req, res, params) {
           phoneNumber: phoneNumber
         }
         if (error) {console.log(error);}
-        M.Analytics.update({name:"NewUsers"},
+        M.Analytics.update(
+          {name:"NewUsers"},
           {$push: {activity: {uid:user._id, time: new Date()}}},
-          {upsert: true}, console.log});
+          {upsert: true},
+          console.log
+        )
 
         if (price === 0) { //FREE GAME
           console.log("Free Event");
