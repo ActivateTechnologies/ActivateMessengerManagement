@@ -28,10 +28,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, '/../public')));
 
-app.use(require('./site/router'))
 app.use(require('./broadcast/router'))
+app.use(require('./conversation/router'))
 app.use(require('./dashboard/router'))
 app.use(require('./events/router'))
+app.use(require('./payment/router'))
+app.use(require('./site/router'))
 app.use(require('./users/router'))
 
 app.get('/login', (req, res) => {

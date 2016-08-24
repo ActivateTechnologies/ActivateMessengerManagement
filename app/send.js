@@ -83,53 +83,6 @@ function startWithPhoneNumber(phoneNumber, eventId) {
   })
 }
 
-/*function bookedWithPhoneNumber(phoneNumber, name, price, eventName, strapline, image_url, order_number) {
-  return new Promise((resolve, reject) => {
-    let messageData = {
-      "attachment": {
-        "type":"template",
-        "payload": {
-          "template_type": "receipt",
-          "recipient_name": name,
-          "currency": "GBP",
-          "payment_method": "Stripe",
-          "order_number": order_number,
-          "elements":[{
-            "title": eventName,
-            "subtitle": strapline,
-            "quantity": 1,
-            "price": price,
-            "currency":"GBP",
-            "image_url":image_url
-          }],
-          "summary":{
-            "total_cost":price
-          }
-        }
-      }
-    }
-
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-        recipient: {phone_number:phoneNumber},
-        message: messageData
-      }
-    }, (error, response, body) => {
-      let errorObject = (error) ? error : response.body.error;
-      if (errorObject) {
-        console.log('Error sending booked message to phoneNumber "'
-          + phoneNumber + '": ', errorObject);
-        reject(errorObject);
-      } else {
-        resolve();
-      }
-    })
-  })
-}*/
-
 function textWithPhoneNumber(phoneNumber, text) {
   return new Promise(function(resolve, reject){
     let messageData = { text: text }
@@ -796,7 +749,6 @@ module.exports = {
   start: start,
   startWithPhoneNumber: startWithPhoneNumber,
   textWithPhoneNumber: textWithPhoneNumber,
-  //bookedWithPhoneNumber: bookedWithPhoneNumber,
   registerUser: registerUser,
   menu: menu,
   notifications: notifications,
