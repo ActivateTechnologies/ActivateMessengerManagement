@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const FacebookWebhooks = require('./../server/facebookwebhooks.js');
+const FacebookWebhooks = require('./facebookwebhooks.js');
 
 // FACEBOOKWEBHOOKS
 router.get('/webhook', (req, res) => {

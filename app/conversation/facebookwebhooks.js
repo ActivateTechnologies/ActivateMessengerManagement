@@ -1,9 +1,9 @@
 'use strict'
 
-const M = require('./../server/schemas.js');
-const Send = require('./../server/send.js');
-const Twilio = require('./../server/twilio.js');
-const Conversation = require('./../server/conversation.js');
+const M = require('./../schemas.js');
+const Send = require('./../send.js');
+const Twilio = require('./../twilio.js');
+const Conversation = require('./conversation.js');
 const Config = require('./../config');
 const S = require('./../strings');
 const request = require('request');

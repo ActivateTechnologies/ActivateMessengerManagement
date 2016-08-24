@@ -1,9 +1,9 @@
 'use strict'
 
 const request = require('request')
-const M = require('./schemas.js')
+const M = require('./../schemas.js')
 const Config = require('./../config')
-const Send = require('./send.js');
+const Send = require('./../send.js');
 
 /*
   Retrieves specified conversation from database and starts executing by
@@ -112,7 +112,7 @@ function executeErrorForNode (event, uid, user) {
 }
 
 /*
-  Executes given node and calls itself or relevant functions 
+  Executes given node and calls itself or relevant functions
   when required */
 function executeTreeNode(uid, conversationName, node, message, user) {
   //console.log('executeTreeNode', uid, conversationName, node);
@@ -154,7 +154,7 @@ function executeTreeNode(uid, conversationName, node, message, user) {
         functionsIndex[conversationName][node.function](uid,
          conversationName, node, message, user);
       } else {
-        console.log('Error: Function "' + node.function 
+        console.log('Error: Function "' + node.function
           + '" for conversation "' + conversationName + '" not found')
       }
     } else if (node.nodeType == 'jumpToId') {
@@ -192,7 +192,7 @@ function executeTreeNodefromId(uid, conversationName, nodeId, message, user) {
 }
 
 /*
-  Called from webhook.js when the user hits a quick reply button and payload 
+  Called from webhook.js when the user hits a quick reply button and payload
   starts with 'conversationName...'. */
 function handleQuickReply(uid, payload, user) {
   /*console.log('handleQuickReply(' + payload + ')');*/
@@ -208,7 +208,7 @@ function handleQuickReply(uid, payload, user) {
   Saves the users current conversation location to his user object,
   saving conversationName, nodeId, type and userErrorText. */
 function saveUserConversationLocation(uid, conversationName, node) {
-  /*console.log('saveUserConversationLocation(' + uid._id + ', ' 
+  /*console.log('saveUserConversationLocation(' + uid._id + ', '
     + conversationName + ', ' + node.id + ', ' + node.nodeType
     + ', ' + node.userErrorText + ')');*/
   let updateObject = {
@@ -236,7 +236,7 @@ function clearUserConversationLocation (uid) {
   })
 }
 
-/* 
+/*
   Replaces hot words of the format #~*#fname with user's unique data
   */
 function replaceHotWords(text, user) {
@@ -252,10 +252,10 @@ function replaceHotWords(text, user) {
 /*
   If user's number is unique, saves it to their user document and calls
   next[0], if users phone number is incorrect, calls next[node.next.length
-   - 1], if user's phone number exists (they've used public link before 
+   - 1], if user's phone number exists (they've used public link before
   messenger platform), calls next[1]*/
 var collectPhoneNumber = function(uid, conversationName, node, message, user) {
-  
+
   let processedPhoneNumber = validatePhoneNumber(message);
   if (processedPhoneNumber == -1) {
     executeTreeNode(uid, conversationName, node.next[node.next.length - 1], null, user);
@@ -264,7 +264,7 @@ var collectPhoneNumber = function(uid, conversationName, node, message, user) {
       if (error) {
         console.log('Error getting users with phoneNumber: ', error);
       } else if (users.length == 0) {
-        console.log('No users with phoneNumber "' 
+        console.log('No users with phoneNumber "'
           + processedPhoneNumber + '" found, confirmed as new user');
         savePhoneNumber(uid, processedPhoneNumber, (updatedUser, error) => {
           if (error) {
@@ -274,7 +274,7 @@ var collectPhoneNumber = function(uid, conversationName, node, message, user) {
           }
         });
       } else {
-        console.log('User with phoneNumber "' + processedPhoneNumber 
+        console.log('User with phoneNumber "' + processedPhoneNumber
           + '" already exists, combining users');
         combineUsers(uid, processedPhoneNumber, users[0], (updatedUser, error) => {
           if (error) {
@@ -351,7 +351,7 @@ var collectPhoneNumber = function(uid, conversationName, node, message, user) {
                 console.log('Error deleting user\'s old profile: ', error);
                 callback(null, error);
               } else {
-                M.Analytics.update({name:"NewUsers"}, {$pull: {activity: 
+                M.Analytics.update({name:"NewUsers"}, {$pull: {activity:
                  {uid:uid._id}}}, (err) => {
                   if (err) {
                     console.log('Error removing analytics from "NewUsers":', err);
