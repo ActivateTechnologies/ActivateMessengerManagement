@@ -135,8 +135,7 @@ function handleExistingUserFree(res, req, uid, eid, price, users, eventObject, p
 }
 
 function handleExistingUserPaid(res, req, uid, eid, price, users, eventObject, phoneNumber){
-  console.log("event price", req.query.eventPrice);
-  makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
+  makeCharge(res, price, req.body.stripeToken, uid, eid)
   .catch((err) => {
     console.log(err);
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
@@ -155,14 +154,10 @@ function handleExistingUserPaid(res, req, uid, eid, price, users, eventObject, p
     sendSmsMessage(uid, eventObject, true, true);
     renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
       + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-    pageRendered = true;
   })
   .then(() => {
     console.log('Existing, paid, message sent');
-    if (!pageRendered) {
-      renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
-       eventObject, phoneNumber, false);
-    }
+    renderPage(res, S.s.payment.bookingSuccessPaidMessenger,eventObject, phoneNumber, false);
   });
 }
 
@@ -182,19 +177,15 @@ function handleNewUserFree(res, req, uid, eid, price, phoneNumber){
     sendSmsMessage(uid, eventObject, false, false);
     renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h
      + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-    pageRendered = true;
   })
   .then(() => {
-    if (!pageRendered) {
-      renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
-       eventObject, phoneNumber, false);
-    }
+    renderPage(res, S.s.payment.bookingSuccessFreeMessenger, eventObject, phoneNumber, false);
   })
 }
 
 function handleNewUserPaid(res, req, uid, eid, price, phoneNumber){
   let eventObject;
-  makeCharge(res, req.query.eventPrice, req.body.stripeToken, uid, eid)
+  makeCharge(res, price, req.body.stripeToken, uid, eid)
   .catch((error) => {
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
   })
@@ -213,13 +204,9 @@ function handleNewUserPaid(res, req, uid, eid, price, phoneNumber){
     sendSmsMessage(uid, eventObject, false, true);
     renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
      + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-    pageRendered = true;
   })
   .then(() => {
-    if (!pageRendered) {
-      renderPage(res, S.s.payment.bookingSuccessPaidMessenger,
-       eventObject, phoneNumber, false);
-    }
+    renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, phoneNumber, false);
   });
 }
 
