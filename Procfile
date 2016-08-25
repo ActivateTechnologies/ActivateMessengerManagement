@@ -1,1 +1,1 @@
-web: node --harmony_destructuring index.js
+web: npm start
