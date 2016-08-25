@@ -112,11 +112,11 @@ function processGetPayment(req, res) {
 }
 
 function handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNumber){
-  H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
+  H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken)
   .catch((error) => {console.log(error);})
   .then((event) => {
     return Send.bookedPromise(uid, users[0].firstName + ' '
-     + users[0].lastName, price, event.name, event.strapline, event.image_url,
+     + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
      uid._id + '-' + event._id, Math.round((new Date()).getTime()/1000));
   })
   .catch((error) => {
@@ -132,18 +132,19 @@ function handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNum
 }
 
 function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNumber){
-  makeCharge(res, price, req.body.stripeToken, uid, eid)
+  console.log("entered handleExistingUserPaid");
+  makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
   .catch((err) => {
     console.log(err);
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
   })
   .then(() => {
-    return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
+    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
   })
-  .catch((error) => {console.log(error);})
+  .catch(console.log)
   .then((event) => {
     return Send.bookedPromise(uid, users[0].firstName + ' '
-     + users[0].lastName, price, event.name, event.strapline, event.image_url,
+     + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
      req.body.stripeToken, Math.round((new Date()).getTime()/1000));
   })
   .catch((error) => {
@@ -159,7 +160,7 @@ function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNum
 
 
 function handleNewUserFree(res, req, uid, eid, eventObject, phoneNumber){
-  H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken)
+  H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken)
   .then((event) => {
     eventObject = event;
     return Send.bookedPromise(uid, phoneNumber, eventObject.price, event.name,
@@ -183,11 +184,11 @@ function handleNewUserPaid(res, req, uid, eid, eventObject, phoneNumber){
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
   })
   .then(() => {
-    return H.updateUserEventAnalytics(uid, eid, price, req.body.stripeToken);
+    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
   })
   .then((event) => {
     eventObject = event;
-    return Send.bookedPromise(uid, phoneNumber, price,event.name,
+    return Send.bookedPromise(uid, phoneNumber, eventObject.price, event.name,
       event.strapline, event.image_url, req.body.stripeToken);
   })
   .catch((error)=>{
@@ -227,7 +228,7 @@ function processGetCharge(req, res, params) {
       if (users[0].mid) {
         uid.mid = users[0].mid;
       }
-      if (price === 0) { //FREE GAME
+      if (eventObject.price === 0) { //FREE GAME
         console.log('Free Event');
         handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNumber)
       }
@@ -257,7 +258,7 @@ function processGetCharge(req, res, params) {
           console.log
         )
 
-        if (price === 0) { //FREE GAME
+        if (eventObject.price === 0) { //FREE GAME
           console.log("Free Event");
           handleNewUserFree(res, req, uid, eid, eventObject, phoneNumber);
         }
@@ -314,11 +315,10 @@ function processGetUserFromPhoneNumber(req, res) {
 }
 
 function makeCharge(res, eventPrice, stripeToken, uid, eid) {
-  console.log("inside makeCharge");
   return new Promise((resolve, reject) => {
-    let price = parseFloat(eventPrice) / 100;
+    let price = parseFloat(eventPrice) * 100;
     let charge = stripe.charges.create({
-      amount: eventPrice, // amount in cents, again
+      amount: price, // amount in cents, again
       currency: "gbp",
       card: stripeToken,
       description: "",
