@@ -31,7 +31,7 @@
               <form action="/charge?pn=<%=pn%>&eid=<%=eid%>" method="POST">
                 <script
                   src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-                  data-key="<%= STRIPE_PUBLIC_KEY%>"
+                  data-key="<%= STRIPE_PUBLIC_KEY %>"
                   data-amount="<%= event.price*100 %>"
                   data-name="<%=s.company.name%>"
                   data-description="<%= event.strapline %>"
