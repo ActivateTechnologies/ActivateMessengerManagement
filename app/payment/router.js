@@ -136,6 +136,7 @@ function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNum
   makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
   .catch((err) => {
     console.log(err);
+    console.log("caught error from promise");
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
   })
   .then(() => {
@@ -277,6 +278,7 @@ function processGetCharge(req, res, params) {
   Render the custom_payment view with given message and other
   options. */
 function renderPage(res, message, event, pn, showPayment) {
+  console.log("called render page");
   let paymentDivDisplay = (showPayment) ? '' : 'none';
   let objectToSend = {
     pn: pn,
@@ -316,22 +318,23 @@ function processGetUserFromPhoneNumber(req, res) {
 
 function makeCharge(res, eventPrice, stripeToken, uid, eid) {
   return new Promise((resolve, reject) => {
-    let price = parseFloat(eventPrice) * 100;
-    let charge = stripe.charges.create({
-      amount: price, // amount in cents, again
-      currency: "gbp",
-      card: stripeToken,
-      description: "",
-      metadata: {_id:(uid._id + ""), eid: eid}
-    }, (err, charge) => {
-      if (err && err.type === 'StripeCardError') {
-        renderPage(res, S.s.payment.paymentError, null, uid.phoneNumber, true);
-        reject(err);
-      }
-      else {
-        resolve();
-      }
-    });
+    // let price = parseFloat(eventPrice) * 100;
+    // let charge = stripe.charges.create({
+    //   amount: price, // amount in cents, again
+    //   currency: "gbp",
+    //   card: stripeToken,
+    //   description: "",
+    //   metadata: {_id:(uid._id + ""), eid: eid}
+    // }, (err, charge) => {
+    //   if (err && err.type === 'StripeCardError') {
+    //     renderPage(res, S.s.payment.paymentError, null, uid.phoneNumber, true);
+    //     reject(err);
+    //   }
+    //   else {
+    //     resolve();
+    //   }
+    // });
+    reject("error for testing")
   });
 }
 
