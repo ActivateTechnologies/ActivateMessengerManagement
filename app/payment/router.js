@@ -132,28 +132,26 @@ function handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNum
 }
 
 function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNumber){
-  console.log("entered handleExistingUserPaid");
   makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
-  .catch((err) => {
+  .then(()=>{
+    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
+  }, (err) => {
     console.log(err);
-    console.log("caught error from promise");
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
   })
-  .then(() => {
-    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
-  })
-  .catch(console.log)
+  //if payment went through try reaching user
   .then((event) => {
+    console.log(1111);
     return Send.bookedPromise(uid, users[0].firstName + ' '
      + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
      req.body.stripeToken, Math.round((new Date()).getTime()/1000));
-  })
-  .catch((error) => {
+  }, (error) => {
     sendSmsMessage(uid, eventObject, true, true);
     renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
       + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
   })
   .then(() => {
+    console.log(22222222);
     console.log('Existing, paid, message sent');
     renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, phoneNumber, false);
   });
@@ -215,8 +213,7 @@ function processGetCharge(req, res, params) {
   .then((events) => {
     eventObject = events[0];
     return M.User.find({phoneNumber: phoneNumber}).exec();
-  })
-  .catch(console.log)
+  }, console.log)
   .then((users) => {
 
     //EXISTING USER
