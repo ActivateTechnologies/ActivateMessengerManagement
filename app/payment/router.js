@@ -138,25 +138,26 @@ function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNum
   }, (err) => {
     console.log(err);
     renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
-    Promise.reject(err);
+    return Promise.reject(err);
   })
   // if payment successful, try sending user the receipt on messenger
   .then((event) => {
-    console.log(111111);
+
     return Send.bookedPromise(uid, users[0].firstName + ' '
      + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
-     req.body.stripeToken, Math.round((new Date()).getTime()/1000)))
-  .then(() => {
-    // if successfully sent receipt to messenger
-    console.log(22222222);
-    console.log('Existing, paid, message sent');
-    renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, phoneNumber, false);
-  }, (error) => {
-    // otherwise try sending receipt to the phoneNumber
-     sendSmsMessage(uid, eventObject, true, true);
-     renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
-       + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-  });
+     req.body.stripeToken, Math.round((new Date()).getTime()/1000))
+     .then(() => {
+      // if successfully sent receipt to messenger
+      console.log('Existing, paid, message sent');
+      renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, phoneNumber, false);
+    }, (error) => {
+      // otherwise try sending receipt to the phoneNumber
+       sendSmsMessage(uid, eventObject, true, true);
+       renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
+         + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
+    });
+
+  })
 }
 
 
