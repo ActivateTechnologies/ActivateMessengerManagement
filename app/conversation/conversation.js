@@ -401,18 +401,6 @@ let functionsIndex = {
     collectPhoneNumber: collectPhoneNumber,
     showEvents: showEvents,
     showLastReceipt: showLastReceipt
-  },
-  collectPhoneNumber: {
-    collectPhoneNumber: collectPhoneNumber,
-    showEvents: showEvents
-  },
-  onboardingSkip: {
-    collectPhoneNumber: collectPhoneNumber,
-    showEvents: showEvents
-  },
-  collectPhoneNumberSkip: {
-    collectPhoneNumber: collectPhoneNumber,
-    showEvents: showEvents
   }
 }
 

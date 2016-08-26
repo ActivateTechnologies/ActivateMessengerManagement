@@ -34,7 +34,9 @@ function processPostWebhook(req, res) {
               //TODO Handle Error
               console.log('Error creating user:', error);
             } else {
-              Conversation.startConversation(newUid, 'onboarding');
+              console.log("here");
+              //Conversation.startConversation(newUid, 'onboarding');
+              Send.start(uid)
             }
           });
         }
@@ -44,14 +46,10 @@ function processPostWebhook(req, res) {
         else {
           user = results[0];
           uid._id = user._id;
-          if (user.phoneNumber) {
-            uid.phoneNumber = user.phoneNumber;
-          }
-          if (user && !uid.phoneNumber && user.conversationLocation
-           && user.conversationLocation.conversationName != 'onboarding'
-           && user.conversationLocation.conversationName != 'collectPhoneNumber') {
-            Conversation.startConversation(uid, 'collectPhoneNumber', user);
-          } else if (!Conversation.consumeWebhookEvent(event, uid, user)) {
+          let convo = user.conversationLocation;
+          let inConversation = (convo && convo.conversationName);
+
+          if (!Conversation.consumeWebhookEvent(event, uid, user)) {
             if (event.message && event.message.text && event.message.quick_reply) {
               processQuickReply(event, uid);
             } else if (event.message && event.message.text && !event.message.quick_reply) {
@@ -171,15 +169,15 @@ function processPostback(event, uid) {
     switch(text.toLowerCase()) {
 
       case('start'):
-      //Send.start(uid);
-      createUser(uid.mid, (newUid, error) => {
-        if (error) {
-          //TODO Handle Error
-          console.log('Error creating user:', error);
-        } else {
-          Conversation.startConversation(newUid, 'onboarding');
-        }
-      });
+      Send.start(uid);
+      // createUser(uid.mid, (newUid, error) => {
+      //   if (error) {
+      //     //TODO Handle Error
+      //     console.log('Error creating user:', error);
+      //   } else {
+      //     Conversation.startConversation(newUid, 'onboarding');
+      //   }
+      // });
       break;
 
       case("my events"):
