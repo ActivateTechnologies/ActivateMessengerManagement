@@ -1,4 +1,4 @@
-const status = 'production'; //'production' or 'test' or 'avi'
+const status = 'ani'; //'production' or 'test' or 'avi'
 
 //PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 const PRODUCTION_VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
@@ -59,7 +59,7 @@ const ANI_FACEBOOK_APP_SECRET = "e1723bfb113ffc87127e3691926044b4";
 const ANI_FACEBOOK_PAGE_ID = "519450361582633";
 const ANI_FACEBOOK_PAGE_URL = PRODUCTION_FACEBOOK_PAGE_URL;
 const ANI_MONGODB_URI = 'mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest';
-const ANI_ROOT_URL = "https://508b784c.ngrok.io";
+const ANI_ROOT_URL = "https://10455407.ngrok.io";
 const ANI_WIT_TOKEN = PRODUCTION_WIT_TOKEN;
 const ANI_LUIS_ID = PRODUCTION_LUIS_ID;
 const ANI_LUIS_SUBSCRIPTION_KEY = PRODUCTION_LUIS_SUBSCRIPTION_KEY;
