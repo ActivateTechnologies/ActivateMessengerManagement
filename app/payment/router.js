@@ -81,28 +81,8 @@ function processGetPayment(req, res) {
   }
   else {
     console.log('/payment did not receive all required details:');
-    renderPage(res, S.s.payment.eventNotFound, null, phoneNumber, false);
+    renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
   }
-}
-
-function handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNumber){
-  H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken)
-  .catch((error) => {console.log(error);})
-  .then((event) => {
-    return Send.bookedPromise(uid, users[0].firstName + ' '
-     + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
-     uid._id + '-' + event._id, Math.round((new Date()).getTime()/1000));
-  })
-  .catch((error) => {
-    console.log(error);
-    sendSmsMessage(uid, eventObject, true, false);
-    renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h
-      + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-  })
-  .then(() => {
-    renderPage(res, S.s.payment.bookingSuccessFreeMessenger,
-     eventObject, phoneNumber, false);
-  });
 }
 
 function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNumber){
@@ -134,59 +114,15 @@ function handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNum
   })
 }
 
-
-function handleNewUserFree(res, req, uid, eid, eventObject, phoneNumber){
-  H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken)
-  .then((event) => {
-    eventObject = event;
-    return Send.bookedPromise(uid, phoneNumber, eventObject.price, event.name,
-     event.strapline, event.image_url, uid._id + '-' + event._id,
-     Math.round((new Date()).getTime()/1000));
-  })
-  .catch((error)=>{
-    console.log('User not found on db or via fb linked pn, using sms.');
-    sendSmsMessage(uid, eventObject, false, false);
-    renderPage(res, S.s.payment.bookingSuccessFreeSms.replace(S.h
-     + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-  })
-  .then(() => {
-    renderPage(res, S.s.payment.bookingSuccessFreeMessenger, eventObject, phoneNumber, false);
-  })
-}
-
-function handleNewUserPaid(res, req, uid, eid, eventObject, phoneNumber){
-  makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
-  .catch((error) => {
-    renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
-  })
-  .then(() => {
-    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
-  })
-  .then((event) => {
-    eventObject = event;
-    return Send.bookedPromise(uid, phoneNumber, eventObject.price, event.name,
-      event.strapline, event.image_url, req.body.stripeToken);
-  })
-  .catch((error)=>{
-    console.log('User not found on db or via fb linked pn, using sms.');
-    sendSmsMessage(uid, eventObject, false, true);
-    renderPage(res, S.s.payment.bookingSuccessPaidSms.replace(S.h
-     + 'phoneNumber', uid.phoneNumber), eventObject, phoneNumber, false);
-  })
-  .then(() => {
-    renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, phoneNumber, false);
-  });
-}
-
 /*
   this function will receive phoneNumber and eid as params
   it will then use these to complete the payment*/
-function processGetCharge(req, res, params) {
-  let phoneNumber = (params) ? '+44' + params.pn : '+44' + req.query.pn;
-  let eid = (params) ? params.eid : req.query.eid;
+function processGetCharge(req, res) {
+  let mid = req.query.mid;
+  let eid = req.query.eid;
   let eventObject;
 
-  M.Event.find({_id: eid}).exec().catch((error) => {console.log(error);})
+  M.Event.find({_id: eid}).exec().catch(console.log)
   .then((events) => {
     eventObject = events[0];
     return M.User.find({phoneNumber: phoneNumber}).exec();
@@ -195,55 +131,23 @@ function processGetCharge(req, res, params) {
 
     //EXISTING USER
     if (users.length > 0) {
-      console.log('Existing User');
       let uid = {
-        _id: users[0]._id,
-        phoneNumber: users[0].phoneNumber
+        _id: users[0]._id
       }
       if (users[0].mid) {
         uid.mid = users[0].mid;
       }
       if (eventObject.price === 0) { //FREE GAME
-        console.log('Free Event');
-        handleExistingUserFree(res, req, uid, eid, users, eventObject, phoneNumber)
+        renderPage(res, S.s.payment.eventNotFound, null, uid.mid, false);
       }
       else { //PAID GAME
-        console.log("Paid Event");
         handleExistingUserPaid(res, req, uid, eid, users, eventObject, phoneNumber)
       }
     }
 
     //NEW USER
     else {
-      console.log('New User');
-      let user = M.User({
-        phoneNumber: phoneNumber,
-        signedUpDate: new Date()
-      })
-      user.save((error, user) => {
-        let uid = {
-          _id: user._id,
-          phoneNumber: phoneNumber
-        }
-        if (error) {console.log(error);}
-        M.Analytics.update(
-          {name:"NewUsers"},
-          {$push: {activity: {uid:user._id, time: new Date()}}},
-          {upsert: true},
-          console.log
-        )
-
-        if (eventObject.price === 0) { //FREE GAME
-          console.log("Free Event");
-          handleNewUserFree(res, req, uid, eid, eventObject, phoneNumber);
-        }
-        else { //PAID GAME
-          console.log("Paid Game");
-          handleNewUserPaid(res, req, uid, eid, eventObject, phoneNumber);
-        }
-      });
-
-
+      renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
     }
   });
 }
