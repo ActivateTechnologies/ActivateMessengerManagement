@@ -31,17 +31,12 @@ function processPostWebhook(req, res) {
           console.log('No users with mid "' + uid.mid + '" found.');
           createUser(uid.mid, (newUid, error) => {
             if (error) {
-              //TODO Handle Error
               console.log('Error creating user:', error);
             } else {
-              console.log("here");
               //Conversation.startConversation(newUid, 'onboarding');
               Send.start(uid)
             }
           });
-        }
-        else if (results.length > 1) {
-          console.log('Multiple users with mid "' + uid.mid + '" found.');
         }
         else {
           user = results[0];

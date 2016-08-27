@@ -41,41 +41,19 @@ function processGetEvent(req, res) {
 
 function processGetPayment(req, res) {
   let eid = req.query.eid;
-  let phoneNumber = '+44' + req.query.pn;
-  let eventObject, price;
-  if (eid && phoneNumber) {
-    M.Event.find({_id: eid}).exec().catch((error) => {
-      console.log('Error quering for event with id ' + eid + ':', error);
-    })
+  let mid = req.query.mid;
+  let eventObject;
+  if (eid && mid) {
+    M.Event.find({_id: eid}).exec().catch(console.log)
     .then((events) => {
       eventObject = events[0];
-      price = eventObject.price;
-      return M.User.find({phoneNumber: phoneNumber}).exec();
-    })
-    .catch((error) => {
-      console.log('Error querying for user with phoneNumber ' + phoneNumber + ':',
-       error);
-      renderPage(res, S.s.payment.eventNotFound,
-       null, phoneNumber, false);
+      return M.User.find({mid: mid}).exec();
     })
     .then((users) => {
       if (users.length == 0) {
-        if (price > 0) {
-          res.render('payment/payment', {
-            eid: eid,
-            pn: req.query.pn,
-            event: eventObject,
-            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
-              company: S.s.company
-            }
-          });
-        } else {
-          processGetCharge(req, res, {
-            pn: req.query.pn,
-            eid: req.query.eid
-          });
-        }
-      } else {
+        renderPage(res, S.s.payment.eventNotFound, null, phoneNumber, false);
+      }
+      else {
         let userAlreadyAttending = false;
         for (let i = 0; i < users[0].events.length && !userAlreadyAttending; i++) {
           userAlreadyAttending = users[0].events[i].eid == eid;
@@ -84,29 +62,25 @@ function processGetPayment(req, res) {
           }
         }
         if (userAlreadyAttending) {
-          renderPage(res, S.s.payment.alreadyAttending,
-           null, phoneNumber, false);
-        } else if (price > 0) {
+          renderPage(res, S.s.payment.alreadyAttending,null, phoneNumber, false);
+        }
+        else if (eventObject.price > 0) {
           res.render('payment/payment', {
             eid: eid,
-            pn: req.query.pn,
+            mid: users[0].mid,
             event: eventObject,
             STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
               company: S.s.company
             }
           });
         } else {
-          processGetCharge(req, res, {
-            pn: req.query.pn,
-            eid: req.query.eid
-          });
+          renderPage(res, S.s.payment.eventNotFound, null, phoneNumber, false);
         }
       }
-    });
+    }, console.log);
   }
   else {
-    console.log('/payment did not receive all required details:',
-     eid, phoneNumber);
+    console.log('/payment did not receive all required details:');
     renderPage(res, S.s.payment.eventNotFound, null, phoneNumber, false);
   }
 }

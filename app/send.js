@@ -400,7 +400,6 @@ function generateCardElement (name, strapline, image_url, latlong,
 
 function cardForBooking (uid, eventId, description, price, booked) {
   let bookOrCancelButton = {}
-  let phoneNumber = uid.phoneNumber.substr(uid.phoneNumber.length - 10, 10);
   // if user has already booked the event
   if (booked === "true") {
     bookOrCancelButton = {
@@ -415,7 +414,7 @@ function cardForBooking (uid, eventId, description, price, booked) {
       "type": "web_url",
       "title": S.s.bot.eventCard.buttonBook,
       "url": config.ROOT_URL + "/payment"
-        + "?pn=" + phoneNumber + "&eid=" + eventId
+        + "?mid=" + uid.mid + "&eid=" + eventId
     }
   }
   // free event so normal button
