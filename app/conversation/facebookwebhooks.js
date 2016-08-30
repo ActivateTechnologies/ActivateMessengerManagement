@@ -24,9 +24,7 @@ function processPostWebhook(req, res) {
       let uid = { mid: event.sender.id };
       let user;
       M.User.find({mid: uid.mid}, (error, results) => {
-        if (error) {
-          console.log('Error getting user object: ', error);
-        }
+        if (error) {console.log(error);}
         else if (results.length == 0) {
           console.log('No users with mid "' + uid.mid + '" found.');
           createUser(uid.mid, (newUid, error) => {
@@ -73,7 +71,7 @@ function processQuickReply(event, uid) {
   } else if (payload.substring(0, 4) == "Book") {
     Send.book(uid, payload);
   } else if (payload.substring(0, 6) == "Cancel") {
-    Send.cancelBooking(uid, payload);
+    Send.cancelBooking(uid, payload.split('|')[1]);
   } else if (payload.substring(0, 9) == "More Info") {
     Send.moreInfo(uid, payload);
   } else {
@@ -150,7 +148,7 @@ function processPostback(event, uid) {
   if (text.substring(0, 4) == "Book") {
     Send.book(uid, text);
   } else if(text.substring(0, 6) == "Cancel") {
-    Send.cancelBooking(uid, text);
+    Send.cancelBooking(uid, text.split('|')[1]);
   } else if(text.substring(0, 5) == "Share") {
     Send.shareEvent(uid, text);
   } else if(text.substring(0, 9) == "More Info") {
@@ -161,10 +159,8 @@ function processPostback(event, uid) {
       case('start'):
       Send.start(uid);
       // createUser(uid.mid, (newUid, error) => {
-      //   if (error) {
-      //     //TODO Handle Error
-      //     console.log('Error creating user:', error);
-      //   } else {
+      //   if (error) {console.log(error)}
+      //   else {
       //     Conversation.startConversation(newUid, 'onboarding');
       //   }
       // });

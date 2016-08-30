@@ -273,79 +273,67 @@ function shareEvent (uid, text) {
 }
 
 
-function hasUserBookedEvent(mid, event){
+function cardForBooking (uid, eventId, description, price, booked) {
+    let bookOrCancelButton = {}
 
-}
-
-function cardForBooking (uid, eventId) {
-  M.Game.findOne({_id:eventId}, function(err, result){
-    if(err){console.log(err);}
-    if(result){
-      let bookOrCancelButton = {}
-
-      // if user has already booked the event
-      let booked = false;
-      _.each(result.joined, function(joiner){
-        if(joiner.uid.mid == uid.mid){
-          booked = true;
-        }
-      })
-
-      if (booked === "true") {
-        bookOrCancelButton = {
-          "type": "postback",
-          "title": S.s.bot.eventCard.buttonCancelBooking,
-          "payload": "Cancel" + "|" + eventId
-        }
+    // if user has already booked the event
+    if (booked) {
+      bookOrCancelButton = {
+        "type": "postback",
+        "title": S.s.bot.eventCard.buttonCancelBooking,
+        "payload": "Cancel" + "|" + eventId
       }
-      // if it is a paid event then button with weblink
-      else if (parseFloat(result.price) > 0) {
-        bookOrCancelButton = {
-          "type": "web_url",
-          "title": S.s.bot.eventCard.buttonBook,
-          "url": config.ROOT_URL + "/payment"
-            + "?mid=" + uid.mid + "&eid=" + eventId
-        }
-      }
-      // free event so normal button
-      else {
-        bookOrCancelButton = {
-          "type": "postback",
-          "title": S.s.bot.eventCard.buttonBook,
-          "payload": "Book" + "|" + eventId
-        }
-      }
-
-      let messageData = {
-        "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text": result.description,
-          "buttons": [
-              bookOrCancelButton, {
-                "type": "postback",
-                "title": S.s.bot.eventCard.buttonKeepLooking,
-                "payload": "No, thanks",
-              }, {
-                "type": "postback",
-                "title": S.s.bot.eventCard.buttonShare,
-                "payload": "Share" + "|" + eventId
-              }
-            ]
-          }
-        }
-      }
-
-      send(uid, messageData);
     }
-  })
+
+    // if it is a paid event then button with weblink
+    else if (parseFloat(price) > 0) {
+      bookOrCancelButton = {
+        "type": "web_url",
+        "title": S.s.bot.eventCard.buttonBook,
+        "url": config.ROOT_URL + "/payment"
+          + "?mid=" + uid.mid + "&eid=" + eventId
+      }
+    }
+
+    // free event so normal button
+    else {
+      bookOrCancelButton = {
+        "type": "postback",
+        "title": S.s.bot.eventCard.buttonBook,
+        "payload": "Book" + "|" + eventId
+      }
+    }
+
+    let messageData = {
+      "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "button",
+        "text": description,
+        "buttons": [
+            bookOrCancelButton,
+            {
+              "type": "postback",
+              "title": S.s.bot.eventCard.buttonKeepLooking,
+              "payload": "No, thanks",
+            },
+            {
+              "type": "postback",
+              "title": S.s.bot.eventCard.buttonShare,
+              "payload": "Share" + "|" + eventId
+            }
+          ]
+        }
+      }
+    }
+
+    send(uid, messageData);
 }
 
 function generateCard(array) {
   let elements = [];
   array.forEach((eventId) => {
-    M.Game.findOne({_id:eventId}, function(err, result){
+    M.Event.findOne({_id:eventId}, function(err, result){
       if(err){console.log(err);}
       if(result){
 
@@ -395,10 +383,10 @@ function cards (uid, data, message) {
   if (message) {
     textPromise(uid, message).then(() => {
       send(uid, data);
-    }).catch((e) => {
-      console.log('Error sending text, ' + e);
-    });
-  } else {
+    })
+    .catch(console.log);
+  }
+  else {
     send(uid, data);
   }
 }
@@ -411,22 +399,13 @@ function allEvents (uid, broadcast) {
   M.Event.find(query).sort('when').exec((err, events) => {
     let data = [];
     events.forEach((event) =>{
-      let booked = false;
-      let attendees = event.joined;
-      attendees.forEach((user) => {
-        if (user.uid == uid._id) {
-          booked = true;
-        }
-      });
-      let descString = (event.desc.trim().length > 0) ? event.desc : event.strapline;
-      data.push([event.name, event.strapline, event.image_url, event.latlong,
-        event._id, event.joined.length + event.non_members_attending, event.capacity,
-        booked, descString, event.when, event.price]);
+      data.push(event._id]);
     });
     data = generateCard(data);
     if (broadcast === undefined) {
       cards(uid, data);
-    } else {
+    }
+    else {
       cards(uid, data, broadcast);
     }
   });
@@ -442,9 +421,7 @@ function yep(uid) {
       }
     });
   M.User.find({mid:uid.mid}, (err, result) => {
-    if (err) {
-      console.log('Error finding user with mid "' + uid.mid + '":', err);
-    }
+    if (err) {console.log(err);}
     if(result.length > 0){
       console.log("User is already registered");
       allEvents(uid, S.s.bot.allEventsDefault);
@@ -465,15 +442,11 @@ function yep(uid) {
             signedUpDate: new Date()
           });
           user.save((err) => {
-            if (err) {
-              console.log('Error saving user:', err);
-            } else {
+            if (err) {console.log(err);}
+            else {
               M.Analytics.update({name:"NewUsers"},
               {$push: {activity: {uid:uid._id, time: new Date()}}},
-              {upsert: true}, (err) => {
-                if (err) {
-                  console.log('Error saving analytics for "NewUsers":', err);
-                }
+              {upsert: true}, console.log
               });
               allEvents(uid, S.s.bot.allEventsDefault);
             }
@@ -489,37 +462,27 @@ function book (uid, rest) {
   let eventId = arr[1];
   H.updateUserEventAnalytics(uid, eventId, 0, null).then((event) => {
     bookedForFreeEvents(uid);
-  }).catch((error) => {
-    console.log('Error in updateUserEventAnalytics():', error);
-  });
+  })
+  .catch(console.log);
 }
 
-function cancelBooking (uid, rest) {
+function cancelBooking (uid, eventId) {
   M.Analytics.update({name:"Button:Cancel"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    (err) => {
-      if (err) {
-        console.log('Error saving analytics for "Button:Cancel":', err);
-      }
+    console.log
     });
 
-  let arr = rest.split('|');
-  let eventId = arr[1];
   M.Event.find({_id:eventId}, (err, result) => {
     if (result.length > 0) {
       M.Event.findOneAndUpdate({_id:eventId}, {$pull: {joined: {uid: uid._id}}},
       (err, data) => {
-        if (err) {
-          console.log('Error removing user from game\'s joined:', err);
-        }
+        if(err){console.log(err);}
         text(uid, S.s.bot.bookingCancelled);
       });
       M.User.findOneAndUpdate({_id:uid}, {$pull: {events: {eid:eventId}}},
       (err, data) => {
-        if (err) {
-          console.log('Error pulling eid from users\'s events:', err);
-        }
+        if(err){console.log(err);}
         allEvents(uid, S.s.bot.allEventsAfterCancel);
       });
     }
@@ -539,14 +502,30 @@ function moreInfo (uid, text) {
   let arr = text.split("|");
   let eventId = arr[1];
 
-  directions(uid, name, latlong)
-  .then((success) => {
-    cardForBooking(uid, eventId);
+  M.Event.findOne({_id:eventId}, function(err, result){
+    if(err){console.log(err);}
+    if(result){
+      directions(uid, result.name, result.latlong)
+      .then((success) => {
+        M.User.findOne({uid:uid.mid}, function(e, res){
+          if(e){console.log(e);}
+          if(res){
+            let booked = false;
+            _.each(result.joined, function(joiner){
+              if(joiner.uid == res._id){
+                booked = true;
+              }
+            })
+            cardForBooking(uid, eventId);
+          }
+       })
+      })
+      .catch(console.log)
+    }
   })
-  .catch(console.log)
 }
 
-function event (uid, eventId) {
+function event(uid, eventId) {
   M.Event.find({_id:eventId}, function(err, result){
     if(result.length > 0){
       let data = [];
@@ -562,9 +541,7 @@ function event (uid, eventId) {
             booked = true;
           }
         });
-        data.push([item.name, item.strapline, item.image_url, item.latlong,
-         item._id, item.joined.length, item.capacity, booked, item.desc,
-         item.when, item.price]);
+        data.push(item._id);
         data = generateCard(data);
         cards(uid, data, S.s.bot.publicLinkEvent);
       } else {
@@ -585,22 +562,17 @@ function myEvents (uid) {
       let join = event.joined;
       join.forEach((user) => {
         if (user.uid == uid._id) {
-          data.push([event.name, event.strapline, event.image_url, event.latlong,
-           event._id, event.joined.length + event.non_members_attending,
-           event.capacity, true, event.desc, event.when, event.price]);
+          data.push(event._id);
         }
       });
     });
 
-    //console.log(data);
-
     if (data.length === 0) {
       textPromise(uid, S.s.bot.myEventsHaventJoined).then(() => {
         allEvents(uid, S.s.bot.allEventsDefault);
-      }).catch((e) => {
-        console.log('Error finding user\'s games:', e);
-      });
-    } else {
+      }).catch(console.log);
+    }
+    else {
       data = generateCard(data);
       cards(uid, data, S.s.bot.yourEvents);
     }
