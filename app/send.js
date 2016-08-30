@@ -306,7 +306,6 @@ function shareEvent (uid, text) {
 }
 
 function cardForBooking (uid, eventId, description, price, booked) {
-  console.log("in here");
     let bookOrCancelButton = {}
 
     // if user has already booked the event

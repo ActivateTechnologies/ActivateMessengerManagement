@@ -3,16 +3,16 @@
 const express = require('express');
 const router = express.Router();
 const M = require('./../schemas.js')
-// const stripe = require("stripe")("sk_test_Lspvreo5c3SnUK7EzaX7Ns1E")
-const stripe = require("stripe")("sk_live_VmcnYw9pEBlxDKGddvKvL8Hu")
 const Send = require('./../send.js');
 const Config = require('./../config');
 const S = require('./../strings');
 const H = require('./../helperFunctions');
 const Twilio = require('./../twilio.js');
+const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
 
 /*
-  handles the /payment route used to pay for games */
+  handles the /payment route used to pay for games
+  it will receive eventId and user's mid as params*/
 function processGetPayment(req, res) {
   let eid = req.query.eid;
   let mid = req.query.mid;
@@ -95,13 +95,11 @@ function processGetCharge(req, res) {
           return Promise.reject(err);
         })
         .then((event) => {
-          return Send.bookedPromise(uid, users[0].firstName + ' '
+          // Send User Receipt
+          Send.booked(uid, users[0].firstName + ' '
            + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
            req.body.stripeToken, Math.round((new Date()).getTime()/1000))
-           .then(() => {
-            console.log('Existing, paid, message sent');
-            renderPage(res, S.s.payment.bookingSuccessPaidMessenger);
-          }, console.log);
+          renderPage(res, S.s.payment.bookingSuccessPaidMessenger);
         })
       }
     }
@@ -128,7 +126,6 @@ function renderPage(res, message) {
 
 function makeCharge(res, eventPrice, stripeToken, uid, eid) {
   return new Promise((resolve, reject) => {
-    console.log("inside make charge");
     let price = parseFloat(eventPrice) * 100;
     let charge = stripe.charges.create({
       amount: price, // amount in cents, again
@@ -142,7 +139,6 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
         reject(err);
       }
       else {
-        console.log("made charge");
         resolve();
       }
     });
