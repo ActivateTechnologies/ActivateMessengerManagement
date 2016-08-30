@@ -372,7 +372,26 @@ function generateCard(array) {
 
         let latlong = result.latlong.replace(/\s+/g, '');
         let pl = "More Info" + '|' + eventId;
-        let directions_link = "http://maps.google.com/?q=" + latlong
+        let directions_link = "http://maps.google.com/?q=" + latlong;
+
+        let bookButton = {};
+        if (parseFloat(price) > 0) {
+          bookButton = {
+            "type": "web_url",
+            "title": S.s.bot.eventCard.buttonBook,
+            "url": config.ROOT_URL + "/payment"
+              + "?mid=" + uid.mid + "&eid=" + eventId
+          }
+        }
+
+        // free event so normal button
+        else {
+          bookButton = {
+            "type": "postback",
+            "title": S.s.bot.eventCard.buttonBook,
+            "payload": "Book" + "|" + eventId
+          }
+        }
 
         if (result.joined.length == result.capacity) {
           let template = {
@@ -390,6 +409,7 @@ function generateCard(array) {
             "image_url": result.image_url,
             "item_url": directions_link,
             "buttons": [
+              bookButton,
               {
               "type": "postback",
               "title": S.s.bot.eventCard.buttonMoreInfo,
