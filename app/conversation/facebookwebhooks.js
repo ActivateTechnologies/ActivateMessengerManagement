@@ -68,18 +68,9 @@ function processQuickReply(event, uid) {
   let payload = event.message.quick_reply.payload;
   if (payload.substring(0, 16) == "conversationName") {
     Conversation.handleQuickReply(uid, payload);
-  } else if (payload.substring(0, 4) == "Book") {
-    Send.book(uid, payload);
-  } else if (payload.substring(0, 6) == "Cancel") {
-    Send.cancelBooking(uid, payload.split('|')[1]);
-  } else if (payload.substring(0, 9) == "More Info") {
-    Send.moreInfo(uid, payload);
-  } else {
+  }
+  else {
     switch(payload.toLowerCase()){
-
-      case('start'):
-      Send.start(uid);
-      break;
 
       case('yep'):
       Send.yep(uid);
@@ -152,7 +143,7 @@ function processPostback(event, uid) {
   } else if(text.substring(0, 5) == "Share") {
     Send.shareEvent(uid, text);
   } else if(text.substring(0, 9) == "More Info") {
-    Send.moreInfo(uid, text);
+    Send.moreInfo(uid, text.split('|')[1]);
   } else {
     switch(text.toLowerCase()) {
 
@@ -185,14 +176,15 @@ function processPostback(event, uid) {
 }
 
 function createUser(mid, callback) {
-  M.User.find({mid: mid}).sort('signedUpDate').exec((error, results) => {
+  M.User.find({mid: mid}).exec((error, results) => {
     if (!error && results.length > 0) {
       console.log('User already exists');
       callback({
         _id: results[0].id,
         mid: mid
       })
-    } else {
+    }
+    else {
       console.log('Going to create user with mid "' + mid + '"');
       var get_url = "https://graph.facebook.com/v2.6/" + mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
@@ -208,33 +200,28 @@ function createUser(mid, callback) {
             locale: body.locale,
             gender: body.gender,
             events: [],
-            //TODO: Remove when actually using phone numbers:
-            //phoneNumber: '+44' + mid.substring(0,10),
             signedUpDate: new Date()
           });
           user.save((err) => {
             if (err) {
-              console.log('Error creating user: ', err);
+              console.log(err);
               callback(null, err);
             } else {
               M.Analytics.update({name:"NewUsers"},
               {$push: {activity: {uid:user._id, time: new Date()}}},
-              {upsert: true}, (err) => {
-                if (err) {
-                  console.log('Error saving analytics for "NewUsers":', err);
-                }
-              });
+              {upsert: true},
+              console.log);
+
               callback({
                 _id: user.id,
                 mid: mid
               });
             }
           });
-        } else {
+        }
+        else {
           let errorObject = (error) ? error : response.body.error;
-          if (errorObject) {
-            console.log('Error retrieving user\s facebook details:', errorObject);
-          }
+          if (errorObject) {console.log(errorObject);}
         }
       });
     }

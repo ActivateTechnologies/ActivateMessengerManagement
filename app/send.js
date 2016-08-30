@@ -8,6 +8,8 @@ const H = require('./helperFunctions');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 const _ = require('underscore')
 
+// Helpers
+
 function send(uid, messageData, callback) {
   let recipient;
   if (uid.mid) {
@@ -53,6 +55,40 @@ function start(uid) {
   }
   send(uid, messageData);
 }
+
+function textPromise (uid, text) {
+  return new Promise(function(resolve, reject){
+    let messageData = { text: text }
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {id:uid.mid},
+        message: messageData
+      }
+    }, function(error, response, body) {
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending text message ' + JSON.stringify(messageData)
+          + ' to mid "'
+          + uid.mid + '": ', errorObject);
+        reject(errorObject);
+      } else {
+        resolve();
+      }
+    })
+  })
+}
+
+function text (uid, text, callback) {
+  let messageData = { text: text }
+  send(uid, messageData, callback);
+}
+
+
+
+// Menu Related
 
 function menu (uid) {
   let messageData = {
@@ -103,6 +139,34 @@ function notificationsChange (uid, set) {
   });
 }
 
+function myEvents (uid) {
+  let now = new Date();
+  let query = {when:{
+    $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
+
+  M.Event.find(query).sort('when').exec((err, events) => {
+    let data = [];
+    events.forEach((event) => {
+      let join = event.joined;
+      join.forEach((user) => {
+        if (user.uid == uid._id) {
+          data.push(event._id);
+        }
+      });
+    });
+
+    if (data.length === 0) {
+      textPromise(uid, S.s.bot.myEventsHaventJoined).then(() => {
+        allEvents(uid, S.s.bot.allEventsDefault);
+      }).catch(console.log);
+    }
+    else {
+      data = generateCard(data);
+      cards(uid, data, S.s.bot.yourEvents);
+    }
+  })
+}
+
 /*
   Send receipt for given game details to the user */
 function booked (uid, name, price, eventName, strapline, image_url, order_number, timestamp, callback) {
@@ -134,7 +198,6 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
   send(uid, messageData, callback);
 }
 
-
 function bookedForFreeEvents (uid) {
   let messageData = {
     "text": S.s.bot.booking.freeEventBookedConfirmation,
@@ -145,36 +208,6 @@ function bookedForFreeEvents (uid) {
     }]
   }
   send(uid, messageData);
-}
-
-function textPromise (uid, text) {
-  return new Promise(function(resolve, reject){
-    let messageData = { text: text }
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-        recipient: {id:uid.mid},
-        message: messageData
-      }
-    }, function(error, response, body) {
-      let errorObject = (error) ? error : response.body.error;
-      if (errorObject) {
-        console.log('Error sending text message ' + JSON.stringify(messageData)
-          + ' to mid "'
-          + uid.mid + '": ', errorObject);
-        reject(errorObject);
-      } else {
-        resolve();
-      }
-    })
-  })
-}
-
-function text (uid, text, callback) {
-  let messageData = { text: text }
-  send(uid, messageData, callback);
 }
 
 function directions (uid, name, latlong) {
@@ -272,7 +305,6 @@ function shareEvent (uid, text) {
   })
 }
 
-
 function cardForBooking (uid, eventId, description, price, booked) {
     let bookOrCancelButton = {}
 
@@ -329,6 +361,8 @@ function cardForBooking (uid, eventId, description, price, booked) {
 
     send(uid, messageData);
 }
+
+// Cards
 
 function generateCard(array) {
   let elements = [];
@@ -489,18 +523,12 @@ function cancelBooking (uid, eventId) {
   })
 }
 
-function moreInfo (uid, text) {
+function moreInfo(uid, eventId) {
   M.Analytics.update({name:"Button:More Info"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    (err) => {
-      if (err) {
-        console.log('Error saving analytics for "Button:More Info":', err);
-      }
+    console.log
     });
-
-  let arr = text.split("|");
-  let eventId = arr[1];
 
   M.Event.findOne({_id:eventId}, function(err, result){
     if(err){console.log(err);}
@@ -525,71 +553,15 @@ function moreInfo (uid, text) {
   })
 }
 
-function event(uid, eventId) {
-  M.Event.find({_id:eventId}, function(err, result){
-    if(result.length > 0){
-      let data = [];
-      let item = result[0];
-      let now = new Date();
-      now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
-      if(item.when > now){
-        let booked = false;
-        let join = item.joined;
-
-        join.forEach(function(i){
-          if(i.uid === uid._id){
-            booked = true;
-          }
-        });
-        data.push(item._id);
-        data = generateCard(data);
-        cards(uid, data, S.s.bot.publicLinkEvent);
-      } else {
-        text(uid, S.s.bot.publicLinkEventFinished)
-      }
-    }
-  })
-}
-
-function myEvents (uid) {
-  let now = new Date();
-  let query = {when:{
-    $gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}};
-
-  M.Event.find(query).sort('when').exec((err, events) => {
-    let data = [];
-    events.forEach((event) => {
-      let join = event.joined;
-      join.forEach((user) => {
-        if (user.uid == uid._id) {
-          data.push(event._id);
-        }
-      });
-    });
-
-    if (data.length === 0) {
-      textPromise(uid, S.s.bot.myEventsHaventJoined).then(() => {
-        allEvents(uid, S.s.bot.allEventsDefault);
-      }).catch(console.log);
-    }
-    else {
-      data = generateCard(data);
-      cards(uid, data, S.s.bot.yourEvents);
-    }
-  })
-}
 
 module.exports = {
   start: start,
-  registerUser: registerUser,
   menu: menu,
   notifications: notifications,
   notificationsChange: notificationsChange,
   booked: booked,
   text: text,
   textPromise: textPromise,
-  textWithQuickReplies: textWithQuickReplies,
-  event: event,
   cards: cards,
   allEvents: allEvents,
   myEvents: myEvents,
