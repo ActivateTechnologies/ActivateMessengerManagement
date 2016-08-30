@@ -72,10 +72,6 @@ function processQuickReply(event, uid) {
   else {
     switch(payload.toLowerCase()){
 
-      case('yep'):
-      Send.yep(uid);
-      break;
-
       case("notifications"):
       Send.notifications(uid);
       break;

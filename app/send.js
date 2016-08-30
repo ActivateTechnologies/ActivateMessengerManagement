@@ -444,48 +444,6 @@ function allEvents (uid, broadcast) {
   });
 }
 
-function yep(uid) {
-  M.Analytics.update({name:"Button:Yep"},
-    {$push: {activity: {uid:uid._id, time: new Date()}}},
-    {upsert: true},
-    console.log);
-  M.User.find({mid:uid.mid}, (err, result) => {
-    if (err) {console.log(err);}
-    if(result.length > 0){
-      console.log("User is already registered");
-      allEvents(uid, S.s.bot.allEventsDefault);
-    }
-    else {
-      var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
-       + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
-       + VERIFICATION_TOKEN;
-      request(get_url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          body = JSON.parse(body);
-          let user = M.User({
-            mid: uid.mid,
-            firstName: body.first_name,
-            lastName: body.last_name,
-            profilePic: body.profile_pic,
-            locale: body.locale,
-            gender: body.gender,
-            signedUpDate: new Date()
-          });
-          user.save((err) => {
-            if (err) {console.log(err);}
-            else {
-              M.Analytics.update({name:"NewUsers"},
-              {$push: {activity: {uid:uid._id, time: new Date()}}},
-              {upsert: true}, console.log)
-              allEvents(uid, S.s.bot.allEventsDefault);
-            }
-          });
-        }
-      });
-    }
-  })
-}
-
 function book (uid, rest) {
   let arr = rest.split('|');
   let eventId = arr[1];
@@ -556,7 +514,6 @@ module.exports = {
   cards: cards,
   allEvents: allEvents,
   myEvents: myEvents,
-  yep: yep,
   book: book,
   cancelBooking: cancelBooking,
   moreInfo: moreInfo,
