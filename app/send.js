@@ -267,7 +267,6 @@ function shareEvent (uid, text) {
     }
     if (results.length > 0) {
       let event = results[0];
-      let publicLink = config.ROOT_URL + "/event?eid=" + eid;
       let description = event.strapline;
       let numAttending = event.non_members_attending + event.joined.length;
       if (numAttending > 0) {
@@ -282,11 +281,11 @@ function shareEvent (uid, text) {
               "title": event.name,
               "subtitle": description,
               "image_url": event.image_url,
-              "item_url": publicLink,
+              "item_url": S.company.botURL,
               "buttons": [{
                 "type": "web_url",
                 "title": S.s.bot.eventCard.buttonShareCardMoreInfo,
-                "url": publicLink,
+                "url": S.company.botURL,
               }]
             }]
           }
@@ -308,16 +307,18 @@ function cardForBooking (uid, eventId, description, price, booked) {
     let bookOrCancelButton = {}
 
     // if user has already booked the event
-    if (booked) {
-      bookOrCancelButton = {
-        "type": "postback",
-        "title": S.s.bot.eventCard.buttonCancelBooking,
-        "payload": "Cancel" + "|" + eventId
-      }
-    }
+    // if (booked) {
+    //   bookOrCancelButton = {
+    //     "type": "postback",
+    //     "title": S.s.bot.eventCard.buttonCancelBooking,
+    //     "payload": "Cancel" + "|" + eventId
+    //   }
+    // }
 
     // if it is a paid event then button with weblink
-    else if (parseFloat(price) > 0) {
+    //else
+
+    if (parseFloat(price) > 0) {
       bookOrCancelButton = {
         "type": "web_url",
         "title": S.s.bot.eventCard.buttonBook,

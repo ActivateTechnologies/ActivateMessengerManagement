@@ -8,6 +8,7 @@ const kickabout = {
     name: "Kickabout",
     website: "www.kickabout.football",
     address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP"
+    botURL: "http://m.me/kickaboutapp"
   },
 	sms: {
 		paidEventConfirmation: "You just booked onto " + h + "name with Kickabout!\n\n"
@@ -39,11 +40,13 @@ const kickabout = {
     		onConfirmationText: "You will receive weekly notifications",
     		offConfirmationText: "You won't receive weekly notifications",
     	}
-    }, booking: {
+    },
+    booking: {
     	freeEventBookedConfirmation: "Thanks for booking. Do you want to"
     	  + " continue looking?",
     	quickReply: "Yes"
-    }, eventCard: {
+    },
+    eventCard: {
     	buttonDirections: "Directions",
     	buttonShareCardMoreInfo: "More Info",
     	buttonMoreInfo: "More Info",
