@@ -48,7 +48,7 @@ const kickabout = {
     	buttonShareCardMoreInfo: "More Info",
     	buttonMoreInfo: "More Info",
     	buttonCancelBooking: "Cancel Booking",
-    	buttonBook: "BOOK",
+    	buttonBook: "Get Ticket",
     	buttonKeepLooking: "Keep Looking",
     	buttonShare: "Share"
     },

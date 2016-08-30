@@ -169,7 +169,7 @@ function myEvents (uid) {
 
 /*
   Send receipt for given game details to the user */
-function booked (uid, name, price, eventName, strapline, image_url, order_number, timestamp, callback) {
+function booked(uid, name, price, eventName, strapline, image_url, order_number, timestamp, callback) {
   let messageData = {
     "attachment": {
       "type":"template",
@@ -198,16 +198,15 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
   send(uid, messageData, callback);
 }
 
-function bookedForFreeEvents (uid) {
-  let messageData = {
-    "text": S.s.bot.booking.freeEventBookedConfirmation,
-    "quick_replies":[{
-      "content_type":"text",
-      "title": S.s.bot.booking.quickReply,
-      "payload":"continue"
-    }]
-  }
-  send(uid, messageData);
+function bookedForFreeEvents (uid, eid) {
+  M.Event.findOne({_id:eid}, function(err, result){
+    if(err){console.log(err);}
+    if(result){
+      booked(uid, uid.firstName + " " + uid.lastName,
+        price, result.name, result.strapline, result.image_url,
+        new Data().toISOString(), new Date().toString())
+    }
+  })
 }
 
 function directions(uid, name, latlong) {
@@ -389,11 +388,13 @@ function generateCard(array) {
             "subtitle": result.strapline,
             "image_url": result.image_url,
             "item_url": directions_link,
-            "buttons": [{
+            "buttons": [
+              {
               "type": "postback",
               "title": S.s.bot.eventCard.buttonMoreInfo,
               "payload": pl
-            }]
+              }
+            ]
           }
           elements.push(template);
         }

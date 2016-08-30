@@ -39,6 +39,8 @@ function processPostWebhook(req, res) {
         else {
           user = results[0];
           uid._id = user._id;
+          uid.firstName = user.firstName;
+          uid.lastName = user.lastName;
           let convo = user.conversationLocation;
           let inConversation = (convo && convo.conversationName);
 
