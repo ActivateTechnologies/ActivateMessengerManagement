@@ -12,33 +12,7 @@ const H = require('./../helperFunctions');
 const Twilio = require('./../twilio.js');
 
 /*
-  handles the /event route */
-function processGetEvent(req, res) {
-  M.Event.find({_id:req.query.eid}, (err, results) => {
-    if (err) {
-      console.log('Error finding event with eid "' + req.query.eid + '":', err);
-      res.send(S.s.payment.eventNotFound);
-    } else if (results.length > 0) {
-      res.render('payment/event', {
-        eid: req.query.eid,
-        event: results[0],
-        eventStraplineEmojiFree: H.removeEmojis(results[0].strapline),
-        config: {
-          FACEBOOK_APP_ID: Config.FACEBOOK_APP_ID,
-          FACEBOOK_PAGE_ID: Config.FACEBOOK_PAGE_ID,
-          FACEBOOK_PAGE_URL: Config.FACEBOOK_PAGE_URL,
-          ROOT_URL: Config.ROOT_URL
-        }, s: {
-          company: S.s.company
-        }
-      });
-    } else {
-      console.log('No events with eid "' + req.query.eid + '" found.');
-      res.send(S.s.payment.eventNotFound);
-    }
-  });
-}
-
+  handles the /payment route used to pay for games */
 function processGetPayment(req, res) {
   let eid = req.query.eid;
   let mid = req.query.mid;
@@ -51,7 +25,7 @@ function processGetPayment(req, res) {
     })
     .then((users) => {
       if (users.length == 0) {
-        renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
+        renderPage(res, S.s.payment.eventNotFound);
       }
       else {
         let userAlreadyAttending = false;
@@ -62,52 +36,32 @@ function processGetPayment(req, res) {
           }
         }
         if (userAlreadyAttending) {
-          renderPage(res, S.s.payment.alreadyAttending,null, "change this", false);
+          renderPage(res, S.s.payment.alreadyAttending);
         }
         else if (eventObject.price > 0) {
           res.render('payment/payment', {
             eid: eid,
             mid: users[0].mid,
             event: eventObject,
-            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
+            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY,
+            s: {
               company: S.s.company
             }
           });
         } else {
-          renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
+          renderPage(res, S.s.payment.eventNotFound);
         }
       }
     }, console.log);
   }
   else {
     console.log('/payment did not receive all required details:');
-    renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
+    renderPage(res, S.s.payment.eventNotFound);
   }
 }
 
-function handleExistingUserPaid(res, req, uid, eid, users, eventObject, mid){
-  makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
-  .then(()=>{
-    return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
-  }, (err) => {
-    console.log(err);
-    renderPage(res, S.s.payment.paymentError, eventObject, phoneNumber, false);
-    return Promise.reject(err);
-  })
-  .then((event) => {
-    return Send.bookedPromise(uid, users[0].firstName + ' '
-     + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
-     req.body.stripeToken, Math.round((new Date()).getTime()/1000))
-     .then(() => {
-      console.log('Existing, paid, message sent');
-      renderPage(res, S.s.payment.bookingSuccessPaidMessenger, eventObject, mid, false);
-    }, console.log);
-  })
-}
-
 /*
-  this function will receive phoneNumber and eid as params
-  it will then use these to complete the payment*/
+  it will complete the payment*/
 function processGetCharge(req, res) {
   let mid = req.query.mid;
   let eid = req.query.eid;
@@ -129,16 +83,32 @@ function processGetCharge(req, res) {
         uid.mid = mid;
       }
       if (eventObject.price === 0) { //FREE GAME
-        renderPage(res, S.s.payment.eventNotFound, null, uid.mid, false);
+        renderPage(res, "This is a free event");
       }
       else { //PAID GAME
-        handleExistingUserPaid(res, req, uid, eid, users, eventObject, mid)
+        makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
+        .then(()=>{
+          return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
+        }, (err) => {
+          console.log(err);
+          renderPage(res, S.s.payment.paymentError);
+          return Promise.reject(err);
+        })
+        .then((event) => {
+          return Send.bookedPromise(uid, users[0].firstName + ' '
+           + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
+           req.body.stripeToken, Math.round((new Date()).getTime()/1000))
+           .then(() => {
+            console.log('Existing, paid, message sent');
+            renderPage(res, S.s.payment.bookingSuccessPaidMessenger);
+          }, console.log);
+        })
       }
     }
 
     //NEW USER
     else {
-      renderPage(res, S.s.payment.eventNotFound, null, "change this", false);
+      renderPage(res, "You aren't a registerd user.");
     }
   });
 }
@@ -146,20 +116,12 @@ function processGetCharge(req, res) {
 /*
   Render the custom_payment view with given message and other
   options. */
-function renderPage(res, message, event, pn, showPayment) {
-  console.log("called render page");
-  let paymentDivDisplay = (showPayment) ? '' : 'none';
+function renderPage(res, message) {
   let objectToSend = {
-    pn: pn,
     message: message,
-    paymentDivDisplay: paymentDivDisplay,
-    STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY, s: {
+    s: {
       company: S.s.company
     }
-  }
-  if (event) {
-    objectToSend.event = event;
-    objectToSend.event.priceString = event.price.toFixed(2);
   }
   res.render('payment/payment_complete', objectToSend);
 }
@@ -176,7 +138,7 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
       metadata: {_id:(uid._id + ""), eid: eid}
     }, (err, charge) => {
       if (err && err.type === 'StripeCardError') {
-        renderPage(res, S.s.payment.paymentError, null, "change this", true);
+        renderPage(res, S.s.payment.paymentError);
         reject(err);
       }
       else {
@@ -190,9 +152,6 @@ function makeCharge(res, eventPrice, stripeToken, uid, eid) {
 
 
 // PAYMENT
-router.get('/event', (req, res) => {
-  processGetEvent(req, res);
-})
 
 router.get('/payment', (req, res) => {
   processGetPayment(req, res);

@@ -210,7 +210,7 @@ function bookedForFreeEvents (uid) {
   send(uid, messageData);
 }
 
-function directions (uid, name, latlong) {
+function directions(uid, name, latlong) {
   return new Promise(function (resolve, reject) {
     latlong = latlong.replace(/\s+/g, '');
     let image_link = "https://maps.googleapis.com/maps/api/staticmap?center="
@@ -252,7 +252,7 @@ function directions (uid, name, latlong) {
           + uid.mid + '": ', errorObject);
         reject(errorObject);
       } else {
-        resolve("success");
+        resolve();
       }
     });
   })
@@ -306,6 +306,7 @@ function shareEvent (uid, text) {
 }
 
 function cardForBooking (uid, eventId, description, price, booked) {
+  console.log("in here");
     let bookOrCancelButton = {}
 
     // if user has already booked the event
@@ -358,7 +359,6 @@ function cardForBooking (uid, eventId, description, price, booked) {
         }
       }
     }
-
     send(uid, messageData);
 }
 
@@ -372,7 +372,7 @@ function generateCard(array) {
       if(result){
 
         let latlong = result.latlong.replace(/\s+/g, '');
-        let pl = "More Info" + | + eventId;
+        let pl = "More Info" + '|' + eventId;
         let directions_link = "http://maps.google.com/?q=" + latlong
 
         if (result.joined.length == result.capacity) {
@@ -433,7 +433,7 @@ function allEvents (uid, broadcast) {
   M.Event.find(query).sort('when').exec((err, events) => {
     let data = [];
     events.forEach((event) =>{
-      data.push(event._id]);
+      data.push(event._id);
     });
     data = generateCard(data);
     if (broadcast === undefined) {
@@ -449,17 +449,14 @@ function yep(uid) {
   M.Analytics.update({name:"Button:Yep"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    (err) => {
-      if (err) {
-        console.log('Error saving analytics for "Button:Yep":', err);
-      }
-    });
+    console.log);
   M.User.find({mid:uid.mid}, (err, result) => {
     if (err) {console.log(err);}
     if(result.length > 0){
       console.log("User is already registered");
       allEvents(uid, S.s.bot.allEventsDefault);
-    } else {
+    }
+    else {
       var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
        + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
        + VERIFICATION_TOKEN;
@@ -480,8 +477,7 @@ function yep(uid) {
             else {
               M.Analytics.update({name:"NewUsers"},
               {$push: {activity: {uid:uid._id, time: new Date()}}},
-              {upsert: true}, console.log
-              });
+              {upsert: true}, console.log)
               allEvents(uid, S.s.bot.allEventsDefault);
             }
           });
@@ -504,8 +500,7 @@ function cancelBooking (uid, eventId) {
   M.Analytics.update({name:"Button:Cancel"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    console.log
-    });
+    console.log);
 
   M.Event.find({_id:eventId}, (err, result) => {
     if (result.length > 0) {
@@ -527,26 +522,23 @@ function moreInfo(uid, eventId) {
   M.Analytics.update({name:"Button:More Info"},
     {$push: {activity: {uid:uid._id, time: new Date()}}},
     {upsert: true},
-    console.log
-    });
+    console.log);
 
   M.Event.findOne({_id:eventId}, function(err, result){
-    if(err){console.log(err);}
+    if(err){
+      console.log(36436);
+      console.log(err);
+    }
     if(result){
       directions(uid, result.name, result.latlong)
-      .then((success) => {
-        M.User.findOne({uid:uid.mid}, function(e, res){
-          if(e){console.log(e);}
-          if(res){
-            let booked = false;
-            _.each(result.joined, function(joiner){
-              if(joiner.uid == res._id){
-                booked = true;
-              }
-            })
-            cardForBooking(uid, eventId);
+      .then(() => {
+        let booked = false;
+        _.each(result.joined, function(joiner){
+          if(joiner.uid == uid._id){
+            booked = true;
           }
-       })
+        })
+        cardForBooking(uid, eventId, result.desc, result.price, booked);
       })
       .catch(console.log)
     }
@@ -567,7 +559,6 @@ module.exports = {
   myEvents: myEvents,
   yep: yep,
   book: book,
-  bookedPromise: bookedPromise,
   cancelBooking: cancelBooking,
   moreInfo: moreInfo,
   shareEvent: shareEvent
