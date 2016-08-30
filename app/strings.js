@@ -7,7 +7,7 @@ const kickabout = {
   company: {
     name: "Kickabout",
     website: "www.kickabout.football",
-    address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP"
+    address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
     botURL: "http://m.me/kickaboutapp"
   },
 	sms: {

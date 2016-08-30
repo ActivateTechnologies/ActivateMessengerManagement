@@ -135,6 +135,7 @@ function processAttachment(event, uid) {
 function processPostback(event, uid) {
   let text = event.postback.payload;
   if (text.substring(0, 4) == "Book") {
+    console.log("Caught book");
     Send.book(uid, text);
   } else if(text.substring(0, 6) == "Cancel") {
     Send.cancelBooking(uid, text.split('|')[1]);

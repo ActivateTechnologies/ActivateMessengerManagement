@@ -202,9 +202,10 @@ function bookedForFreeEvents (uid, eid) {
   M.Event.findOne({_id:eid}, function(err, result){
     if(err){console.log(err);}
     if(result){
+      console.log("sending receipt");
       booked(uid, uid.firstName + " " + uid.lastName,
-        price, result.name, result.strapline, result.image_url,
-        new Data().toISOString(), new Date().toString())
+        result.price, result.name, result.strapline, result.image_url,
+        new Date().toISOString(), Math.round((new Date()).getTime()/1000))
     }
   })
 }
@@ -375,7 +376,7 @@ function generateCard(array) {
         let directions_link = "http://maps.google.com/?q=" + latlong;
 
         let bookButton = {};
-        if (parseFloat(price) > 0) {
+        if (parseFloat(result.price) > 0){
           bookButton = {
             "type": "web_url",
             "title": S.s.bot.eventCard.buttonBook,
@@ -470,7 +471,7 @@ function book (uid, rest) {
   let arr = rest.split('|');
   let eventId = arr[1];
   H.updateUserEventAnalytics(uid, eventId, 0, null).then((event) => {
-    bookedForFreeEvents(uid);
+    bookedForFreeEvents(uid, eventId);
   })
   .catch(console.log);
 }
@@ -505,7 +506,6 @@ function moreInfo(uid, eventId) {
 
   M.Event.findOne({_id:eventId}, function(err, result){
     if(err){
-      console.log(36436);
       console.log(err);
     }
     if(result){
