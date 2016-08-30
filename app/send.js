@@ -6,6 +6,7 @@ const config = require('./config');
 const S = require('./strings');
 const H = require('./helperFunctions');
 const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
+const _ = require('underscore')
 
 function send(uid, messageData, callback) {
   let recipient;
@@ -51,42 +52,6 @@ function start(uid) {
     }]
   }
   send(uid, messageData);
-}
-
-function registerUser (uid, phoneNumber, eventId) {
-  var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
-   + "?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token="
-   + VERIFICATION_TOKEN;
-  request(get_url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      body = JSON.parse(body);
-      let user = M.User({
-        mid: uid.mid,
-        phoneNumber: phoneNumber,
-        firstName: body.first_name,
-        lastName: body.last_name,
-        profilePic: body.profile_pic,
-        locale: body.locale,
-        gender: body.gender,
-        signedUpDate: new Date()
-      })
-
-      user.save((err) => {
-        if (err) {
-          console.log('Error registering user: ', err);
-        } else {
-          M.Analytics.update({name:"NewUsers"},
-          {$push: {activity: {uid:uid._id, time: new Date()}}},
-          {upsert: true}, (err) => {
-            if (err) {
-              console.log('Error saving analytics for "NewUsers":', err);
-            }
-          });
-          console.log("saved user");
-        }
-      })
-    }
-  })
 }
 
 function menu (uid) {
@@ -169,19 +134,6 @@ function booked (uid, name, price, eventName, strapline, image_url, order_number
   send(uid, messageData, callback);
 }
 
-function bookedPromise (uid, name, price, eventName, strapline, image_url,
- order_number, timestamp) {
-  return new Promise((resolve, reject) => {
-    booked(uid, name, price, eventName, strapline, image_url, order_number, timestamp,
-     (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
 
 function bookedForFreeEvents (uid) {
   let messageData = {
@@ -194,11 +146,6 @@ function bookedForFreeEvents (uid) {
   }
   send(uid, messageData);
 }
-
-// function processReceivedMessage(uid, message, defaultCallback) {
-//   //W.sendConversationMessage(uid, message);
-//   L.processTextMessage(uid, message, defaultCallback);
-// }
 
 function textPromise (uid, text) {
   return new Promise(function(resolve, reject){
@@ -228,45 +175,6 @@ function textPromise (uid, text) {
 function text (uid, text, callback) {
   let messageData = { text: text }
   send(uid, messageData, callback);
-}
-
-function textWithQuickReplies (uid, text, quickReplies) {
-  //console.log('textWithQuickReplies', uid, text, quickReplies);
-  return new Promise((resolve, reject) => {
-    let quickRepliesObjects = [];
-    if (quickReplies.length && typeof quickReplies[0] === 'string') {
-      quickReplies.forEach((textString) => {
-        quickRepliesObjects.push({
-          "content_type": "text",
-          "title": textString,
-          "payload": "staticTempPayLoad~" + textString
-        });
-      });
-    } else {
-      quickRepliesObjects = quickReplies;
-    }
-    request({
-      url: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token:VERIFICATION_TOKEN},
-      method: 'POST',
-      json: {
-        recipient: {id: uid.mid},
-        message: {
-          text: text,
-          quick_replies: quickRepliesObjects
-        }
-      }
-    }, function(error, response, body) {
-      let errorObject = (error) ? error : response.body.error;
-      if (errorObject) {
-        console.log('Error sending messages with quickReplies to mid "'
-          + uid.mid + '": ', errorObject);
-        reject(errorObject);
-      } else {
-        resolve();
-      }
-    });
-  });
 }
 
 function directions (uid, name, latlong) {
@@ -364,99 +272,112 @@ function shareEvent (uid, text) {
   })
 }
 
-function generateCardElement (name, strapline, image_url, latlong,
- eventId, attending, capacity, booked, description, when, price) {
 
-  latlong = latlong.replace(/\s+/g, '')
-  let con = "|||.|";
-  let pl = "More Info" + con + name + con + strapline + con + latlong
-   + con + eventId + con + description + con + price + con + booked;
+function hasUserBookedEvent(mid, event){
 
-  let directions_link = "http://maps.google.com/?q=" + latlong
-
-  if (attending == capacity) {
-    let template = {
-      "title": name,
-      "subtitle": strapline + " (fully booked)",
-      "image_url": image_url,
-      "item_url": directions_link
-    }
-    return template;
-  } else {
-    let template = {
-      "title": name,
-      "subtitle": strapline,
-      "image_url": image_url,
-      "item_url": directions_link,
-      "buttons": [{
-        "type": "postback",
-        "title": S.s.bot.eventCard.buttonMoreInfo,
-        "payload": pl
-      }]
-    }
-    return template;
-  }
 }
 
-function cardForBooking (uid, eventId, description, price, booked) {
-  let bookOrCancelButton = {}
-  // if user has already booked the event
-  if (booked === "true") {
-    bookOrCancelButton = {
-      "type": "postback",
-      "title": S.s.bot.eventCard.buttonCancelBooking,
-      "payload": "Cancel" + "|" + eventId
-    }
-  }
-  // if it is a paid event then button with weblink
-  else if (parseFloat(price) > 0) {
-    bookOrCancelButton = {
-      "type": "web_url",
-      "title": S.s.bot.eventCard.buttonBook,
-      "url": config.ROOT_URL + "/payment"
-        + "?mid=" + uid.mid + "&eid=" + eventId
-    }
-  }
-  // free event so normal button
-  else {
-    bookOrCancelButton = {
-      "type": "postback",
-      "title": S.s.bot.eventCard.buttonBook,
-      "payload": "Book" + "|" + eventId
-    }
-  }
+function cardForBooking (uid, eventId) {
+  M.Game.findOne({_id:eventId}, function(err, result){
+    if(err){console.log(err);}
+    if(result){
+      let bookOrCancelButton = {}
 
-  let messageData = {
-    "attachment": {
-    "type": "template",
-    "payload": {
-      "template_type": "button",
-      "text": description,
-      "buttons": [
-          bookOrCancelButton, {
-            "type": "postback",
-            "title": S.s.bot.eventCard.buttonKeepLooking,
-            "payload": "No, thanks",
-          }, {
-            "type": "postback",
-            "title": S.s.bot.eventCard.buttonShare,
-            "payload": "Share" + "|" + eventId
-          }
-        ]
+      // if user has already booked the event
+      let booked = false;
+      _.each(result.joined, function(joiner){
+        if(joiner.uid.mid == uid.mid){
+          booked = true;
+        }
+      })
+
+      if (booked === "true") {
+        bookOrCancelButton = {
+          "type": "postback",
+          "title": S.s.bot.eventCard.buttonCancelBooking,
+          "payload": "Cancel" + "|" + eventId
+        }
       }
-    }
-  }
+      // if it is a paid event then button with weblink
+      else if (parseFloat(result.price) > 0) {
+        bookOrCancelButton = {
+          "type": "web_url",
+          "title": S.s.bot.eventCard.buttonBook,
+          "url": config.ROOT_URL + "/payment"
+            + "?mid=" + uid.mid + "&eid=" + eventId
+        }
+      }
+      // free event so normal button
+      else {
+        bookOrCancelButton = {
+          "type": "postback",
+          "title": S.s.bot.eventCard.buttonBook,
+          "payload": "Book" + "|" + eventId
+        }
+      }
 
-  send(uid, messageData);
+      let messageData = {
+        "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": result.description,
+          "buttons": [
+              bookOrCancelButton, {
+                "type": "postback",
+                "title": S.s.bot.eventCard.buttonKeepLooking,
+                "payload": "No, thanks",
+              }, {
+                "type": "postback",
+                "title": S.s.bot.eventCard.buttonShare,
+                "payload": "Share" + "|" + eventId
+              }
+            ]
+          }
+        }
+      }
+
+      send(uid, messageData);
+    }
+  })
 }
 
-function generateCard (array) {
+function generateCard(array) {
   let elements = [];
-  array.forEach((item) => {
-    //name, strapline, image_url, latlong, eventId,
-    //attending, capacity, booked, description, when, price
-    elements.push(generateCardElement(item[0], item[1], item[2], item[3], item[4],
-     item[5], item[6], item[7], item[8], item[9], item[10]));
+  array.forEach((eventId) => {
+    M.Game.findOne({_id:eventId}, function(err, result){
+      if(err){console.log(err);}
+      if(result){
+
+        let latlong = result.latlong.replace(/\s+/g, '');
+        let pl = "More Info" + | + eventId;
+        let directions_link = "http://maps.google.com/?q=" + latlong
+
+        if (result.joined.length == result.capacity) {
+          let template = {
+            "title": result.name,
+            "subtitle": result.strapline + " (fully booked)",
+            "image_url": result.image_url,
+            "item_url": directions_link
+          }
+          elements.push(template);
+        }
+        else {
+          let template = {
+            "title": result.name,
+            "subtitle": result.strapline,
+            "image_url": result.image_url,
+            "item_url": directions_link,
+            "buttons": [{
+              "type": "postback",
+              "title": S.s.bot.eventCard.buttonMoreInfo,
+              "payload": pl
+            }]
+          }
+          elements.push(template);
+        }
+      }
+    })
   });
   var template = {
     "attachment": {
@@ -615,22 +536,14 @@ function moreInfo (uid, text) {
       }
     });
 
-  let arr = text.split("|||.|");
-  //console.log('moreInfo', text, arr[5]);
-  let name = arr[1];
-  let strapline = arr[2];
-  let latlong = arr[3];
-  let eventId = arr[4];
-  let description = arr[5];
-  let price = arr[6];
-  let booked = arr[7]
+  let arr = text.split("|");
+  let eventId = arr[1];
 
   directions(uid, name, latlong)
   .then((success) => {
-    cardForBooking(uid, eventId, description, price, booked);
-  }).catch((err) => {
-    console.log('Error sending directions:', err);
+    cardForBooking(uid, eventId);
   })
+  .catch(console.log)
 }
 
 function event (uid, eventId) {

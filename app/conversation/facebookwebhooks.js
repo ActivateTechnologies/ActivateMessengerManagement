@@ -76,11 +76,6 @@ function processQuickReply(event, uid) {
     Send.cancelBooking(uid, payload);
   } else if (payload.substring(0, 9) == "More Info") {
     Send.moreInfo(uid, payload);
-  } else if (payload.substring(0, 11) == "phoneNumber") {
-    let arr = text.split('|');
-    let phoneNumber = arr[1];
-    let eventId = arr[2];
-    Send.registerUser(uid, phoneNumber, eventId);
   } else {
     switch(payload.toLowerCase()){
 
