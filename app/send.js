@@ -484,7 +484,6 @@ function cards(uid, data, message) {
 }
 
 function allEvents (uid, broadcast) {
-  console.log("called all events");
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
