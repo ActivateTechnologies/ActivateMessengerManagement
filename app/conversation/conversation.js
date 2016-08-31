@@ -393,11 +393,14 @@ var showLastReceipt = function(uid, conversationName, node, message, user) {
       });
     }
   });
-  //TODO: Sort events user is attending, choose latest event, send receipt
 }
 
 let functionsIndex = {
-  onboarding: {
+  onboardingSimple: {
+    showEvents: showEvents,
+    showLastReceipt: showLastReceipt
+  },
+  onboardingPhoneNumber: {
     collectPhoneNumber: collectPhoneNumber,
     showEvents: showEvents,
     showLastReceipt: showLastReceipt

@@ -31,8 +31,8 @@ function processPostWebhook(req, res) {
             if (error) {
               console.log('Error creating user:', error);
             } else {
-              //Conversation.startConversation(newUid, 'onboarding');
-              Send.start(uid)
+              Conversation.startConversation(newUid, 'onboardingSimple');
+              //Send.start(uid)
             }
           });
         }
@@ -118,6 +118,7 @@ function processTextMessage(event, uid) {
     });
   });
   */
+  //Send.allEvents(uid);
   Send.allEvents(uid, S.s.bot.allEventsDefault);
 }
 
@@ -147,13 +148,13 @@ function processPostback(event, uid) {
     switch(text.toLowerCase()) {
 
       case('start'):
-      Send.start(uid);
-      // createUser(uid.mid, (newUid, error) => {
-      //   if (error) {console.log(error)}
-      //   else {
-      //     Conversation.startConversation(newUid, 'onboarding');
-      //   }
-      // });
+      //Send.start(uid);
+      createUser(uid.mid, (newUid, error) => {
+        if (error) {console.log(error)}
+        else {
+          Conversation.startConversation(newUid, 'onboardingSimple');
+        }
+      });
       break;
 
       case("my events"):

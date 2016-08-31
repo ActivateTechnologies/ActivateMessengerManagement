@@ -86,6 +86,45 @@ function text (uid, text, callback) {
   send(uid, messageData, callback);
 }
 
+function textWithQuickReplies(uid, text, quickReplies) {
+  //console.log('textWithQuickReplies', uid, text, quickReplies);
+  return new Promise((resolve, reject) => {
+    let quickRepliesObjects = [];
+    if (quickReplies.length && typeof quickReplies[0] === 'string') {
+      quickReplies.forEach((textString) => {
+        quickRepliesObjects.push({
+          "content_type": "text",
+          "title": textString,
+          "payload": "staticTempPayLoad~" + textString
+        });
+      });
+    } else {
+      quickRepliesObjects = quickReplies;
+    }
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {access_token:VERIFICATION_TOKEN},
+      method: 'POST',
+      json: {
+        recipient: {id: uid.mid},
+        message: {
+          text: text,
+          quick_replies: quickRepliesObjects
+        }
+      }
+    }, function(error, response, body) {
+      let errorObject = (error) ? error : response.body.error;
+      if (errorObject) {
+        console.log('Error sending messages with quickReplies to mid "'
+          + uid.mid + '": ', errorObject);
+        reject(errorObject);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 
 
 // Menu Related
@@ -282,11 +321,11 @@ function shareEvent (uid, text) {
               "title": event.name,
               "subtitle": description,
               "image_url": event.image_url,
-              "item_url": S.company.botURL,
+              "item_url": S.s.company.botURL,
               "buttons": [{
                 "type": "web_url",
                 "title": S.s.bot.eventCard.buttonShareCardMoreInfo,
-                "url": S.company.botURL,
+                "url": S.s.company.botURL,
               }]
             }]
           }
@@ -373,15 +412,14 @@ function generateCard(array) {
 
         let latlong = result.latlong.replace(/\s+/g, '');
         let pl = "More Info" + '|' + eventId;
-        let directions_link = "http://maps.google.com/?q=" + latlong;
+        // let directions_link = "http://maps.google.com/?q=" + latlong;
 
         let bookButton = {};
         if (parseFloat(result.price) > 0){
           bookButton = {
             "type": "web_url",
             "title": S.s.bot.eventCard.buttonBook,
-            "url": config.ROOT_URL + "/payment"
-              + "?mid=" + uid.mid + "&eid=" + eventId
+            "url": config.ROOT_URL + "/payment" + "?mid=" + uid.mid + "&eid=" + eventId
           }
         }
 
@@ -398,8 +436,7 @@ function generateCard(array) {
           let template = {
             "title": result.name,
             "subtitle": result.strapline + " (fully booked)",
-            "image_url": result.image_url,
-            "item_url": directions_link
+            "image_url": result.image_url
           }
           elements.push(template);
         }
@@ -408,7 +445,6 @@ function generateCard(array) {
             "title": result.name,
             "subtitle": result.strapline,
             "image_url": result.image_url,
-            "item_url": directions_link,
             "buttons": [
               bookButton,
               {
@@ -435,7 +471,7 @@ function generateCard(array) {
   return template;
 }
 
-function cards (uid, data, message) {
+function cards(uid, data, message) {
   if (message) {
     textPromise(uid, message).then(() => {
       send(uid, data);
@@ -448,6 +484,7 @@ function cards (uid, data, message) {
 }
 
 function allEvents (uid, broadcast) {
+  console.log("called all events");
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
@@ -458,11 +495,11 @@ function allEvents (uid, broadcast) {
       data.push(event._id);
     });
     data = generateCard(data);
-    if (broadcast === undefined) {
-      cards(uid, data);
+    if (broadcast) {
+      cards(uid, data, broadcast);
     }
     else {
-      cards(uid, data, broadcast);
+      cards(uid, data);
     }
   });
 }
@@ -533,6 +570,7 @@ module.exports = {
   booked: booked,
   text: text,
   textPromise: textPromise,
+  textWithQuickReplies: textWithQuickReplies,
   cards: cards,
   allEvents: allEvents,
   myEvents: myEvents,
