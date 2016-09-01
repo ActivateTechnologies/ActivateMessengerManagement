@@ -367,6 +367,53 @@ var collectPhoneNumber = function(uid, conversationName, node, message, user) {
   }
 }
 
+function collectEmail(uid, conversationName, node, message, user){
+  let email= validateEmail(message);
+
+  //Invalid email so calling last item in next
+  if (email == -1) {
+    executeTreeNode(uid, conversationName, node.next[node.next.length - 1], null, user);
+  }
+
+  //valid email so adding the user to the database
+  else {
+
+    M.User.find({email: email}, (error, users) => {
+      if (error) {console.log(error);}
+
+      // NEW USER
+      // so adding his email to his record
+      else if (users.length == 0) {
+        console.log('No users with email "' + email + '" found, confirmed as new user');
+        M.User.findOneAndUpdate({mid: uid.mid}, {email:email}, {new: true},
+         (e, updatedUser) => {
+          if (e) {
+            console.log(e);
+          } else {
+            executeTreeNode(uid, conversationName, node.next[0], null, updatedUser);
+          }
+        })
+      }
+
+      // EXISTING USER
+      // Need to show him the game from the public link
+    })
+
+  }
+}
+
+//Returns email if valid or -1 if unrecognnized email
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if(re.test(email)){
+    return email;
+  }
+  else {
+    return -1;
+  }
+}
+
+
 /* Calls send.allEvents */
 var showEvents = function(uid, conversationName, node, message, user) {
   Send.allEvents(uid);
@@ -395,10 +442,15 @@ var showLastReceipt = function(uid, conversationName, node, message, user) {
   });
 }
 
+
 let functionsIndex = {
   onboardingSimple: {
     showEvents: showEvents,
     showLastReceipt: showLastReceipt
+  },
+  onboardingEmail: {
+    collectEmail: collectEmail,
+    showEvents: showEvents
   },
   onboardingPhoneNumber: {
     collectPhoneNumber: collectPhoneNumber,

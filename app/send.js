@@ -56,7 +56,7 @@ function start(uid) {
   send(uid, messageData);
 }
 
-function textPromise (uid, text) {
+function textPromise(uid, text) {
   return new Promise(function(resolve, reject){
     let messageData = { text: text }
     request({
@@ -189,7 +189,7 @@ function myEvents (uid) {
       let join = event.joined;
       join.forEach((user) => {
         if (user.uid == uid._id) {
-          data.push(event._id);
+          data.push(event);
         }
       });
     });
@@ -241,7 +241,6 @@ function bookedForFreeEvents (uid, eid) {
   M.Event.findOne({_id:eid}, function(err, result){
     if(err){console.log(err);}
     if(result){
-      console.log("sending receipt");
       booked(uid, uid.firstName + " " + uid.lastName,
         result.price, result.name, result.strapline, result.image_url,
         new Date().toISOString(), Math.round((new Date()).getTime()/1000))
@@ -362,8 +361,7 @@ function cardForBooking (uid, eventId, description, price, booked) {
       bookOrCancelButton = {
         "type": "web_url",
         "title": S.s.bot.eventCard.buttonBook,
-        "url": config.ROOT_URL + "/payment"
-          + "?mid=" + uid.mid + "&eid=" + eventId
+        "url": config.ROOT_URL + "/event" + "?eid=" + eventId + "&uid=" + uid._id
       }
     }
 
@@ -401,25 +399,24 @@ function cardForBooking (uid, eventId, description, price, booked) {
     send(uid, messageData);
 }
 
+
+
 // Cards
 
-function generateCard(uid, array) {
+function generateCard(uid, events) {
   let elements = [];
-  array.forEach((eventId) => {
-    M.Event.findOne({_id:eventId}, function(err, result){
-      if(err){console.log(err);}
-      if(result){
+  _.each(events, (event) => {
 
-        let latlong = result.latlong.replace(/\s+/g, '');
-        let pl = "More Info" + '|' + eventId;
+        let latlong = event.latlong.replace(/\s+/g, '');
+        let pl = "More Info" + '|' + event._id;
         // let directions_link = "http://maps.google.com/?q=" + latlong;
 
         let bookButton = {};
-        if (parseFloat(result.price) > 0){
+        if (parseFloat(event.price) > 0){
           bookButton = {
             "type": "web_url",
             "title": S.s.bot.eventCard.buttonBook,
-            "url": config.ROOT_URL + "/payment" + "?mid=" + uid.mid + "&eid=" + eventId
+            "url": config.ROOT_URL + "/event" + "?eid=" + event._id + "&uid=" + uid._id
           }
         }
 
@@ -428,23 +425,23 @@ function generateCard(uid, array) {
           bookButton = {
             "type": "postback",
             "title": S.s.bot.eventCard.buttonBook,
-            "payload": "Book" + "|" + eventId
+            "payload": "Book" + "|" + event._id
           }
         }
 
-        if (result.joined.length == result.capacity) {
+        if (event.joined.length == event.capacity) {
           let template = {
-            "title": result.name,
-            "subtitle": result.strapline + " (fully booked)",
-            "image_url": result.image_url
+            "title": event.name,
+            "subtitle": event.strapline + " (fully booked)",
+            "image_url": event.image_url
           }
           elements.push(template);
         }
         else {
           let template = {
-            "title": result.name,
-            "subtitle": result.strapline,
-            "image_url": result.image_url,
+            "title": event.name,
+            "subtitle": event.strapline,
+            "image_url": event.image_url,
             "buttons": [
               bookButton,
               {
@@ -456,9 +453,8 @@ function generateCard(uid, array) {
           }
           elements.push(template);
         }
-      }
-    })
   });
+
   var template = {
     "attachment": {
       "type": "template",
@@ -473,27 +469,43 @@ function generateCard(uid, array) {
 
 function cards(uid, data, message) {
   if (message) {
-    textPromise(uid, message).then(() => {
+    textPromise(uid, message)
+    .then(() => {
       send(uid, data);
-    })
-    .catch(console.log);
+    }, console.log)
   }
   else {
     send(uid, data);
   }
 }
 
-function allEvents (uid, broadcast) {
+function event(uid, eventId) {
+  M.Event.findOne({_id:eventId}, function(err, result){
+    if(err) console.log(err);
+    if(result){
+      let data = [];
+      let now = new Date();
+      now = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
+      if(result.when > now){
+        data.push(result);
+        data = generateCard(uid, data);
+        cards(uid, data);
+      }
+      else {
+        console.log("That event has finished");
+      }
+    }
+  })
+}
+
+function allEvents(uid, broadcast) {
   let now = new Date();
   let query = {when:
     {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
 
   M.Event.find(query).sort('when').exec((err, events) => {
-    let data = [];
-    events.forEach((event) =>{
-      data.push(event._id);
-    });
-    data = generateCard(uid, data);
+    if(err) console.log(err);
+    let data = generateCard(uid, events);
     if (broadcast) {
       cards(uid, data, broadcast);
     }
@@ -503,7 +515,7 @@ function allEvents (uid, broadcast) {
   });
 }
 
-function book (uid, rest) {
+function book(uid, rest) {
   let arr = rest.split('|');
   let eventId = arr[1];
   H.updateUserEventAnalytics(uid, eventId, 0, null).then((event) => {
@@ -564,6 +576,7 @@ function moreInfo(uid, eventId) {
 module.exports = {
   start: start,
   menu: menu,
+  sendReceipts: sendReceipts,
   notifications: notifications,
   notificationsChange: notificationsChange,
   booked: booked,
@@ -576,5 +589,6 @@ module.exports = {
   book: book,
   cancelBooking: cancelBooking,
   moreInfo: moreInfo,
-  shareEvent: shareEvent
+  shareEvent: shareEvent,
+  event: event
 }

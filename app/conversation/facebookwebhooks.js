@@ -30,9 +30,17 @@ function processPostWebhook(req, res) {
           createUser(uid.mid, (newUid, error) => {
             if (error) {
               console.log('Error creating user:', error);
-            } else {
-              //Conversation.startConversation(newUid, 'onboardingSimple');
-              Send.start(uid)
+            }
+            else {
+              if(Config.useEmail){
+                Conversation.startConversation(newUid, 'onboardingEmail');
+              }
+              else if(Config.usePhoneNumber){
+                Conversation.startConversation(newUid, 'onboardingPhoneNumber');
+              }
+              else {
+                Conversation.startConversation(newUid, 'onboardingSimple');
+              }
             }
           });
         }
@@ -148,13 +156,21 @@ function processPostback(event, uid) {
     switch(text.toLowerCase()) {
 
       case('start'):
-      Send.start(uid);
-      // createUser(uid.mid, (newUid, error) => {
-      //   if (error) {console.log(error)}
-      //   else {
-      //     Conversation.startConversation(newUid, 'onboardingSimple');
-      //   }
-      // });
+      //Send.start(uid);
+      createUser(uid.mid, (newUid, error) => {
+        if (error) {console.log(error)}
+        else {
+          if(Config.useEmail){
+            Conversation.startConversation(newUid, 'onboardingEmail');
+          }
+          else if(Config.usePhoneNumber){
+            Conversation.startConversation(newUid, 'onboardingPhoneNumber');
+          }
+          else {
+            Conversation.startConversation(newUid, 'onboardingSimple');
+          }
+        }
+      });
       break;
 
       case("my events"):
