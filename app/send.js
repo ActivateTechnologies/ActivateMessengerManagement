@@ -200,7 +200,7 @@ function myEvents (uid) {
       }).catch(console.log);
     }
     else {
-      data = generateCard(data);
+      data = generateCard(uid, data);
       cards(uid, data, S.s.bot.yourEvents);
     }
   })
@@ -403,7 +403,7 @@ function cardForBooking (uid, eventId, description, price, booked) {
 
 // Cards
 
-function generateCard(array) {
+function generateCard(uid, array) {
   let elements = [];
   array.forEach((eventId) => {
     M.Event.findOne({_id:eventId}, function(err, result){
@@ -493,7 +493,7 @@ function allEvents (uid, broadcast) {
     events.forEach((event) =>{
       data.push(event._id);
     });
-    data = generateCard(data);
+    data = generateCard(uid, data);
     if (broadcast) {
       cards(uid, data, broadcast);
     }
