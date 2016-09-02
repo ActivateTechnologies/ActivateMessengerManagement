@@ -576,7 +576,6 @@ function moreInfo(uid, eventId) {
 module.exports = {
   start: start,
   menu: menu,
-  sendReceipts: sendReceipts,
   notifications: notifications,
   notificationsChange: notificationsChange,
   booked: booked,
