@@ -12,15 +12,8 @@
 
     <a href="dashboard"><title><%=s.company.name%></title></a>
 
-    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dashboardCoded.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
@@ -43,11 +36,6 @@
             <li><a href="message">Message</a></li>
             <li><a href="users">Members</a></li>
           </ul>
-          <!--
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-          -->
         </div>
       </div>
     </nav>
@@ -58,7 +46,7 @@
           <a href="dashboard"><h1 class="page-header"><%=s.company.name%></h1></a>
 
           <h2 class="sub-header" id="titleElement">Message All Users</h2>
-          
+
            <form id="addevent">
 
               <div class="form-group" onclick="changeType('message')">
@@ -139,7 +127,7 @@
           alert('Message box empty');
           return;
         }
-        let confirmMessage = (type == 'message') 
+        let confirmMessage = (type == 'message')
          ? "Are you sure you want to send this message?"
          : "Are you sure you want to send this message along with upcoming events?";
         if (confirm(confirmMessage)) {
