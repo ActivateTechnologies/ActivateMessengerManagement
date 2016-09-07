@@ -6,11 +6,11 @@ const FacebookWebhooks = require('./facebookwebhooks.js');
 
 // FACEBOOKWEBHOOKS
 router.get('/webhook', (req, res) => {
-  FacebookWebhooks.processGetWebhook(req, res);
+  FacebookWebhooks('kickabout').processGetWebhook(req, res);
 });
 
-router.post('/webhook/', (req, res) => {
-  FacebookWebhooks.processPostWebhook(req, res);
+router.post('/webhook/kickabout', (req, res) => {
+  FacebookWebhooks('kickabout').processPostWebhook(req, res);
 });
 
 module.exports = router
