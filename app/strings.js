@@ -91,4 +91,4 @@ let controller = (function(code){
 
 })(code)
 
-exports.controller = controller;
+module.exports = controller

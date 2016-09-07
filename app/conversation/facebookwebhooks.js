@@ -34,15 +34,7 @@ let controller = (function(code){
                 console.log('Error creating user:', error);
               }
               else {
-                if(Config.CONVERSATION === 'onboardingEmail'){
-                  Conversation.startConversation(newUid, 'onboardingEmail');
-                }
-                else if(Config.CONVERSATION === 'onboardingPhoneNumber'){
-                  Conversation.startConversation(newUid, 'onboardingPhoneNumber');
-                }
-                else {
-                  Conversation.startConversation(newUid, 'onboardingSimple');
-                }
+                Conversation.startConversation(newUid, Config.CONVERSATION);
               }
             });
           }
@@ -57,11 +49,14 @@ let controller = (function(code){
             if (!Conversation.consumeWebhookEvent(event, uid, user)) {
               if (event.message && event.message.text && event.message.quick_reply) {
                 processQuickReply(event, uid);
-              } else if (event.message && event.message.text && !event.message.quick_reply) {
+              }
+              else if (event.message && event.message.text && !event.message.quick_reply) {
                 Send.allEvents(uid, S.s.bot.allEventsDefault);
-              } else if (event.message && event.message.attachments){
+              }
+              else if (event.message && event.message.attachments){
                 processAttachment(event, uid);
-              } else if (event.postback) {
+              }
+              else if (event.postback) {
                 processPostback(event, uid);
               }
             }
@@ -70,10 +65,6 @@ let controller = (function(code){
       }
     });
     res.sendStatus(200);
-  }
-
-  function processOptin(optin) {
-    console.log('optin.ref:', optin.ref);
   }
 
   function processQuickReply(event, uid) {
@@ -124,28 +115,24 @@ let controller = (function(code){
     if (text.substring(0, 4) == "Book") {
       console.log("Caught book");
       Send.book(uid, text);
-    } else if(text.substring(0, 6) == "Cancel") {
+    }
+    else if(text.substring(0, 6) == "Cancel") {
       Send.cancelBooking(uid, text.split('|')[1]);
-    } else if(text.substring(0, 5) == "Share") {
+    }
+    else if(text.substring(0, 5) == "Share") {
       Send.shareEvent(uid, text);
-    } else if(text.substring(0, 9) == "More Info") {
+    }
+    else if(text.substring(0, 9) == "More Info") {
       Send.moreInfo(uid, text.split('|')[1]);
-    } else {
+    }
+    else {
       switch(text.toLowerCase()) {
 
         case('start'):
         createUser(uid.mid, (newUid, error) => {
           if (error) {console.log(error)}
           else {
-            if(Config.useEmail){
-              Conversation.startConversation(newUid, 'onboardingEmail');
-            }
-            else if(Config.usePhoneNumber){
-              Conversation.startConversation(newUid, 'onboardingPhoneNumber');
-            }
-            else {
-              Conversation.startConversation(newUid, 'onboardingSimple');
-            }
+            Conversation.startConversation(newUid, Config.CONVERSATION);
           }
         });
         break;
@@ -199,7 +186,8 @@ let controller = (function(code){
               if (err) {
                 console.log(err);
                 callback(null, err);
-              } else {
+              }
+              else {
                 M.Analytics.update({name:"NewUsers"},
                 {$push: {activity: {uid:user._id, time: new Date()}}},
                 {upsert: true},
@@ -226,3 +214,5 @@ let controller = (function(code){
     processGetWebhook: processGetWebhook
   }
 })(code)
+
+module.exports = controller
