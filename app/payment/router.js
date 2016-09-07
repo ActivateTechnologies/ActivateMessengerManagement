@@ -7,7 +7,6 @@ const Send = require('./../send.js');
 const Config = require('./../config');
 const S = require('./../strings');
 const H = require('./../helperFunctions');
-const Twilio = require('./../twilio.js');
 const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
 
 /*

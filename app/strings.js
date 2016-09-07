@@ -1,7 +1,7 @@
 'use strict'
 
 let controller = (function(code){
-  
+
   let s;
 
   if (code === 'kickabout') {
@@ -23,7 +23,8 @@ let controller = (function(code){
     		  + "Directions: " + h + "mapsUrl \n\n"
     		 	+ "For more info and for more games come talk to us on "
     		  + "Facebook Messenger: " + h + "messengerUrl"
-    	}, bot: {
+    	},
+      bot: {
     		allEventsDefault: "Here are some upcoming games to join. "
           + "Tap the card for directions or 'More Info' to book.",
         allEventsAfterCancel: "Looking for other games? Here are a few upcoming ones:",
