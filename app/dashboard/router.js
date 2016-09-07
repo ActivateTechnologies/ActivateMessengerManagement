@@ -2,17 +2,20 @@
 
 const express = require('express');
 const router = express.Router();
-const S = require('./../strings');
-const fs = require('fs');
-const Analytics = require('./analytics.js');
 
 
-function processGetDashboard(req, res) {
+router.get('/dashboard:code', isLoggedIn, (req, res) => {
+
+  const code = req.params.code;
+  const S = require('./../strings')(code);
+  const Analytics = require('./analytics.js')(code);
+
   Analytics.getDashboardStats((data, error) => {
     if (error) {
+      console.log(error);
       res.send('There was an error retrieving data.');
-      console.log('/dashboard error:', error);
-    } else {
+    }
+    else {
       res.render('dashboard/dashboard', {
         totalNoOfMembers: data.totalNoOfMembers,
         totalRevenue: data.totalRevenue.toFixed(2),
@@ -23,48 +26,51 @@ function processGetDashboard(req, res) {
       });
     }
   });
-}
 
-function processGetDashboardData(req, res) {
+});
+
+router.get('/dashboardData:code', (req, res) => {
+
+  const code = req.params.code;
+  const S = require('./../strings')(code);
+  const Analytics = require('./analytics.js')(code);
+
   let requiredData = req.query.requiredData;
   if (requiredData == 'getTicketsSoldOverTime') {
     Analytics.getTicketsSoldOverTime((data, error) => {
       if (error) {
-        console.log('/dashboardData error with getTicketsSoldOverTime:', error);
+        console.log(error);
         res.send('Error');
-      } else {
+      }
+      else {
         res.send(data);
       }
     })
-  } else if (requiredData == 'getNewMembersOverTime') {
+  }
+
+  else if (requiredData == 'getNewMembersOverTime') {
     Analytics.getNewMembersOverTime((data, error) => {
       if (error) {
-        console.log('/dashboardData error with getNewMembersOverTime:', error);
-        res.send('Error');
-      } else {
-        res.send(data);
-      }
-    })
-  } else if (requiredData == 'getButtonHitsOverTime') {
-    Analytics.getButtonHitsOverTime((data, error) => {
-      if (error) {
-        console.log('/dashboardData error with getButtonHitsOverTime:', error);
+        console.log(error);
         res.send('Error');
       } else {
         res.send(data);
       }
     })
   }
-}
 
+  else if (requiredData == 'getButtonHitsOverTime') {
+    Analytics.getButtonHitsOverTime((data, error) => {
+      if (error) {
+        console.log(error);
+        res.send('Error');
+      }
+      else {
+        res.send(data);
+      }
+    })
+  }
 
-
-router.get('/dashboard', isLoggedIn, (req, res) => {
-  processGetDashboard(req, res);
-});
-
-router.get('/dashboardData', (req, res) => {
-  processGetDashboardData(req, res);
 });
 
 function isLoggedIn(req, res, next) {

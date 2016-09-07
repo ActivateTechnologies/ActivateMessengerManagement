@@ -7,7 +7,7 @@ const router = express.Router();
   Sends given message to user, with events if type is
   "upcomingEvents" */
 router.post('/message:code', (req, res) => {
-  let code = req.params.code
+  const code = req.params.code
   const S = require('./../strings')(code);
   const M = require('./../schemas.js')(code);
   const Send = require('./../send.js')(code);
