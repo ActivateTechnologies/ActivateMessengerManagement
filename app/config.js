@@ -40,7 +40,7 @@ let controller = (function(code){
 		FACEBOOK_PAGE_URL = "https://www.facebook.com/Anirudh-Test-519450361582633/";
 		MESSENGER_URL = "http://m.me/631474433673481";
 		MONGODB_URI = "mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest";
-		ROOT_URL = "https://073058d3.ngrok.io";
+		ROOT_URL = "https://3d84b846.ngrok.io";
 	}
 
 

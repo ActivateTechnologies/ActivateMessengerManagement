@@ -8,13 +8,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express()
 
-const M = require('./schemas.js')
-const config = require('./config')
-
-const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
-const FACEBOOK_APP_ID = config.FACEBOOK_APP_ID;
-const FACEBOOK_APP_SECRET = config.FACEBOOK_APP_SECRET;
-
 app.set('port', (process.env.PORT || 3000))
 app.set('view engine', 'ejs')
 app.set('views', __dirname)

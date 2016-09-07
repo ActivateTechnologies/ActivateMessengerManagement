@@ -2,15 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
-const S = require('./../strings');
-const M = require('./../schemas.js');
-const Send = require('./../send.js');
-const Twilio = require('./../twilio.js');
 
 /*
   Sends given message to user, with events if type is
   "upcomingEvents" */
-function processMessage(req, res) {
+router.post('/message:code', (req, res) => {
+  let code = req.params.code
+  const S = require('./../strings')(code);
+  const M = require('./../schemas.js')(code);
+  const Send = require('./../send.js')(code);
+
+
   let type = req.query.type;
   let message = decodeURIComponent(req.query.message);
   if (type == "message") {
@@ -36,7 +38,8 @@ function processMessage(req, res) {
       }
       res.send("People reached: " + counter)
     })
-  } else if (type == "upcomingEvents") {
+  }
+  else if (type == "upcomingEvents") {
     console.log('5');
     M.User.find({}, (err, result) => {
       let counter =  0;
@@ -54,13 +57,11 @@ function processMessage(req, res) {
       res.send("People reached: " + counter)
     })
   }
-}
-
-router.post('/message', (req, res) => {
-  processMessage(req, res);
 });
 
-router.get('/message', isLoggedIn, (req, res) => {
+
+router.get('/message:code', isLoggedIn, (req, res) => {
+  const S = require('./../strings')(req.params.code);
   res.render('broadcast/message', {
     s: {
       company: S.s.company
