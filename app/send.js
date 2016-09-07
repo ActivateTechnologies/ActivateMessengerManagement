@@ -597,4 +597,4 @@ let controller = function(code){
 
 })(code)
 
-export controller
+exports.controller = controller
