@@ -112,8 +112,7 @@ function processGetCharge(req, res) {
 }
 
 /*
-  Render the custom_payment view with given message and other
-  options. */
+  Renders payment_complete view to show message */
 function renderPage(res, message) {
   let objectToSend = {
     message: message,
