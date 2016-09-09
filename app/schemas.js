@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 module.exports = function(code){
 
   const config = require('./config')(code);
-  mongoose.disconnect()
+  mongoose.disconnect();
   mongoose.createConnection(config.MONGODB_URI);
 
   console.log("doing something");

@@ -10,7 +10,7 @@ const upload = multer({dest:'uploads/'});
 
 /*
   renders the /events page */
-router.get('/events:code', isLoggedIn, (req, res) => {
+router.get('/events/:code', isLoggedIn, (req, res) => {
 
   const S = require('./../strings')(req.params.code);
   res.render('events/events', {
@@ -26,7 +26,7 @@ router.get('/events:code', isLoggedIn, (req, res) => {
 
 /*
   handles creating a new event */
-router.post('/events:code', upload.single('image'), (req, res) => {
+router.post('/events/:code', upload.single('image'), (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')(code);
@@ -158,7 +158,7 @@ router.post('/events:code', upload.single('image'), (req, res) => {
 
 /*
   handles deleting an event */
-router.delete('/events', (req, res) => {
+router.delete('/events/:code', (req, res) => {
 
   let code = req.params.code;
   const S = require('./../strings')(code);
@@ -185,7 +185,7 @@ router.delete('/events', (req, res) => {
 
 /*
   returns all the currentEvents to display on /events */
-router.get('/currentEvents', (req, res) => {
+router.get('/currentEvents/:code', (req, res) => {
 
   const M = require('./../schemas.js')(req.params.code);
 
@@ -204,7 +204,7 @@ router.get('/currentEvents', (req, res) => {
 
 /*
   returns old events to display on /events */
-router.get('/pastEvents', (req, res) => {
+router.get('/pastEvents/:code', (req, res) => {
 
   const M = require('./../schemas.js')(req.params.code);
 

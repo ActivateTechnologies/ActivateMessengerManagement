@@ -31,7 +31,7 @@ router.get('/dashboard/:code', isLoggedIn, (req, res) => {
 
 });
 
-router.get('/dashboardData:code', (req, res) => {
+router.get('/dashboardData/:code', (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')(code);

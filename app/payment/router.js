@@ -18,7 +18,7 @@ function renderPage(S, res, message) {
 /*
   handles the /payment route used to pay for games
   it will receive eventId and user's mid as params*/
-router.get('/payment:code', (req, res) => {
+router.get('/payment/:code', (req, res) => {
 
   let code = req.params.code;
   const M = require('./../schemas.js')(code);
@@ -77,7 +77,7 @@ router.get('/payment:code', (req, res) => {
 
 /*
   it will complete the payment*/
-router.post('/charge:code', (req, res) => {
+router.post('/charge/:code', (req, res) => {
 
   let code = req.params.code;
   const M = require('./../schemas.js')(code);
