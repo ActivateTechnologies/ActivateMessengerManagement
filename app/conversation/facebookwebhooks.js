@@ -2,7 +2,7 @@
 
 const request = require('request');
 
-let controller = (function(code){
+module.exports = function(code){
 
   const M = require('./../schemas.js')(code);
   const Send = require('./../send.js')(code);
@@ -213,6 +213,4 @@ let controller = (function(code){
     processPostWebhook: processPostWebhook,
     processGetWebhook: processGetWebhook
   }
-})(code)
-
-module.exports = controller
+}

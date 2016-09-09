@@ -1,9 +1,9 @@
-const status = 'ani'; //'production' or 'test' or 'ani'
+const status = 'test'; //'production' or 'test' or 'ani'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
 
-let controller = (function(code){
+module.exports = function(code){
 
 	let FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY,
 		FACEBOOK_PAGE_ID, VERIFICATION_TOKEN, FACEBOOK_PAGE_URL, MESSENGER_URL,
@@ -70,6 +70,4 @@ let controller = (function(code){
 		AWSsecretAccessKe: "MOkoWexmlZScfbkrwkLeiTxWVUGC/vCuGhUuxL6O"
 	}
 
-})(code)
-
-exports.controller = controller
+}

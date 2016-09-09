@@ -1,6 +1,6 @@
 'use strict'
 
-let controller = (function(code){
+module.exports = function(code){
 
   const M = require('./../schemas.js')(code);
 
@@ -193,6 +193,4 @@ let controller = (function(code){
     getTicketsSoldOverTime: getTicketsSoldOverTime,
     getButtonHitsOverTime: getButtonHitsOverTime
   }
-})(code)
-
-module.exports = controller
+}

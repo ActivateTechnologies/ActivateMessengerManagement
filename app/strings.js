@@ -1,6 +1,6 @@
 'use strict'
 
-let controller = (function(code){
+module.exports = function(code){
 
   let s;
 
@@ -88,7 +88,4 @@ let controller = (function(code){
   }
 
   return s;
-
-})(code)
-
-module.exports = controller
+}

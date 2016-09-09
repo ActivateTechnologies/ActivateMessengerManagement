@@ -1,33 +1,33 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'start' ]
-2 info using npm@3.9.5
-3 info using node@v5.11.0
+2 info using npm@3.10.3
+3 info using node@v6.5.0
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info lifecycle bot@1.0.0~prestart: bot@1.0.0
 6 silly lifecycle bot@1.0.0~prestart: no script for prestart, continuing
 7 info lifecycle bot@1.0.0~start: bot@1.0.0
 8 verbose lifecycle bot@1.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle bot@1.0.0~start: PATH: /usr/lib/node_modules/npm/bin/node-gyp-bin:/home/anirudh/Desktop/bot/node_modules/.bin:/usr/bin:/usr/local/heroku/bin:/home/anirudh/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+9 verbose lifecycle bot@1.0.0~start: PATH: /usr/lib/node_modules/npm/bin/node-gyp-bin:/home/anirudh/Desktop/bot/node_modules/.bin:/usr/bin:/home/anirudh/bin:/home/anirudh/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 10 verbose lifecycle bot@1.0.0~start: CWD: /home/anirudh/Desktop/bot
 11 silly lifecycle bot@1.0.0~start: Args: [ '-c', 'node app/index.js' ]
 12 silly lifecycle bot@1.0.0~start: Returned: code: 1  signal: null
 13 info lifecycle bot@1.0.0~start: Failed to exec start script
 14 verbose stack Error: bot@1.0.0 start: `node app/index.js`
 14 verbose stack Exit status 1
-14 verbose stack     at EventEmitter.<anonymous> (/usr/lib/node_modules/npm/lib/utils/lifecycle.js:245:16)
-14 verbose stack     at emitTwo (events.js:100:13)
-14 verbose stack     at EventEmitter.emit (events.js:185:7)
-14 verbose stack     at ChildProcess.<anonymous> (/usr/lib/node_modules/npm/lib/utils/spawn.js:24:14)
-14 verbose stack     at emitTwo (events.js:100:13)
-14 verbose stack     at ChildProcess.emit (events.js:185:7)
-14 verbose stack     at maybeClose (internal/child_process.js:850:16)
-14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:215:5)
+14 verbose stack     at EventEmitter.<anonymous> (/usr/lib/node_modules/npm/lib/utils/lifecycle.js:242:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:877:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid bot@1.0.0
 16 verbose cwd /home/anirudh/Desktop/bot
-17 error Linux 4.4.0-34-generic
+17 error Linux 4.4.0-36-generic
 18 error argv "/usr/bin/nodejs" "/usr/bin/npm" "start"
-19 error node v5.11.0
-20 error npm  v3.9.5
+19 error node v6.5.0
+20 error npm  v3.10.3
 21 error code ELIFECYCLE
 22 error bot@1.0.0 start: `node app/index.js`
 22 error Exit status 1

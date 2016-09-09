@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let controller = (function(code){
+module.exports = function(code){
 
   const config = require('./config')(code);
 
@@ -93,6 +93,4 @@ let controller = (function(code){
     Conversations: Conversations
   }
 
-})(code)
-
-module.exports = controller
+}

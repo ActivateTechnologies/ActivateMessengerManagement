@@ -3,7 +3,7 @@
 const request = require('request');
 const _ = require('underscore')
 
-let controller = function(code){
+module.exports = function(code){
 
   const M = require('./schemas.js')(code);
   const config = require('./config')(code);
@@ -595,6 +595,4 @@ let controller = function(code){
     event: event
   }
 
-})(code)
-
-module.exports = controller
+}

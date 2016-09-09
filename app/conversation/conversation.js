@@ -3,7 +3,7 @@
 const request = require('request');
 
 
-let controller = (function(code){
+module.exports = function(code){
 
   const M = require('./../schemas.js')(code);
   const Config = require('./../config')(code);
@@ -483,6 +483,4 @@ let controller = (function(code){
     consumeWebhookEvent: consumeWebhookEvent
   }
 
-})(code)
-
-module.exports = controller
+}
