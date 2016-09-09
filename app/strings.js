@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = function(code){
-  
+
   const h = "#~*#";
   let s;
 
@@ -11,7 +11,8 @@ module.exports = function(code){
         name: "Kickabout",
         website: "www.kickabout.football",
         address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
-        botURL: "http://m.me/kickaboutapp"
+        botURL: "http://m.me/kickaboutapp",
+        code: 'kickabout'
       },
     	sms: {
     		paidEventConfirmation: "You just booked onto " + h + "name with Kickabout!\n\n"
@@ -88,5 +89,5 @@ module.exports = function(code){
     console.log("CODE not provided");
   }
 
-  return s;
+  return {s:s};
 }

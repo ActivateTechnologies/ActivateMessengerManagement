@@ -12,11 +12,15 @@ const upload = multer({dest:'uploads/'});
   renders the /events page */
 router.get('/events/:code', isLoggedIn, (req, res) => {
 
-  const S = require('./../strings')(req.params.code);
+  const code = req.params.code;
+  const S = require('./../strings')(code);
+  const config = require('./../config')(code);
+
   res.render('events/events', {
     config: {
       ROOT_URL: config.ROOT_URL
-    }, s: {
+    },
+    s: {
       company: S.s.company
     }
   });
