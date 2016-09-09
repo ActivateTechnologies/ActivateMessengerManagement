@@ -46,7 +46,7 @@ router.get('/userAnalyticsData/:code', (req, res) => {
 
 router.get('/users/:code', isLoggedIn, (req, res) => {
 
-  const code = request.params.code;
+  const code = req.params.code;
   const S = require('./../strings')(code);
 
   res.render('users/users', {

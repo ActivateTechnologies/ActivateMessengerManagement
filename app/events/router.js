@@ -10,11 +10,11 @@ const upload = multer({dest:'uploads/'});
 
 /*
   renders the /events page */
-router.get('/events/:code', isLoggedIn, (req, res) => {
+router.get(':code.events', (req, res) => {
 
   const code = req.params.code;
-  const S = require('./../strings')(code);
-  const config = require('./../config')(code);
+  const S = require('./../strings')('kickabout');
+  const config = require('./../config')('kickabout');
 
   res.render('events/events', {
     config: {

@@ -26,6 +26,8 @@ module.exports = function(code){
 
 
 	if (status === 'test') {
+		CONVERSATION = "onboardingSimple";
+
 		VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
 		MESSENGER_URL = "http://m.me/245261069180348";
 		FACEBOOK_PAGE_ID = "245261069180348";
