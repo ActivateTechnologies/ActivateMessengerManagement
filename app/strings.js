@@ -1,7 +1,8 @@
 'use strict'
 
 module.exports = function(code){
-
+  
+  const h = "#~*#";
   let s;
 
   if (code === 'kickabout') {

@@ -6,13 +6,10 @@ const Schema = mongoose.Schema;
 module.exports = function(code){
 
   const config = require('./config')(code);
+  mongoose.disconnect()
+  mongoose.createConnection(config.MONGODB_URI);
 
-  mongoose.Promise = global.Promise;
-  mongoose.connect(config.MONGODB_URI, (error) => {
-    if (error) {
-      console.log('Error connecting to mongoose:', error);
-    }
-  });
+  console.log("doing something");
 
   let userSchema = new Schema({
     mid: String,

@@ -4,12 +4,14 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/dashboard:code', isLoggedIn, (req, res) => {
+router.get('/dashboard/:code', isLoggedIn, (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')(code);
   const Analytics = require('./analytics.js')(code);
 
+  console.log("rendering dashboard");
+  res.send("hi")
   Analytics.getDashboardStats((data, error) => {
     if (error) {
       console.log(error);
