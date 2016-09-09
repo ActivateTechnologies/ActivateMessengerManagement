@@ -14,6 +14,7 @@ router.get('/userdata', (req, res) => {
   M.User.find({}, (err, users) => {
     if(err) res.send(err);
     let data = "Messenger Id Id,Name,Sign Up Date, Events Attended";
+    
     _.each(users, (user)=>{
       data += "\r\n";
       data += user.mid + ","
@@ -21,6 +22,7 @@ router.get('/userdata', (req, res) => {
             + user.signedUpDate + ","
             + user.events.length
     })
+
     res.setHeader('Content-disposition',
       'attachment; filename=usersData.csv');
     res.set('Content-Type', 'text/csv');
@@ -52,7 +54,7 @@ router.get('/users', isLoggedIn, (req, res) => {
       company: S.s.company
     }
   });
-  
+
 });
 
 function isLoggedIn(req, res, next) {
