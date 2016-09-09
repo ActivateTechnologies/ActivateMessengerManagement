@@ -2,46 +2,16 @@
 
 const express = require('express');
 const router = express.Router();
-const M = require('./../schemas.js')
-const Send = require('./../send.js');
-const Config = require('./../config');
-const S = require('./../strings');
-const H = require('./../helperFunctions');
-const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
+
 
 /*
   Renders payment_complete view to show message */
 function renderPage(S, res, message) {
   let objectToSend = {
     message: message,
-    s: {
-      company: S.s.company
-    }
+    s: {company: S.s.company}
   }
   res.render('payment/payment_complete', objectToSend);
-}
-
-/*
-  promise that actually make the charge */
-function makeCharge(S, stripe, res, eventPrice, stripeToken, uid, eid) {
-  return new Promise((resolve, reject) => {
-    let price = parseFloat(eventPrice) * 100;
-    let charge = stripe.charges.create({
-      amount: price, // amount in cents, again
-      currency: "gbp",
-      card: stripeToken,
-      description: "",
-      metadata: {_id:(uid._id + ""), eid: eid}
-    }, (err, charge) => {
-      if (err && err.type === 'StripeCardError') {
-        renderPage(S, res, S.s.payment.paymentError);
-        reject(err);
-      }
-      else {
-        resolve();
-      }
-    });
-  });
 }
 
 
@@ -119,51 +89,89 @@ router.post('/charge:code', (req, res) => {
 
   let mid = req.query.mid;
   let eid = req.query.eid;
-  let eventObject;
+  let stripeToken = req.body.stripeToken;
 
-  M.Event.find({_id: eid}).exec().catch(console.log)
-  .then((events) => {
-    eventObject = events[0];
-    return M.User.find({mid: mid}).exec();
-  }, console.log)
-  .then((users) => {
-
-    //EXISTING USER
-    if (users.length > 0) {
-      let uid = {
-        _id: users[0]._id
-      }
-      if (users[0].mid) {
-        uid.mid = mid;
-      }
-      if (eventObject.price === 0) { //FREE GAME
-        renderPage(S, res, "This is a free event");
-      }
-      else { //PAID GAME
-        makeCharge(S, stripe, res, eventObject.price, req.body.stripeToken, uid, eid)
-        .then(()=>{
-          return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
-        }, (err) => {
-          console.log(err);
-          renderPage(S, res, S.s.payment.paymentError);
-          return Promise.reject(err);
-        })
-        .then((event) => {
-          // Send User Receipt
-          Send.booked(uid, users[0].firstName + ' '
-           + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
-           req.body.stripeToken, Math.round((new Date()).getTime()/1000))
-          renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
-        })
-      }
+  M.Event.findOne({_id: eid}, function(err, event){
+    if(err) console.log(err);
+    if(!event){
+      console.log("Event not found");
+      renderPage(S, res, S.s.payment.paymentError);
     }
-
-    //NEW USER
+    // Event Exists
     else {
-      renderPage(S, res, "You aren't a registerd user.");
+      M.User.findOne({mid: mid}, function(e, user){
+        if(e) console.log(e);
+        if(!user){
+          console.log("User not found");
+          renderPage(S, res, S.s.payment.paymentError);
+        }
+        // Found User
+        else {
+          let uid = {_id: user._id}
+
+          // FREE EVENT
+          if (event.price === 0) {renderPage(S, res, "This is a free event");}
+
+          // PAID EVENT
+          else {
+            let price = parseFloat(event.price) * 100;
+            let charge = stripe.charges.create({
+              amount: price, // amount in cents, again
+              currency: "gbp",
+              card: stripeToken,
+              description: "",
+              metadata: {_id:(uid._id + ""), eid: eid}
+            },
+            (err, charge) => {
+              if (err && err.type === 'StripeCardError') {
+                renderPage(S, res, S.s.payment.paymentError);
+              }
+
+              // PAYMENT Successful
+              else {
+                // Update Analytics
+                M.Analytics.update({name:"Payments"},
+                  {$push: {
+                      activity: {
+                        uid: uid._id,
+                        time: new Date(),
+                        eid: eid,
+                        amount: price
+                      }
+                    },
+                    $inc: {total: price}},
+                  {upsert: true},
+                console.log);
+
+                // update user record
+                M.User.findOneAndUpdate({_id:uid._id},
+                  {$push: {events: {
+                    eid: eid,
+                    bookingReference: stripeToken,
+                    joinDate: new Date()
+                  }}},
+                console.log);
+
+                // update event rec
+                M.Event.findOneAndUpdate({_id:eid},
+                  {$push: {joined: {
+                    uid: uid._id,
+                    joinDate: new Date()
+                  }}},
+                console.log);
+
+                // SEND RECEIPT to user
+                Send.booked(uid, user.firstName + ' ' + user.lastName,
+                   event.price, event.name, event.strapline, event.image_url,
+                   stripeToken, Math.round((new Date()).getTime()/1000))
+                renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
+              }
+            });
+          }
+        }
+      });
     }
   });
-
 });
 
 module.exports = router
