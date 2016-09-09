@@ -2,22 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
-const S = require('./../strings');
 const AWS = require('aws-sdk');
-const M = require('./../schemas.js');
-const config = require('./../config');
 const fs = require('fs')
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 
-AWS.config.update({
-  accessKeyId: config.AWSaccessKeyId,
-  secretAccessKey: config.AWSsecretAccessKey
-});
 
-let s3 = new AWS.S3();
+/*
+  renders the /events page */
+router.get('/events:code', isLoggedIn, (req, res) => {
 
-function processGetEvents(req, res) {
+  const S = require('./../strings')(req.params.code);
   res.render('events/events', {
     config: {
       ROOT_URL: config.ROOT_URL
@@ -25,9 +20,26 @@ function processGetEvents(req, res) {
       company: S.s.company
     }
   });
-}
 
-function processPostEvents(req, res) {
+});
+
+
+/*
+  handles creating a new event */
+router.post('/events:code', upload.single('image'), (req, res) => {
+
+  const code = req.params.code;
+  const S = require('./../strings')(code);
+  const M = require('./../schemas.js')(code);
+  const config = require('./../config')(code);
+
+  AWS.config.update({
+    accessKeyId: config.AWSaccessKeyId,
+    secretAccessKey: config.AWSsecretAccessKey
+  });
+
+  let s3 = new AWS.S3();
+
   //if file is uploaded then updating the event or changing depending on id
   if (req.file) {
     let file = req.file
@@ -140,15 +152,24 @@ function processPostEvents(req, res) {
       })
     }
   }
-}
 
-function processDeleteEvents(req, res) {
+});
+
+
+/*
+  handles deleting an event */
+router.delete('/events', (req, res) => {
+
+  let code = req.params.code;
+  const S = require('./../strings')(code);
+  const M = require('./../schemas.js')(code);
+
   M.Event.findOneAndRemove({_id:req.query.eid}, (err) => {
     if (err) {
       console.log('Error deleting event:', err);
       res.send('There was an error deleting event');
-    } else {
-      //console.log("deleted event");
+    }
+    else {
       res.render('events/events', {
         config: {
           ROOT_URL: config.ROOT_URL
@@ -158,9 +179,16 @@ function processDeleteEvents(req, res) {
       });
     }
   });
-}
 
-function processGetCurrentEvents(req, res) {
+});
+
+
+/*
+  returns all the currentEvents to display on /events */
+router.get('/currentEvents', (req, res) => {
+
+  const M = require('./../schemas.js')(req.params.code);
+
   let now = new Date();
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
   M.Event.find({when:{$gt: date}}).sort('when').exec((err, result) => {
@@ -170,41 +198,30 @@ function processGetCurrentEvents(req, res) {
       res.send(result);
     }
   });
-}
 
-function processGetPastEvents(req, res) {
+});
+
+
+/*
+  returns old events to display on /events */
+router.get('/pastEvents', (req, res) => {
+
+  const M = require('./../schemas.js')(req.params.code);
+
   M.Event.find({when:{$lt: new Date()}}).sort('when').exec((err, result) => {
     if (err) {
       console.log('Error finding events for soon:', err);
-    } else {
+    }
+    else {
       res.send(result);
     }
   });
-}
 
-
-
-
-router.get('/events', isLoggedIn, (req, res) => {
-  processGetEvents(req, res);
 });
 
-router.post('/events', upload.single('image'), (req, res) => {
-  processPostEvents(req, res);
-});
 
-router.delete('/events', (req, res) => {
-  processDeleteEvents(req, res);
-});
-
-router.get('/currentEvents', (req, res) => {
-  processGetCurrentEvents(req, res);
-});
-
-router.get('/pastEvents', (req, res) => {
-  processGetPastEvents(req, res);
-});
-
+/*
+  middleware that checks if the user is logged in */
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
