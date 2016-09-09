@@ -10,9 +10,54 @@ const H = require('./../helperFunctions');
 const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
 
 /*
+  Renders payment_complete view to show message */
+function renderPage(S, res, message) {
+  let objectToSend = {
+    message: message,
+    s: {
+      company: S.s.company
+    }
+  }
+  res.render('payment/payment_complete', objectToSend);
+}
+
+/*
+  promise that actually make the charge */
+function makeCharge(S, stripe, res, eventPrice, stripeToken, uid, eid) {
+  return new Promise((resolve, reject) => {
+    let price = parseFloat(eventPrice) * 100;
+    let charge = stripe.charges.create({
+      amount: price, // amount in cents, again
+      currency: "gbp",
+      card: stripeToken,
+      description: "",
+      metadata: {_id:(uid._id + ""), eid: eid}
+    }, (err, charge) => {
+      if (err && err.type === 'StripeCardError') {
+        renderPage(S, res, S.s.payment.paymentError);
+        reject(err);
+      }
+      else {
+        resolve();
+      }
+    });
+  });
+}
+
+
+/*
   handles the /payment route used to pay for games
   it will receive eventId and user's mid as params*/
-function processGetPayment(req, res) {
+router.get('/payment:code', (req, res) => {
+
+  let code = req.params.code;
+  const M = require('./../schemas.js')(code);
+  const Send = require('./../send.js')(code);
+  const Config = require('./../config')(code);
+  const S = require('./../strings')(code);
+  const H = require('./../helperFunctions')(code);
+  const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
+
   let eid = req.query.eid;
   let mid = req.query.mid;
   let eventObject;
@@ -24,7 +69,7 @@ function processGetPayment(req, res) {
     })
     .then((users) => {
       if (users.length == 0) {
-        renderPage(res, S.s.payment.eventNotFound);
+        renderPage(S, res, S.s.payment.eventNotFound);
       }
       else {
         let userAlreadyAttending = false;
@@ -35,7 +80,7 @@ function processGetPayment(req, res) {
           }
         }
         if (userAlreadyAttending) {
-          renderPage(res, S.s.payment.alreadyAttending);
+          renderPage(S, res, S.s.payment.alreadyAttending);
         }
         else if (eventObject.price > 0) {
           res.render('payment/payment', {
@@ -48,20 +93,30 @@ function processGetPayment(req, res) {
             }
           });
         } else {
-          renderPage(res, S.s.payment.eventNotFound);
+          renderPage(S, res, S.s.payment.eventNotFound);
         }
       }
     }, console.log);
   }
   else {
     console.log('/payment did not receive all required details:');
-    renderPage(res, S.s.payment.eventNotFound);
+    renderPage(S, res, S.s.payment.eventNotFound);
   }
-}
+});
+
 
 /*
   it will complete the payment*/
-function processGetCharge(req, res) {
+router.post('/charge:code', (req, res) => {
+
+  let code = req.params.code;
+  const M = require('./../schemas.js')(code);
+  const Send = require('./../send.js')(code);
+  const Config = require('./../config')(code);
+  const S = require('./../strings')(code);
+  const H = require('./../helperFunctions')(code);
+  const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
+
   let mid = req.query.mid;
   let eid = req.query.eid;
   let eventObject;
@@ -82,15 +137,15 @@ function processGetCharge(req, res) {
         uid.mid = mid;
       }
       if (eventObject.price === 0) { //FREE GAME
-        renderPage(res, "This is a free event");
+        renderPage(S, res, "This is a free event");
       }
       else { //PAID GAME
-        makeCharge(res, eventObject.price, req.body.stripeToken, uid, eid)
+        makeCharge(S, stripe, res, eventObject.price, req.body.stripeToken, uid, eid)
         .then(()=>{
           return H.updateUserEventAnalytics(uid, eid, eventObject.price, req.body.stripeToken);
         }, (err) => {
           console.log(err);
-          renderPage(res, S.s.payment.paymentError);
+          renderPage(S, res, S.s.payment.paymentError);
           return Promise.reject(err);
         })
         .then((event) => {
@@ -98,61 +153,17 @@ function processGetCharge(req, res) {
           Send.booked(uid, users[0].firstName + ' '
            + users[0].lastName, eventObject.price, event.name, event.strapline, event.image_url,
            req.body.stripeToken, Math.round((new Date()).getTime()/1000))
-          renderPage(res, S.s.payment.bookingSuccessPaidMessenger);
+          renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
         })
       }
     }
 
     //NEW USER
     else {
-      renderPage(res, "You aren't a registerd user.");
+      renderPage(S, res, "You aren't a registerd user.");
     }
   });
-}
 
-/*
-  Renders payment_complete view to show message */
-function renderPage(res, message) {
-  let objectToSend = {
-    message: message,
-    s: {
-      company: S.s.company
-    }
-  }
-  res.render('payment/payment_complete', objectToSend);
-}
-
-function makeCharge(res, eventPrice, stripeToken, uid, eid) {
-  return new Promise((resolve, reject) => {
-    let price = parseFloat(eventPrice) * 100;
-    let charge = stripe.charges.create({
-      amount: price, // amount in cents, again
-      currency: "gbp",
-      card: stripeToken,
-      description: "",
-      metadata: {_id:(uid._id + ""), eid: eid}
-    }, (err, charge) => {
-      if (err && err.type === 'StripeCardError') {
-        renderPage(res, S.s.payment.paymentError);
-        reject(err);
-      }
-      else {
-        resolve();
-      }
-    });
-  });
-}
-
-
-
-// PAYMENT
-
-router.get('/payment', (req, res) => {
-  processGetPayment(req, res);
-});
-
-router.post('/charge', (req, res) => {
-  processGetCharge(req, res);
 });
 
 module.exports = router
