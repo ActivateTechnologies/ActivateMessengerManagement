@@ -44,6 +44,17 @@ router.post('/events.:code', upload.single('image'), (req, res) => {
 
   let s3 = new AWS.S3();
 
+  let data = {
+    name: req.body.title,
+    strapline: req.body.strapline,
+    latlong: req.body.latlong.replace(/\s+/g, ''),
+    desc: req.body.desc,
+    when: req.body.when,
+    capacity: req.body.capacity,
+    non_members_attending: req.body.non_members_attending,
+    price: parseFloat(req.body.price)
+  };
+
   //if file is uploaded then updating the event or changing depending on id
   if (req.file) {
     let file = req.file
@@ -59,98 +70,68 @@ router.post('/events.:code', upload.single('image'), (req, res) => {
       if (perr) {
         console.log("Error uploading data: ", perr);
         res.send(perr);
-      } else {
-        console.log("Successfully uploaded data to myBucket/myKey");
+      }
+      else {
         let urlParams = {Bucket: 'kickabout-messenger', Key: imagename, Expires: 30000000};
         let image_url = s3.getSignedUrl('getObject', urlParams);
 
-        let data = {
-          name: req.body.title,
-          strapline: req.body.strapline,
-          image_url: image_url,
-          image_name: imagename,
-          latlong: req.body.latlong.replace(/\s+/g, ''),
-          desc: req.body.desc,
-          when: req.body.when,
-          capacity: req.body.capacity,
-          non_members_attending: req.body.non_members_attending,
-          price: parseFloat(req.body.price)
-        };
+        data.image_name = imagename;
+        data.image_url = image_url
 
+        // Editing event with image
         if (req.body.id) {
-          //console.log("Editing event with image");
           M.Event.findOneAndUpdate({_id:req.body.id}, data, (err) => {
-            if (err) {
-              console.log(err);
-            }
+            if (err) console.log(err);
             res.render('events/events', {
-              config: {
-                ROOT_URL: config.ROOT_URL
-              }, s: {
-                company: S.s.company
-              }
+              config: {ROOT_URL: config.ROOT_URL},
+              s: {company: S.s.company}
             });
           })
-        } else {
-          //console.log("Adding event with image");
+        }
+
+        // Adding event with image
+        else {
           let event = M.Event(data);
           event.save((err) => {
-            if (err) {
-              console.log(err);
-            }
+            if (err) console.log(err);
             res.render('events/events', {
-              config: {
-                ROOT_URL: config.ROOT_URL
-              }, s: {
-                company: S.s.company
-              }
+              config: {ROOT_URL: config.ROOT_URL},
+              s: {company: S.s.company}
             });
           })
         }
       }
     });
   }
+
   //if no image uploaded then updating the event or saving depending on presence of id
   else {
-    let data = {
-      name: req.body.title,
-      strapline: req.body.strapline,
-      image_url: req.body.image_url,
-      latlong: req.body.latlong.replace(/\s+/g, ''),
-      desc: req.body.desc,
-      when: req.body.when,
-      capacity: req.body.capacity,
-      non_members_attending: req.body.non_members_attending,
-      price: parseFloat(req.body.price)
-    };
+    data.image_url = req.body.image_url;
+    data.image_name = req.body.image_name;
+
+    // Editing event without image
     if (req.body.id) {
-      //console.log("Editing event without image");
       M.Event.findOneAndUpdate({_id:req.body.id}, data, (err) => {
-        if (err) {
-          console.log('Error editing event:', err);
-        }
+        if (err) console.log(err);
         res.render('events/events', {
-          config: {
-            ROOT_URL: config.ROOT_URL
-          }, s: {
-            company: S.s.company
-          }
+          config: {ROOT_URL: config.ROOT_URL},
+          s: {company: S.s.company}
         });
       })
-    } else {
-      //console.log("Adding event without image");
+    }
+
+    // Adding event without image
+    else {
       let event = M.Event(data);
       event.save((err) => {
         if (err) {
-          console.log('Error adding event:', err);
+          console.log(err);
           res.send('Error saving event');
-        } else {
+        }
+        else {
           res.render('events/events', {
-            config: {
-              ROOT_URL: config.ROOT_URL
-            }, s: {
-              company: S.s.company
-            }
+            config: {ROOT_URL: config.ROOT_URL},
+            s: {company: S.s.company}
           });
         }
       })
@@ -167,17 +148,19 @@ router.delete('/events.:code', (req, res) => {
   let code = req.params.code;
   const S = require('./../strings')(code);
   const M = require('./../schemas.js')(code);
+  const config = require('./../config')(code);
 
   M.Event.findOneAndRemove({_id:req.query.eid}, (err) => {
     if (err) {
-      console.log('Error deleting event:', err);
+      console.log(err);
       res.send('There was an error deleting event');
     }
     else {
       res.render('events/events', {
         config: {
           ROOT_URL: config.ROOT_URL
-        }, s: {
+        },
+        s: {
           company: S.s.company
         }
       });
@@ -196,9 +179,8 @@ router.get('/currentEvents.:code', (req, res) => {
   let now = new Date();
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
   M.Event.find({when:{$gt: date}}).sort('when').exec((err, result) => {
-    if (err) {
-      console.log('Error finding events for soon:', err);
-    } else {
+    if (err) console.log(err)
+    else {
       res.send(result);
     }
   });
@@ -213,9 +195,7 @@ router.get('/pastEvents.:code', (req, res) => {
   const M = require('./../schemas.js')(req.params.code);
 
   M.Event.find({when:{$lt: new Date()}}).sort('when').exec((err, result) => {
-    if (err) {
-      console.log('Error finding events for soon:', err);
-    }
+    if (err) console.log(err);
     else {
       res.send(result);
     }

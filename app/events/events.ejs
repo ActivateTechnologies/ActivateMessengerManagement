@@ -52,7 +52,7 @@
           <div class="col-md-4">
             <h2 class="sub-header" id="formStatusTitle">Create/Edit Event</h2>
 
-            <form id="addevent" method="POST" action="/events"
+            <form id="addevent" method="POST" action="/events.<%= s.company.code %>"
              enctype="multipart/form-data" onsubmit="return confirmSubmit();">
 
               <div class="form-group">
