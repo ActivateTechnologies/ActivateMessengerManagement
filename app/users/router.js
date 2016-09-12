@@ -52,7 +52,8 @@ router.get('/users.:code', isLoggedIn, (req, res) => {
   res.render('users/users', {
     s: {
       company: S.s.company
-    }
+    },
+    code: code
   });
 
 });

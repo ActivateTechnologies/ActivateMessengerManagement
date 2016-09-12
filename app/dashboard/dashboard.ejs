@@ -4,22 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
     <a href="dashboard"><title><%=s.company.name%></title></a>
 
-    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dashboardCoded.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
@@ -42,11 +34,6 @@
             <li><a href="message">Message</a></li>
             <li><a href="users">Members</a></li>
           </ul>
-          <!--
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
-          -->
         </div>
       </div>
     </nav>
@@ -140,9 +127,6 @@
       </div>
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="js/bootstrap.min.js"></script>
@@ -156,21 +140,21 @@
       let modifiedMonthLabels = [];
       $(document).ready(() => {
         initMonthAndWeekLabels();
-        $.get('/dashboardData?requiredData=getTicketsSoldOverTime',
+        $.get('/dashboardData.<%= s.company.code %>?requiredData=getTicketsSoldOverTime',
          (data, status) => {
           console.log('getTicketsSoldOverTime', data);
           initChart('ticketsSoldDay', data.daysArray, dayLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
           initChart('ticketsSoldWeek', data.weeksArray, weekLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
           initChart('ticketsSoldMonth', data.monthsArray, modifiedMonthLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
         });
-        $.get('/dashboardData?requiredData=getNewMembersOverTime',
+        $.get('/dashboardData.<%= s.company.code %>?requiredData=getNewMembersOverTime',
          (data, status) => {
           console.log('getNewMembersOverTime', data);
           initChart('newMembersDay', data.daysArray, dayLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
           initChart('newMembersWeek', data.weeksArray, weekLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
           initChart('newMembersMonth', data.monthsArray, modifiedMonthLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
         });
-        $.get('/dashboardData?requiredData=getButtonHitsOverTime',
+        $.get('/dashboardData.<%= s.company.code %>?requiredData=getButtonHitsOverTime',
          (data, status) => {
           console.log('getButtonHitsOverTime', data);
           initChart('buttonsHitsDay', data.daysArray, dayLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
@@ -194,7 +178,7 @@
         };
         new Chart(ctx, {
           type: 'bar',
-          data: chartData, 
+          data: chartData,
           options: {
             legend: {
               display: false,
@@ -212,7 +196,7 @@
               }]
             }
           }
-        }); 
+        });
       }
 
       function initMonthAndWeekLabels () {

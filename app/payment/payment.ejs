@@ -28,7 +28,7 @@
       <div class="cover-container2">
         <div class="inner cover">
           <div class="payWithCardButtonContainer">
-              <form action="/charge?mid=<%=mid%>&eid=<%=eid%>" method="POST">
+              <form action="/charge.<%= s.company.code %>?mid=<%=mid%>&eid=<%=eid%>" method="POST">
                 <script
                   src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
                   data-key="<%= STRIPE_PUBLIC_KEY %>"

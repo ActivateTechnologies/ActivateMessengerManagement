@@ -211,7 +211,7 @@
       }
 
       $(document).ready(() => {
-        $.get('/pastEvents/<%=s.company.code%>', (retrievedEvents, status) => {
+        $.get('/pastEvents.<%=s.company.code%>', (retrievedEvents, status) => {
           retrievedEvents.forEach((event) => {
             pastEvents[event._id] = event;
             let eventDiv = getCard(event, false);
@@ -221,7 +221,7 @@
             $('#pastEventsContainer').append('<span>There have been no past events.</span>')
           }
         });
-        $.get('/currentEvents/<%=s.company.code%>', (retrievedEvents, status) => {
+        $.get('/currentEvents.<%=s.company.code%>', (retrievedEvents, status) => {
           retrievedEvents.forEach((event) => {
             currentEvents[event._id] = event;
             let eventDiv = getCard(event, true);
@@ -343,7 +343,8 @@
                 + "," + currentLocation.longitude);
             }
           });
-        } else {
+        }
+        else {
           console.log('Event not found');
         }
       }
