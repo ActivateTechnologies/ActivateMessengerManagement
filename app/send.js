@@ -526,10 +526,10 @@ module.exports = function(code){
             uid: uid._id,
             time: new Date(),
             eid: eid,
-            amount: price
+            amount: 0
           }
         },
-        $inc: {total: price}},
+        $inc: {total: 0}},
       {upsert: true},
     (e)=> { if (e) console.log(e);});
 
@@ -551,7 +551,7 @@ module.exports = function(code){
     function(err){
       if(err) console.log(err);
       else {
-        bookedForFreeEvents(uid, eventId);
+        bookedForFreeEvents(uid, eid);
       }
     });
   }
