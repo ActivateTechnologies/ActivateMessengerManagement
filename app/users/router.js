@@ -8,7 +8,7 @@ const _ = require('underscore')
   returns json data about users which can be imported in excel for querying*/
 router.get('/userdata.:code', (req, res) => {
 
-  const code = request.params.code;
+  const code = req.params.code;
   const M = require('./../schemas')(code);
 
   M.User.find({}, (err, users) => {
@@ -35,7 +35,7 @@ router.get('/userdata.:code', (req, res) => {
   this returns data for /users route */
 router.get('/userAnalyticsData.:code', (req, res) => {
 
-  const code = request.params.code;
+  const code = req.params.code;
   const M = require('./../schemas')(code);
 
   M.User.find({}, (err, users) => {
