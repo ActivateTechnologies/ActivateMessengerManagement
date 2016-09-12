@@ -126,7 +126,7 @@
       }
 
       $(document).ready(() => {
-        $.get('/userAnalyticsData' + ".<%= code %>", (data, status) => {
+        $.get('/userAnalyticsData' + ".<%= s.company.code %>", (data, status) => {
           data.users.forEach((user, index) => {
             users[user._id] = user;
             let userTr = getCard(user, index);
