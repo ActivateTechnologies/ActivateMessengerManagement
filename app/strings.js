@@ -27,8 +27,7 @@ module.exports = function(code){
     		  + "Facebook Messenger: " + h + "messengerUrl"
     	},
       bot: {
-    		allEventsDefault: "Here are some upcoming games to join. "
-          + "Tap the card for directions or 'More Info' to book.",
+    		allEventsDefault: "Here are some upcoming games to join. ",
         allEventsAfterCancel: "Looking for other games? Here are a few upcoming ones:",
         start: {
         	text: "Hey there! We at Kickabout are all about playing football. Sound Good?",
@@ -86,7 +85,7 @@ module.exports = function(code){
   }
 
   else {
-    console.log("CODE not provided");
+    console.log("CODE not provided in strings.js");
   }
 
   return {s:s};

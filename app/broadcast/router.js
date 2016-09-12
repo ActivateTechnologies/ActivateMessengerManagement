@@ -25,14 +25,7 @@ router.post('/message.:code', (req, res) => {
             phoneNumber: result[i].phoneNumber,
           }
           uid.mid = (result[i].mid) ? result[i].mid : null;
-          Send.text(uid, message, (error) => {
-            if (error) {
-              console.log('Error with send via messenger, sending sms');
-              Twilio.sendSms(uid.phoneNumber, message, () => {
-                console.log('Sms sent');
-              });
-            }
-          });
+          Send.text(uid, message);
           counter++;
         }
       }
@@ -40,7 +33,6 @@ router.post('/message.:code', (req, res) => {
     })
   }
   else if (type == "upcomingEvents") {
-    console.log('5');
     M.User.find({}, (err, result) => {
       let counter =  0;
       for(let i = 0; i<result.length; i++){

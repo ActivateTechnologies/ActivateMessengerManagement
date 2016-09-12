@@ -3,23 +3,21 @@ const LocalStrategy = require('passport-local').Strategy;
 module.exports = function(passport){
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      if (username === "alex@activatetechnologies.co.uk" && password === "activate098"){
-        console.log("correct");
-        return done(null, [])
+      if (username === "alex@activatetechnologies.co.uk"
+            && password === "activate098"){
+        return done(null, {code: 'kickabout'})
       }
       else {
-        console.log("incorrect");
         return done(null, false)
       }
     }
   ));
 
-  passport.serializeUser(function(user, done) {
-    done(null, "serialized");
+  passport.serializeUser(function(code, done) {
+    done(null, code);
   });
 
-  // used to deserialize the user
-  passport.deserializeUser(function(str, done) {
-      done(null, "deserialized");
+  passport.deserializeUser(function(code, done) {
+    done(null, code);
   });
 }

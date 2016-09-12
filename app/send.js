@@ -317,7 +317,7 @@ module.exports = function(code){
             "payload": {
               "template_type": "generic",
               "elements": [{
-                "title": event.name,
+                "title": event.name + ": via Kickabout",
                 "subtitle": description,
                 "image_url": event.image_url,
                 "item_url": S.s.company.botURL,

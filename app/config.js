@@ -15,7 +15,7 @@ module.exports = function(code){
 		ROOT_URL = "http://www.kickabout.football";
 	}
 	else {
-		console.log("CODE not provided");
+		console.log("CODE not provided in config.js");
 	}
 
 

@@ -10,7 +10,7 @@ const upload = multer({dest:'uploads/'});
 
 /*
   renders the /events page */
-router.get('/events.:code', (req, res) => {
+router.get('/events.:code', isLoggedIn, (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')('kickabout');
