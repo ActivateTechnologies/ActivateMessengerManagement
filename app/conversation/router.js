@@ -9,8 +9,8 @@ router.get('/webhook', (req, res) => {
   FacebookWebhooks('kickabout').processGetWebhook(req, res);
 });
 
-router.post('/webhook/kickabout', (req, res) => {
-  FacebookWebhooks('kickabout').processPostWebhook(req, res);
+router.post('/webhook.:code', (req, res) => {
+  FacebookWebhooks(req.params.code).processPostWebhook(req, res);
 });
 
 module.exports = router

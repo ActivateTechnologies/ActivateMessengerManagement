@@ -10,7 +10,7 @@ const upload = multer({dest:'uploads/'});
 
 /*
   renders the /events page */
-router.get(':code.events', (req, res) => {
+router.get('/events.:code', (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')('kickabout');
@@ -30,7 +30,7 @@ router.get(':code.events', (req, res) => {
 
 /*
   handles creating a new event */
-router.post('/events/:code', upload.single('image'), (req, res) => {
+router.post('/events.:code', upload.single('image'), (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')(code);
@@ -162,7 +162,7 @@ router.post('/events/:code', upload.single('image'), (req, res) => {
 
 /*
   handles deleting an event */
-router.delete('/events/:code', (req, res) => {
+router.delete('/events.:code', (req, res) => {
 
   let code = req.params.code;
   const S = require('./../strings')(code);
@@ -189,7 +189,7 @@ router.delete('/events/:code', (req, res) => {
 
 /*
   returns all the currentEvents to display on /events */
-router.get('/currentEvents/:code', (req, res) => {
+router.get('/currentEvents.:code', (req, res) => {
 
   const M = require('./../schemas.js')(req.params.code);
 
@@ -208,7 +208,7 @@ router.get('/currentEvents/:code', (req, res) => {
 
 /*
   returns old events to display on /events */
-router.get('/pastEvents/:code', (req, res) => {
+router.get('/pastEvents.:code', (req, res) => {
 
   const M = require('./../schemas.js')(req.params.code);
 

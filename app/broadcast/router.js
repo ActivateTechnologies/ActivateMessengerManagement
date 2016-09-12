@@ -6,7 +6,7 @@ const router = express.Router();
 /*
   Sends given message to user, with events if type is
   "upcomingEvents" */
-router.post('/message/:code', (req, res) => {
+router.post('/message.:code', (req, res) => {
   const code = req.params.code
   const S = require('./../strings')(code);
   const M = require('./../schemas.js')(code);
@@ -60,7 +60,7 @@ router.post('/message/:code', (req, res) => {
 });
 
 
-router.get('/message/:code', isLoggedIn, (req, res) => {
+router.get('/message.:code', isLoggedIn, (req, res) => {
   const S = require('./../strings')(req.params.code);
   res.render('broadcast/message', {
     s: {

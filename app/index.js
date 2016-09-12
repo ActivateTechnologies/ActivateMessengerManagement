@@ -22,8 +22,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, './../public')));
 
-console.log("setting static", path.join(__dirname, './../public'));
-
 app.use(require('./broadcast/router'))
 app.use(require('./conversation/router'))
 app.use(require('./dashboard/router'))
