@@ -26,7 +26,7 @@ module.exports = function(code){
 
 	else if (status == 'ani') {
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-		ROOT_URL = "https://3d84b846.ngrok.io";
+		ROOT_URL = "https://c7bdcc9b.ngrok.io";
 	}
 
 

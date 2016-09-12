@@ -25,48 +25,51 @@ router.get('/payment.:code', (req, res) => {
   const Send = require('./../send.js')(code);
   const Config = require('./../config')(code);
   const S = require('./../strings')(code);
-  const H = require('./../helperFunctions')(code);
   const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
 
   let eid = req.query.eid;
-  let mid = req.query.mid;
-  let eventObject;
-  if (eid && mid) {
-    M.Event.find({_id: eid}).exec().catch(console.log)
-    .then((events) => {
-      eventObject = events[0];
-      return M.User.find({mid: mid}).exec();
-    })
-    .then((users) => {
-      if (users.length == 0) {
+  let uid = req.query.uid;
+  console.log("here you go", eid, uid);
+
+  if (eid && uid) {
+    M.Event.findOne({_id: eid}, function(err, event){
+      if (err) console.log(err);
+      if (!event) {
         renderPage(S, res, S.s.payment.eventNotFound);
       }
       else {
-        let userAlreadyAttending = false;
-        for (let i = 0; i < users[0].events.length && !userAlreadyAttending; i++) {
-          userAlreadyAttending = users[0].events[i].eid == eid;
-          if (userAlreadyAttending) {
-            break;
-          }
-        }
-        if (userAlreadyAttending) {
-          renderPage(S, res, S.s.payment.alreadyAttending);
-        }
-        else if (eventObject.price > 0) {
-          res.render('payment/payment', {
-            eid: eid,
-            mid: users[0].mid,
-            event: eventObject,
-            STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY,
-            s: {
-              company: S.s.company
-            }
-          });
-        } else {
-          renderPage(S, res, S.s.payment.eventNotFound);
-        }
+         M.User.findOne({_id: uid}, function(e, user){
+           if (e) console.log(e);
+           if (!user) {
+             renderPage(S, res, S.s.payment.eventNotFound);
+           }
+           else {
+             let userAlreadyAttending = false;
+             for (let i = 0; i < user.events.length && !userAlreadyAttending; i++) {
+               userAlreadyAttending = user.events[i].eid == eid;
+               if (userAlreadyAttending) {
+                 break;
+               }
+             }
+             if (userAlreadyAttending) {
+               renderPage(S, res, S.s.payment.alreadyAttending);
+             }
+             else if (event.price > 0) {
+               res.render('payment/payment', {
+                 eid: eid,
+                 uid: uid,
+                 event: event,
+                 STRIPE_PUBLIC_KEY: Config.STRIPE_PUBLIC_KEY,
+                 s: {company: S.s.company}
+               });
+             }
+             else {
+               renderPage(S, res, S.s.payment.eventNotFound);
+             }
+           }
+         })
       }
-    }, console.log);
+    })
   }
   else {
     console.log('/payment did not receive all required details:');
@@ -84,10 +87,9 @@ router.post('/charge.:code', (req, res) => {
   const Send = require('./../send.js')(code);
   const Config = require('./../config')(code);
   const S = require('./../strings')(code);
-  const H = require('./../helperFunctions')(code);
   const stripe = require("stripe")(Config.STRIPE_SECRET_KEY)
 
-  let mid = req.query.mid;
+  let id = req.query.uid;
   let eid = req.query.eid;
   let stripeToken = req.body.stripeToken;
 
@@ -99,7 +101,7 @@ router.post('/charge.:code', (req, res) => {
     }
     // Event Exists
     else {
-      M.User.findOne({mid: mid}, function(e, user){
+      M.User.findOne({_id: id}, function(e, user){
         if(e) console.log(e);
         if(!user){
           console.log("User not found");
@@ -107,10 +109,15 @@ router.post('/charge.:code', (req, res) => {
         }
         // Found User
         else {
-          let uid = {_id: user._id}
+          let uid = {
+            _id: user._id,
+            mid: user.mid
+          }
 
           // FREE EVENT
-          if (event.price === 0) {renderPage(S, res, "This is a free event");}
+          if (event.price === 0) {
+            renderPage(S, res, "This is a free event");
+          }
 
           // PAID EVENT
           else {
@@ -141,7 +148,7 @@ router.post('/charge.:code', (req, res) => {
                     },
                     $inc: {total: price}},
                   {upsert: true},
-                console.log);
+                (e)=> { if (e) console.log(e);});
 
                 // update user record
                 M.User.findOneAndUpdate({_id:uid._id},
@@ -150,7 +157,7 @@ router.post('/charge.:code', (req, res) => {
                     bookingReference: stripeToken,
                     joinDate: new Date()
                   }}},
-                console.log);
+                (e)=> { if (e) console.log(e);});
 
                 // update event rec
                 M.Event.findOneAndUpdate({_id:eid},
@@ -158,7 +165,7 @@ router.post('/charge.:code', (req, res) => {
                     uid: uid._id,
                     joinDate: new Date()
                   }}},
-                console.log);
+                (e)=> { if (e) console.log(e);});
 
                 // SEND RECEIPT to user
                 Send.booked(uid, user.firstName + ' ' + user.lastName,

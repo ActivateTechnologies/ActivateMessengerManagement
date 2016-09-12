@@ -5,7 +5,7 @@ const router = express.Router();
 const FacebookWebhooks = require('./facebookwebhooks.js');
 
 // FACEBOOKWEBHOOKS
-router.get('/webhook', (req, res) => {
+router.get('/webhook.:code', (req, res) => {
   FacebookWebhooks('kickabout').processGetWebhook(req, res);
 });
 

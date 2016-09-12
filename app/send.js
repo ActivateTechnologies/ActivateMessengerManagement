@@ -8,7 +8,6 @@ module.exports = function(code){
   const M = require('./schemas.js')(code);
   const config = require('./config')(code);
   const S = require('./strings')(code);
-  const H = require('./helperFunctions')(code);
   const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;
 
   function send(uid, messageData, callback) {
@@ -90,7 +89,6 @@ module.exports = function(code){
   }
 
   function textWithQuickReplies(uid, text, quickReplies) {
-    //console.log('textWithQuickReplies', uid, text, quickReplies);
     return new Promise((resolve, reject) => {
       let quickRepliesObjects = [];
       if (quickReplies.length && typeof quickReplies[0] === 'string') {
@@ -170,12 +168,11 @@ module.exports = function(code){
 
   function notificationsChange (uid, set) {
     M.User.update({mid:uid.mid}, {notifications: set}, (err) => {
-      if (err) {
-        console.log('Error changing user\'s notification settings:', err);
-      }
+      if (err) console.log(err);
       if (set === "on") {
         text(uid, S.s.bot.menu.notifications.onConfirmationText);
-      } else {
+      }
+      else {
         text(uid, S.s.bot.menu.notifications.offConfirmationText);
       }
     });
@@ -419,7 +416,7 @@ module.exports = function(code){
             bookButton = {
               "type": "web_url",
               "title": S.s.bot.eventCard.buttonBook,
-              "url": config.ROOT_URL + "/event" + "?eid=" + event._id + "&uid=" + uid._id
+              "url": config.ROOT_URL + "/payment." + code + "?eid=" + event._id + "&uid=" + uid._id
             }
           }
 
@@ -475,7 +472,7 @@ module.exports = function(code){
       textPromise(uid, message)
       .then(() => {
         send(uid, data);
-      }, console.log)
+      }, (e)=> { if (e) console.log(e);})
     }
     else {
       send(uid, data);
@@ -520,18 +517,50 @@ module.exports = function(code){
 
   function book(uid, rest) {
     let arr = rest.split('|');
-    let eventId = arr[1];
-    H.updateUserEventAnalytics(uid, eventId, 0, null).then((event) => {
-      bookedForFreeEvents(uid, eventId);
-    })
-    .catch(console.log);
+    let eid = arr[1];
+
+    // update analytics
+    M.Analytics.update({name:"Payments"},
+      {$push: {
+          activity: {
+            uid: uid._id,
+            time: new Date(),
+            eid: eid,
+            amount: price
+          }
+        },
+        $inc: {total: price}},
+      {upsert: true},
+    (e)=> { if (e) console.log(e);});
+
+    // update user record
+    M.User.findOneAndUpdate({_id:uid._id},
+      {$push: {events: {
+        eid: eid,
+        bookingReference: uid._id + '-' + eid,
+        joinDate: new Date()
+      }}},
+    (e)=> { if (e) console.log(e);});
+
+    // update event rec
+    M.Event.findOneAndUpdate({_id:eid},
+      {$push: {joined: {
+        uid: uid._id,
+        joinDate: new Date()
+      }}},
+    function(err){
+      if(err) console.log(err);
+      else {
+        bookedForFreeEvents(uid, eventId);
+      }
+    });
   }
 
   function cancelBooking (uid, eventId) {
     M.Analytics.update({name:"Button:Cancel"},
       {$push: {activity: {uid:uid._id, time: new Date()}}},
       {upsert: true},
-      console.log);
+    (e)=> { if (e) console.log(e);});
 
     M.Event.find({_id:eventId}, (err, result) => {
       if (result.length > 0) {
@@ -553,7 +582,7 @@ module.exports = function(code){
     M.Analytics.update({name:"Button:More Info"},
       {$push: {activity: {uid:uid._id, time: new Date()}}},
       {upsert: true},
-      console.log);
+    (e)=> { if (e) console.log(e);});
 
     M.Event.findOne({_id:eventId}, function(err, result){
       if(err){
