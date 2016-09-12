@@ -20,7 +20,7 @@ app.use(bodyParser.json())
 app.use(session({
     secret: "some-secret",
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -36,7 +36,7 @@ app.use(require('./site/router'))
 app.use(require('./users/router'))
 
 let server = app.listen(app.get('port'), function() {
-  console.log('running on port', app.get('port'));
+  console.log('Magic happens on port', app.get('port'));
 })
 
 module.exports = server;
