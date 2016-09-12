@@ -41,6 +41,8 @@ module.exports = function(code){
 	}
 
 	return {
+		status: status,
+
 		STRIPE_PUBLIC_KEY: STRIPE_PUBLIC_KEY,
 		STRIPE_SECRET_KEY: STRIPE_SECRET_KEY,
 

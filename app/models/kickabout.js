@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-mongoose.connect("mongodb://anirudh:kickabout@ds051575.mlab.com:51575/bottest", console.log);
+mongoose.connect("mongodb://anirudh:kickabout@ds013664.mlab.com:13664/bot", console.log);
 
 let userSchema = new Schema({
   mid: String,
