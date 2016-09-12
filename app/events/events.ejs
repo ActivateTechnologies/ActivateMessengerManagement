@@ -25,14 +25,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="dashboard"><%=s.company.name%></a>
+          <a class="navbar-brand" href="dashboard.<%=s.company.code%>"><%=s.company.name%></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="dashboard">Overview</a></li>
-            <li><a href="events">Events</a></li>
-            <li><a href="message">Message</a></li>
-            <li><a href="users">Members</a></li>
+            <li><a href="dashboard.<%=s.company.code%>">Overview</a></li>
+            <li><a href="events.<%=s.company.code%>">Events</a></li>
+            <li><a href="message.<%=s.company.code%>">Message</a></li>
+            <li><a href="users.<%=s.company.code%>">Members</a></li>
           </ul>
         </div>
       </div>
