@@ -1,0 +1,6 @@
+create new model in models
+go to mlab and set up the db to get URI
+
+add to config file the details
+
+add strings in strings.js

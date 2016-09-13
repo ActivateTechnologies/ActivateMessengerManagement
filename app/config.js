@@ -1,4 +1,4 @@
-const status = 'ani'; //'production' or 'test' or 'ani'
+const status = 'production'; //'production' or 'test' or 'ani'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
@@ -12,6 +12,11 @@ module.exports = function(code){
 	if(code === 'kickabout'){
 		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
+		ROOT_URL = "http://www.kickabout.football";
+	}
+	if(code === 'uwe'){
+		CONVERSATION = "onboardingSimple";
+		VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
 		ROOT_URL = "http://www.kickabout.football";
 	}
 	else {
