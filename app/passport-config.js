@@ -5,9 +5,13 @@ const LocalStrategy = require('passport-local').Strategy;
 module.exports = function(passport){
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      if (username === "alex@activatetechnologies.co.uk"
+      if (username === "kickabout"
             && password === "activate098"){
         return done(null, {code: 'kickabout'})
+      }
+      if (username === "uwe"
+            && password === "password"){
+        return done(null, {code: 'uwe'})
       }
       else {
         return done(null, false)
