@@ -1,3 +1,5 @@
+'use strict'
+
 const status = 'production'; //'production' or 'test' or 'ani'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
