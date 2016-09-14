@@ -6,6 +6,9 @@ const FacebookWebhooks = require('./facebookwebhooks.js');
 
 // FACEBOOKWEBHOOKS
 router.get('/webhook.:code', (req, res) => {
+  // verifying webhook is same for all right now
+  // can change this to use unique passwords for each webhook
+  // current password is verify_me
   FacebookWebhooks('kickabout').processGetWebhook(req, res);
 });
 

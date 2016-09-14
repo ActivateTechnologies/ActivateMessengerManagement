@@ -174,7 +174,6 @@ router.delete('/events.:code', (req, res) => {
 router.get('/currentEvents.:code', (req, res) => {
 
   let code = req.params.code;
-  console.log("code in currentEvents:", code);
   const M = require('./../models/' + code);
 
   let now = new Date();
@@ -194,7 +193,6 @@ router.get('/currentEvents.:code', (req, res) => {
 router.get('/pastEvents.:code', (req, res) => {
 
   let code = req.params.code;
-  console.log("code in currentEvents:", code);
   const M = require('./../models/' + code);
 
   M.Event.find({when:{$lt: new Date()}}).sort('when').exec((err, result) => {

@@ -7,6 +7,7 @@ const router = express.Router();
   Sends given message to user, with events if type is
   "upcomingEvents" */
 router.post('/message.:code', (req, res) => {
+
   const code = req.params.code
   const S = require('./../strings')(code);
   const M = require('./../models/' + code);
@@ -15,6 +16,7 @@ router.post('/message.:code', (req, res) => {
 
   let type = req.query.type;
   let message = decodeURIComponent(req.query.message);
+
   if (type == "message") {
     M.User.find({}, (err, result) => {
       let counter = 0;
@@ -49,6 +51,7 @@ router.post('/message.:code', (req, res) => {
       res.send("People reached: " + counter)
     })
   }
+
 });
 
 

@@ -11,9 +11,10 @@ module.exports = function(code){
   const S = require('./../strings')(code);
 
   function processGetWebhook(req, res) {
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+    if (req.query['hub.verify_token'] === 'verify_me') {
       res.send(req.query['hub.challenge']);
-    } else {
+    }
+    else {
       res.send('Error, wrong validation token');
     }
   }
