@@ -10,6 +10,7 @@ module.exports = function(code){
     connection = require('./models/test')
   }
   else {
+    console.log(11111);
     connection = require('./models/' + code);
   }
 
@@ -62,7 +63,7 @@ module.exports = function(code){
     next: Array
   })
 
-  module.exports = {
+  return {
     User: connection.model('User', userSchema),
     Event: connection.model('Event', eventSchema),
     Analytics: connection.model('Analytics', analyticsSchema),
