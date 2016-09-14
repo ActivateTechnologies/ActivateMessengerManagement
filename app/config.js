@@ -18,8 +18,8 @@ module.exports = function(code){
 	}
 	else if(code === 'uwe'){
 		CONVERSATION = "onboardingSimple";
-		VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
-		ROOT_URL = "http://www.kickabout.football";
+		VERIFICATION_TOKEN = "EAAW8z3Llta8BAPXlubWU8t1aQyLUi00ANNBaiorYExsOZAOT63bRMhEXZCrdxQctJvzEyVV4NfgESKA0mjsQLpsVkNyePaZBDvalW4pzAcxIvkaZCpePB62bO7ttzkKayR5tiZBoocAbqVYgWS3QguUQqmASIJNH7dvJx6zNLKgZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 	else if(code === 'ucl'){
 		CONVERSATION = "onboardingSimple";
