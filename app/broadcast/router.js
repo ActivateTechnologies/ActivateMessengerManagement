@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/message.:code', (req, res) => {
   const code = req.params.code
   const S = require('./../strings')(code);
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const Send = require('./../send.js')(code);
 
 

@@ -21,7 +21,7 @@ function renderPage(S, res, message) {
 router.get('/payment.:code', (req, res) => {
 
   let code = req.params.code;
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const Send = require('./../send.js')(code);
   const Config = require('./../config')(code);
   const S = require('./../strings')(code);
@@ -44,17 +44,7 @@ router.get('/payment.:code', (req, res) => {
              renderPage(S, res, S.s.payment.eventNotFound);
            }
            else {
-             let userAlreadyAttending = false;
-             for (let i = 0; i < user.events.length && !userAlreadyAttending; i++) {
-               userAlreadyAttending = user.events[i].eid == eid;
-               if (userAlreadyAttending) {
-                 break;
-               }
-             }
-             if (userAlreadyAttending) {
-               renderPage(S, res, S.s.payment.alreadyAttending);
-             }
-             else if (event.price > 0) {
+             if (event.price > 0) {
                res.render('payment/payment', {
                  eid: eid,
                  uid: uid,
@@ -83,7 +73,7 @@ router.get('/payment.:code', (req, res) => {
 router.post('/charge.:code', (req, res) => {
 
   let code = req.params.code;
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const Send = require('./../send.js')(code);
   const Config = require('./../config')(code);
   const S = require('./../strings')(code);

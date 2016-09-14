@@ -9,7 +9,7 @@ const _ = require('underscore')
 router.get('/userdata.:code', (req, res) => {
 
   const code = req.params.code;
-  const M = require('./../schemas')(code);
+  const M = require('./../models/' + code);
 
   M.User.find({}, (err, users) => {
     if(err) res.send(err);
@@ -36,7 +36,7 @@ router.get('/userdata.:code', (req, res) => {
 router.get('/userAnalyticsData.:code', (req, res) => {
 
   const code = req.params.code;
-  const M = require('./../schemas')(code);
+  const M = require('./../models/' + code);
 
   M.User.find({}, (err, users) => {
     res.json({'users': users})
