@@ -140,15 +140,6 @@ router.post('/charge.:code', (req, res) => {
                   {upsert: true},
                 (e)=> { if (e) console.log(e);});
 
-                // update user record
-                M.User.findOneAndUpdate({_id:uid._id},
-                  {$push: {events: {
-                    eid: eid,
-                    bookingReference: stripeToken,
-                    joinDate: new Date()
-                  }}},
-                (e)=> { if (e) console.log(e);});
-
                 // update event rec
                 M.Event.findOneAndUpdate({_id:eid},
                   {$push: {joined: {

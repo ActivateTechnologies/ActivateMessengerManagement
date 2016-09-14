@@ -1,6 +1,6 @@
 'use strict'
 
-const status = 'ani'; //'production' or 'test' or 'ani'
+const status = 'ani'; //'production' or 'ani'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
@@ -35,7 +35,7 @@ module.exports = function(code){
 	else if (code == 'ani') {
 		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-		ROOT_URL = "https://b0f575d3.ngrok.io";
+		ROOT_URL = "https://dd94a7ed.ngrok.io";
 	}
 	else {
 		console.log("CODE not provided in config.js");
