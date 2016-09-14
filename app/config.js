@@ -61,10 +61,6 @@ module.exports = function(code){
 		VERIFICATION_TOKEN: VERIFICATION_TOKEN,
 		ROOT_URL: ROOT_URL,
 		CONVERSATION: CONVERSATION,
-
-		// Constants
-		AWSaccessKeyId: "AKIAIAQYS6UTUGDGOUPA",
-		AWSsecretAccessKe: "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"
 	}
 
 }

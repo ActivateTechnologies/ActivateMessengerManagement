@@ -7,6 +7,12 @@ const fs = require('fs')
 const multer = require('multer');
 const upload = multer({dest:'uploads/'});
 
+AWS.config.update({
+  accessKeyId: "AKIAIAQYS6UTUGDGOUPA",
+  secretAccessKey: "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"
+});
+
+let s3 = new AWS.S3();
 
 /*
   renders the /events page */
@@ -33,17 +39,9 @@ router.get('/events.:code', isLoggedIn, (req, res) => {
 router.post('/events.:code', upload.single('image'), (req, res) => {
 
   const code = req.params.code;
-  console.log("code in events:", code);
   const S = require('./../strings')(code);
   const M = require('./../models/' + code);
   const config = require('./../config')(code);
-
-  AWS.config.update({
-    accessKeyId: config.AWSaccessKeyId,
-    secretAccessKey: config.AWSsecretAccessKey
-  });
-
-  let s3 = new AWS.S3();
 
   let data = {
     name: req.body.title,
