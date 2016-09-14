@@ -68,13 +68,13 @@ module.exports = function(connection){
   }
   if (!connection.models.Conversation) {
     console.log("convo");
-    connection.model('Conversation', conversationsSchema)
+    connection.model('Conversations', conversationsSchema)
   }
 
   return {
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
-    Conversation: connection.models.Conversation
+    Conversations: connection.models.Conversations
   };
 }
