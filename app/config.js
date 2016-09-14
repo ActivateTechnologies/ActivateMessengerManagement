@@ -1,6 +1,6 @@
 'use strict'
 
-const status = 'production'; //'production' or 'test' or 'ani'
+const status = 'ani'; //'production' or 'test' or 'ani'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
@@ -26,19 +26,19 @@ module.exports = function(code){
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
 		ROOT_URL = "http://www.kickabout.football";
 	}
+
+	// else if (code === 'test') {
+	// 	VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
+	// 	ROOT_URL = "https://kickabouttest.herokuapp.com";
+	// }
+
+	else if (code == 'ani') {
+		CONVERSATION = "onboardingSimple";
+		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
+		ROOT_URL = "https://b0f575d3.ngrok.io";
+	}
 	else {
 		console.log("CODE not provided in config.js");
-	}
-
-
-	if (status === 'test') {
-		VERIFICATION_TOKEN = "EAACQ34o5sQ0BANnKbZCduf6FkAZCjaXufTqIsja5YuPVq5ZADHD9u9Q3fGikMBzSRNkzLiwXVzTFUHzZB1eUziYRYIdu6mfvdRzIriHqwVFvrtstBI5vsMcBTQi8eSjV6b8ZAqIsJZCmsabrc9utJFH3J6ZATZAmUaLCiwPMuiRV7QZDZD";
-		ROOT_URL = "https://kickabouttest.herokuapp.com";
-	}
-
-	else if (status == 'ani') {
-		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-		ROOT_URL = "https://b694a652.ngrok.io";
 	}
 
 
