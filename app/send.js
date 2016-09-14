@@ -5,7 +5,7 @@ const _ = require('underscore')
 
 module.exports = function(code){
 
-  const M = require('./schemas.js')(code);
+  const M = require('./models/' + code);
   const config = require('./config')(code);
   const S = require('./strings')(code);
   const VERIFICATION_TOKEN = config.VERIFICATION_TOKEN;

@@ -4,7 +4,7 @@ const request = require('request');
 
 module.exports = function(code){
 
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const Send = require('./../send.js')(code);
   const Conversation = require('./conversation.js')(code);
   const Config = require('./../config')(code);

@@ -1,4 +1,6 @@
 'use strict'
 
 const mongoose = require('mongoose')
-module.exports = mongoose.createConnection("mongodb://anirudh:kickabout@ds029496.mlab.com:29496/uwe");
+mongoose.createConnection("mongodb://anirudh:kickabout@ds029496.mlab.com:29496/uwe");
+
+module.exports = require('./schemas')(mongoose)

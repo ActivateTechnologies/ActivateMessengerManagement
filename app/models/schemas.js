@@ -3,16 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-module.exports = function(code){
-  let status = require('./config').status;
-  let connection;
-  if (status === "ani" || status === "test"){
-    connection = require('./models/test')
-  }
-  else {
-    console.log(11111);
-    connection = require('./models/' + code);
-  }
+module.exports = function(connection){
 
   let userSchema = new Schema({
     mid: String,
@@ -63,11 +54,10 @@ module.exports = function(code){
     next: Array
   })
 
-  return {
-    User: connection.model('User', userSchema),
-    Event: connection.model('Event', eventSchema),
-    Analytics: connection.model('Analytics', analyticsSchema),
-    Conversation: connection.model('Conversation', conversationsSchema)
-  }
+  connection.model('User', userSchema)
+  connection.model('Event', eventSchema)
+  connection.model('Analytics', analyticsSchema)
+  connection.model('Conversation', conversationsSchema)
 
+  return connection;
 }
