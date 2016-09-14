@@ -54,10 +54,19 @@ module.exports = function(connection){
     next: Array
   })
 
-  connection.model('User', userSchema)
-  connection.model('Event', eventSchema)
-  connection.model('Analytics', analyticsSchema)
-  connection.model('Conversation', conversationsSchema)
 
-  return connection;
+  if (!connection.models.User) {
+    connection.model('User', userSchema);
+  }
+  if (!connection.models.Event) {
+    connection.model('Event', eventSchema);
+  }
+  if (!connection.models.Analytics) {
+    connection.model('Analytics', analyticsSchema)
+  }
+  if (!connection.models.Conversation) {
+    connection.model('Conversation', conversationsSchema)
+  }
+
+  module.exports = connection;
 }
