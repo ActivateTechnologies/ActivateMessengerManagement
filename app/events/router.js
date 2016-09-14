@@ -13,8 +13,8 @@ const upload = multer({dest:'uploads/'});
 router.get('/events.:code', isLoggedIn, (req, res) => {
 
   const code = req.params.code;
-  const S = require('./../strings')('kickabout');
-  const config = require('./../config')('kickabout');
+  const S = require('./../strings')(code);
+  const config = require('./../config')(code);
 
   res.render('events/events', {
     config: {
@@ -33,6 +33,7 @@ router.get('/events.:code', isLoggedIn, (req, res) => {
 router.post('/events.:code', upload.single('image'), (req, res) => {
 
   const code = req.params.code;
+  console.log("code in events:", code);
   const S = require('./../strings')(code);
   const M = require('./../models/' + code);
   const config = require('./../config')(code);
@@ -174,7 +175,9 @@ router.delete('/events.:code', (req, res) => {
   returns all the currentEvents to display on /events */
 router.get('/currentEvents.:code', (req, res) => {
 
-  const M = require('./../models/' + req.params.code);
+  let code = req.params.code;
+  console.log("code in currentEvents:", code);
+  const M = require('./../models/' + code);
 
   let now = new Date();
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
@@ -192,7 +195,9 @@ router.get('/currentEvents.:code', (req, res) => {
   returns old events to display on /events */
 router.get('/pastEvents.:code', (req, res) => {
 
-  const M = require('./../models/' + req.params.code);
+  let code = req.params.code;
+  console.log("code in currentEvents:", code);
+  const M = require('./../models/' + code);
 
   M.Event.find({when:{$lt: new Date()}}).sort('when').exec((err, result) => {
     if (err) console.log(err);
