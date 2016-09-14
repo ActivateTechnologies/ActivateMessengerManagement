@@ -34,7 +34,7 @@ router.post('/events.:code', upload.single('image'), (req, res) => {
 
   const code = req.params.code;
   const S = require('./../strings')(code);
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const config = require('./../config')(code);
 
   AWS.config.update({
@@ -147,7 +147,7 @@ router.delete('/events.:code', (req, res) => {
 
   let code = req.params.code;
   const S = require('./../strings')(code);
-  const M = require('./../schemas.js')(code);
+  const M = require('./../models/' + code);
   const config = require('./../config')(code);
 
   M.Event.findOneAndRemove({_id:req.query.eid}, (err) => {
@@ -174,7 +174,7 @@ router.delete('/events.:code', (req, res) => {
   returns all the currentEvents to display on /events */
 router.get('/currentEvents.:code', (req, res) => {
 
-  const M = require('./../schemas.js')(req.params.code);
+  const M = require('./../models/' + req.params.code);
 
   let now = new Date();
   let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
@@ -192,7 +192,7 @@ router.get('/currentEvents.:code', (req, res) => {
   returns old events to display on /events */
 router.get('/pastEvents.:code', (req, res) => {
 
-  const M = require('./../schemas.js')(req.params.code);
+  const M = require('./../models/' + req.params.code);
 
   M.Event.find({when:{$lt: new Date()}}).sort('when').exec((err, result) => {
     if (err) console.log(err);

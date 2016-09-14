@@ -54,19 +54,27 @@ module.exports = function(connection){
     next: Array
   })
 
-
   if (!connection.models.User) {
+    console.log("user");
     connection.model('User', userSchema);
   }
   if (!connection.models.Event) {
+    console.log("event");
     connection.model('Event', eventSchema);
   }
   if (!connection.models.Analytics) {
+    console.log("analytics");
     connection.model('Analytics', analyticsSchema)
   }
   if (!connection.models.Conversation) {
+    console.log("convo");
     connection.model('Conversation', conversationsSchema)
   }
 
-  module.exports = connection;
+  return {
+    User: connection.models.User,
+    Event: connection.models.Event,
+    Analytics: connection.models.Analytics,
+    Conversation: connection.models.Conversation
+  };
 }

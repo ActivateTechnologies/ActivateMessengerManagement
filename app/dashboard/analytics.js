@@ -2,7 +2,8 @@
 
 module.exports = function(code){
 
-  const M = require('./../schemas.js')(code);
+
+  const M = require('./../models/' + code);
 
   /*
     Returns the basic dashboard stats, called when the dashboard is rendered.
