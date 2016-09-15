@@ -268,33 +268,12 @@ module.exports = function(code){
       executeTreeNode(uid, conversationName, node.next[node.next.length - 1], null, user);
     }
     else {
-      M.User.find({phoneNumber: '+44' + processedPhoneNumber}, (error, users) => {
-        if (error) {
-          console.log('Error getting users with phoneNumber: ', error);
-        }
-        else if (users.length == 0) {
-          console.log('No users with phoneNumber "'
-            + processedPhoneNumber + '" found, confirmed as new user');
-          savePhoneNumber(uid, processedPhoneNumber, (updatedUser, error) => {
-            if (error) {
-              console.log(error);
-            }
-            else {
-              executeTreeNode(uid, conversationName, node.next[0], null, updatedUser);
-            }
-          });
-        }
-        else {
-          console.log('User with phoneNumber "' + processedPhoneNumber
-            + '" already exists, combining users');
-          combineUsers(uid, processedPhoneNumber, users[0], (updatedUser, error) => {
-            if (error) {console.log(error);}
-            else {
-              executeTreeNode(uid, conversationName, node.next[1], null, updatedUser);
-            }
-          });
-        }
-      });
+      M.User.findOneAndUpdate({_id:uid._id},
+        {$push: {extras: {"phoneNumber": processedPhoneNumber}}},
+        (error, user) => {
+          console.log("added phone number");
+          executeTreeNode(uid, conversationName, node.next[0], null, user);
+        });
     }
   }
 
@@ -388,13 +367,12 @@ module.exports = function(code){
     //valid email so adding the user to the database
     else {
 
-      M.User.findOne({_id: uid._id}, (error, user) => {
-        if (error) {console.log(error);}
-        if(user){
-          user.extras['email'] = email;
+      M.User.findOneAndUpdate({_id:uid._id},
+        {$push: {extras: {"email": email}}},
+        (error, user) => {
+          console.log("added email");
           executeTreeNode(uid, conversationName, node.next[0], null, user);
-        }
-      })
+        });
 
     }
   }
@@ -411,6 +389,22 @@ module.exports = function(code){
   }
 
 
+
+
+
+  // Position saving functions
+  function saveToExtras(key, value){
+    return function(uid, conversationName, node, message, user){
+      M.User.findOneAndUpdate({_id:uid._id},
+        {$push: {extras: {key: value}}},
+        (error, user) => {
+          console.log("added", key, value);
+          executeTreeNode(uid, conversationName, node.next[0], null, user);
+        });
+    }
+  }
+
+
   /* Calls send.allEvents */
   var showEvents = function(uid, conversationName, node, message, user) {
     Send.allEvents(uid);
@@ -421,7 +415,15 @@ module.exports = function(code){
     onboarding: {
       showEvents: showEvents,
       collectPhoneNumber: collectPhoneNumber,
-      collectEmail: collectEmail
+      collectEmail: collectEmail,
+
+      // Preferred Position
+      saveStriker: saveToExtras("preferredPosition", "Striker"),
+      saveWinger: saveToExtras("preferredPosition", "Winger"),
+      saveCenterMid: saveToExtras("preferredPosition", "Center Mid"),
+      saveKeeper: saveToExtras("preferredPosition", "Keeper"),
+      saveCenterBack: saveToExtras("preferredPosition", "Center Back"),
+      saveFullBack: saveToExtras("preferredPosition", "Full Back")
     }
   }
 

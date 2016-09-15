@@ -14,7 +14,7 @@ module.exports = function(connection){
     gender: String,
     notifications: String,
     signedUpDate: Date,
-    extras: Schema.Types.Mixed,
+    extras: Array,
     conversationLocation: {
       conversationName: String,
       nodeId: String,
