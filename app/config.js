@@ -31,7 +31,7 @@ module.exports = function(code){
 
 	else if (code == 'ani') {
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-		ROOT_URL = "https://dd94a7ed.ngrok.io";
+		ROOT_URL = "https://9a46004d.ngrok.io";
 	}
 	else {
 		console.log("CODE not provided in config.js");
@@ -55,8 +55,7 @@ module.exports = function(code){
 		STRIPE_SECRET_KEY: STRIPE_SECRET_KEY,
 
 		VERIFICATION_TOKEN: VERIFICATION_TOKEN,
-		ROOT_URL: ROOT_URL,
-		CONVERSATION: CONVERSATION,
+		ROOT_URL: ROOT_URL
 	}
 
 }

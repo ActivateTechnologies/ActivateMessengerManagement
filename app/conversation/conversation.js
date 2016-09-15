@@ -98,9 +98,7 @@ module.exports = function(code){
 
     let nodeIdArray = nodeId.split(".");
     M.Conversations.find({name: conversationName}, (error, results) => {
-      if (error) {
-        console.log('Error getting conversation: ', error);
-      }
+      if (error) {console.log(error);}
       else if (results.length == 0) {
         console.log('No conversations with name "' + conversationName + '" found.');
       }
@@ -430,43 +428,12 @@ module.exports = function(code){
     Send.allEvents(uid);
   }
 
-  /* Send receipt for the user's last event */
-  var showLastReceipt = function(uid, conversationName, node, message, user) {
-    let lastEvent = user.events[user.events.length - 1];
-    M.Event.findOne({_id: lastEvent.eid}, (error, event) => {
-      if (error) {
-        console.log('Error getting events for showLastReceipt: ', error);
-      } else if (event == undefined || event == null) {
-        console.log('No event with _id "' + uid._id + '" found.');
-      } else {
-        Send.booked(uid, user.firstName + ' ' + user.lastName, event.price,
-         event.name, event.strapline, event.image_url, lastEvent.bookingReference,
-         Math.round(lastEvent.joinDate.getTime()/1000), (error) => {
-          if (error) {
-            console.log('Error sending receipt to user:', error);
-          } else {
-            executeTreeNode(uid, conversationName, node.next[node.next.length - 1],
-             null, user);
-          }
-        });
-      }
-    });
-  }
-
 
   let functionsIndex = {
-    onboardingSimple: {
+    onboarding: {
       showEvents: showEvents,
-      showLastReceipt: showLastReceipt
-    },
-    onboardingEmail: {
-      collectEmail: collectEmail,
-      showEvents: showEvents
-    },
-    onboardingPhoneNumber: {
       collectPhoneNumber: collectPhoneNumber,
-      showEvents: showEvents,
-      showLastReceipt: showLastReceipt
+      collectEmail: collectEmail
     }
   }
 
@@ -478,3 +445,135 @@ module.exports = function(code){
   }
 
 }
+
+
+/*
+
+{
+    "_id": {
+        "$oid": "57b3299adcba0f396ac72c6f"
+    },
+    "name": "onboarding",
+    "next": [
+        {
+            "id": "1",
+            "sender": "bot",
+            "nodeType": "quickReplies",
+            "text": "Welcome to the new UWE Football Community page. Please answer a few questions so we can help you get the most out of your football.",
+            "quickReplies": [
+                "Continue"
+            ],
+            "next": [
+                {
+                    "id": "1.1",
+                    "sender": "bot",
+                    "nodeType": "text",
+                    "text": "What is your phone number?",
+                    "next": [
+                        {
+                            "id": "1.1.1",
+                            "sender": "user",
+                            "nodeType": "text",
+                            "userErrorText": "Really sorry, but we need your phone number before we can proceed.",
+                            "next": [
+                                {
+                                    "id": "1.1.1.1",
+                                    "sender": "bot",
+                                    "nodeType": "function",
+                                    "function": "collectPhoneNumber",
+                                    "next": [
+                                        {
+                                            "id": "1.1.1.1.1",
+                                            "sender": "bot",
+                                            "nodeType": "text",
+                                            "text": "What is your email?",
+                                            "next": [
+                                                {
+                                                    "id": "1.1.1.1.1.1",
+                                                    "sender": "bot",
+                                                    "nodeType": "function",
+                                                    "function": "collectEmail",
+                                                    "next": [
+                                                        {
+                                                            "id": "1.1.1.1.1.1.1",
+                                                            "sender": "bot",
+                                                            "nodeType": "text",
+                                                            "text": "What is your preferred position?",
+                                                            "next": [
+                                                                {
+                                                                    "id": "1.1.1.1.1.1.1.1",
+                                                                    "sender": "bot",
+                                                                    "nodeType": "quickReplies",
+                                                                    "text": "What is your preferred position?",
+                                                                    "quickReplies": [
+                                                                        "Striker",
+                                                                        "Winger",
+                                                                        "Centre Mid"
+                                                                    ],
+                                                                    "next": [
+                                                                        {
+                                                                            "id": "1.1.1.1.1.1.1.1.1",
+                                                                            "sender": "bot",
+                                                                            "nodeType": "function",
+                                                                            "function": "showEvents"
+                                                                        },
+                                                                        {
+                                                                            "id": "1.1.1.1.1.1.1.1.2",
+                                                                            "sender": "bot",
+                                                                            "nodeType": "function",
+                                                                            "function": "showEvents"
+                                                                        },
+                                                                        {
+                                                                            "id": "1.1.1.1.1.1.1.1.3",
+                                                                            "sender": "bot",
+                                                                            "nodeType": "function",
+                                                                            "function": "showEvents"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "id": "1.1.1.1.1.1.2",
+                                                            "sender": "bot",
+                                                            "nodeType": "text",
+                                                            "text": "That doesn't seem like a valid email sorry, try typing out your email again?",
+                                                            "next": [
+                                                                {
+                                                                    "id": "1.1.1.1.1.1.2.1",
+                                                                    "sender": "bot",
+                                                                    "nodeType": "jumpToId",
+                                                                    "jumpToId": "1.1.1.1.1"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "1.1.1.1.2",
+                                            "sender": "bot",
+                                            "nodeType": "text",
+                                            "text": "That doesn't seem like a valid phone number sorry, try typing out your phone number again?",
+                                            "next": [
+                                                {
+                                                    "id": "1.1.1.1.2.1",
+                                                    "sender": "bot",
+                                                    "nodeType": "jumpToId",
+                                                    "jumpToId": "1.1.1"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+*/
