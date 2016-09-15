@@ -14,6 +14,7 @@ module.exports = function(connection){
     gender: String,
     notifications: String,
     signedUpDate: Date,
+    extras: Schema.Types.Mixed,
     conversationLocation: {
       conversationName: String,
       nodeId: String,
@@ -21,6 +22,10 @@ module.exports = function(connection){
       userErrorText: String
     }
   })
+
+  // extras is an object {}
+  // so any new property like striker can be added
+  // user.extras['position'] = "striker"
 
   let eventSchema = new Schema({
     name: String,

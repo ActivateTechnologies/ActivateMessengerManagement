@@ -8,23 +8,20 @@ const status = 'production'; //'production' or 'test'
 module.exports = function(code){
 
 	let STRIPE_PUBLIC_KEY, STRIPE_SECRET_KEY, VERIFICATION_TOKEN,
-	 ROOT_URL, CONVERSATION;
+	 ROOT_URL;
 
 
 	if(code === 'kickabout'){
-		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAACDZA59ohMoBABsVdZBRaXqrPeauovKzZB2JmyoZA87PLeIlTZCXNy1ry0EX7q7ZBNNpb3UAKlhirwPDZCniRY1JvHZCzlkIXceCWZBNUh3sNooO8L8tVAYcJRZAIzRljP1wcQgxeTuu7rtRLHEteAVmjKuPjfxXfXkkwKW8h7h981QZDZD";
 		ROOT_URL = "http://www.kickabout.football";
 	}
 	else if(code === 'uwe'){
-		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAAW8z3Llta8BAPXlubWU8t1aQyLUi00ANNBaiorYExsOZAOT63bRMhEXZCrdxQctJvzEyVV4NfgESKA0mjsQLpsVkNyePaZBDvalW4pzAcxIvkaZCpePB62bO7ttzkKayR5tiZBoocAbqVYgWS3QguUQqmASIJNH7dvJx6zNLKgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 	else if(code === 'ucl'){
-		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-		ROOT_URL = "http://www.kickabout.football";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
 	// else if (code === 'test') {
@@ -33,7 +30,6 @@ module.exports = function(code){
 	// }
 
 	else if (code == 'ani') {
-		CONVERSATION = "onboardingSimple";
 		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
 		ROOT_URL = "https://dd94a7ed.ngrok.io";
 	}

@@ -35,7 +35,7 @@ module.exports = function(code){
                 console.log('Error creating user:', error);
               }
               else {
-                Conversation.startConversation(newUid, Config.CONVERSATION);
+                Conversation.startConversation(newUid, "onboarding");
               }
             });
           }
@@ -133,7 +133,7 @@ module.exports = function(code){
         createUser(uid.mid, (newUid, error) => {
           if (error) {console.log(error)}
           else {
-            Conversation.startConversation(newUid, Config.CONVERSATION);
+            Conversation.startConversation(newUid, "onboarding");
           }
         });
         break;
@@ -167,9 +167,11 @@ module.exports = function(code){
       }
       else {
         console.log('Going to create user with mid "' + mid + '"');
+
         var get_url = "https://graph.facebook.com/v2.6/" + mid
          + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
          + "&access_token=" + Config.VERIFICATION_TOKEN;
+
         request(get_url, (error, response, body) => {
           if (!error && response.statusCode == 200) {
             body = JSON.parse(body);
@@ -180,7 +182,7 @@ module.exports = function(code){
               profilePic: body.profile_pic,
               locale: body.locale,
               gender: body.gender,
-              events: [],
+              extras: {},
               signedUpDate: new Date()
             });
             user.save((err) => {
