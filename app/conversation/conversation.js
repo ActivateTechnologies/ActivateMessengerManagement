@@ -409,7 +409,7 @@ module.exports = function(code){
 
   /* Calls send.allEvents */
   var showEvents = function(uid, conversationName, node, message, user) {
-    Send.allEvents(uid);
+    Send.allEvents(uid, "Thanks for providing us with that information, do book yourself onto one of our events below: ");
   }
 
 

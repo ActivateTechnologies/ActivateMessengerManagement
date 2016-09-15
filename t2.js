@@ -113,8 +113,8 @@
                                                                                                                     "nodeType": "quickReplies",
                                                                                                                     "text": "Last question, are you a new or returning member of UWE Football?",
                                                                                                                     "quickReplies": [
-                                                                                                                        "Yes",
-                                                                                                                        "No"
+                                                                                                                        "New",
+                                                                                                                        "Returning"
                                                                                                                     ],
                                                                                                                     "next": [
                                                                                                                         {
