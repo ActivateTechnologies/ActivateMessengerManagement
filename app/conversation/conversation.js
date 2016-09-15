@@ -395,8 +395,10 @@ module.exports = function(code){
   // Position saving functions
   function saveToExtras(key, value){
     return function(uid, conversationName, node, message, user){
+      let obj = {};
+      obj[key] = value;
       M.User.findOneAndUpdate({_id:uid._id},
-        {$push: {extras: {key: value}}},
+        {$push: {extras: obj}},
         (error, user) => {
           console.log("added", key, value);
           executeTreeNode(uid, conversationName, node.next[0], null, user);
@@ -423,7 +425,25 @@ module.exports = function(code){
       saveCenterMid: saveToExtras("preferredPosition", "Center Mid"),
       saveKeeper: saveToExtras("preferredPosition", "Keeper"),
       saveCenterBack: saveToExtras("preferredPosition", "Center Back"),
-      saveFullBack: saveToExtras("preferredPosition", "Full Back")
+      saveFullBack: saveToExtras("preferredPosition", "Full Back"),
+
+      // Backup Position
+      saveStriker2: saveToExtras("backup", "Striker"),
+      saveWinger2: saveToExtras("backup", "Winger"),
+      saveCenterMid2: saveToExtras("backup", "Center Mid"),
+      saveKeeper2: saveToExtras("backup", "Keeper"),
+      saveCenterBack2: saveToExtras("backup", "Center Back"),
+      saveFullBack2: saveToExtras("backup", "Full Back"),
+
+      // Previous Football Experience
+      savePro: saveToExtras("level", "Pro"),
+      saveSemiPro: saveToExtras("level", "Semi Pro"),
+      saveSchool: saveToExtras("level", "School/Uni"),
+      saveAmateur: saveToExtras("level", "Amateur"),
+
+      // New or returning member
+      newMember: saveToExtras("type", "new"),
+      returning: saveToExtras("type", "returning")
     }
   }
 
