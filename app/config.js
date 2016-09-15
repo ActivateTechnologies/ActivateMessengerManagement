@@ -21,7 +21,9 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 	else if(code === 'ucl'){
-		VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
+		//attached to wembley fc
+		VERIFICATION_TOKEN = "EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD";
+		//VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
