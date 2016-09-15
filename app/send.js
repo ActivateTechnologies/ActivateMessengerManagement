@@ -361,7 +361,7 @@ module.exports = function(code){
         bookOrCancelButton = {
           "type": "web_url",
           "title": S.s.bot.eventCard.buttonBook,
-          "url": config.ROOT_URL + "/event" + "?eid=" + eventId + "&uid=" + uid._id
+          "url": config.ROOT_URL + "/payment." + code + "?eid=" + eventId + "&uid=" + uid._id
         }
       }
 

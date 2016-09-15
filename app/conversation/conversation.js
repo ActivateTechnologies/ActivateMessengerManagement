@@ -108,7 +108,6 @@ module.exports = function(code){
         let conversation = results[0];
         let i = 1, node = conversation.next[0];
         while (i < nodeIdArray.length) {
-          //console.log('Going to id next[' + (nodeIdArray[i] - 1) + ']');
           node = node.next[nodeIdArray[i] - 1];
           i++;
         }
@@ -121,7 +120,6 @@ module.exports = function(code){
     Executes given node and calls itself or relevant functions
     when required */
   function executeTreeNode(uid, conversationName, node, message, user) {
-    //console.log('executeTreeNode', uid, conversationName, node);
     if (node.sender == 'bot') {
       clearUserConversationLocation(uid);
       if (node.nodeType == 'text') {
@@ -211,7 +209,6 @@ module.exports = function(code){
     Called from webhook.js when the user hits a quick reply button and payload
     starts with 'conversationName...'. */
   function handleQuickReply(uid, payload, user) {
-    /*console.log('handleQuickReply(' + payload + ')');*/
     let conversationName = payload.split('|')[0].split('~')[1];
     let nodeId = payload.split('|')[1].split('~')[1];
     executeTreeNodefromId(uid, conversationName, nodeId, null, user);
@@ -222,9 +219,6 @@ module.exports = function(code){
     Saves the users current conversation location to his user object,
     saving conversationName, nodeId, type and userErrorText. */
   function saveUserConversationLocation(uid, conversationName, node) {
-    /*console.log('saveUserConversationLocation(' + uid._id + ', '
-      + conversationName + ', ' + node.id + ', ' + node.nodeType
-      + ', ' + node.userErrorText + ')');*/
     let updateObject = {
       conversationLocation: {
         conversationName: conversationName,
