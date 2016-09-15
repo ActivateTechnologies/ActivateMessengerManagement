@@ -182,7 +182,7 @@ module.exports = function(code){
               profilePic: body.profile_pic,
               locale: body.locale,
               gender: body.gender,
-              extras: {},
+              extras: {"test":"tosee"},
               signedUpDate: new Date()
             });
             user.save((err) => {
