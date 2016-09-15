@@ -54,7 +54,6 @@
                   <th>Name</th>
                   <th>Gender</th>
                   <th>Phone Number</th>
-                  <th>No Of Events Attended</th>
                 </tr>
               </thead>
               <tbody id="usersTBody">
@@ -85,15 +84,6 @@
             + '<td>' + user.firstName + ' ' + user.lastName + '</td>'
             + '<td>' + user.gender + '</td>'
             + '<td>' + phoneNumber + '</td>'
-            + '<td>' + user.events.length + '</td>'
-          + '</tr>'
-        } else if (user.phoneNumber) {
-          data =
-            '<tr>'
-            + '<td>' + (index + 1) + '</td>'
-            + '<td colspan="4" style="text-align:center">Text Service User: '
-             + user.phoneNumber + '</td>'
-            + '<td>' + user.events.length + '</td>'
           + '</tr>'
         }
         return data;
