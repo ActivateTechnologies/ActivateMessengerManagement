@@ -50,10 +50,26 @@
               <thead>
                 <tr>
                   <th></th>
+                  <% if (<%= s.company.code %> === 'kickabout') { %>
+
+                    <th>FB Profile Pic</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+
+                  <% } else { %>
+
                   <th>FB Profile Pic</th>
                   <th>Name</th>
                   <th>Gender</th>
                   <th>Phone Number</th>
+                  <th>Email</th>
+                  <th>Preferred Position</th>
+                  <th>Backup Position</th>
+                  <th>Level</th>
+                  <th>New/Returning</th>
+
+                  <% } %>
                 </tr>
               </thead>
               <tbody id="usersTBody">
@@ -74,18 +90,37 @@
 
       var getCard = function(user, index) {
         let data;
-        if (user.mid) {
-          let phoneNumber = (user.phoneNumber) ? user.phoneNumber
-           : 'Not Collected Yet';
+
+        let phoneNumber = (user.phoneNumber) ? user.phoneNumber
+         : 'Not Collected Yet';
+
+        if('<%= s.company.code %>' === 'kickabout'){
           data =
-            '<tr>'
+          '<tr>'
             + '<td>' + (index + 1) + '</td>'
             + '<td><img style="height:50px;" src="' + user.profilePic + '" /></td>'
             + '<td>' + user.firstName + ' ' + user.lastName + '</td>'
             + '<td>' + user.gender + '</td>'
-            + '<td>' + phoneNumber + '</td>'
+            + '<td>' + user.events.length + '</td>'
           + '</tr>'
         }
+        
+        else {
+          data =
+            '<tr>'
+              + '<td>' + (index + 1) + '</td>'
+              + '<td><img style="height:50px;" src="' + user.profilePic + '" /></td>'
+              + '<td>' + user.firstName + ' ' + user.lastName + '</td>'
+              + '<td>' + user.gender + '</td>'
+              + '<td>' + user.extras[1].phoneNumber + '</td>'
+              + '<td>' + user.extras[2].email + '</td>'
+              + '<td>' + user.extras[3].preferredPosition + '</td>'
+              + '<td>' + user.extras[4].backup + '</td>'
+              + '<td>' + user.extras[5].level + '</td>'
+              + '<td>' + (user.extras[6])['type'] + '</td>'
+            + '</tr>'
+        }
+
         return data;
       }
 
