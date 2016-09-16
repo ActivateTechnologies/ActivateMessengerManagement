@@ -50,7 +50,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <% if (<%= s.company.code %> === 'kickabout') { %>
+                  <% if (s.company.code === 'kickabout') { %>
 
                     <th>FB Profile Pic</th>
                     <th>Name</th>
@@ -104,7 +104,7 @@
             + '<td>' + user.events.length + '</td>'
           + '</tr>'
         }
-        
+
         else {
           data =
             '<tr>'
