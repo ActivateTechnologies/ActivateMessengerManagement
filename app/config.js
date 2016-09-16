@@ -22,8 +22,12 @@ module.exports = function(code){
 	}
 	else if(code === 'ucl'){
 		//attached to wembley fc
-		VERIFICATION_TOKEN = "EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD";
+		//VERIFICATION_TOKEN = "EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD";
+
 		//VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
+
+		// attached to wembley fc using the wickedstudentnightsapp
+		VERIFICATION_TOKEN = "EAAQmEkmfekUBAKdoF4WKdMi6q3mNI4mPyND6tV5BnrY0OIdFH8UnHmZCVUZBZA1JshTwsw45V6pSLUFPbMB5cWkLdGkC90P72AWQBoKaGGRJatLJIyGDaAfucKKygG9wqSo3vXbXCnrK8dy4D35zmUUp4owMOd7ZBFBdZCxtKfAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
@@ -86,7 +90,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAIL6dc0iLsBABYhZB3KsNv8N3uARJ7mqLDHPdSL2bEAqms3uuGRQMy4jXv9ZB2vLTIbR2xS3IuFZBatM20NVYtQyjKH3wZAMWzd2pRnB3tYHXHzwgxPMfdIiYSZBlhK9ZAOZBBtaSSeefdgjHTTDc3HaTzdB29sWY3f1KNyNF5nAZDZD
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD"
 
 // For setting up Get Started Button
 
@@ -98,4 +102,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAQmEkmfekUBAD8bq0HX9x88drq8YxBOmGSGCynWJaQK6yZA28cuURx54GjgZBm5NALa3mvfxNFrJYingqlYgkSfLNUPyINyZBCoE2E8PkzsZAThe4zMKgS13llcP1mkItozytvmvyVOOfoKZBJXvURBDpowRYZCTsGkgJQYTQNgZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD"
