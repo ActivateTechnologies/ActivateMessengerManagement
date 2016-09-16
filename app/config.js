@@ -1,6 +1,6 @@
 'use strict'
 
-const status = 'production'; //'production' or 'test'
+const status = 'test'; //'production' or 'test'
 
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
