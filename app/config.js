@@ -54,7 +54,7 @@ module.exports = function(code){
 	}
 
 	else if(code === 'bot4'){
-		VERIFICATION_TOKEN = "EAARHSh9eMe8BAHiKscXMZB3zEV8ci4ZAB47iy4vX0YcO39QIvmo7S8ti6zWWur2HnhbnFzVl6AqsWkMo7ocgd81ElJbiJXYpulFQcIPzj5OMysFtqRmBYeppat8C7BRtmCqvX1JhKV5jtFGYkZC5KyhsnxDclGP2pZCgwP4VCgZDZD";
+		VERIFICATION_TOKEN = "EAAPOshDiARgBAPJxp3wRj3xuEqpChsMFiZBW9NvGvx3oMi4Sky5woWhOzfDdujEeEAJGYUr4atrGlmiLrrZBMQSfarOEkcfFkpmc2sfDu6ksLcZB4yelFShZCAWJpwjR4pjNYhGnzBtSdFqZBdpMkUZBQPI1JWe7WIGfIAncCu9wZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
