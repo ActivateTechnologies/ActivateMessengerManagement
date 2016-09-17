@@ -242,7 +242,7 @@ module.exports = function(code){
     }
   }
 
-  else if (code === "ani"){
+  else {
     s = {
       company: {
         name: "Kickabout",
@@ -319,10 +319,6 @@ module.exports = function(code){
         paymentError: "Your payment did not go through, please try again."
     	}
     }
-  }
-
-  else {
-    console.log("CODE not provided in strings.js");
   }
 
   return {s:s};
