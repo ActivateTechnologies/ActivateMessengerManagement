@@ -44,7 +44,7 @@ router.post('/message.:code', (req, res) => {
             phoneNumber: result[i].phoneNumber,
           }
           uid.mid = (result[i].mid) ? result[i].mid : null;
-          Send.allEvents(uid, message);
+          Send.allEvents(uid);
           counter++;
         }
       }

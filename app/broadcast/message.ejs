@@ -44,31 +44,27 @@
         <div class="main">
           <a href="dashboard"><h1 class="page-header"><%=s.company.name%></h1></a>
 
-          <h2 class="sub-header" id="titleElement">Message All Users</h2>
+          <h2 class="sub-header">Message</h2>
 
            <form id="addevent">
 
-              <div class="form-group" onclick="changeType('message')">
+              <div class="form-group">
                 <label for="textarea_message">
                   Message Text
                 </label>
                 <textarea class="form-control" rows="3" placeholder="Message Text"
-                 name="textarea_message" id="textarea_message"></textarea>
+                 name="message" id="message"></textarea>
+                <br/>
+                <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
+                 name="ids" id="ids"></textarea>
               </div>
-
-              <hr>
-
-              <div class="form-group" onclick="changeType('upcomingEvents')">
-                <label for="textarea_upcomingEvents">
-                  Upcoming Events with Message Text
-                </label>
-                <textarea class="form-control" rows="3" placeholder="Message Text"
-                 name="textarea_upcomingEvents" id="textarea_upcomingEvents"></textarea>
-              </div>
-
-              <input type="button" class="btn btn-success btn-block" value="Send" onclick="send()"/>
+              <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(message)"/>
 
             </form>
+
+            <br/>
+
+            <button type="button" class="btn btn-primary" onclick="sendEvents(events)">Send Events</button>
           </div>
         </div>
       </div>
@@ -79,55 +75,32 @@
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
 
-      $(document).ready(() => {
-        init();
-      });
-
-      var type = 'message';
-      var titles = {
-        message: 'Message All Users',
-        upcomingEvents: 'Send Events to All Users'
-      }
-
-      function init() {
-        changeType(type);
-      }
-
-      function changeType(newType) {
-        if (type != newType) {
-          $('#type_' + type).removeClass("radioButtonSelected");
-          $('#type_' + type).addClass("radioButton");
-          $('#textarea' + type).attr("disabled", true);
-          type = newType;
-          $('#type_' + type).removeClass("radioButton");
-          $('#type_' + type).addClass("radioButtonSelected");
-          $('#textarea' + type).attr("disabled", false);
-          $('#titleElement').fadeOut(100, () => {
-            $('#titleElement').html(titles[type]);
-            $('#titleElement').fadeIn(400);
-          });
+      function sendMessage(type, message, ids) {
+        if (type === "events"){
+          $.post(window.location.href
+            + "?type=" + "events",
+            (data) => {
+              console.log(data);
+              alert(data);
+            });
+        }
+        else {
+          $.post(window.location.href
+            + "?type=" + "message"
+            + "&message=" + encodeURIComponent(message)
+            + "&ids=" + ids,
+            (data) => {
+              console.log(data);
+              alert(data);
+            });
         }
       }
 
-      function sendMessage(type, message) {
-        console.log('sendMessage', type, message);
-        $.post(window.location.href + "?type=" + type + "&message="
-         + encodeURIComponent(message), (data) => {
-          console.log(data);
-          alert(data);
-        });
-      }
-
-      function send() {
-        if ($('#textarea_' + type).val().trim().length == 0) {
-          alert('Message box empty');
-          return;
-        }
-        let confirmMessage = (type == 'message')
-         ? "Are you sure you want to send this message?"
-         : "Are you sure you want to send this message along with upcoming events?";
-        if (confirm(confirmMessage)) {
-          sendMessage(type, $('#textarea_' + type).val().trim());
+      function send(type) {
+        if (confirm("Are you sure you want to send this message?")) {
+          sendMessage(type,
+            $('#message').val().trim()
+            $('#ids').val().trim());
         }
       }
     </script>
