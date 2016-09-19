@@ -40,8 +40,7 @@ router.post('/message.:code', (req, res) => {
 
   // if to send to choosen ids
   if(req.query.ids){
-    let ids = req.query.ids;
-    ids = ids.split(',')
+    let ids = req.query.ids.split(',')
     _.each(ids, (id)=>{
       fn(uid);
     })
@@ -69,11 +68,18 @@ router.post('/message.:code', (req, res) => {
 
 router.get('/message.:code', isLoggedIn, (req, res) => {
   const S = require('./../strings')(req.params.code);
-  res.render('broadcast/message', {
-    s: {
-      company: S.s.company
-    }
-  });
+  const M = require('./../models/' + req.params.code);
+
+  let now = new Date();
+  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  M.Event.find({when:{$gt: date}}, (err, results)=>{
+    if(err) console.log(err);
+    res.render('broadcast/message', {
+      s: {company: S.s.company},
+      events: results
+    });
+  })
 });
 
 function isLoggedIn(req, res, next) {
