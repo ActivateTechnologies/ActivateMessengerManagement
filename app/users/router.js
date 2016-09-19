@@ -13,12 +13,11 @@ router.get('/userdata.:code', (req, res) => {
 
   M.User.find({}, (err, users) => {
     if(err) res.send(err);
-    let data = "Messenger Id Id,Name,Gender,Phone Number,Email,Preferred Position,Backup Position,Level,New/Returning,Sign Up Date,Events Attended";
+    let data = "Name,Gender,Phone Number,Email,Preferred Position,Backup Position,Level,New/Returning,Events Attended,Sign Up Date,Messenger Id";
 
     _.each(users, (user)=>{
       data += "\r\n";
-      data += user.mid + ","
-            + (user.firstName + " " + user.lastName) + ","
+      data += (user.firstName + " " + user.lastName) + ","
             + user.gender + ","
       try {
         data += (user.extras[1].phoneNumber + ',')
@@ -56,14 +55,15 @@ router.get('/userdata.:code', (req, res) => {
       catch (e) {
         data += ("NA" + ',')
       }
-      data += user.signedUpDate + ","
-
       try {
         data += (user.events.length + ',')
       }
       catch (e) {
-        data += 0
+        data += 0 + ','
       }
+      data += user.signedUpDate + ","
+      data += '"' + user.mid + '"'
+
     })
 
     res.setHeader('Content-disposition',
