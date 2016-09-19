@@ -38,7 +38,7 @@ router.get('/userAnalyticsData.:code', (req, res) => {
   const code = req.params.code;
   const M = require('./../models/' + code);
 
-  M.User.find({}, (err, users) => {
+  M.User.find({}).sort({signedUpDate: -1}).exec((err, users) => {
     res.json({'users': users})
   });
 
