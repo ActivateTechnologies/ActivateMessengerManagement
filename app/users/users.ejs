@@ -41,7 +41,7 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-9 col-md-10 main">
+        <div class="main">
           <a href="dashboard"><h1 class="page-header"><%=s.company.name%></h1></a>
 
           <h2 class="sub-header">Members</h2>
@@ -67,6 +67,9 @@
                   <th>Backup Position</th>
                   <th>Level</th>
                   <th>New/Returning</th>
+                  <th></th>
+                  <th>Signed Up Date</th>
+                  <th>Messenger Id</th>
 
                   <% } %>
                 </tr>
@@ -115,38 +118,59 @@
             data += '<td>' + user.extras[1].phoneNumber + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
           try {
             data += '<td>' + user.extras[2].email + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
           try {
             data += '<td>' + user.extras[3].preferredPosition + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
           try {
             data += '<td>' + user.extras[4].backup + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
           try {
             data += '<td>' + user.extras[5].level + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
           try {
             data += '<td>' + (user.extras[6])['type'] + '</td>'
           }
           catch (e) {
-            data += '<td>' + "Not Answered" + '</td>'
+            data += '<td>' + "NA" + '</td>'
           }
+
+          data += '<td>' + "     " + '</td>'
+
+
+          function formatDate(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+          }
+
+          let sd = new Date(user.signedUpDate);
+          sd = formatDate(sd);
+          data += '<td>' + sd + '</td>'
+
+          data += '<td>' + user.mid + '</td>'
+
           data += '</tr>'
         }
 
