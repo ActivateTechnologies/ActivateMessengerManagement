@@ -46,26 +46,23 @@
 
           <h2 class="sub-header">Message</h2>
 
-           <form id="addevent">
+          <form>
+            <div class="form-group">
+              <label for="textarea_message">
+                Message Text
+              </label>
+              <textarea class="form-control" rows="3" placeholder="Message Text"
+               name="message" id="message"></textarea>
+              <br/>
+              <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
+               name="ids" id="ids"></textarea>
+            </div>
+            <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(message)"/>
+          </form>
 
-              <div class="form-group">
-                <label for="textarea_message">
-                  Message Text
-                </label>
-                <textarea class="form-control" rows="3" placeholder="Message Text"
-                 name="message" id="message"></textarea>
-                <br/>
-                <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
-                 name="ids" id="ids"></textarea>
-              </div>
-              <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(message)"/>
+          <br/>
 
-            </form>
-
-            <br/>
-
-            <button type="button" class="btn btn-primary" onclick="sendEvents(events)">Send Events</button>
-          </div>
+          <button type="button" class="btn btn-primary" onclick="sendEvents(events)">Send Events</button>
         </div>
       </div>
     </div>

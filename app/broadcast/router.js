@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const _ = require('underscore')
 
 /*
   Sends given message to user, with events if type is
@@ -15,39 +16,48 @@ router.post('/message.:code', (req, res) => {
 
 
   let type = req.query.type;
-  let message = decodeURIComponent(req.query.message);
 
   if (type == "message") {
-    M.User.find({}, (err, result) => {
-      let counter = 0;
-      for(let i = 0; i<result.length; i++){
-        if(result[i].notifications !== "off"){
+    let message = decodeURIComponent(req.query.message);
+
+    // if to send to choosen ids
+    if(req.query.ids){
+      let ids = req.query.ids;
+      ids = ids.split(',')
+      _.each(ids, (id)=>{
+        Send.text(uid, message);
+      })
+      res.send("People reached:", ids.length);
+    }
+
+    // else send to everyone
+    else {
+      M.User.find({}, (err, result) => {
+        _.each(result, (item)=>{
           let uid = {
-            _id: result[i].id,
-            phoneNumber: result[i].phoneNumber,
+            _id: item.id,
+            mid: item.mid
           }
-          uid.mid = (result[i].mid) ? result[i].mid : null;
-          Send.text(uid, message);
-          counter++;
-        }
-      }
-      res.send("People reached: " + counter)
-    })
+          if (item.notifications !== "off"){
+            Send.text(uid, message);
+          }
+        })
+        res.send("People reached: " + result.length)
+      })
+    }
   }
+
   else if (type == "upcomingEvents") {
     M.User.find({}, (err, result) => {
-      let counter =  0;
-      for(let i = 0; i<result.length; i++){
-        if(result[i].notifications !== "off"){
-          let uid = {
-            _id: result[i].id,
-            phoneNumber: result[i].phoneNumber,
-          }
-          uid.mid = (result[i].mid) ? result[i].mid : null;
-          Send.allEvents(uid);
-          counter++;
+      _.each(result, (item)=>{
+        let uid = {
+          _id: item.id,
+          mid: item.mid
         }
-      }
+        if (item.notifications !== "off"){
+          Send.allEvents(uid);
+        }
+      })
       res.send("People reached: " + counter)
     })
   }

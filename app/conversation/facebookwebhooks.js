@@ -184,6 +184,7 @@ module.exports = function(code){
               gender: body.gender,
               extras: [{"test":"tosee"}],
               events: [],
+              notifications: "on",
               signedUpDate: new Date()
             });
             user.save((err) => {
