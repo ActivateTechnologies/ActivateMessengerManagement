@@ -240,8 +240,8 @@ module.exports = function(code){
   function bookedForFreeEvents (uid, eid) {
     M.Event.findOneAndUpdate(
       {_id:eid},
-      {$push: {joined: {uid: uid._id, joinDate: new Date()}}}
-      (e, event){
+      {$push: {joined: {uid: uid._id, joinDate: new Date()}}},
+      (e, event)=>{
         if(e) console.log(e);
 
         // update user record

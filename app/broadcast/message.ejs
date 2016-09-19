@@ -56,35 +56,38 @@
 
           <div class="tab-content">
             <div id="text" class="tab-pane fade in active">
-              <form>
+              <form action="/message.<%= s.company.code %>" method="POST">
+                <input style="display:none" type="text" name="formType" value="message">
                 <div class="form-group">
                   <label for="textarea_message">
                     Message Text
                   </label>
                   <textarea class="form-control" rows="3" placeholder="Message Text"
-                   name="message" id="message"></textarea>
+                   name="message"></textarea>
                   <br/>
                   <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
-                   name="ids" id="ids"></textarea>
+                   name="ids"></textarea>
                 </div>
-                <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(message)"/>
+                <input type="submit" class="btn btn-success btn-block" value="Send"/>
               </form>
             </div>
 
             <div id="allEvents" class="tab-pane fade">
-              <form>
+              <form action="/message.<%= s.company.code %>" method="POST">
+                <input style="display:none" type="text" name="formType" value="events">
                 <div class="form-group">
                   <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
-                   name="ids" id="ids"></textarea>
+                   name="ids"></textarea>
                 </div>
-                <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(events)"/>
+                <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(events)"/>
               </form>
             </div>
 
             <div id="featuredEvent" class="tab-pane fade">
-              <form>
+              <form action="/message.<%= s.company.code %>" method="POST">
+                <input style="display:none" type="text" name="formType" value="featured">
                 <div class="form-group">
-                  <select id="#eventId">
+                  <select name="eid">
                     <% events.forEach(function(item){ %>
                       <option value="<%=item._id%>"><%= item.name %></option>
                     <% }) %>
@@ -95,12 +98,12 @@
                     Subtitle Text
                   </label>
                   <textarea class="form-control" rows="3" placeholder="Subtitle Text"
-                   name="message" id="subtitle"></textarea>
+                   name="subtitle"></textarea>
                   <br/>
                   <textarea class="form-control" rows="3" placeholder="List of Id's (Leave blank to message everyone)"
-                   name="ids" id="ids"></textarea>
+                   name="ids"></textarea>
                 </div>
-                <input type="button" class="btn btn-success btn-block" value="Send" onclick="send(featured)"/>
+                <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(featured)"/>
               </form>
             </div>
           </div>
@@ -114,57 +117,6 @@
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
 
-      function sendText(text, ids) {
-        $.post(window.location.href
-          + "?type=message"
-          + "&text=" + text
-          + "&ids=" + ids,
-          (data) => {
-            console.log(data);
-            alert(data);
-          });
-      }
-
-      function sendAllEvents(ids) {
-        $.post(window.location.href
-          + "?type=events"
-          + "&ids=" + ids,
-          (data) => {
-            console.log(data);
-            alert(data);
-          });
-      }
-
-      function sendFeaturedEvent(text, eid, ids) {
-        $.post(window.location.href
-          + "?type=featured"
-          + "&text=" + text
-          + "&eid" + eid
-          + "&ids=" + ids,
-          (data) => {
-            console.log(data);
-            alert(data);
-          });
-      }
-
-      function send(type) {
-        if (confirm("Are you sure you want to send this message?")) {
-          var ids = $('#ids').val().trim();
-          switch(type){
-            case "message":
-            sendMessage($('#message').val().trim(), ids);
-            break;
-
-            case "events":
-            sendAllEvents(ids);
-            break;
-
-            case "featured":
-            sendFeaturedEvent($('#subtitle').val().trim(), $('#eventId').val(), ids)
-            break;
-          }
-        }
-      }
     </script>
   </body>
 </html>

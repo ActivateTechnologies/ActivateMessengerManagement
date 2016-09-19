@@ -24,15 +24,9 @@ module.exports = function(code){
 	}
 	else if(code === 'uwe'){
 		VERIFICATION_TOKEN = "EAAW8z3Llta8BAPXlubWU8t1aQyLUi00ANNBaiorYExsOZAOT63bRMhEXZCrdxQctJvzEyVV4NfgESKA0mjsQLpsVkNyePaZBDvalW4pzAcxIvkaZCpePB62bO7ttzkKayR5tiZBoocAbqVYgWS3QguUQqmASIJNH7dvJx6zNLKgZDZD";
-		//VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 	else if(code === 'ucl'){
-		//attached to wembley fc
-		//VERIFICATION_TOKEN = "EAAPatMpovWoBAF5uEsTzBcK4jhUimOfOICZAXx1WlfWUVnEdaZBaWU6CAJyWwZCoclNvFbQLJBTNdIZBHHnj93qzcQnjDpsMcyjNovjxiDriqODfPbEpzTxjJERLdXSySmqjHvGTV8vfSBBOAhACFYOWc3eI7CmMQr0QBF784QZDZD";
-
-		//VERIFICATION_TOKEN = "EAAIL6dc0iLsBALpD2ZBiLskvxJjtB12xukUvLevmJE0S5BAHuFPgPY38h3fgX2UqxX54rRvzhMyiFFgydT9t3xilFAjZB4TVBFjV2ANzHtnnn19erpmfgcyv3SSA07nsYmZCjT4h47B2LkbB0iH0nGFrbCPnMCIo4wpQmrDqwZDZD";
-
 		// attached to wembley fc using the wickedstudentnightsapp
 		VERIFICATION_TOKEN = "EAAQmEkmfekUBAKdoF4WKdMi6q3mNI4mPyND6tV5BnrY0OIdFH8UnHmZCVUZBZA1JshTwsw45V6pSLUFPbMB5cWkLdGkC90P72AWQBoKaGGRJatLJIyGDaAfucKKygG9wqSo3vXbXCnrK8dy4D35zmUUp4owMOd7ZBFBdZCxtKfAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";

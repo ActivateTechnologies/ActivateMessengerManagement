@@ -8,6 +8,7 @@ const _ = require('underscore')
   Sends given message to user, with events if type is
   "upcomingEvents" */
 router.post('/message.:code', (req, res) => {
+  console.log("posted something");
 
   const code = req.params.code
   const S = require('./../strings')(code);
@@ -15,11 +16,11 @@ router.post('/message.:code', (req, res) => {
   const Send = require('./../send.js')(code);
 
 
-  let type = req.query.type;
+  let type = req.body.formType;
   let fn;
 
   if (type === "message"){
-    let message = decodeURIComponent(req.query.message);
+    let message = req.body.message;
     fn = function(uid){
       Send.text(uid, message);
     }
@@ -30,21 +31,34 @@ router.post('/message.:code', (req, res) => {
   }
 
   else if (type === "featured"){
-    let eid = req.query.eid;
-    let text = req.query.text;
+    let eid = req.body.eid;
+    let subtitle = req.body.subtitle;
     fn = function(uid){
-      Send.eventBroadcast(uid, eid, text);
+      Send.eventBroadcast(uid, eid, subtitle);
     }
   }
 
 
   // if to send to choosen ids
-  if(req.query.ids){
-    let ids = req.query.ids.split(',')
+  if(req.body.ids){
+    let ids = req.body.ids.trim().split(',')
+    console.log(ids);
     _.each(ids, (id)=>{
-      fn(uid);
+      M.User.findOne({_id:id}, function(err, user){
+        if(err) console.log(err);
+        if(user){
+          let uid = {
+            _id: id,
+            mid: user.mid
+          }
+          fn(uid)
+        }
+        else {
+          console.log("user not found invalid id");
+        }
+      })
     })
-    res.send("People reached:", ids.length);
+    res.send("People reached: " + ids.length);
   }
 
   // else send to everyone
