@@ -238,13 +238,21 @@ module.exports = function(code){
   }
 
   function bookedForFreeEvents (uid, eid) {
-    M.Event.findOne({_id:eid}, function(err, result){
-      if(err){console.log(err);}
-      if(result){
+    M.Event.findOneAndUpdate(
+      {_id:eid},
+      {$push: {joined: {uid: uid._id, joinDate: new Date()}}}
+      (e, event){
+        if(e) console.log(e);
+
+        // update user record
+        M.User.findOneAndUpdate(
+          {_id:uid._id},
+          {$push: {events: eid}},
+          (e)=>{if(e) console.log(e);})
+
         booked(uid, uid.firstName + " " + uid.lastName,
-          result.price, result.name, result.strapline, result.image_url,
+          event.price, event.name, event.strapline, event.image_url,
           new Date().toISOString(), Math.round((new Date()).getTime()/1000))
-      }
     })
   }
 

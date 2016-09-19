@@ -183,6 +183,7 @@ module.exports = function(code){
               locale: body.locale,
               gender: body.gender,
               extras: [{"test":"tosee"}],
+              events: [],
               signedUpDate: new Date()
             });
             user.save((err) => {

@@ -15,6 +15,7 @@ module.exports = function(connection){
     notifications: String,
     signedUpDate: Date,
     extras: Array,
+    events: Array,
     conversationLocation: {
       conversationName: String,
       nodeId: String,

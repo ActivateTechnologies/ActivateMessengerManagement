@@ -91,7 +91,7 @@ router.post('/charge.:code', (req, res) => {
     }
     // Event Exists
     else {
-      M.User.findOne({_id: id}, function(e, user){
+      M.User.findOneAndUpdate({_id: id}, function(e, user){
         if(e) console.log(e);
         if(!user){
           console.log("User not found");
@@ -129,7 +129,7 @@ router.post('/charge.:code', (req, res) => {
                 // Update Analytics
                 M.Analytics.update({name:"Payments"},
                   {$push: {
-                      activity: {
+                    activity: {
                         uid: uid._id,
                         time: new Date(),
                         eid: eid,
@@ -138,24 +138,29 @@ router.post('/charge.:code', (req, res) => {
                     },
                     $inc: {total: event.price}},
                   {upsert: true},
-                (e)=> {
+                  (e)=> {
+                    if (e) console.log(e);
 
-                  if (e) console.log(e);
+                    // update User rec
+                    M.User.findOneAndUpdate(
+                      {_id:uid._id},
+                      {$push: {events: eid}},
+                      (e)=>{if(e) console.log(e);})
 
-                  // update event rec
-                  M.Event.findOneAndUpdate({_id:eid},
-                    {$push: {joined: {uid: uid._id, joinDate: new Date()}}},
-                    (err)=> {
-                      if (err) console.log(err);
+                    // update event rec
+                    M.Event.findOneAndUpdate({_id:eid},
+                      {$push: {joined: {uid: uid._id, joinDate: new Date()}}},
+                      (err)=> {
+                        if (err) console.log(err);
 
-                      // SEND RECEIPT to user
-                      Send.booked(uid, user.firstName + ' ' + user.lastName,
-                         event.price, event.name, event.strapline, event.image_url,
-                         stripeToken, Math.round((new Date()).getTime()/1000))
+                        // SEND RECEIPT to user
+                        Send.booked(uid, user.firstName + ' ' + user.lastName,
+                           event.price, event.name, event.strapline, event.image_url,
+                           stripeToken, Math.round((new Date()).getTime()/1000))
 
-                      renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
-                    });
-                });
+                        renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
+                      });
+                  });
               }
             });
           }
