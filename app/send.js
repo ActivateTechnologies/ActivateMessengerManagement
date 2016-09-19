@@ -506,6 +506,19 @@ module.exports = function(code){
     })
   }
 
+  function eventBroadcast(uid, eventId, subtitle) {
+    M.Event.findOne({_id:eventId}, function(err, result){
+      if(err) console.log(err);
+      if(result){
+        let data = [];
+        data.push(result);
+        data = generateCard(uid, data);
+        data.attachment.payload.elements[0].subtitle = subtitle;
+        cards(uid, data);
+      }
+    })
+  }
+
   function allEvents(uid, broadcast) {
     let now = new Date();
     let query = {when:
@@ -629,7 +642,8 @@ module.exports = function(code){
     cancelBooking: cancelBooking,
     moreInfo: moreInfo,
     shareEvent: shareEvent,
-    event: event
+    event: event,
+    eventBroadcast: eventBroadcast
   }
 
 }

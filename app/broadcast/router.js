@@ -16,38 +16,40 @@ router.post('/message.:code', (req, res) => {
 
 
   let type = req.query.type;
+  let fn;
 
-  if (type == "message") {
+  if (type === "message"){
     let message = decodeURIComponent(req.query.message);
-
-    // if to send to choosen ids
-    if(req.query.ids){
-      let ids = req.query.ids;
-      ids = ids.split(',')
-      _.each(ids, (id)=>{
-        Send.text(uid, message);
-      })
-      res.send("People reached:", ids.length);
-    }
-
-    // else send to everyone
-    else {
-      M.User.find({}, (err, result) => {
-        _.each(result, (item)=>{
-          let uid = {
-            _id: item.id,
-            mid: item.mid
-          }
-          if (item.notifications !== "off"){
-            Send.text(uid, message);
-          }
-        })
-        res.send("People reached: " + result.length)
-      })
+    fn = function(uid){
+      Send.text(uid, message);
     }
   }
 
-  else if (type == "upcomingEvents") {
+  else if (type === "events"){
+    fn = Send.allEvents
+  }
+  
+  else if (type === "event"){
+    let eid = req.query.eid;
+    let text = req.query.text;
+    fn = function(uid){
+      Send.eventBroadcast(uid, eid, text);
+    }
+  }
+
+
+  // if to send to choosen ids
+  if(req.query.ids){
+    let ids = req.query.ids;
+    ids = ids.split(',')
+    _.each(ids, (id)=>{
+      fn(uid);
+    })
+    res.send("People reached:", ids.length);
+  }
+
+  // else send to everyone
+  else {
     M.User.find({}, (err, result) => {
       _.each(result, (item)=>{
         let uid = {
@@ -55,10 +57,10 @@ router.post('/message.:code', (req, res) => {
           mid: item.mid
         }
         if (item.notifications !== "off"){
-          Send.allEvents(uid);
+          fn(uid);
         }
       })
-      res.send("People reached: " + counter)
+      res.send("People reached: " + result.length)
     })
   }
 
