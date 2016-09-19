@@ -52,7 +52,7 @@ module.exports = function(code){
                 processQuickReply(event, uid);
               }
               else if (event.message && event.message.text && !event.message.quick_reply) {
-                Send.allEvents(uid, S.s.bot.allEventsDefault);
+                // Send.allEvents(uid, S.s.bot.allEventsDefault);
               }
               else if (event.message && event.message.attachments){
                 processAttachment(event, uid);
