@@ -28,8 +28,8 @@ router.post('/message.:code', (req, res) => {
   else if (type === "events"){
     fn = Send.allEvents
   }
-  
-  else if (type === "event"){
+
+  else if (type === "featured"){
     let eid = req.query.eid;
     let text = req.query.text;
     fn = function(uid){
