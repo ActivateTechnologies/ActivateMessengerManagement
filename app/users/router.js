@@ -13,14 +13,57 @@ router.get('/userdata.:code', (req, res) => {
 
   M.User.find({}, (err, users) => {
     if(err) res.send(err);
-    let data = "Messenger Id Id,Name,Sign Up Date, Events Attended";
+    let data = "Messenger Id Id,Name,Gender,Phone Number,Email,Preferred Position,Backup Position,Level,New/Returning,Sign Up Date,Events Attended";
 
     _.each(users, (user)=>{
       data += "\r\n";
       data += user.mid + ","
             + (user.firstName + " " + user.lastName) + ","
-            + user.signedUpDate + ","
-            + user.events.length
+            + user.gender + ","
+      try {
+        data += (user.extras[1].phoneNumber + ',')
+      }
+      catch (e) {
+        data += "NA" + ','
+      }
+      try {
+        data += (user.extras[2].email + ',')
+      }
+      catch (e) {
+        data += ("NA" + ',')
+      }
+      try {
+        data += (user.extras[3].preferredPosition + ',')
+      }
+      catch (e) {
+        data += ("NA" + ',')
+      }
+      try {
+        data += (user.extras[4].backup + ',')
+      }
+      catch (e) {
+        data += ("NA" + ',')
+      }
+      try {
+        data += (user.extras[5].level + ',')
+      }
+      catch (e) {
+        data += ("NA" + ',')
+      }
+      try {
+        data += ((user.extras[6])['type'] + ',')
+      }
+      catch (e) {
+        data += ("NA" + ',')
+      }
+      data += user.signedUpDate + ","
+
+      try {
+        data += (user.events.length + ',')
+      }
+      catch (e) {
+        data += 0
+      }
     })
 
     res.setHeader('Content-disposition',
