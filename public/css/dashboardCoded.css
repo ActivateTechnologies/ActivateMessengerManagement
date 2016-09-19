@@ -215,8 +215,8 @@ a { color: inherit; }
 }
 
 .activateLogoHeader {
-  width: 200px;
-  margin-top: 5px;
+  width: 160px;
+  margin-top: 10px;
 }
 
 .jumbatronLeftContainer {
@@ -254,10 +254,26 @@ a { color: inherit; }
   border-radius: 100%;
 }
 
+.footerText {
+  text-align: center;
+}
 
+.navbar {
+  background-color: #FF524F;
+}
 
+.jumbotron {
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
 
+.navbar-inverse .navbar-nav>li>a {
+    color: #FFFFFF;
+}
 
+.nav>li:hover {
+    background-color: rgba(255,255,255, 0.3);
+}
 
 
 
