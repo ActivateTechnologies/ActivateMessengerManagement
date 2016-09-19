@@ -5,56 +5,41 @@ module.exports = function(code){
 
   const M = require('./../models/' + code);
 
+
   /*
     Returns the basic dashboard stats, called when the dashboard is rendered.
     Returns data of form:
     { totalNoOfMembers:number, totalRevenue: number, totalNoOfTickets: number}*/
   function getDashboardStats (callback) {
-    let returnObject = {};
-    let errors = [];
     M.User.count((err, count) => {
-      if (err) {
-        returnObject.totalNoOfMembers = 0;
-        console.log('Er1' + JSON.stringify(err));
-        errors.push('Error getting totalNoOfMembers: ' + JSON.stringify(err));
-      } else {
-        returnObject.totalNoOfMembers = count;
+      if (err) console.log(err);
+      else {
+        M.Analytics.findOne({name:"Payments"}, (err, result) => {
+          if (err) console.log(err);
+          if (result) {
+            return {
+              totalNoOfMembers: count,
+              totalRevenue: result.total,
+              totalNoOfTickets: result.activity.length
+            }
+          }
+          else {
+            return {
+              totalNoOfMembers: count,
+              totalRevenue: 0,
+              totalNoOfTickets: 0
+            }
+          }
+        });
       }
-      returnData();
     });
-
-    M.Analytics.find({name:"Payments"}, (err, results) => {
-      if (err || results.length == 0) {
-        returnObject.totalRevenue = 0;
-        returnObject.totalNoOfTickets = 0;
-        if (err) {
-          errors.push('Error getting totalRevenue & totalNoOfTickets: '
-           + JSON.stringify(err));
-        }
-      } else {
-        returnObject.totalRevenue = results[0].total;
-        returnObject.totalNoOfTickets = results[0].activity.length;
-      }
-      returnData();
-    });
-
-    function returnData() {
-      if (returnObject.totalNoOfMembers != undefined && returnObject.totalRevenue
-       != undefined && returnObject.totalNoOfTickets != undefined) {
-        if (errors.length) {
-          callback(returnObject, {
-            message: 'Error(s) in getDashboardStats: ' + errors.join(', ')
-          });
-        } else {
-          callback(returnObject);
-        }
-      }
-    }
   }
+
 
   function getNewMembersOverTime (callback) {
     processAnalyticsDataOverTime("NewUsers", callback);
   }
+
 
   function getTicketsSoldOverTime (callback) {
     processAnalyticsDataOverTime("Payments", callback);
