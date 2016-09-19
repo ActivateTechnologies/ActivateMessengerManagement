@@ -177,7 +177,7 @@ router.get('/currentEvents.:code', (req, res) => {
   const M = require('./../models/' + code);
 
   let now = new Date();
-  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   M.Event.find({when:{$gt: date}}).sort('when').exec((err, result) => {
     if (err) console.log(err)
     else {
