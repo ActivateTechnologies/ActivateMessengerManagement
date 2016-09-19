@@ -501,7 +501,7 @@ module.exports = function(code){
   function allEvents(uid, broadcast) {
     let now = new Date();
     let query = {when:
-      {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)}}
+      {$gt: new Date(now.getFullYear(), now.getMonth(), now.getDate())}}
 
     M.Event.find(query).sort('when').exec((err, events) => {
       if(err) console.log(err);
