@@ -113,7 +113,7 @@ router.post('/charge.:code', (req, res) => {
           else {
             let price = parseFloat(event.price) * 100;
             let charge = stripe.charges.create({
-              amount: price, // amount in cents, again
+              amount: price,
               currency: "gbp",
               card: stripeToken,
               description: "",
@@ -133,26 +133,29 @@ router.post('/charge.:code', (req, res) => {
                         uid: uid._id,
                         time: new Date(),
                         eid: eid,
-                        amount: price
+                        amount: event.price
                       }
                     },
-                    $inc: {total: price}},
+                    $inc: {total: event.price}},
                   {upsert: true},
-                (e)=> { if (e) console.log(e);});
+                (e)=> {
 
-                // update event rec
-                M.Event.findOneAndUpdate({_id:eid},
-                  {$push: {joined: {
-                    uid: uid._id,
-                    joinDate: new Date()
-                  }}},
-                (e)=> { if (e) console.log(e);});
+                  if (e) console.log(e);
 
-                // SEND RECEIPT to user
-                Send.booked(uid, user.firstName + ' ' + user.lastName,
-                   event.price, event.name, event.strapline, event.image_url,
-                   stripeToken, Math.round((new Date()).getTime()/1000))
-                renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
+                  // update event rec
+                  M.Event.findOneAndUpdate({_id:eid},
+                    {$push: {joined: {uid: uid._id, joinDate: new Date()}}},
+                    (err)=> {
+                      if (err) console.log(err);
+
+                      // SEND RECEIPT to user
+                      Send.booked(uid, user.firstName + ' ' + user.lastName,
+                         event.price, event.name, event.strapline, event.image_url,
+                         stripeToken, Math.round((new Date()).getTime()/1000))
+
+                      renderPage(S, res, S.s.payment.bookingSuccessPaidMessenger);
+                    });
+                });
               }
             });
           }

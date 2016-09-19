@@ -17,18 +17,18 @@ module.exports = function(code){
         M.Analytics.findOne({name:"Payments"}, (err, result) => {
           if (err) console.log(err);
           if (result) {
-            return {
+            callback({
               totalNoOfMembers: count,
               totalRevenue: result.total,
               totalNoOfTickets: result.activity.length
-            }
+            })
           }
           else {
-            return {
+            callback({
               totalNoOfMembers: count,
               totalRevenue: 0,
               totalNoOfTickets: 0
-            }
+            })
           }
         });
       }

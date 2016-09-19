@@ -10,21 +10,13 @@ router.get('/dashboard.:code', isLoggedIn, (req, res) => {
   const S = require('./../strings')(code);
   const Analytics = require('./analytics.js')(code);
 
-  Analytics.getDashboardStats((data, error) => {
-    if (error) {
-      console.log(error);
-      res.send('There was an error retrieving data.');
-    }
-    else {
-      res.render('dashboard/dashboard', {
-        totalNoOfMembers: data.totalNoOfMembers,
-        totalRevenue: data.totalRevenue.toFixed(2),
-        totalNoOfTickets: data.totalNoOfTickets,
-        s: {
-          company: S.s.company
-        }
-      });
-    }
+  Analytics.getDashboardStats((data) => {
+    res.render('dashboard/dashboard', {
+      totalNoOfMembers: data.totalNoOfMembers,
+      totalRevenue: data.totalRevenue.toFixed(2),
+      totalNoOfTickets: data.totalNoOfTickets,
+      s: {company: S.s.company}
+    });
   });
 
 });
