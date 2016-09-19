@@ -214,4 +214,50 @@ a { color: inherit; }
   width: 100px;
 }
 
+.activateLogoHeader {
+  width: 200px;
+  margin-top: 5px;
+}
+
+.jumbatronLeftContainer {
+  width: 60%;
+  display: inline-block;
+}
+
+.jumbatronRightContainer {
+  width: 34%;
+  display: inline-block;
+}
+
+
+
+.iphonesDiv {
+  margin-top: 10px;
+  height: 400px;
+  width: 506px;
+  background-color: yellow;
+
+  background: url(../img/iphones.png) no-repeat;
+}
+
+.botMessageUs {
+  width: 130px;
+}
+
+.botAdContainer {
+  text-align: center;
+}
+
+.botImageAd {
+  width: 100px;
+
+  border-radius: 100%;
+}
+
+
+
+
+
+
+
 
