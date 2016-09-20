@@ -22,7 +22,7 @@ let schema = function(connection){
     preferredPosition: String,
     backupPosition: String,
     level: String,
-    age: String,
+    kitSize: String,
 
     events: Array,
     conversationLocation: {

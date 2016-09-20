@@ -25,6 +25,10 @@ module.exports = function(passport){
             && password === "password"){
         return done(null, {code: 'kings'})
       }
+      if (username === "salford"
+            && password === "password"){
+        return done(null, {code: 'salford'})
+      }
       if (username === "ani"
             && password === "password"){
         return done(null, {code: 'ani'})
