@@ -281,8 +281,9 @@ module.exports = function(code){
       executeTreeNode(uid, conversationName, node.next[node.next.length - 1], null, user);
     }
     else {
-      M.User.findOneAndUpdate({_id:uid._id},
-        {$push: {extras: {"phoneNumber": processedPhoneNumber}}},
+      M.User.findOneAndUpdate(
+        {_id:uid._id},
+        {"phoneNumber": processedPhoneNumber},
         (error, user) => {
           console.log("added phone number");
           executeTreeNode(uid, conversationName, node.next[0], null, user);
@@ -306,69 +307,6 @@ module.exports = function(code){
     }
   }
 
-  //Saves phone number to database
-  function savePhoneNumber(uid, phoneNumber, callback) {
-    let updateObj = {
-      phoneNumber: '+44' + phoneNumber
-    }
-    M.User.findOneAndUpdate({mid: uid.mid}, {$set:updateObj}, {new: true},
-     (error, updatedUser) => {
-      if (error) {
-        console.log('Error saving user\'s phone number: ', error);
-        callback(null, error);
-      } else {
-        callback(updatedUser);
-      }
-    })
-  }
-
-  //Combines user with this mid to existing user with phoneNumber
-  function combineUsers(uid, phoneNumber, existingUser, callback) {
-    M.User.find({_id: uid._id}, (error, users) => {
-      if (error) {
-        console.log('Error getting user with _id ' + uid._id + ':', error);
-        callback(error);
-      } else if (users.length == 0) {
-        console.log('No users found with _id ' + uid._id + '.');
-        callback({message:'No users found with _id ' + uid._id + '.'});
-      } else {
-        let updateObj = {
-          mid: users[0].mid,
-          firstName: users[0].firstName,
-          lastName: users[0].lastName,
-          profilePic: users[0].profilePic,
-          locale: users[0].locale,
-          gender: users[0].gender,
-          messengerSignedUpDate: new Date(),
-          conversationLocation: users[0].conversationLocation
-        }
-        M.User.findOneAndUpdate({phoneNumber: '+44' + phoneNumber}, {$set:updateObj},
-         {new: true},
-         (error, updatedUser) => {
-          if (error) {
-            console.log('Error saving user\'s phone number: ', error);
-            callback(null, error);
-          } else {
-            M.User.remove({_id: uid._id}, (error, result) => {
-              if (error) {
-                console.log('Error deleting user\'s old profile: ', error);
-                callback(null, error);
-              } else {
-                M.Analytics.update({name:"NewUsers"}, {$pull: {activity:
-                 {uid:uid._id}}}, (err) => {
-                  if (err) {
-                    console.log('Error removing analytics from "NewUsers":', err);
-                  }
-                });
-                callback(updatedUser);
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
 
   function collectEmail(uid, conversationName, node, message, user){
     let email= validateEmail(message);
@@ -381,8 +319,9 @@ module.exports = function(code){
     //valid email so adding the user to the database
     else {
 
-      M.User.findOneAndUpdate({_id:uid._id},
-        {$push: {extras: {"email": email}}},
+      M.User.findOneAndUpdate(
+        {_id:uid._id},
+        {"email": email},
         (error, user) => {
           console.log("added email");
           executeTreeNode(uid, conversationName, node.next[0], null, user);
@@ -407,7 +346,7 @@ module.exports = function(code){
   function collectAge(uid, conversationName, node, age, user){
     //valid age so adding the user to the database
     M.User.findOneAndUpdate({_id:uid._id},
-      {$push: {extras: {"age": age}}},
+      {"age": age},
       (error, user) => {
         console.log("added age");
         executeTreeNode(uid, conversationName, node.next[0], null, user);
@@ -423,8 +362,9 @@ module.exports = function(code){
     return function(uid, conversationName, node, message, user){
       let obj = {};
       obj[key] = value;
-      M.User.findOneAndUpdate({_id:uid._id},
-        {$push: {extras: obj}},
+      M.User.findOneAndUpdate(
+        {_id:uid._id},
+        obj,
         (error, user) => {
           console.log("added", key, value);
           executeTreeNode(uid, conversationName, node.next[0], null, user);
@@ -460,12 +400,12 @@ module.exports = function(code){
       saveFullBack: saveToExtras("preferredPosition", "Full Back"),
 
       // Backup Position
-      saveStriker2: saveToExtras("backup", "Striker"),
-      saveWinger2: saveToExtras("backup", "Winger"),
-      saveCenterMid2: saveToExtras("backup", "Center Mid"),
-      saveKeeper2: saveToExtras("backup", "Keeper"),
-      saveCenterBack2: saveToExtras("backup", "Center Back"),
-      saveFullBack2: saveToExtras("backup", "Full Back"),
+      saveStriker2: saveToExtras("backupPosition", "Striker"),
+      saveWinger2: saveToExtras("backupPosition", "Winger"),
+      saveCenterMid2: saveToExtras("backupPosition", "Center Mid"),
+      saveKeeper2: saveToExtras("backupPosition", "Keeper"),
+      saveCenterBack2: saveToExtras("backupPosition", "Center Back"),
+      saveFullBack2: saveToExtras("backupPosition", "Full Back"),
 
       // Previous Football Experience
       savePro: saveToExtras("level", "Pro"),

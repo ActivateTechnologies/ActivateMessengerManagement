@@ -1,6 +1,8 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema;
+
 let db = mongoose.createConnection("mongodb://anirudh:kickabout@ds029496.mlab.com:29496/uwe");
 
 
@@ -15,7 +17,14 @@ let schema = function(connection){
     gender: String,
     notifications: String,
     signedUpDate: Date,
-    extras: Array,
+    
+    phoneNumber: String,
+    email: String,
+    preferredPosition: String,
+    backupPosition: String,
+    level: String,
+    type: String,
+
     events: Array,
     conversationLocation: {
       conversationName: String,
@@ -85,6 +94,7 @@ let schema = function(connection){
     console.log("convo");
     connection.model('Conversations', conversationsSchema)
   }
+
   return {
     User: connection.models.User,
     Event: connection.models.Event,
@@ -93,4 +103,4 @@ let schema = function(connection){
   };
 }
 
-module.exports = require('./schemas')(db)
+module.exports = schema(db)
