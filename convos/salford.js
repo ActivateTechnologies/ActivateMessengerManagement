@@ -110,7 +110,7 @@
                                                                                                                 {
                                                                                                                     "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1",
                                                                                                                     "sender": "bot",
-                                                                                                                    "nodeType": "text",
+                                                                                                                    "nodeType": "quickReplies",
                                                                                                                     "text": "What is your kit size?",
                                                                                                                     "quickReplies": [
                                                                                                                         "XL",
@@ -130,7 +130,7 @@
                                                                                                                                   "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1",
                                                                                                                                   "sender": "bot",
                                                                                                                                   "nodeType": "function",
-                                                                                                                                  "jumpToId": "showEvents"
+                                                                                                                                  "function": "showEvents"
                                                                                                                               }
                                                                                                                           ]
                                                                                                                       },
@@ -144,7 +144,7 @@
                                                                                                                                   "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1",
                                                                                                                                   "sender": "bot",
                                                                                                                                   "nodeType": "function",
-                                                                                                                                  "jumpToId": "showEvents"
+                                                                                                                                  "function": "showEvents"
                                                                                                                               }
                                                                                                                           ]
                                                                                                                       },
@@ -158,7 +158,7 @@
                                                                                                                                   "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.3.1",
                                                                                                                                   "sender": "bot",
                                                                                                                                   "nodeType": "function",
-                                                                                                                                  "jumpToId": "showEvents"
+                                                                                                                                  "function": "showEvents"
                                                                                                                               }
                                                                                                                           ]
                                                                                                                       },
@@ -172,7 +172,7 @@
                                                                                                                                   "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.4.1",
                                                                                                                                   "sender": "bot",
                                                                                                                                   "nodeType": "function",
-                                                                                                                                  "jumpToId": "showEvents"
+                                                                                                                                  "function": "showEvents"
                                                                                                                               }
                                                                                                                           ]
                                                                                                                       },
@@ -186,7 +186,7 @@
                                                                                                                                   "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.5.1",
                                                                                                                                   "sender": "bot",
                                                                                                                                   "nodeType": "function",
-                                                                                                                                  "jumpToId": "showEvents"
+                                                                                                                                  "function": "showEvents"
                                                                                                                               }
                                                                                                                           ]
                                                                                                                       }
