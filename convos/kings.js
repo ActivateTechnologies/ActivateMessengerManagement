@@ -110,86 +110,83 @@
                                                                                                                 {
                                                                                                                     "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1",
                                                                                                                     "sender": "bot",
-                                                                                                                    "nodeType": "function",
+                                                                                                                    "nodeType": "text",
                                                                                                                     "text": "What is you age?",
-                                                                                                                    "function": "collectAge",
                                                                                                                     "next": [
-                                                                                                                      {
-                                                                                                                        "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1",
-                                                                                                                        "sender": "bot",
-                                                                                                                        "nodeType": "function",
-                                                                                                                        "function": "showEvents"
-                                                                                                                      },
-                                                                                                                      {
-                                                                                                                          "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.2",
-                                                                                                                          "sender": "bot",
-                                                                                                                          "nodeType": "text",
-                                                                                                                          "text": "That doesn't seem like a valid age sorry, try typing out your age again?",
-                                                                                                                          "next": [
-                                                                                                                              {
-                                                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.2.1",
-                                                                                                                                  "sender": "bot",
-                                                                                                                                  "nodeType": "jumpToId",
-                                                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                                                              }
-                                                                                                                          ]
-                                                                                                                      }
+                                                                                                                        {
+                                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1",
+                                                                                                                            "sender": "user",
+                                                                                                                            "nodeType": "text",
+                                                                                                                            "userErrorText": "Really sorry, but we need your age before we can proceed.",
+                                                                                                                            "next": [
+                                                                                                                                {
+                                                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1",
+                                                                                                                                    "sender": "bot",
+                                                                                                                                    "nodeType": "function",
+                                                                                                                                    "function": "collectAge",
+                                                                                                                                    "next": [
+                                                                                                                                        {
+                                                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1",
+                                                                                                                                            "sender": "bot",
+                                                                                                                                            "nodeType": "function",
+                                                                                                                                            "function": "showEvents"
+                                                                                                                                        },
+                                                                                                                                        {
+                                                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.2",
+                                                                                                                                            "sender": "bot",
+                                                                                                                                            "nodeType": "function",
+                                                                                                                                            "function": "showEvents"
+                                                                                                                                        }
+                                                                                                                                    ]
+                                                                                                                                }
+                                                                                                                            ]
+                                                                                                                        }
                                                                                                                     ]
                                                                                                                 }
                                                                                                             ]
                                                                                                         },
-
-
-
                                                                                                         {
-                                                                                                          "id": "1.1.1.1.1.1.1.1.1.1.1.1.2",
-                                                                                                          "sender": "bot",
-                                                                                                          "nodeType": "function",
-                                                                                                          "function": "saveSemiPro",
-                                                                                                          "next": [
-                                                                                                            {
-                                                                                                                "id": "1.1.1.1.1.1.1.1.1.1.1.1.2.1",
-                                                                                                                "sender": "bot",
-                                                                                                                "nodeType": "jumpToId",
-                                                                                                                "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                                            }
-                                                                                                          ]
+                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.2",
+                                                                                                            "sender": "bot",
+                                                                                                            "nodeType": "function",
+                                                                                                            "function": "saveSemiPro",
+                                                                                                            "next": [
+                                                                                                                {
+                                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.1.1.2.1",
+                                                                                                                    "sender": "bot",
+                                                                                                                    "nodeType": "jumpToId",
+                                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                                }
+                                                                                                            ]
                                                                                                         },
-
                                                                                                         {
-                                                                                                          "id": "1.1.1.1.1.1.1.1.1.1.1.1.3",
-                                                                                                          "sender": "bot",
-                                                                                                          "nodeType": "function",
-                                                                                                          "function": "saveSchool",
-                                                                                                          "next": [
-                                                                                                            {
-                                                                                                                "id": "1.1.1.1.1.1.1.1.1.1.1.1.3.1",
-                                                                                                                "sender": "bot",
-                                                                                                                "nodeType": "jumpToId",
-                                                                                                                "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                                            }
-                                                                                                          ]
+                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.3",
+                                                                                                            "sender": "bot",
+                                                                                                            "nodeType": "function",
+                                                                                                            "function": "saveSchool",
+                                                                                                            "next": [
+                                                                                                                {
+                                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.1.1.3.1",
+                                                                                                                    "sender": "bot",
+                                                                                                                    "nodeType": "jumpToId",
+                                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                                }
+                                                                                                            ]
                                                                                                         },
-
-
                                                                                                         {
-                                                                                                          "id": "1.1.1.1.1.1.1.1.1.1.1.1.4",
-                                                                                                          "sender": "bot",
-                                                                                                          "nodeType": "function",
-                                                                                                          "function": "saveAmateur",
-                                                                                                          "next": [
-                                                                                                            {
-                                                                                                                "id": "1.1.1.1.1.1.1.1.1.1.1.1.4.1",
-                                                                                                                "sender": "bot",
-                                                                                                                "nodeType": "jumpToId",
-                                                                                                                "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                                            }
-                                                                                                          ]
+                                                                                                            "id": "1.1.1.1.1.1.1.1.1.1.1.1.4",
+                                                                                                            "sender": "bot",
+                                                                                                            "nodeType": "function",
+                                                                                                            "function": "saveAmateur",
+                                                                                                            "next": [
+                                                                                                                {
+                                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.1.1.4.1",
+                                                                                                                    "sender": "bot",
+                                                                                                                    "nodeType": "jumpToId",
+                                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                                }
+                                                                                                            ]
                                                                                                         }
-
-
-
-
                                                                                                     ]
                                                                                                 }
                                                                                             ]
@@ -200,12 +197,12 @@
                                                                                             "nodeType": "function",
                                                                                             "function": "saveWinger2",
                                                                                             "next": [
-                                                                                              {
-                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.2.1",
-                                                                                                  "sender": "bot",
-                                                                                                  "nodeType": "jumpToId",
-                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                              }
+                                                                                                {
+                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.2.1",
+                                                                                                    "sender": "bot",
+                                                                                                    "nodeType": "jumpToId",
+                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                }
                                                                                             ]
                                                                                         },
                                                                                         {
@@ -214,12 +211,12 @@
                                                                                             "nodeType": "function",
                                                                                             "function": "saveCenterMid2",
                                                                                             "next": [
-                                                                                              {
-                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.3.1",
-                                                                                                  "sender": "bot",
-                                                                                                  "nodeType": "jumpToId",
-                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                              }
+                                                                                                {
+                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.3.1",
+                                                                                                    "sender": "bot",
+                                                                                                    "nodeType": "jumpToId",
+                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                }
                                                                                             ]
                                                                                         },
                                                                                         {
@@ -228,12 +225,12 @@
                                                                                             "nodeType": "function",
                                                                                             "function": "saveKeeper2",
                                                                                             "next": [
-                                                                                              {
-                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.4.1",
-                                                                                                  "sender": "bot",
-                                                                                                  "nodeType": "jumpToId",
-                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                              }
+                                                                                                {
+                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.4.1",
+                                                                                                    "sender": "bot",
+                                                                                                    "nodeType": "jumpToId",
+                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                }
                                                                                             ]
                                                                                         },
                                                                                         {
@@ -242,12 +239,12 @@
                                                                                             "nodeType": "function",
                                                                                             "function": "saveCenterBack2",
                                                                                             "next": [
-                                                                                              {
-                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.5.1",
-                                                                                                  "sender": "bot",
-                                                                                                  "nodeType": "jumpToId",
-                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                              }
+                                                                                                {
+                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.5.1",
+                                                                                                    "sender": "bot",
+                                                                                                    "nodeType": "jumpToId",
+                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                }
                                                                                             ]
                                                                                         },
                                                                                         {
@@ -256,31 +253,30 @@
                                                                                             "nodeType": "function",
                                                                                             "function": "saveFullBack2",
                                                                                             "next": [
-                                                                                              {
-                                                                                                  "id": "1.1.1.1.1.1.1.1.1.1.6.1",
-                                                                                                  "sender": "bot",
-                                                                                                  "nodeType": "jumpToId",
-                                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
-                                                                                              }
+                                                                                                {
+                                                                                                    "id": "1.1.1.1.1.1.1.1.1.1.6.1",
+                                                                                                    "sender": "bot",
+                                                                                                    "nodeType": "jumpToId",
+                                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1.1.1"
+                                                                                                }
                                                                                             ]
                                                                                         }
                                                                                     ]
                                                                                 }
                                                                             ]
                                                                         },
-
                                                                         {
                                                                             "id": "1.1.1.1.1.1.1.1.2",
                                                                             "sender": "bot",
                                                                             "nodeType": "function",
                                                                             "function": "saveWinger",
                                                                             "next": [
-                                                                              {
-                                                                                  "id": "1.1.1.1.1.1.1.1.2.1",
-                                                                                  "sender": "bot",
-                                                                                  "nodeType": "jumpToId",
-                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1"
-                                                                              }
+                                                                                {
+                                                                                    "id": "1.1.1.1.1.1.1.1.2.1",
+                                                                                    "sender": "bot",
+                                                                                    "nodeType": "jumpToId",
+                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1"
+                                                                                }
                                                                             ]
                                                                         },
                                                                         {
@@ -289,12 +285,12 @@
                                                                             "nodeType": "function",
                                                                             "function": "saveCenterMid",
                                                                             "next": [
-                                                                              {
-                                                                                  "id": "1.1.1.1.1.1.1.1.3.1",
-                                                                                  "sender": "bot",
-                                                                                  "nodeType": "jumpToId",
-                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1"
-                                                                              }
+                                                                                {
+                                                                                    "id": "1.1.1.1.1.1.1.1.3.1",
+                                                                                    "sender": "bot",
+                                                                                    "nodeType": "jumpToId",
+                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1"
+                                                                                }
                                                                             ]
                                                                         },
                                                                         {
@@ -303,12 +299,12 @@
                                                                             "nodeType": "function",
                                                                             "function": "saveKeeper",
                                                                             "next": [
-                                                                              {
-                                                                                  "id": "1.1.1.1.1.1.1.1.4.1",
-                                                                                  "sender": "bot",
-                                                                                  "nodeType": "jumpToId",
-                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1"
-                                                                              }
+                                                                                {
+                                                                                    "id": "1.1.1.1.1.1.1.1.4.1",
+                                                                                    "sender": "bot",
+                                                                                    "nodeType": "jumpToId",
+                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1"
+                                                                                }
                                                                             ]
                                                                         },
                                                                         {
@@ -317,12 +313,12 @@
                                                                             "nodeType": "function",
                                                                             "function": "saveCenterBack",
                                                                             "next": [
-                                                                              {
-                                                                                  "id": "1.1.1.1.1.1.1.1.5.1",
-                                                                                  "sender": "bot",
-                                                                                  "nodeType": "jumpToId",
-                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1"
-                                                                              }
+                                                                                {
+                                                                                    "id": "1.1.1.1.1.1.1.1.5.1",
+                                                                                    "sender": "bot",
+                                                                                    "nodeType": "jumpToId",
+                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1"
+                                                                                }
                                                                             ]
                                                                         },
                                                                         {
@@ -331,12 +327,12 @@
                                                                             "nodeType": "function",
                                                                             "function": "saveFullBack",
                                                                             "next": [
-                                                                              {
-                                                                                  "id": "1.1.1.1.1.1.1.1.6.1",
-                                                                                  "sender": "bot",
-                                                                                  "nodeType": "jumpToId",
-                                                                                  "jumpToId": "1.1.1.1.1.1.1.1.1.1"
-                                                                              }
+                                                                                {
+                                                                                    "id": "1.1.1.1.1.1.1.1.6.1",
+                                                                                    "sender": "bot",
+                                                                                    "nodeType": "jumpToId",
+                                                                                    "jumpToId": "1.1.1.1.1.1.1.1.1.1"
+                                                                                }
                                                                             ]
                                                                         }
                                                                     ]
