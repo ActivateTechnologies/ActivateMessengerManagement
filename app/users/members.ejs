@@ -3,7 +3,6 @@
 	<head>
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-		<script src="script.js"></script>
 	</head>
 
 	<body ng-app="sortTable" ng-controller="usersCtrl">
@@ -40,5 +39,66 @@
 	            </table>
         	</div>
 		</div>
+
+    <script type="text/javascript">
+    var app = angular.module('sortTable' , []);
+
+    app.controller('usersCtrl', ['$scope', '$http' , function($scope, $http) {
+      $http.get('/userAnalyticsData.<%= s.company.code %>').success(function(response) {
+        $scope.users = response.users;
+        console.log("hello");
+      })
+      $scope.currentHead = -1;
+
+      $scope.headingClicked = function(head) {
+        if($scope.currentHead == head) {
+          $scope.isReversed = !$scope.isReversed;
+        } else {
+          $scope.isReversed = false;
+        }
+
+        $scope.currentHead = head;
+
+        switch(head) {
+
+          case 0:
+            $scope.orderField = ['firstName','lastName'];
+            break;
+          case 1:
+            $scope.orderField = 'gender';
+            break;
+          case 2:
+            $scope.orderField = 'phoneNumber';
+            break
+          case 3:
+            $scope.orderField = 'events.length';
+            break;
+        }
+      }
+
+      $scope.selectedItems = [];
+
+      $scope.updateSelectedItems = function(id) {
+        console.log(id);
+        var index = JSON.stringify($scope.selectedItems).indexOf(id);
+        if(index < 0) {
+          $scope.users.forEach(function(user) {
+            if (user._id == id) {
+              $scope.selectedItems.push(user);
+            }
+          });
+        } else {
+          for(i = 0; i < $scope.selectedItems.length; i++) {
+            if($scope.selectedItems[i]._id == id) {
+              $scope.selectedItems.splice(i, 1);
+              console.log("BYE");
+            }
+          }
+        }
+        console.log($scope.selectedItems);
+      }
+    }])
+
+    </script>
 	</body>
-</html> 
+</html>
