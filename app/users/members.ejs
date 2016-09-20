@@ -20,8 +20,15 @@
 	                  <th>FB Profile Pic</th>
 	                  <th ng-click="headingClicked(0)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"> </span>Name</th>
 	                  <th ng-click="headingClicked(1)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"> </span>Gender</th>
-	                  <th ng-click="headingClicked(2)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"> </span>Phone Number</th>
-	                  <th ng-click="headingClicked(3)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"> </span>No Of Events Attended</th>
+	                  <th ng-click="headingClicked(2)" ng-if="isDisplayed(2)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"> </span>Phone Number</th>
+                    <th ng-if="isDisplayed(3)">Email</th>
+                    <th ng-if="isDisplayed(4)">Preferred Position</th>
+                    <th ng-if="isDisplayed(5)">Backup Position</th>
+                    <th ng-if="isDisplayed(6)">Level</th>
+                    <th ng-if="isDisplayed(7)">New/Returning</th>
+                    <th>Signed Up Date</th>
+                    <th>Messenger ID</th>
+<!-- 	                  <th ng-click="headingClicked(3)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"> </span>No Of Events Attended</th> -->
 	                  <th>Select</th>
 	                </tr>
 	              </thead>
@@ -31,8 +38,14 @@
 	              		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
 	              		<td>{{user.firstName + " " + user.lastName}}</td>
 	              		<td>{{user.gender}}</td>
-	              		<td>{{user.phoneNumber}}</td>
-	              		<td>{{user.events.length}}</td>
+	              		<td>{{user.extras[0].phoneNumber}}</td>
+                    <td>{{user.extras[1].email}}</td>
+                    <td>{{user.extras[2].preferredPosition}}</td>
+                    <td>{{user.extras[3].backup}}</td>
+                    <td>{{user.extras[4].level}}</td>
+                    <td>{{user.extras[5].type}}</td>
+	              		<td>{{user.signedUpDate}}</td>
+                    <td>{{user.mid}}</td>
 	              		<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td>
 	              	</tr>
 	              </tbody>
@@ -46,9 +59,52 @@
     app.controller('usersCtrl', ['$scope', '$http' , function($scope, $http) {
       $http.get('/userAnalyticsData.<%= s.company.code %>').success(function(response) {
         $scope.users = response.users;
-        console.log("hello");
+        var hashtable = {
+          "phoneNumber": 1,
+          "email":2
+        }
+        hashtable[user.extras]
       })
+
       $scope.currentHead = -1;
+
+      $scope.isDisplayed = function(head) {
+        for(i = 0; i < $scope.users.length; i++) {
+          switch(head) {
+            case 2:
+              if(user[i].phoneNumber != null) {
+                return true;
+              }
+              break;
+            case 3:
+              if(user[i].email != null) {
+                return true;
+              }
+              break;
+            case 4:
+              if(user[i].preferredPosition != null) {
+                return true;
+              }
+              break;
+            case 5:
+              if(user[i].backup != null) {
+                return true;
+              }
+              break;
+            case 6:
+              if(user[i].level != null) {
+                return true;
+              }
+              break;
+            case 7:
+              if(user[i].type != null) {
+                return true;
+              }
+              break;
+          }
+        }
+        return false;
+      }
 
       $scope.headingClicked = function(head) {
         if($scope.currentHead == head) {
@@ -60,7 +116,6 @@
         $scope.currentHead = head;
 
         switch(head) {
-
           case 0:
             $scope.orderField = ['firstName','lastName'];
             break;
