@@ -245,7 +245,7 @@ module.exports = function(code){
   else {
     s = {
       company: {
-        name: "Kickabout",
+        name: "Ani",
         website: "www.kickabout.football",
         address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
         botURL: "http://m.me/kickaboutapp",
