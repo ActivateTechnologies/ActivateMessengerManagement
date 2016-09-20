@@ -249,7 +249,7 @@ module.exports = function(code){
         website: "www.kickabout.football",
         address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
         botURL: "http://m.me/kickaboutapp",
-        code: 'bot1'
+        code: 'ani'
       },
     	sms: {
     		paidEventConfirmation: "You just booked onto " + h + "name with Kickabout!\n\n"
