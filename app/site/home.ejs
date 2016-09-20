@@ -49,12 +49,12 @@
           <img class="activateLogoHeader" src="img/ActivateLogoWhite.png">
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
+          <form class="navbar-form navbar-right" action="/login" method="post">
             <div class="form-group">
-              <input type="text" placeholder="Bot Name" class="form-control">
+              <input type="text" name="username" placeholder="Bot Name" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
+              <input type="password" name="password" placeholder="Password" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Log In</button>
           </form>
@@ -71,12 +71,12 @@
 
           <div class="iphonesDiv">
             <video style="margin-top: 49px; margin-left: 323px;" height="300px" width="autos" loop autoplay muted>
-                  <source src="video/botScreencast.mp4" type="video/mp4">
-                  <source src="movie.ogg" type="video/ogg">
-                  Your browser does not support the video tag.
-                </video>
+              <source src="video/botScreencast.mp4" type="video/mp4">
+              <source src="movie.ogg" type="video/ogg">
+              Your browser does not support the video tag.
+            </video>
           </div>
-         
+
         </div>
         <div class="jumbatronRightContainer">
           <h2>Want a Bot?</h2>

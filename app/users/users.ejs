@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img class="activateLogoHeader" src="img/ActivateLogoWhite.png">
+          <a href="dashboard.<%=s.company.code%>"><img class="activateLogoHeader" src="img/ActivateLogoWhite.png"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -42,7 +42,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="main">
-          <a href="dashboard"><h1 class="page-header"><%=s.company.name%></h1></a>
+          <h1 class="page-header"><%=s.company.name%></h1>
 
           <h2 class="sub-header">Members</h2>
           <a class="btn btn-primary" href="/userdata.<%=s.company.code%>">Download as CSV</a>
@@ -116,37 +116,37 @@
               + '<td>' + user.gender + '</td>'
 
           try {
-            data += '<td>' + user.extras[1].phoneNumber + '</td>'
+            data += '<td>' + user.extras[0].phoneNumber + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
           }
           try {
-            data += '<td>' + user.extras[2].email + '</td>'
+            data += '<td>' + user.extras[1].email + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
           }
           try {
-            data += '<td>' + user.extras[3].preferredPosition + '</td>'
+            data += '<td>' + user.extras[2].preferredPosition + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
           }
           try {
-            data += '<td>' + user.extras[4].backup + '</td>'
+            data += '<td>' + user.extras[3].backup + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
           }
           try {
-            data += '<td>' + user.extras[5].level + '</td>'
+            data += '<td>' + user.extras[4].level + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
           }
           try {
-            data += '<td>' + (user.extras[6])['type'] + '</td>'
+            data += '<td>' + (user.extras[5])['type'] + '</td>'
           }
           catch (e) {
             data += '<td>' + "NA" + '</td>'
