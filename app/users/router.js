@@ -92,10 +92,8 @@ router.get('/users.:code', isLoggedIn, (req, res) => {
   const code = req.params.code;
   const S = require('./../strings')(code);
 
-  res.render('users/members', {
-    s: {
-      company: S.s.company
-    }
+  res.render('users/users', {
+    s: {company: S.s.company}
   });
 
 });
