@@ -254,6 +254,19 @@ module.exports = function(code){
     return text;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
   /* CONVERSATION FUNCTIONS */
 
   /*
@@ -356,6 +369,7 @@ module.exports = function(code){
     });
   }
 
+
   function collectEmail(uid, conversationName, node, message, user){
     let email= validateEmail(message);
 
@@ -377,6 +391,7 @@ module.exports = function(code){
     }
   }
 
+
   //Returns email if valid or -1 if unrecognnized email
   function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -386,6 +401,17 @@ module.exports = function(code){
     else {
       return -1;
     }
+  }
+
+
+  function collectAge(uid, conversationName, node, age, user){
+    //valid age so adding the user to the database
+    M.User.findOneAndUpdate({_id:uid._id},
+      {$push: {extras: {"age": age}}},
+      (error, user) => {
+        console.log("added age");
+        executeTreeNode(uid, conversationName, node.next[0], null, user);
+      });
   }
 
 
@@ -423,6 +449,7 @@ module.exports = function(code){
       showEvents: showEvents,
       collectPhoneNumber: collectPhoneNumber,
       collectEmail: collectEmail,
+      collectAge: collectAge,
 
       // Preferred Position
       saveStriker: saveToExtras("preferredPosition", "Striker"),

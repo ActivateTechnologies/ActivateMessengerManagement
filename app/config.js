@@ -37,7 +37,7 @@ module.exports = function(code){
 		VERIFICATION_TOKEN = "EAAPmFZANQPNMBAN12jyRTW1TxU6ZBZAwfZBbpf3SajLYsqrAuz3MVtieZCZALbLxOpaE0PcXJYeVZAIK6ldiCeP0FHQlVhZBwdn1ivujTRhntJVwgM47kUiSCTNKa4HKPJVUdTHV766dTLa9ZAal6DOzrC0AErTs0AotXeCVZBbKjIAwZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
-	
+
 	else if(code === 'bot5'){
 		VERIFICATION_TOKEN = "EAAPXiDbQxgwBAHvLWwuz1L4Qn22JNbNNrPpfadAYfeUL3E0Wt2L2Tyc6Yvk7AyVVV1TaaZCM7KVwgGFFzuSiMNaxTqKrTfDPyoJqMQFjUpz0CZBWs7kNwGx1ifWgHSw7RSR7rKpL1v2x2jLoVN4C7mhlXFTMSZAsmKqOn0AjAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -107,7 +107,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAIL6dc0iLsBAGZCZAl7lUMfe6X70T1Nvoj9g5ioMZAVDivJDZCZBM1aWYZBjNLjBWWlQxafiU4TU3IIHYaoh8zEHFlqdSMrDLdx1adySu9Qdfsa7Wy1BUOIdpNpUAZAsUNBhZCEKKyAI0vRqVWx1oSn4WyAhl5H7PZBIrZAx8uZArECwZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAPmFZANQPNMBAN12jyRTW1TxU6ZBZAwfZBbpf3SajLYsqrAuz3MVtieZCZALbLxOpaE0PcXJYeVZAIK6ldiCeP0FHQlVhZBwdn1ivujTRhntJVwgM47kUiSCTNKa4HKPJVUdTHV766dTLa9ZAal6DOzrC0AErTs0AotXeCVZBbKjIAwZDZD"
 
 // For setting up Get Started Button
 
@@ -119,4 +119,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAIL6dc0iLsBAGZCZAl7lUMfe6X70T1Nvoj9g5ioMZAVDivJDZCZBM1aWYZBjNLjBWWlQxafiU4TU3IIHYaoh8zEHFlqdSMrDLdx1adySu9Qdfsa7Wy1BUOIdpNpUAZAsUNBhZCEKKyAI0vRqVWx1oSn4WyAhl5H7PZBIrZAx8uZArECwZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAPmFZANQPNMBAN12jyRTW1TxU6ZBZAwfZBbpf3SajLYsqrAuz3MVtieZCZALbLxOpaE0PcXJYeVZAIK6ldiCeP0FHQlVhZBwdn1ivujTRhntJVwgM47kUiSCTNKa4HKPJVUdTHV766dTLa9ZAal6DOzrC0AErTs0AotXeCVZBbKjIAwZDZD"
