@@ -94,7 +94,7 @@ let schema = function(connection){
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
-    Conversations: connection.models.Conversations
+    Conversations: connection.models.Conversations,
     Register: connection.models.Register
   };
 }
