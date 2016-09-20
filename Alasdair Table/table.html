@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="script.js"></script>
+	</head>
+
+	<body ng-app="sortTable" ng-controller="usersCtrl">
+		<div class="container">
+			<h1>Users</h1>
+			<!-- <input ng-model="filterBy"> -->
+			<ul>
+				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
+			</ul>
+			<div class="table-responsive">
+	            <table class="table table-striped">
+	              <thead>
+	                <tr>
+	                  <th></th>
+	                  <th>FB Profile Pic</th>
+	                  <th ng-click="headingClicked(0)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"> </span>Name</th>
+	                  <th ng-click="headingClicked(1)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"> </span>Gender</th>
+	                  <th ng-click="headingClicked(2)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"> </span>Phone Number</th>
+	                  <th ng-click="headingClicked(3)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"> </span>No Of Events Attended</th>
+	                  <th>Select</th>
+	                </tr>
+	              </thead>
+	              <tbody id="usersTBody">
+	              	<tr ng-repeat="user in users | orderBy:orderField:isReversed | filter:filterBy">
+	              		<td>{{$index + 1}}</td>
+	              		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
+	              		<td>{{user.firstName + " " + user.lastName}}</td>
+	              		<td>{{user.gender}}</td>
+	              		<td>{{user.phoneNumber}}</td>
+	              		<td>{{user.events.length}}</td>
+	              		<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td>
+	              	</tr>
+	              </tbody>
+	            </table>
+        	</div>
+		</div>
+	</body>
+</html> 
