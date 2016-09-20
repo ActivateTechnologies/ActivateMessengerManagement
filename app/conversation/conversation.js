@@ -413,6 +413,13 @@ module.exports = function(code){
       saveSchool: saveToExtras("level", "School/Uni"),
       saveAmateur: saveToExtras("level", "Amateur"),
 
+      // Save kit
+      saveXL: saveToExtras("kitSize", "XL"),
+      saveL: saveToExtras("kitSize", "L"),
+      saveM: saveToExtras("kitSize", "M"),
+      saveS: saveToExtras("kitSize", "S"),
+      saveXS: saveToExtras("kitSize", "XS"),
+
       // New or returning member
       newMember: saveToExtras("type", "new"),
       returning: saveToExtras("type", "returning")
