@@ -29,10 +29,6 @@ let schema = function(connection){
     }
   })
 
-  // extras is an object {}
-  // so any new property like striker can be added
-  // user.extras['position'] = "striker"
-
   let eventSchema = new Schema({
     name: String,
     strapline: String,

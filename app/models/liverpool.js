@@ -3,8 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-let db = mongoose.createConnection("mongodb://anirudh:kickabout@ds029496.mlab.com:29496/uwe");
-
+let db = mongoose.createConnection("mongodb://anirudh:kickabout@ds035806.mlab.com:35806/liverpool");
 
 let schema = function(connection){
 
@@ -18,12 +17,9 @@ let schema = function(connection){
     notifications: String,
     signedUpDate: Date,
 
-    phoneNumber: String,
     email: String,
     preferredPosition: String,
     backupPosition: String,
-    level: String,
-    type: String,
 
     events: Array,
     conversationLocation: {
