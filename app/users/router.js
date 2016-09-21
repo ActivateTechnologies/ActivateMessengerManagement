@@ -20,37 +20,37 @@ router.get('/userdata.:code', (req, res) => {
       data += (user.firstName + " " + user.lastName) + ","
             + user.gender + ","
       try {
-        data += (user.extras[1].phoneNumber + ',')
+        data += (user.phoneNumber + ',')
       }
       catch (e) {
         data += "NA" + ','
       }
       try {
-        data += (user.extras[2].email + ',')
+        data += (user.email + ',')
       }
       catch (e) {
         data += ("NA" + ',')
       }
       try {
-        data += (user.extras[3].preferredPosition + ',')
+        data += (user.preferredPosition + ',')
       }
       catch (e) {
         data += ("NA" + ',')
       }
       try {
-        data += (user.extras[4].backup + ',')
+        data += (user.backup + ',')
       }
       catch (e) {
         data += ("NA" + ',')
       }
       try {
-        data += (user.extras[5].level + ',')
+        data += (user.level + ',')
       }
       catch (e) {
         data += ("NA" + ',')
       }
       try {
-        data += ((user.extras[6])['type'] + ',')
+        data += (user['type'] + ',')
       }
       catch (e) {
         data += ("NA" + ',')
