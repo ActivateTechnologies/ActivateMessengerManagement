@@ -4,7 +4,7 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
+  padding-top: 0px;
 }
 
 
@@ -219,8 +219,13 @@ a { color: inherit; }
 }
 
 .activateLogoHeader {
-  width: 160px;
+  height: 38px;
   margin-top: 10px;
+}
+
+.activateLogoMainCentre {
+  height: 60px;
+  margin-bottom: 25px;
 }
 
 .jumbatronLeftContainer {
@@ -263,7 +268,11 @@ a { color: inherit; }
 }
 
 .navbar {
-  background-color: #FF524F;
+ background: rgba(34, 34, 34, 0.5);
+}
+
+.navbar:hover {
+ background: rgba(34, 34, 34, 0.9);
 }
 
 .jumbotron {
@@ -289,6 +298,57 @@ a { color: inherit; }
   margin-right: auto;
   margin-left: auto;
   display: block;
+}ac
+
+input:focus { 
+    border: #ff524f;
 }
 
+input[type="text"], input[type="password"], input[type="email"] {
+  color: #FFFFFF;
+}
+
+.login-button {
+  box-shadow: none;
+}
+
+button {
+  color: #FFFFFF !important;
+}
+
+#header {
+  color: #FFFFFF;
+}
+
+.form-control {
+  color: #000000 !important;
+  background: #FFFFFF !important;
+}
+
+.modal-dialog {
+  width: 400px;
+}
+
+.modal-header {
+  padding: 0px;
+}
+
+.modal-title {
+  padding-top: 15px;
+  padding-left: 15px;
+}
+
+.btn {
+  box-shadow: none;
+}
+
+.btn-close-modal {
+  color: #000000 !important;
+}
+
+.websiteTitleBots {
+  text-align: center;
+  margin-top: 10px;
+  color: #222222;
+}
 
