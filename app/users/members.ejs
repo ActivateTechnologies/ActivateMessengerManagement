@@ -12,6 +12,7 @@
 
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/dashboardCoded.css" rel="stylesheet">
 	</head>
 
@@ -41,7 +42,6 @@
 
 		<div class="container">
 			<h1>Users</h1>
-			<!-- <input ng-model="filterBy"> -->
 			<ul>
 				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
 			</ul>
@@ -50,33 +50,32 @@
 	              <thead>
 	                <tr>
 	                  <th></th>
-	                  <th>FB Profile Pic</th>
-	                  <th ng-click="headingClicked(0)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"> </span>Name</th>
-	                  <th ng-click="headingClicked(1)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"> </span>Gender</th>
-	                  <th ng-click="headingClicked(2)" ng-if="isDisplayed(2)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"> </span>Phone Number</th>
+	                  <th></th>
+	                  <th ng-click="headingClicked(0)">Name <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"></span></th>
+	                  <th ng-click="headingClicked(1)">Gender <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"></span></th>
+	                  <th ng-if="isDisplayed(2)">Phone Number</th>
                     <th ng-if="isDisplayed(3)">Email</th>
-                    <th ng-if="isDisplayed(4)">Preferred Position</th>
-                    <th ng-if="isDisplayed(5)">Backup Position</th>
-                    <th ng-if="isDisplayed(6)">Level</th>
-                    <th ng-if="isDisplayed(7)">New/Returning</th>
-                    <th>Signed Up Date</th>
+                    <th ng-if="isDisplayed(4)" ng-click="headingClicked(4)">Preferred Position <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==4 && isReversed==true"></span></th>
+                    <th ng-if="isDisplayed(5)" ng-click="headingClicked(5)">Backup Position <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==5 && isReversed==true"></span></th>
+                    <th ng-if="isDisplayed(6)" ng-click="headingClicked(6)">Level <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==6 && isReversed==true"></span></th>
+                    <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
+                    <th ng-click="headingClicked(8)">Signed Up Date <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
                     <th>Messenger ID</th>
-<!-- 	                  <th ng-click="headingClicked(3)"><span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"> </span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"> </span>No Of Events Attended</th> -->
 	                  <th>Select</th>
 	                </tr>
 	              </thead>
 	              <tbody id="usersTBody">
-	              	<tr ng-repeat="user in users | orderBy:orderField:isReversed | filter:filterBy">
+	              	<tr ng-repeat="user in users | orderBy:orderField:isReversed">
 	              		<td>{{$index + 1}}</td>
 	              		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
 	              		<td>{{user.firstName + " " + user.lastName}}</td>
-	              		<td>{{user.gender}}</td>
-	              		<td>{{user.extras[0].phoneNumber}}</td>
-                    <td>{{user.extras[1].email}}</td>
-                    <td>{{user.extras[2].preferredPosition}}</td>
-                    <td>{{user.extras[3].backup}}</td>
-                    <td>{{user.extras[4].level}}</td>
-                    <td>{{user.extras[5].type}}</td>
+	              		<td>{{user.gender | capitaliseFirst}}</td>
+	              		<td ng-if="isDisplayed(2)">{{user.phoneNumber | phone}}</td>
+                    <td ng-if="isDisplayed(3)">{{user.email || '-'}}</td>
+                    <td ng-if="isDisplayed(4)">{{user.preferredPosition || '-'}}</td>
+                    <td ng-if="isDisplayed(5)">{{user.backupPosition || '-'}}</td>
+                    <td ng-if="isDisplayed(6)">{{user.level || '-'}}</td>
+                    <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
 	              		<td>{{user.signedUpDate}}</td>
                     <td>{{user.mid}}</td>
 	              		<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td>
@@ -102,35 +101,36 @@
       $scope.currentHead = -1;
 
       $scope.isDisplayed = function(head) {
+        console.log("HELLO", head);
         for(i = 0; i < $scope.users.length; i++) {
           switch(head) {
             case 2:
-              if(user[i].phoneNumber != null) {
+              if($scope.users[i].phoneNumber != null) {
                 return true;
               }
               break;
             case 3:
-              if(user[i].email != null) {
+              if($scope.users[i].email != null) {
                 return true;
               }
               break;
             case 4:
-              if(user[i].preferredPosition != null) {
+              if($scope.users[i].preferredPosition != null) {
                 return true;
               }
               break;
             case 5:
-              if(user[i].backup != null) {
+              if($scope.users[i].backupPosition != null) {
                 return true;
               }
               break;
             case 6:
-              if(user[i].level != null) {
+              if($scope.users[i].level != null) {
                 return true;
               }
               break;
             case 7:
-              if(user[i].type != null) {
+              if($scope.users[i].type != null) {
                 return true;
               }
               break;
@@ -155,11 +155,20 @@
           case 1:
             $scope.orderField = 'gender';
             break;
-          case 2:
-            $scope.orderField = 'phoneNumber';
-            break
-          case 3:
-            $scope.orderField = 'events.length';
+          case 4:
+            $scope.orderField = 'preferredPosition';
+            break;
+          case 5:
+            $scope.orderField = 'backupPosition';
+            break;
+          case 6:
+            $scope.orderField = 'level';
+            break;
+          case 7:
+            $scope.orderField = 'type';
+            break;
+          case 8:
+            $scope.orderField = 'signedUpDate';
             break;
         }
       }
@@ -185,7 +194,19 @@
         }
         console.log($scope.selectedItems);
       }
-    }])
+    }]);
+
+    app.filter('phone', function() {
+      return function(input) {
+        return (!!input) ? '+44' + input : '-';
+      }
+    });
+
+    app.filter('capitaliseFirst', function() {
+      return function(input) {
+        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '-';
+      }
+    });
 
     </script>
 	</body>
