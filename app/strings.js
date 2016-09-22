@@ -83,7 +83,7 @@ module.exports = function(code){
   }
 
   else if (code === 'sheffieldHallam'){
-    s.company: {
+    s.company = {
       name: "Sheffield Hallam University",
       website: "www.kickabout.football",
       address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
