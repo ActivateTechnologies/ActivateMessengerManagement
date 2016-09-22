@@ -222,17 +222,9 @@
     });
 
     $(document).ready(function() {
+      // Function to create CSV string
       $("#btn1").click(function() {
         var csvStr = '';
-        // // Getting the headings
-        // var headings = $("th");
-        // for(i = 2; i < headings.length; i++) {
-        //   heading = $(headings[i]).text();
-        //   heading = heading.substr(0, heading.length - 1);
-        //   csvStr += heading + ',';
-        // }
-        // csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
-
         // Getting data from the rows
         var rows = $("tr");
         for(y = 0; y < rows.length; y++) {
@@ -243,7 +235,6 @@
           csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
           csvStr += '\r\n';
         }
-
         console.log(csvStr);
       })
     })
