@@ -53,15 +53,15 @@
 	                  <th></th>
 	                  <th ng-click="headingClicked(0)">Name <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"></span></th>
 	                  <th ng-click="headingClicked(1)">Gender <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"></span></th>
-	                  <th ng-if="isDisplayed(2)">Phone Number</th>
-                    <th ng-if="isDisplayed(3)">Email</th>
+	                  <th ng-if="isDisplayed(2)" ng-click="headingClicked(2)">Phone Number <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"></span></th>
+                    <th ng-if="isDisplayed(3)" ng-click="headingClicked(3)">Email <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(4)" ng-click="headingClicked(4)">Preferred Position <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==4 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(5)" ng-click="headingClicked(5)">Backup Position <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==5 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(6)" ng-click="headingClicked(6)">Level <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==6 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
                     <th ng-click="headingClicked(8)">Signed Up Date <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
-                    <th>Messenger ID</th>
-	                  <th>Select</th>
+                    <th ng-click="headingClicked(9)">Messenger ID <span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
+	                  <!-- <th>Select</th> -->
 	                </tr>
 	              </thead>
 	              <tbody id="usersTBody">
@@ -78,7 +78,7 @@
                     <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
 	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
                     <td>{{user.mid}}</td>
-	              		<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td>
+	              		<!-- <td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
 	              	</tr>
 	              </tbody>
 	            </table>
@@ -154,6 +154,12 @@
           case 1:
             $scope.orderField = 'gender';
             break;
+          case 2:
+            $scope.orderField = 'phoneNumber';
+            break;
+          case 3:
+            $scope.orderField = 'email';
+            break;
           case 4:
             $scope.orderField = 'preferredPosition';
             break;
@@ -169,11 +175,14 @@
           case 8:
             $scope.orderField = 'signedUpDate';
             break;
+          case 9:
+            $scope.orderField = 'mid';
+            break;
         }
       }
 
       $scope.getFormattedDate = function(date) {
-        return moment(date).format('dddd Do MMMM HH:mm');
+        return moment(date).format('DD/MM/YY HH:mm');
       }
 
       $scope.selectedItems = [];

@@ -1,41 +1,30 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<!--
+  Fractal by HTML5 UP
+  html5up.net | @ajlkn
+  Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
   <head>
-    <meta charset="utf-8">
+    <title>Activate | Log In or Sign Up</title>
+    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <meta name="description" content="">
     <meta name="author" content="">
+    <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
     <link rel="icon" href="img/activateFavicon.png">
-
-    <title>Activate | Log In or Sign Up</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Bootstrap core CSS -->
+    
     <!-- CODED CSS -->
     <link href="css/dashboardCoded.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+    <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
   </head>
-
-  <body>
+  <body id="top">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -46,7 +35,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img class="activateLogoHeader" src="img/ActivateLogoWhite.png">
+          <img class="activateLogoHeader" src="img/ALogo.png">
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="/login" method="post">
@@ -56,54 +45,78 @@
             <div class="form-group">
               <input type="password" name="password" placeholder="Password" class="form-control">
             </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
+            <button type="submit" class="btn btn-primary login-button">Log In</button>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <div class="jumbatronLeftContainer">
-          <h2>Activate is a platform for managing event and shop bots.</h2>
-          <p>Goodbye apps, hello bots!</p>
-
-          <div class="iphonesDiv">
-            <video style="margin-top: 49px; margin-left: 323px;" height="300px" width="autos" loop autoplay muted>
+    <!-- Header -->
+      <header id="header">
+        <div class="content">
+          <img class="activateLogoMainCentre" src="img/logoVectorNoBackground.png">
+          <p>Helping you create and manage bots.</p>
+          <ul class="actions">
+            <li><a href="#one" class="button icon fa-chevron-down scrolly">Learn More</a></li>
+            <li type="button" data-toggle="modal" data-target="#myModal"> <a class="button special">Sign Up</a>
+            </li>
+          </ul>
+        </div>
+        <div class="image phone">
+          <div class="inner" style="height:367px;"">
+            <video style="" height="363px" loop autoplay muted>
               <source src="video/botScreencast.mp4" type="video/mp4">
               <source src="movie.ogg" type="video/ogg">
-              Your browser does not support the video tag.
+                Your browser does not support the video tag.
             </video>
-          </div>
+        </div></div>
+      </header>
 
-        </div>
-        <div class="jumbatronRightContainer">
-          <h2 id="formTitle">Want a Bot?</h2>
-          <form id="registerForm">
-            <div class="form-group">
-              <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="Name" required>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" >Sign Up</h4>
             </div>
-            <div class="form-group">
-              <input type="text" class="form-control" name="phoneNumber" id="exampleInputEmail1" placeholder="Phone Number" required>
+            <div class="modal-body">
+              <form id="registerForm">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="phoneNumber" id="exampleInputEmail1" placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" id="exampleInputEmail1" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="fbPageURL" id="exampleInputEmail1" placeholder="Facebook Page URL" required>
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" rows="9" name="desc" placeholder="Please provide as much information on your bot requirements as possible and we'll be in touch as soon as possible." required></textarea>
+                </div>
+              </form>
             </div>
-            <div class="form-group">
-              <input type="email" class="form-control" name="email" id="exampleInputEmail1" placeholder="Email" required>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-close-modal" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Submit</button>
             </div>
-            <div class="form-group">
-              <input type="text" class="form-control" name="fbPageURL" id="exampleInputEmail1" placeholder="Facebook Page URL" required>
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" rows="9" name="desc" placeholder="Please provide as much information on your bot requirements as possible and we'll be in touch as soon as possible." required></textarea>
-            </div>
-            <input type="submit" class="btn btn-success btn-block" value="Submit">
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+
+    <!-- One -->
+      <section id="one" class="wrapper style2 special">
+
+        <h2>Say goodbye to apps, and hello to bots!</h2>
+        
+      </section>
 
     <div class="container">
       <!-- Example row of columns -->
+      <h3 class="websiteTitleBots">See who else is using Activate</h3>
       <div class="row">
 
         <div class="col-md-4 botAdContainer">
@@ -148,12 +161,19 @@
       </footer>
     </div> <!-- /container -->
 
+    <!-- Scripts -->
+      <script src="assets/js/jquery.min.js"></script>
+      <script src="assets/js/jquery.scrolly.min.js"></script>
+      <script src="assets/js/skel.min.js"></script>
+      <script src="assets/js/util.js"></script>
+      <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+      <script src="assets/js/main.js"></script>
 
-    <!-- Bootstrap core JavaScript
+      <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
     <script src="js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="js/ie10-viewport-bug-workaround.js"></script>
@@ -171,5 +191,9 @@
         })
       })
     </script>
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/master
   </body>
 </html>
