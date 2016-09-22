@@ -61,7 +61,7 @@ module.exports = function(code){
 
                 console.log("New User");
 
-                var get_url = "https://graph.facebook.com/v2.6/" + mid
+                var get_url = "https://graph.facebook.com/v2.6/" + uid.mid
                  + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
                  + "&access_token=" + Config.VERIFICATION_TOKEN;
 
@@ -71,7 +71,7 @@ module.exports = function(code){
 
                     body = JSON.parse(body);
                     let user = M.User({
-                      mid: mid,
+                      mid: uid.mid,
                       firstName: body.first_name,
                       lastName: body.last_name,
                       profilePic: body.profile_pic,
@@ -91,12 +91,7 @@ module.exports = function(code){
                         {upsert: true},
                         (err)=>{if(err) console.log(err);});
 
-                      let uid = {
-                        _id: user.id,
-                        mid: mid
-                      }
-
-                      Conversation.startConversation(newUid, "onboarding");
+                      Conversation.startConversation(uid, "onboarding");
                     });
 
                   }
