@@ -18,7 +18,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css" />
     <!-- Bootstrap core CSS -->
-    
+
     <!-- CODED CSS -->
     <link href="css/dashboardCoded.css" rel="stylesheet">
     <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
@@ -55,7 +55,7 @@
       <header id="header">
         <div class="content">
           <img class="activateLogoMainCentre" src="img/logoVectorNoBackground.png">
-          <p>Helping you create and manage bots.</p>
+          <p id="formFeedback">Helping you create and manage bots.</p>
           <ul class="actions">
             <li><a href="#one" class="button icon fa-chevron-down scrolly">Learn More</a></li>
             <li type="button" data-toggle="modal" data-target="#myModal"> <a class="button special">Sign Up</a>
@@ -63,7 +63,7 @@
           </ul>
         </div>
         <div class="image phone">
-          <div class="inner" style="height:367px;"">
+          <div class="inner" style="height:367px;">
             <video style="" height="363px" loop autoplay muted>
               <source src="video/botScreencast.mp4" type="video/mp4">
               <source src="movie.ogg" type="video/ogg">
@@ -78,7 +78,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" >Sign Up</h4>
+              <h4 class="modal-title">Sign Up</h4>
             </div>
             <div class="modal-body">
               <form id="registerForm">
@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default btn-close-modal" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="formSubmit">Submit</button>
             </div>
           </div>
         </div>
@@ -111,7 +111,7 @@
       <section id="one" class="wrapper style2 special">
 
         <h2>Say goodbye to apps, and hello to bots!</h2>
-        
+
       </section>
 
     <div class="container">
@@ -179,21 +179,12 @@
     <script src="js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
-        console.log(1111);
-        $('#registerForm').submit(function(event){
-          console.log("submitted");
-          event.preventDefault();
+        $('#formSubmit').click(function(event){
           $.post("/register", $("#registerForm").serialize(), function(data) {
-            console.log(33333);
-            $('#registerForm').css('display', 'none');
-            $('#formTitle').text(data)
+            $('#formFeedback').text(data)
           });
         })
       })
     </script>
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
   </body>
 </html>
