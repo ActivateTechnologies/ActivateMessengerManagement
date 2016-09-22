@@ -15,6 +15,8 @@ let schema = function(connection){
     gender: String,
     notifications: String,
     signedUpDate: Date,
+    interactionTime: Date,
+    receivedTime: Date,
     events: Array,
     conversationLocation: {
       conversationName: String,

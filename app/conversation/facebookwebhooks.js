@@ -25,44 +25,87 @@ module.exports = function(code){
       if ((!event.message || !event.message.is_echo)
        && !event.read && !event.delivery) {
         let uid = { mid: event.sender.id };
-        let user;
-        M.User.find({mid: uid.mid}, (error, results) => {
-          if (error) {console.log(error);}
-          else if (results.length == 0) {
-            console.log('No users with mid "' + uid.mid + '" found.');
-            createUser(uid.mid, (newUid, error) => {
-              if (error) {
-                console.log('Error creating user:', error);
-              }
-              else {
-                Conversation.startConversation(newUid, "onboarding");
-              }
-            });
-          }
-          else {
-            user = results[0];
-            uid._id = user._id;
-            uid.firstName = user.firstName;
-            uid.lastName = user.lastName;
-            let convo = user.conversationLocation;
-            let inConversation = (convo && convo.conversationName);
 
-            if (!Conversation.consumeWebhookEvent(event, uid, user)) {
-              if (event.message && event.message.text && event.message.quick_reply) {
-                processQuickReply(event, uid);
+        M.User.findOneAndUpdate(
+            {mid: uid.mid},
+            {interactionTime: (new Date())},
+            function(error, user){
+              if(error) console.log(error);
+
+              // found user
+              if(user){
+                uid._id = user._id;
+                uid.firstName = user.firstName;
+                uid.lastName = user.lastName;
+                let convo = user.conversationLocation;
+                let inConversation = (convo && convo.conversationName);
+
+                if (!Conversation.consumeWebhookEvent(event, uid, user)) {
+                  if (event.message && event.message.text && event.message.quick_reply) {
+                    processQuickReply(event, uid);
+                  }
+                  else if (event.message && event.message.text && !event.message.quick_reply) {
+                    // Send.allEvents(uid, S.s.bot.allEventsDefault);
+                  }
+                  else if (event.message && event.message.attachments){
+                    processAttachment(event, uid);
+                  }
+                  else if (event.postback) {
+                    processPostback(event, uid);
+                  }
+                }
               }
-              else if (event.message && event.message.text && !event.message.quick_reply) {
-                // Send.allEvents(uid, S.s.bot.allEventsDefault);
+
+              // new user
+              else {
+
+                console.log("New User");
+
+                var get_url = "https://graph.facebook.com/v2.6/" + mid
+                 + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
+                 + "&access_token=" + Config.VERIFICATION_TOKEN;
+
+                request(get_url, (err, response, body) => {
+
+                  if (!err && response.statusCode == 200) {
+
+                    body = JSON.parse(body);
+                    let user = M.User({
+                      mid: mid,
+                      firstName: body.first_name,
+                      lastName: body.last_name,
+                      profilePic: body.profile_pic,
+                      locale: body.locale,
+                      gender: body.gender,
+                      events: [],
+                      interactionTime: new Date(),
+                      notifications: "on",
+                      signedUpDate: new Date()
+                    });
+
+                    user.save((err) => {
+                      if (err) console.log(err);
+
+                      M.Analytics.update({name:"NewUsers"},
+                        {$push: {activity: {uid:user._id, time: new Date()}}},
+                        {upsert: true},
+                        (err)=>{if(err) console.log(err);});
+
+                      let uid = {
+                        _id: user.id,
+                        mid: mid
+                      }
+
+                      Conversation.startConversation(newUid, "onboarding");
+                    });
+
+                  }
+
+                });
+
               }
-              else if (event.message && event.message.attachments){
-                processAttachment(event, uid);
-              }
-              else if (event.postback) {
-                processPostback(event, uid);
-              }
-            }
-          }
-        });
+            })
+
       }
     });
     res.sendStatus(200);
@@ -129,15 +172,6 @@ module.exports = function(code){
     else {
       switch(text.toLowerCase()) {
 
-        case('start'):
-        createUser(uid.mid, (newUid, error) => {
-          if (error) {console.log(error)}
-          else {
-            Conversation.startConversation(newUid, "onboarding");
-          }
-        });
-        break;
-
         case("my events"):
         Send.myEvents(uid);
         break;
@@ -154,63 +188,6 @@ module.exports = function(code){
         Send.allEvents(uid, S.s.bot.allEventsDefault);
       }
     }
-  }
-
-  function createUser(mid, callback) {
-    M.User.find({mid: mid}).exec((error, results) => {
-      if (!error && results.length > 0) {
-        console.log('User already exists');
-        callback({
-          _id: results[0].id,
-          mid: mid
-        })
-      }
-      else {
-        console.log('Going to create user with mid "' + mid + '"');
-
-        var get_url = "https://graph.facebook.com/v2.6/" + mid
-         + "?fields=first_name,last_name,profile_pic,locale,timezone,gender"
-         + "&access_token=" + Config.VERIFICATION_TOKEN;
-
-        request(get_url, (error, response, body) => {
-          if (!error && response.statusCode == 200) {
-            body = JSON.parse(body);
-            let user = M.User({
-              mid: mid,
-              firstName: body.first_name,
-              lastName: body.last_name,
-              profilePic: body.profile_pic,
-              locale: body.locale,
-              gender: body.gender,
-              events: [],
-              notifications: "on",
-              signedUpDate: new Date()
-            });
-            user.save((err) => {
-              if (err) {
-                console.log(err);
-                callback(null, err);
-              }
-              else {
-                M.Analytics.update({name:"NewUsers"},
-                {$push: {activity: {uid:user._id, time: new Date()}}},
-                {upsert: true},
-                console.log);
-
-                callback({
-                  _id: user.id,
-                  mid: mid
-                });
-              }
-            });
-          }
-          else {
-            let errorObject = (error) ? error : response.body.error;
-            if (errorObject) {console.log(errorObject);}
-          }
-        });
-      }
-    });
   }
 
   return {
