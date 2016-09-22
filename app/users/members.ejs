@@ -10,9 +10,9 @@
 
     <title>Activate | <%=s.company.name%></title>
 
-		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="js/moment.js"></script>
+		<script src="js/angular.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/dashboardCoded.css" rel="stylesheet">
 	</head>
 
@@ -42,9 +42,9 @@
 
 		<div class="container">
 			<h1>Users</h1>
-			<ul>
+			<!-- <ul>
 				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
-			</ul>
+			</ul> -->
 			<div class="table-responsive">
 	            <table class="table table-striped">
 	              <thead>
@@ -76,7 +76,7 @@
                     <td ng-if="isDisplayed(5)">{{user.backupPosition || '-'}}</td>
                     <td ng-if="isDisplayed(6)">{{user.level || '-'}}</td>
                     <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
-	              		<td>{{user.signedUpDate}}</td>
+	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
                     <td>{{user.mid}}</td>
 	              		<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td>
 	              	</tr>
@@ -101,7 +101,6 @@
       $scope.currentHead = -1;
 
       $scope.isDisplayed = function(head) {
-        console.log("HELLO", head);
         for(i = 0; i < $scope.users.length; i++) {
           switch(head) {
             case 2:
@@ -173,6 +172,10 @@
         }
       }
 
+      $scope.getFormattedDate = function(date) {
+        return moment(date).format('dddd Do MMMM');
+      }
+
       $scope.selectedItems = [];
 
       $scope.updateSelectedItems = function(id) {
@@ -188,7 +191,6 @@
           for(i = 0; i < $scope.selectedItems.length; i++) {
             if($scope.selectedItems[i]._id == id) {
               $scope.selectedItems.splice(i, 1);
-              console.log("BYE");
             }
           }
         }
