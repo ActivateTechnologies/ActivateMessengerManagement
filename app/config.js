@@ -5,9 +5,9 @@ const status = 'production'; //'production' or 'test'
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
 
-// Bot 5 - Monty Messener
-// Bot 6 - Wembley FC
-// Bot 7 - Avi Messenger
+// Bot 8 - Monty Messener
+// Bot 9 - Wembley FC
+// Bot 10 - Avi Messenger
 
 
 
@@ -24,12 +24,6 @@ module.exports = function(code){
 
 	else if(code === 'uwe'){
 		VERIFICATION_TOKEN = "EAAW8z3Llta8BAPXlubWU8t1aQyLUi00ANNBaiorYExsOZAOT63bRMhEXZCrdxQctJvzEyVV4NfgESKA0mjsQLpsVkNyePaZBDvalW4pzAcxIvkaZCpePB62bO7ttzkKayR5tiZBoocAbqVYgWS3QguUQqmASIJNH7dvJx6zNLKgZDZD";
-		ROOT_URL = "http://www.activatetechnologies.co.uk";
-	}
-
-	else if(code === 'ucl'){
-		// attached to wembley fc using the wickedstudentnightsapp
-		VERIFICATION_TOKEN = "EAAQmEkmfekUBAKdoF4WKdMi6q3mNI4mPyND6tV5BnrY0OIdFH8UnHmZCVUZBZA1JshTwsw45V6pSLUFPbMB5cWkLdGkC90P72AWQBoKaGGRJatLJIyGDaAfucKKygG9wqSo3vXbXCnrK8dy4D35zmUUp4owMOd7ZBFBdZCxtKfAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
@@ -53,18 +47,18 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot5'){
-		VERIFICATION_TOKEN = "EAAPXiDbQxgwBAHvLWwuz1L4Qn22JNbNNrPpfadAYfeUL3E0Wt2L2Tyc6Yvk7AyVVV1TaaZCM7KVwgGFFzuSiMNaxTqKrTfDPyoJqMQFjUpz0CZBWs7kNwGx1ifWgHSw7RSR7rKpL1v2x2jLoVN4C7mhlXFTMSZAsmKqOn0AjAZDZD";
+	else if(code === 'bot8'){
+		VERIFICATION_TOKEN = "EAAHsfEZAJkVYBAOMiU57ZCf7lT4iaEipMpO4FC00vdG2bn42UJF0Y9qMZBAGgV79l73ypCk4nZA95TAuiLPzyYWuQ1fdJEReaqEcZC26gdoSUG1koWXAR0waeZCrMoZAXU96nY2PjcxsUAX9Px6QsoPxeKeirIL7CKEP2yPZA7HXawZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot6'){
-		VERIFICATION_TOKEN = "EAAYvJrXVU1sBAKxvcvZAY6ZBp44xBe6nFX0KaULy4g9dJXTzZBDe4eMxNkn8j2InJl9TSZAlZCsQCIUjhzIPrOGxeIE1NP7MK1g18LKaMsV5iDdEovN17ZA6LUpfEnAnqY7ZBZBCaa1I92PSxEiQOuL32aNpPQuq1IYg47XJsORfpQZDZD";
+	else if(code === 'bot9'){
+		VERIFICATION_TOKEN = "EAAW9W8MJa2kBANybJfxAwJMxXsvhZC2T1rfB0rEJwDSkbkZB2UeZB7ROQhevnfJiMxw8hkBsql8gnIax8tE42B108phOltAQRbOZAyd2AlbBrxrMZCiclZCn79lCUam9OgTF6cVQpG8CXZChjjxIqwlQv0qEsWPhYaF8qJzZCP0NxAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot7'){
-		VERIFICATION_TOKEN = "EAAOmcqjs0c0BAAZBQSZBpPfU6gFZCwqbWLiipYfwOefnxAfPF8UZBdfmNZCblOZB6I6FoVHmknDdHw19V2rZBeVY7GwPb2qruUOcZCZBMe1bygm15RHxfesOgpEqPJuq7CMjTZCO1l6PwnYVcg2Cnfj6ZBAZAC4OeZCGlarfQCSN3WBOBjAZDZD";
+	else if(code === 'bot10'){
+		VERIFICATION_TOKEN = "EAAEd51HpEZCwBAA2Hp8mKndoguUBh3myZCZAIwmGSR3EYHWUJkF4OGckjYmZC3xT1AQ7CM8A6JzIVYZB7g1o0VsdFYNxhcrFWWfBkAEZAiGSFJU7oi379ty2vjKIgXrzYN82jDO8yOhaZAsVqFMeZARr7bE1hOq2ZAZBCmy3xXsAOk5QZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
