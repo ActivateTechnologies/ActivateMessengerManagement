@@ -15,9 +15,6 @@ module.exports = function(code){
     if (uid.mid) {
       recipient = {id:uid.mid}
     }
-    else if (uid.phoneNumber) {
-      recipient = {phone_number:uid.phoneNumber};
-    }
     else {
       console.log('send not executed, as neither mid nor phone number exist');
       return;

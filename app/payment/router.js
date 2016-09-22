@@ -83,7 +83,11 @@ router.post('/charge.:code', (req, res) => {
   let eid = req.query.eid;
   let stripeToken = req.body.stripeToken;
 
+  console.log("reached charge");
+
+
   M.Event.findOne({_id: eid}, function(err, event){
+    console.log(5555);
     if(err) console.log(err);
     if(!event){
       console.log("Event not found");
@@ -91,7 +95,9 @@ router.post('/charge.:code', (req, res) => {
     }
     // Event Exists
     else {
-      M.User.findOneAndUpdate({_id: id}, function(e, user){
+      console.log(66666);
+      M.User.findOne({_id:id}, function(e, user){
+        console.log(111111);
         if(e) console.log(e);
         if(!user){
           console.log("User not found");
@@ -99,6 +105,7 @@ router.post('/charge.:code', (req, res) => {
         }
         // Found User
         else {
+          console.log(333333);
           let uid = {
             _id: user._id,
             mid: user.mid
@@ -111,6 +118,7 @@ router.post('/charge.:code', (req, res) => {
 
           // PAID EVENT
           else {
+            console.log("paid event");
             let price = parseFloat(event.price) * 100;
             let charge = stripe.charges.create({
               amount: price,
@@ -124,8 +132,11 @@ router.post('/charge.:code', (req, res) => {
                 renderPage(S, res, S.s.payment.paymentError);
               }
 
+
+
               // PAYMENT Successful
               else {
+                console.log("charging");
                 // Update Analytics
                 M.Analytics.update({name:"Payments"},
                   {$push: {

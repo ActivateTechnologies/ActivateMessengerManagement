@@ -182,7 +182,6 @@ module.exports = function(code){
               profilePic: body.profile_pic,
               locale: body.locale,
               gender: body.gender,
-              extras: [{"test":"tosee"}],
               events: [],
               notifications: "on",
               signedUpDate: new Date()
