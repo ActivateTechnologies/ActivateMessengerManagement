@@ -4,6 +4,9 @@ const express = require('express');
 const router = express.Router();
 
 
+let codes = ['kickabout', 'uwe', 'sheffieldHallam',
+  'kings', 'salford', 'liverpool']
+
 /*
   Searchs Analytics collection for document with name=nameOfdocument,
   returning bucketed analytics in the format:
@@ -93,42 +96,85 @@ function processAnalyticsDataOverTime(M, nameOfdocument) {
 }
 
 
+function getMainStats(M){
+  return new Promise(function(resolve, reject){
+    M.User.count((err, count) => {
+      if (err) console.log(err);
+      else {
+        M.Analytics.findOne({name:"Payments"}, (err, result) => {
+          if (err) console.log(err);
+
+          if (result) {
+            resolve({
+              totalNoOfMembers: count,
+              totalRevenue: result.total,
+              totalNoOfTickets: result.activity.length
+            });
+          }
+
+          else {
+            resolve({
+              totalNoOfMembers: count,
+              totalRevenue: 0,
+              totalNoOfTickets: 0
+            });
+          }
+        });
+      }
+    });
+  })
+}
+
+
 /*
   Renders the dashboard page and provides the main data:
   { totalNoOfMembers:number, totalRevenue: number, totalNoOfTickets: number}*/
 router.get('/dashboard.:code', isLoggedIn, (req, res) => {
 
   const code = req.params.code;
-  const S = require('./../strings')(code);
-  const M = require('./../models/' + code);
 
-  M.User.count((err, count) => {
-    if (err) console.log(err);
-    else {
-      M.Analytics.findOne({name:"Payments"}, (err, result) => {
-        if (err) console.log(err);
+  if (code === "master"){
+    const S = require('./../strings')('kickabout');
 
-        if (result) {
-          res.render('dashboard/dashboard', {
-            totalNoOfMembers: count,
-            totalRevenue: result.total,
-            totalNoOfTickets: result.activity.length,
-            s: {company: S.s.company}
-          });
-        }
+    let all = [];
 
-        else {
-          res.render('dashboard/dashboard', {
-            totalNoOfMembers: count,
-            totalRevenue: 0,
-            totalNoOfTickets: 0,
-            s: {company: S.s.company}
-          });
-        }
-      });
+    for(let i = 0; i<codes.length; i++){
+        const M = require('./../models/' + codes[i]);
+        all.push(getMainStats(M));
     }
-  });
 
+    Promise.all(all)
+    .then((values)=>{
+        console.log(values);
+        console.log("2222");
+        let ret = {
+          totalNoOfMembers: 0,
+          totalRevenue: 0,
+          totalNoOfTickets: 0,
+          s: {company: S.s.company}
+        }
+
+        for(let i = 0; i<values.length; i++){
+          ret.totalNoOfMembers += values[i].totalNoOfMembers;
+          ret.totalRevenue += values[i].totalRevenue;
+          ret.totalNoOfTickets += values[i].totalNoOfTickets;
+        }
+
+        console.log(1111);
+        res.render('dashboard/dashboard', ret);
+    })
+  }
+
+  else {
+    const S = require('./../strings')(code);
+    const M = require('./../models/' + code);
+
+    getMainStats(M)
+    .then((ret)=>{
+      ret.s = {company: S.s.company};
+      res.render('dashboard/dashboard', ret);
+    })
+  }
 });
 
 
@@ -138,91 +184,64 @@ router.get('/dashboardData.:code', (req, res) => {
   const code = req.params.code;
 
   if (code === "master"){
-    const S = require('./../strings')("kickabout");
+      const S = require('./../strings')("kickabout");
 
-    let codes = ['kickabout', 'uwe', 'sheffieldHallam',
-      'kings', 'salford', 'liverpool']
+      let all = [];
 
-    let all = [];
-
-    for(var i = 0; i<codes.length; i++){
-      const M = require('./../models/' + codes[i]);
-      if (requiredData == 'getTicketsSoldOverTime') {
-        all.push(processAnalyticsDataOverTime(M, "Payments"))
-      }
-      else if (requiredData == 'getNewMembersOverTime') {
-        all.push(processAnalyticsDataOverTime(M, "NewUsers"))
-      }
-      else if (requiredData == 'getButtonHitsOverTime') {
-        all.push(processAnalyticsDataOverTime(M, "Button:More Info"))
-      }
-    }
-
-    Promise.all(all)
-    .then((values)=>{
-      let dataToReturn = values[0];
-
-      for (let j = 1; j<values.length; j++){
-        for (let i = 0; i<7; i++){
-          dataToReturn.daysArray[i] += values[j].daysArray[i];
+      for(var i = 0; i<codes.length; i++){
+        const M = require('./../models/' + codes[i]);
+        if (requiredData == 'getTicketsSoldOverTime') {
+          all.push(processAnalyticsDataOverTime(M, "Payments"))
         }
-        for (let i = 0; i<dataToReturn.weeksArray.length; i++){
-          dataToReturn.weeksArray[i] += values[j].weeksArray[i];
+        else if (requiredData == 'getNewMembersOverTime') {
+          all.push(processAnalyticsDataOverTime(M, "NewUsers"))
         }
-        for (let i = 0; i<dataToReturn.monthsArray.length; i++){
-          dataToReturn.monthsArray[i] += values[j].monthsArray[i];
+        else if (requiredData == 'getButtonHitsOverTime') {
+          all.push(processAnalyticsDataOverTime(M, "Button:More Info"))
         }
       }
-      
-      res.send(dataToReturn);
-    })
+
+      Promise.all(all)
+      .then((values)=>{
+        let dataToReturn = values[0];
+
+        for (let j = 1; j<values.length; j++){
+          for (let i = 0; i<7; i++){
+            dataToReturn.daysArray[i] += values[j].daysArray[i];
+          }
+          for (let i = 0; i<dataToReturn.weeksArray.length; i++){
+            dataToReturn.weeksArray[i] += values[j].weeksArray[i];
+          }
+          for (let i = 0; i<dataToReturn.monthsArray.length; i++){
+            dataToReturn.monthsArray[i] += values[j].monthsArray[i];
+          }
+        }
+
+        res.send(dataToReturn);
+      })
   }
 
   else {
 
-    const S = require('./../strings')(code);
-    const M = require('./../models/' + code);
+      const S = require('./../strings')(code);
+      const M = require('./../models/' + code);
 
-    let requiredData = req.query.requiredData;
+      let requiredData = req.query.requiredData;
 
-    if (requiredData == 'getTicketsSoldOverTime') {
-      processAnalyticsDataOverTime(M, "Payments")
-      .then((data, error) => {
-        if (error) {
-          console.log(error);
-          res.send('Error');
-        }
-        else {
-          res.send(data);
-        }
-      });
-    }
+      if (requiredData == 'getTicketsSoldOverTime') {
+        processAnalyticsDataOverTime(M, "Payments")
+        .then((data) => {res.send(data);});
+      }
 
-    else if (requiredData == 'getNewMembersOverTime') {
-      processAnalyticsDataOverTime(M, "NewUsers")
-      .then((data, error) => {
-        if (error) {
-          console.log(error);
-          res.send('Error');
-        }
-        else {
-          res.send(data);
-        }
-      });
-    }
+      else if (requiredData == 'getNewMembersOverTime') {
+        processAnalyticsDataOverTime(M, "NewUsers")
+        .then((data) => {res.send(data);});
+      }
 
-    else if (requiredData == 'getButtonHitsOverTime') {
-      processAnalyticsDataOverTime(M, "Button:More Info")
-      .then((data, error) => {
-        if (error) {
-          console.log(error);
-          res.send('Error');
-        }
-        else {
-          res.send(data);
-        }
-      });
-    }
+      else if (requiredData == 'getButtonHitsOverTime') {
+        processAnalyticsDataOverTime(M, "Button:More Info")
+        .then((data)=>{res.send(data);});
+      }
 
   }
 
