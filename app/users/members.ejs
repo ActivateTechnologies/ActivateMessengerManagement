@@ -62,7 +62,7 @@
                     <th ng-if="isDisplayed(6)" ng-click="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==6 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
                     <th ng-click="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(9)">Messenger ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
+                    <th ng-click="headingClicked(9)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
 	                  <!-- <th>Select</th> -->
 	                </tr>
 	              </thead>
@@ -79,7 +79,7 @@
                     <td ng-if="isDisplayed(6)">{{user.level || '-'}}</td>
                     <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
 	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
-                    <td>{{user.mid}}</td>
+                    <td>{{user._id}}</td>
 	              		<!-- <td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
 	              	</tr>
 	              </tbody>
