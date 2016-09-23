@@ -189,6 +189,22 @@
 
       $scope.selectedItems = [];
 
+			$scope.getColorAndTime = function(interactionTime, receivedTime){
+				var it = moment(interactionTime);
+				var rt = moment(receivedTime);
+				var now = moment()
+
+				if(it.add(24, 'hours').isAfter(now)){
+					return ["green", it.add(24, 'hours').subtract(now)];
+				}
+				else if(rt.isBefore(it)){
+					return ["amber", now.subtract(it)];
+				}
+				else {
+					return ["red", now.subtract(it)]
+				}
+			}
+
       $scope.updateSelectedItems = function(id) {
         console.log(id);
         var index = JSON.stringify($scope.selectedItems).indexOf(id);
