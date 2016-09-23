@@ -8,3 +8,5 @@ add strings in strings.js
 add login details to passport-config
 
 send out threads for getting started and Persistent menu
+
+add code to dashboard
