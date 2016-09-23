@@ -138,18 +138,46 @@ router.get('/dashboardData.:code', (req, res) => {
   const code = req.params.code;
 
   if (code === "master"){
-    const S = require('./../strings')(code);
-    const M = require('./../models/' + code);
+    const S = require('./../strings')("kickabout");
 
     let codes = ['kickabout', 'uwe', 'sheffieldHallam',
-      'kings', 'salford', 'liverpool'
-    ]
+      'kings', 'salford', 'liverpool']
+
+    let all = [];
 
     for(var i = 0; i<codes.length; i++){
-
+      const M = require('./../models/' + codes[i]);
+      if (requiredData == 'getTicketsSoldOverTime') {
+        all.push(processAnalyticsDataOverTime(M, "Payments"))
+      }
+      else if (requiredData == 'getNewMembersOverTime') {
+        all.push(processAnalyticsDataOverTime(M, "NewUsers"))
+      }
+      else if (requiredData == 'getButtonHitsOverTime') {
+        all.push(processAnalyticsDataOverTime(M, "Button:More Info"))
+      }
     }
+
+    Promise.all(all)
+    .then((values)=>{
+      let dataToReturn = values[0];
+
+      for (let j = 1; j<values.length; j++){
+        for (let i = 0; i<7; i++){
+          dataToReturn.daysArray[i] += values[j].daysArray[i];
+        }
+        for (let i = 0; i<dataToReturn.weeksArray.length; i++){
+          dataToReturn.weeksArray[i] += values[j].weeksArray[i];
+        }
+        for (let i = 0; i<dataToReturn.monthsArray.length; i++){
+          dataToReturn.monthsArray[i] += values[j].monthsArray[i];
+        }
+      }
+      
+      res.send(dataToReturn);
+    })
   }
-  
+
   else {
 
     const S = require('./../strings')(code);
