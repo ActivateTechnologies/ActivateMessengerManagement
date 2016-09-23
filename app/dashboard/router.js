@@ -4,8 +4,10 @@ const express = require('express');
 const router = express.Router();
 
 
-let codes = ['kickabout', 'uwe', 'sheffieldHallam',
-  'kings', 'salford', 'liverpool']
+// let codes = ['kickabout', 'uwe', 'sheffieldHallam',
+//   'kings', 'salford', 'liverpool']
+
+let codes = ['kickabout', 'uwe', 'sheffieldHallam', 'salford', 'liverpool']
 
 /*
   Searchs Analytics collection for document with name=nameOfdocument,
@@ -83,6 +85,7 @@ function processAnalyticsDataOverTime(M, nameOfdocument) {
             daysArrayModified.push(0);
           }
         }
+
         resolve({
           daysArray: daysArrayModified,
           weeksArray: weeksArray.slice(-12),
@@ -134,7 +137,7 @@ router.get('/dashboard.:code', isLoggedIn, (req, res) => {
   const code = req.params.code;
 
   if (code === "master"){
-    const S = require('./../strings')('kickabout');
+    const S = require('./../strings')(code);
 
     let all = [];
 
@@ -145,8 +148,6 @@ router.get('/dashboard.:code', isLoggedIn, (req, res) => {
 
     Promise.all(all)
     .then((values)=>{
-        console.log(values);
-        console.log("2222");
         let ret = {
           totalNoOfMembers: 0,
           totalRevenue: 0,
@@ -160,7 +161,6 @@ router.get('/dashboard.:code', isLoggedIn, (req, res) => {
           ret.totalNoOfTickets += values[i].totalNoOfTickets;
         }
 
-        console.log(1111);
         res.render('dashboard/dashboard', ret);
     })
   }
@@ -182,41 +182,42 @@ router.get('/dashboard.:code', isLoggedIn, (req, res) => {
 router.get('/dashboardData.:code', (req, res) => {
 
   const code = req.params.code;
+  let requiredData = req.query.requiredData;
 
   if (code === "master"){
-      const S = require('./../strings')("kickabout");
+      const S = require('./../strings')(code);
 
       let all = [];
 
-      for(var i = 0; i<codes.length; i++){
+      for(let i = 0; i<codes.length; i++){
         const M = require('./../models/' + codes[i]);
-        if (requiredData == 'getTicketsSoldOverTime') {
+        if (requiredData === 'getTicketsSoldOverTime') {
           all.push(processAnalyticsDataOverTime(M, "Payments"))
         }
-        else if (requiredData == 'getNewMembersOverTime') {
+        else if (requiredData === 'getNewMembersOverTime') {
           all.push(processAnalyticsDataOverTime(M, "NewUsers"))
         }
-        else if (requiredData == 'getButtonHitsOverTime') {
+        else if (requiredData === 'getButtonHitsOverTime') {
           all.push(processAnalyticsDataOverTime(M, "Button:More Info"))
         }
       }
 
+      console.log(requiredData);
       Promise.all(all)
       .then((values)=>{
+        console.log(requiredData, values);
         let dataToReturn = values[0];
-
         for (let j = 1; j<values.length; j++){
           for (let i = 0; i<7; i++){
-            dataToReturn.daysArray[i] += values[j].daysArray[i];
+            (dataToReturn.daysArray)[i] += (values[j].daysArray)[i];
           }
           for (let i = 0; i<dataToReturn.weeksArray.length; i++){
-            dataToReturn.weeksArray[i] += values[j].weeksArray[i];
+            (dataToReturn.weeksArray)[i] += (values[j].weeksArray)[i];
           }
           for (let i = 0; i<dataToReturn.monthsArray.length; i++){
-            dataToReturn.monthsArray[i] += values[j].monthsArray[i];
+            (dataToReturn.monthsArray)[i] += (values[j].monthsArray)[i];
           }
         }
-
         res.send(dataToReturn);
       })
   }
@@ -225,8 +226,6 @@ router.get('/dashboardData.:code', (req, res) => {
 
       const S = require('./../strings')(code);
       const M = require('./../models/' + code);
-
-      let requiredData = req.query.requiredData;
 
       if (requiredData == 'getTicketsSoldOverTime') {
         processAnalyticsDataOverTime(M, "Payments")
