@@ -235,7 +235,12 @@
           csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
           csvStr += '\r\n';
         }
-        console.log(csvStr);
+
+				var formBlob = new Blob([csvStr], { type: 'text/csv' });
+				var link = document.createElement("a");
+				link.href = window.URL.createObjectURL(formBlob);
+				link.setAttribute("download", "my_data.csv");
+				link.click();
       })
     })
 

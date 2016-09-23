@@ -44,19 +44,22 @@ router.post('/message.:code', (req, res) => {
     let ids = req.body.ids.trim().split(',')
     console.log(ids);
     _.each(ids, (id)=>{
-      M.User.findOne({_id:id}, function(err, user){
+      M.User.findOneAndUpdate(
+        {_id:id},
+        {receivedTime: (new Date())},
+        function(err, user){
         if(err) console.log(err);
-        if(user){
-          let uid = {
-            _id: id,
-            mid: user.mid
+          if(user){
+            let uid = {
+              _id: id,
+              mid: user.mid
+            }
+            fn(uid)
           }
-          fn(uid)
-        }
-        else {
-          console.log("user not found invalid id");
-        }
-      })
+          else {
+            console.log("user not found invalid id");
+          }
+        })
     })
     res.send("People reached: " + ids.length);
   }
@@ -69,6 +72,8 @@ router.post('/message.:code', (req, res) => {
           _id: item.id,
           mid: item.mid
         }
+        item.receivedTime = new Date();
+        item.save();
         if (item.notifications !== "off"){
           fn(uid);
         }
