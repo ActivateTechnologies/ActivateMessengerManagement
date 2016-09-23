@@ -27,7 +27,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="dashboard.<%=s.company.code%>"><img class="activateLogoHeader" src="img/ActivateLogoWhite.png"></a>
+          <a href="dashboard.<%=s.company.code%>"><img class="activateLogoHeader" src="img/ALogo.png"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -62,7 +62,8 @@
                     <th ng-if="isDisplayed(6)" ng-click="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==6 && isReversed==true"></span></th>
                     <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
                     <th ng-click="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(9)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
+                    <th ng-click="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
+                    <th ng-click="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==10 && isReversed==true"></span></th>
 	                  <!-- <th>Select</th> -->
 	                </tr>
 	              </thead>
@@ -79,6 +80,7 @@
                     <td ng-if="isDisplayed(6)">{{user.level || '-'}}</td>
                     <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
 	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
+                    <td style="background-color:{{getColorAndTime(user.interactionTime, user.receivedTime)[0]}}">{{getColorAndTime(user.interactionTime, user.receivedTime)[1]}}</td>
                     <td>{{user._id}}</td>
 	              		<!-- <td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
 	              	</tr>
@@ -178,7 +180,10 @@
             $scope.orderField = 'signedUpDate';
             break;
           case 9:
-            $scope.orderField = 'mid';
+            $scope.orderField = 'interactionTime';
+            break;
+          case 10:
+            $scope.orderField = '_id';
             break;
         }
       }
@@ -192,18 +197,37 @@
 			$scope.getColorAndTime = function(interactionTime, receivedTime){
 				var it = moment(interactionTime);
 				var rt = moment(receivedTime);
-				var now = moment()
+				var now = moment();
+        var endOfWindow = moment(interactionTime);
+        endOfWindow.add(24, 'hours');
 
-				if(it.add(24, 'hours').isAfter(now)){
-					return ["green", it.add(24, 'hours').subtract(now)];
+				if(endOfWindow.isAfter(now)){
+          var duration = moment.duration(endOfWindow.diff(now));
+					return ["green", formatDuration(duration)];
 				}
-				else if(rt.isBefore(it)){
-					return ["amber", now.subtract(it)];
+				else if(rt.isBefore(it) || receivedTime == null){
+          var duration = moment.duration(it.diff(now));
+					return ["orange", formatDuration(duration)];
 				}
 				else {
-					return ["red", now.subtract(it)]
+          var duration = moment.duration(it.diff(now));
+					return ["red", formatDuration(duration)];
 				}
 			}
+
+      var formatDuration = function(duration) {
+        var hrs = String(duration.asHours()).split(".")[0];
+        if(parseInt(hrs) < 0) {
+          return duration.humanize(true);
+        }
+        var mins = Math.abs(duration.minutes());
+        if (mins < 10) {
+          var ph = "0";
+        } else {
+          var ph = "";
+        }
+        return hrs + "h" + ph + mins + "m to go";
+      }
 
       $scope.updateSelectedItems = function(id) {
         console.log(id);
