@@ -132,6 +132,16 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'roehampton'){
+    s.company = {
+      name: "University of Liverpool",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'roehampton'
+    }
+  }
+
 
   else {
     s.company = {

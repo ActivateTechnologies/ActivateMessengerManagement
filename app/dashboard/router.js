@@ -4,8 +4,6 @@ const express = require('express');
 const router = express.Router();
 
 
-// let codes = ['kickabout', 'uwe', 'sheffieldHallam',
-//   'kings', 'salford', 'liverpool']
 
 let codes = ['kickabout', 'uwe', 'sheffieldHallam', 'salford', 'liverpool']
 
