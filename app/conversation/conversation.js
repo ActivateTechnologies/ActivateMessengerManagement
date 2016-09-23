@@ -413,7 +413,14 @@ module.exports = function(code){
       saveSchool: saveToExtras("level", "School/Uni"),
       saveAmateur: saveToExtras("level", "Amateur"),
 
-      // Save kit
+      // Ethnicity
+      saveWhite: saveToExtras("ethnicity", "White"),
+      saveMixed: saveToExtras("ethnicity", "Mixed"),
+      saveAAB: saveToExtras("ethnicity", "Asian / Asian British"),
+      saveBAC: saveToExtras("ethnicity", "Black / African / Caribbean / Black British"),
+      saveOE: saveToExtras("ethnicity", "Other Ethnic Group incl Arab"),
+
+      // Kit Size
       saveXL: saveToExtras("kitSize", "XL"),
       saveL: saveToExtras("kitSize", "L"),
       saveM: saveToExtras("kitSize", "M"),
