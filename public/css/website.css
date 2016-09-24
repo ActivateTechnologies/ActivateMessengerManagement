@@ -349,6 +349,22 @@ button {
 .websiteTitleBots {
   text-align: center;
   margin-top: 10px;
-  color: #222222;
+  color: #828282;
 }
 
+.toBots {
+  width: 800px;
+}
+
+.lowerRowOfBots {
+  margin-top: 35px;
+}
+
+.botInfoText {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.botTitle {
+  margin-bottom: 0px;
+}
