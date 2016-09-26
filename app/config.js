@@ -52,6 +52,11 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
+	else if(code === 'bedfordshire'){
+		VERIFICATION_TOKEN = "EAAYvJrXVU1sBAFZBAC8bpItqCZBKNcZBxbleaxcIdLYiJVZAelRfpQFI6pPZAaoz2JHeMqJfvkljpFp1mLBqtHriJCPrHiQlZCjOEOwjJ0pOl06BukAqP61AQflGTYMToYSLWGHq7lHm7Q9khreq0yZBKKzb0wUv6V24K3YRvOcHgZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
 	else if(code === 'bot8'){
 		VERIFICATION_TOKEN = "EAAHsfEZAJkVYBAOMiU57ZCf7lT4iaEipMpO4FC00vdG2bn42UJF0Y9qMZBAGgV79l73ypCk4nZA95TAuiLPzyYWuQ1fdJEReaqEcZC26gdoSUG1koWXAR0waeZCrMoZAXU96nY2PjcxsUAX9Px6QsoPxeKeirIL7CKEP2yPZA7HXawZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
