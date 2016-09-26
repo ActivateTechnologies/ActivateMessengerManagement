@@ -142,6 +142,15 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'bedfordshire'){
+    s.company = {
+      name: "University of Bedfordshire Mens Football Club",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'bedfordshire'
+    }
+  }
 
   else {
     s.company = {
