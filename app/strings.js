@@ -62,7 +62,17 @@ module.exports = function(code){
     }
   }
 
-  if (code === 'kickabout') {
+  if (code === 'master') {
+    s.company = {
+      name: "Master",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'master'
+    }
+  }
+
+  else if (code === 'kickabout') {
     s.company = {
       name: "Kickabout",
       website: "www.kickabout.football",
@@ -119,6 +129,16 @@ module.exports = function(code){
       address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
       botURL: "http://m.me/kickaboutapp",
       code: 'liverpool'
+    }
+  }
+
+  else if (code === 'roehampton'){
+    s.company = {
+      name: "University of Roehampton",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'roehampton'
     }
   }
 
