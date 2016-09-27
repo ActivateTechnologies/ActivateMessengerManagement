@@ -71,7 +71,8 @@ module.exports = function(code){
 	else if(code === 'hertfordshire'){
 		VERIFICATION_TOKEN = "EAAW9W8MJa2kBAFJeBqF2osbFlNOkBwbY6LMq4zOOcH710ParO5E8IOL4EKvnFUwbKzYXzPwPajDkY6uOlBRTlrTZASdvBYvC38wQKUTmqYq693PSxeYOJWPo7iZA0f0ubpaCNS4ZC8gVoeKYbQ6jna4Gdf5QibQyNsI6wtIdAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
-	}EAAW9W8MJa2kBAFJeBqF2osbFlNOkBwbY6LMq4zOOcH710ParO5E8IOL4EKvnFUwbKzYXzPwPajDkY6uOlBRTlrTZASdvBYvC38wQKUTmqYq693PSxeYOJWPo7iZA0f0ubpaCNS4ZC8gVoeKYbQ6jna4Gdf5QibQyNsI6wtIdAZDZD
+	}
+
 	else if(code === 'bot11'){
 		VERIFICATION_TOKEN = "EAAX1JAdwI9MBALz7BLzpV35Qe0XqVrnGKNZCEACeXmeUZCAG6Jdn3bo8KGYvdFzxljixu5psqnHi8FfVFJ07Apof7zJGgxqcbybcQSAyCFzF7gCgXOcDz0dFliRon23tgF1xZCZCW2GmFxJyD4NURZAnTbDrZCbKwmoqxXSz4fWgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -146,7 +147,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAW9W8MJa2kBAFJeBqF2osbFlNOkBwbY6LMq4zOOcH710ParO5E8IOL4EKvnFUwbKzYXzPwPajDkY6uOlBRTlrTZASdvBYvC38wQKUTmqYq693PSxeYOJWPo7iZA0f0ubpaCNS4ZC8gVoeKYbQ6jna4Gdf5QibQyNsI6wtIdAZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAHsfEZAJkVYBAIKVGRuhthACyc1vjkYDr4jZAARj1ZCG57Y30AOxyRb66I1rE9yv3T8fa45ZAhU2uFm7byIM110Ec4ZAATcZA9B0doLdvh2LXumncuk2EMS3r4gje0ZBqge9xuDBBermsPf2hrrdG9lBbLlsZCuB1RJTDoGbxLcLwZDZD"
 
 // For setting up Get Started Button
 
@@ -158,4 +159,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAW9W8MJa2kBAFJeBqF2osbFlNOkBwbY6LMq4zOOcH710ParO5E8IOL4EKvnFUwbKzYXzPwPajDkY6uOlBRTlrTZASdvBYvC38wQKUTmqYq693PSxeYOJWPo7iZA0f0ubpaCNS4ZC8gVoeKYbQ6jna4Gdf5QibQyNsI6wtIdAZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAHsfEZAJkVYBAIKVGRuhthACyc1vjkYDr4jZAARj1ZCG57Y30AOxyRb66I1rE9yv3T8fa45ZAhU2uFm7byIM110Ec4ZAATcZA9B0doLdvh2LXumncuk2EMS3r4gje0ZBqge9xuDBBermsPf2hrrdG9lBbLlsZCuB1RJTDoGbxLcLwZDZD"
