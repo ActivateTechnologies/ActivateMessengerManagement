@@ -5,9 +5,10 @@ const status = 'production'; //'production' or 'test'
 // PRODUCTION | Kickabout | heroku git:remote -a limitless-sierra-68694
 // TEST | Monty Messenger | heroku git:remote -a kickabouttest
 
-// Bot 8 - Monty Messener
-// Bot 9 - Wembley FC
-// Bot 10 - Avi Messenger
+// Bot 11 - Monty Messener
+// Bot 12 - Wembley FC
+// Bot 13 - Avi Messenger
+// Bot 14 - Anirudh Test
 
 
 
@@ -62,17 +63,22 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot8'){
-		VERIFICATION_TOKEN = "EAAHsfEZAJkVYBAOMiU57ZCf7lT4iaEipMpO4FC00vdG2bn42UJF0Y9qMZBAGgV79l73ypCk4nZA95TAuiLPzyYWuQ1fdJEReaqEcZC26gdoSUG1koWXAR0waeZCrMoZAXU96nY2PjcxsUAX9Px6QsoPxeKeirIL7CKEP2yPZA7HXawZDZD";
+	else if(code === 'bot11'){
+		VERIFICATION_TOKEN = "EAAX1JAdwI9MBALz7BLzpV35Qe0XqVrnGKNZCEACeXmeUZCAG6Jdn3bo8KGYvdFzxljixu5psqnHi8FfVFJ07Apof7zJGgxqcbybcQSAyCFzF7gCgXOcDz0dFliRon23tgF1xZCZCW2GmFxJyD4NURZAnTbDrZCbKwmoqxXSz4fWgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot9'){
-		VERIFICATION_TOKEN = "EAAW9W8MJa2kBANybJfxAwJMxXsvhZC2T1rfB0rEJwDSkbkZB2UeZB7ROQhevnfJiMxw8hkBsql8gnIax8tE42B108phOltAQRbOZAyd2AlbBrxrMZCiclZCn79lCUam9OgTF6cVQpG8CXZChjjxIqwlQv0qEsWPhYaF8qJzZCP0NxAZDZD";
+	else if(code === 'bot12'){
+		VERIFICATION_TOKEN = "EAACBLyO7Q4wBAMnoEL24gpNeV4ZC4o2N5JBjCat6RZCJ62k8KNZBZBK93F3QYQ1USEaxamXHTvZBloD3rhKJb5pBoVLZB4AZByd7dTbItYtY6ZByrdZBue2oQApTNdmgkw2VHE9qPvKgWUnHSRupfFbRIN0F5L2Oiq1zyUxJBf7xnewZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
-	else if(code === 'bot10'){
+	else if(code === 'bot13'){
+		VERIFICATION_TOKEN = "EAAZA6iwin4KgBAIz47eyFfXinT9vJqpLX4AgTJZCVfZAXNF50guxkGgstWttLsZCRKEsSqX9ZC1aT8V1dw6kVHi6AM8KICwPSiQ7eZB0Y79ePIemajAM9OGIgjp8o2IEgfCsC6H07ZB4OteptZBHWUmmsuiZA6VVVZAwYb1ssh9A5GYQZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
+	else if(code === 'bot14'){
 		VERIFICATION_TOKEN = "EAAEd51HpEZCwBAA2Hp8mKndoguUBh3myZCZAIwmGSR3EYHWUJkF4OGckjYmZC3xT1AQ7CM8A6JzIVYZB7g1o0VsdFYNxhcrFWWfBkAEZAiGSFJU7oi379ty2vjKIgXrzYN82jDO8yOhaZAsVqFMeZARr7bE1hOq2ZAZBCmy3xXsAOk5QZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
@@ -131,10 +137,10 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAOmcqjs0c0BAOaBJctZCpOeWiG6Bc6hwMX1BLOjdeQHW8YWwFvIPKrBpFXi6rlP2awuBbTZA3WUQxPGiwvNuxqcm2Y6abu7BBclI6cdRbQfPRqZCmZCZA6TdnWxHB3kxfrb8U6R4o57BTxU3yMC4fYf5lISWrZCN6JGM1AnzlrgZDZD"
-
-// For setting up Get Started Button
-
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZA6iwin4KgBAIz47eyFfXinT9vJqpLX4AgTJZCVfZAXNF50guxkGgstWttLsZCRKEsSqX9ZC1aT8V1dw6kVHi6AM8KICwPSiQ7eZB0Y79ePIemajAM9OGIgjp8o2IEgfCsC6H07ZB4OteptZBHWUmmsuiZA6VVVZAwYb1ssh9A5GYQZDZD"
+//
+// // For setting up Get Started Button
+//
 // curl -X POST -H "Content-Type: application/json" -d '{
 //   "setting_type":"call_to_actions",
 //   "thread_state":"new_thread",
@@ -143,4 +149,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAOmcqjs0c0BAOaBJctZCpOeWiG6Bc6hwMX1BLOjdeQHW8YWwFvIPKrBpFXi6rlP2awuBbTZA3WUQxPGiwvNuxqcm2Y6abu7BBclI6cdRbQfPRqZCmZCZA6TdnWxHB3kxfrb8U6R4o57BTxU3yMC4fYf5lISWrZCN6JGM1AnzlrgZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZA6iwin4KgBAIz47eyFfXinT9vJqpLX4AgTJZCVfZAXNF50guxkGgstWttLsZCRKEsSqX9ZC1aT8V1dw6kVHi6AM8KICwPSiQ7eZB0Y79ePIemajAM9OGIgjp8o2IEgfCsC6H07ZB4OteptZBHWUmmsuiZA6VVVZAwYb1ssh9A5GYQZDZD"
