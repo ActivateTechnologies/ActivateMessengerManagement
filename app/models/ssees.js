@@ -3,7 +3,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-let db = mongoose.createConnection("mongodb://anirudh:kickabout@ds029496.mlab.com:29496/uwe");
+let db = mongoose.createConnection("mongodb://anirudh:kickabout@ds041556.mlab.com:41556/ssees");
 
 
 let schema = function(connection){
@@ -68,7 +68,6 @@ let schema = function(connection){
     next: Array
   })
 
-  
   if (!connection.models.User) {
     console.log("user");
     connection.model('User', userSchema);
