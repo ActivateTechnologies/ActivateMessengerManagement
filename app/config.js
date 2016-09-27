@@ -63,6 +63,11 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
+	else if(code === 'ucl'){
+		VERIFICATION_TOKEN = "EAAHsfEZAJkVYBAIKVGRuhthACyc1vjkYDr4jZAARj1ZCG57Y30AOxyRb66I1rE9yv3T8fa45ZAhU2uFm7byIM110Ec4ZAATcZA9B0doLdvh2LXumncuk2EMS3r4gje0ZBqge9xuDBBermsPf2hrrdG9lBbLlsZCuB1RJTDoGbxLcLwZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
 	else if(code === 'bot11'){
 		VERIFICATION_TOKEN = "EAAX1JAdwI9MBALz7BLzpV35Qe0XqVrnGKNZCEACeXmeUZCAG6Jdn3bo8KGYvdFzxljixu5psqnHi8FfVFJ07Apof7zJGgxqcbybcQSAyCFzF7gCgXOcDz0dFliRon23tgF1xZCZCW2GmFxJyD4NURZAnTbDrZCbKwmoqxXSz4fWgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -137,10 +142,10 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZA6iwin4KgBAIz47eyFfXinT9vJqpLX4AgTJZCVfZAXNF50guxkGgstWttLsZCRKEsSqX9ZC1aT8V1dw6kVHi6AM8KICwPSiQ7eZB0Y79ePIemajAM9OGIgjp8o2IEgfCsC6H07ZB4OteptZBHWUmmsuiZA6VVVZAwYb1ssh9A5GYQZDZD"
-//
-// // For setting up Get Started Button
-//
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAHsfEZAJkVYBAIKVGRuhthACyc1vjkYDr4jZAARj1ZCG57Y30AOxyRb66I1rE9yv3T8fa45ZAhU2uFm7byIM110Ec4ZAATcZA9B0doLdvh2LXumncuk2EMS3r4gje0ZBqge9xuDBBermsPf2hrrdG9lBbLlsZCuB1RJTDoGbxLcLwZDZD"
+
+// For setting up Get Started Button
+
 // curl -X POST -H "Content-Type: application/json" -d '{
 //   "setting_type":"call_to_actions",
 //   "thread_state":"new_thread",
@@ -149,4 +154,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZA6iwin4KgBAIz47eyFfXinT9vJqpLX4AgTJZCVfZAXNF50guxkGgstWttLsZCRKEsSqX9ZC1aT8V1dw6kVHi6AM8KICwPSiQ7eZB0Y79ePIemajAM9OGIgjp8o2IEgfCsC6H07ZB4OteptZBHWUmmsuiZA6VVVZAwYb1ssh9A5GYQZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAHsfEZAJkVYBAIKVGRuhthACyc1vjkYDr4jZAARj1ZCG57Y30AOxyRb66I1rE9yv3T8fa45ZAhU2uFm7byIM110Ec4ZAATcZA9B0doLdvh2LXumncuk2EMS3r4gje0ZBqge9xuDBBermsPf2hrrdG9lBbLlsZCuB1RJTDoGbxLcLwZDZD"

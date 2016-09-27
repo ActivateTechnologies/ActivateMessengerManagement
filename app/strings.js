@@ -132,6 +132,16 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'ucl'){
+    s.company = {
+      name: "UCLU Men's Football Club",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'ucl'
+    }
+  }
+
   else if (code === 'roehampton'){
     s.company = {
       name: "University of Roehampton",
