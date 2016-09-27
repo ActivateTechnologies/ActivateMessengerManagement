@@ -9,4 +9,6 @@ add to config file the details
 
 send out threads for getting started and Persistent menu
 
+add conversation to model
+
 add code to dashboard
