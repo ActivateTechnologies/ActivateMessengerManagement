@@ -182,6 +182,16 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'entrepreneurs'){
+    s.company = {
+      name: "UCL Entrepreneurs",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'entrepreneurs'
+    }
+  }
+
   else {
     s.company = {
       name: "Ani",

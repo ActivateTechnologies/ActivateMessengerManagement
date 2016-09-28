@@ -73,6 +73,11 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
+	else if(code === 'entrepreneurs'){
+		VERIFICATION_TOKEN = "EAAEd51HpEZCwBADOoxUDUZCoHHodFrbMIh9gI9PpUXs5ABmZBhDZBzrMEE8dOBrOPcNU45IZBiSZBfXyylopwZBeqxZC2ZCxcUAHOwnKM0u4jZAKAug4Bh9bXpJUevIZCwyYhdVf2X4Yjzi6k6Y0yrW5AOCrNqz3J4v9aoWX85WQZBlrrwZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
 	else if(code === 'bot11'){
 		VERIFICATION_TOKEN = "EAAX1JAdwI9MBALz7BLzpV35Qe0XqVrnGKNZCEACeXmeUZCAG6Jdn3bo8KGYvdFzxljixu5psqnHi8FfVFJ07Apof7zJGgxqcbybcQSAyCFzF7gCgXOcDz0dFliRon23tgF1xZCZCW2GmFxJyD4NURZAnTbDrZCbKwmoqxXSz4fWgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -147,7 +152,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZAfg4qX41oBACidTP8Dp1BqjiaO0DoDYuST07ZAmZB7V8LmYoeLMe9tMJRZB1RU8v5GtK7TEVu8TRMgd4K9qgUFl1TvHDwnXALCBcbM83ju2ZACiS6dZCW5KKazrTMhknvZBY4uULrFazuTEz3dlr37p1hd2fdSDN65HoJF4pZAwZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAEd51HpEZCwBADOoxUDUZCoHHodFrbMIh9gI9PpUXs5ABmZBhDZBzrMEE8dOBrOPcNU45IZBiSZBfXyylopwZBeqxZC2ZCxcUAHOwnKM0u4jZAKAug4Bh9bXpJUevIZCwyYhdVf2X4Yjzi6k6Y0yrW5AOCrNqz3J4v9aoWX85WQZBlrrwZDZD"
 
 // For setting up Get Started Button
 
@@ -159,4 +164,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAZAfg4qX41oBACidTP8Dp1BqjiaO0DoDYuST07ZAmZB7V8LmYoeLMe9tMJRZB1RU8v5GtK7TEVu8TRMgd4K9qgUFl1TvHDwnXALCBcbM83ju2ZACiS6dZCW5KKazrTMhknvZBY4uULrFazuTEz3dlr37p1hd2fdSDN65HoJF4pZAwZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAEd51HpEZCwBADOoxUDUZCoHHodFrbMIh9gI9PpUXs5ABmZBhDZBzrMEE8dOBrOPcNU45IZBiSZBfXyylopwZBeqxZC2ZCxcUAHOwnKM0u4jZAKAug4Bh9bXpJUevIZCwyYhdVf2X4Yjzi6k6Y0yrW5AOCrNqz3J4v9aoWX85WQZBlrrwZDZD"
