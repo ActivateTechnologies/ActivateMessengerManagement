@@ -78,6 +78,11 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
+	else if(code === 'lacrosse'){
+		VERIFICATION_TOKEN = "EAAX1JAdwI9MBALKXa20Be3EGOHE67PqtbA0USJ5KciYZA1lWEyI7IcBh1LAhEjL3mMTjSF0pxdny8VO7f8euEO9kBKFiaJNRxHndLOEMxz9InjcbaLGTwa74RCEG9BKlrBZAQgsmOCfDlajUmg9UjyZBOwysaWmyf22shpZBvAZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
 	else if(code === 'bot15'){
 		VERIFICATION_TOKEN = "EAASRxicK1BEBABVSZCXjCNU88PuTQZBFIbDrckZCoT6YxQZCM5qCopl1bG1ZBu6bfeL6wwZAWQbZCrug4hHJiS4g9mvvYa98DXia9wO6mxZAUd195Grib20HOAR65ltZBryCUtOLOOczzP2qTtVwfETojWgE3oBqkBH5bzoIT9TUgXAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -152,7 +157,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAdxEjAbauwBAOizPui6j1ZB4kdnrB3JDFFVHkq5wzFeZCMZBWlvLaoCWsvZAWbwM6WZB5ZBI3OB4xCwEmtdFnKjZAjlEQUA8ZALZC2zv5F3ovkcnhELGwOaT6DhZBGSiyHuy2WITZBvuCxMINDYBfdZCQOOfwSsXqhqP1QCBHOrnzZAB3gZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAX1JAdwI9MBALKXa20Be3EGOHE67PqtbA0USJ5KciYZA1lWEyI7IcBh1LAhEjL3mMTjSF0pxdny8VO7f8euEO9kBKFiaJNRxHndLOEMxz9InjcbaLGTwa74RCEG9BKlrBZAQgsmOCfDlajUmg9UjyZBOwysaWmyf22shpZBvAZDZD"
 
 // For setting up Get Started Button
 
@@ -164,4 +169,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAdxEjAbauwBAOizPui6j1ZB4kdnrB3JDFFVHkq5wzFeZCMZBWlvLaoCWsvZAWbwM6WZB5ZBI3OB4xCwEmtdFnKjZAjlEQUA8ZALZC2zv5F3ovkcnhELGwOaT6DhZBGSiyHuy2WITZBvuCxMINDYBfdZCQOOfwSsXqhqP1QCBHOrnzZAB3gZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAX1JAdwI9MBALKXa20Be3EGOHE67PqtbA0USJ5KciYZA1lWEyI7IcBh1LAhEjL3mMTjSF0pxdny8VO7f8euEO9kBKFiaJNRxHndLOEMxz9InjcbaLGTwa74RCEG9BKlrBZAQgsmOCfDlajUmg9UjyZBOwysaWmyf22shpZBvAZDZD"

@@ -192,6 +192,17 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'lacrosse'){
+    s.company = {
+      name: "UCLU Lacrosse",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'lacrosse'
+    }
+  }
+
+
   else {
     s.company = {
       name: "Ani",
