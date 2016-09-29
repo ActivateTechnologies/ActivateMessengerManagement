@@ -202,6 +202,15 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'parkour'){
+    s.company = {
+      name: "UCLU Parkour",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'parkour'
+    }
+  }
 
   else {
     s.company = {
