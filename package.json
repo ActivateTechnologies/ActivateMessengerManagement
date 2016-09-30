@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/*",
-    "start": "node app/index.js"
+    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" && node app/index.js",
+    "lite": "lite-server",
+    "postinstall": "typings install",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "typings": "typings"
   },
   "author": "",
   "license": "ISC",
@@ -20,9 +25,31 @@
     "request": "^2.72.0",
     "sinon": "^1.17.4",
     "sinon-mongoose": "^1.2.1",
-    "stripe": "^4.7.0"
+    "stripe": "^4.7.0",
+
+    "@angular/common": "~2.0.1",
+    "@angular/compiler": "~2.0.1",
+    "@angular/core": "~2.0.1",
+    "@angular/forms": "~2.0.1",
+    "@angular/http": "~2.0.1",
+    "@angular/platform-browser": "~2.0.1",
+    "@angular/platform-browser-dynamic": "~2.0.1",
+    "@angular/router": "~3.0.1",
+    "@angular/upgrade": "~2.0.1",
+
+    "angular-in-memory-web-api": "~0.1.1",
+    "bootstrap": "^3.3.7",
+    "core-js": "^2.4.1",
+    "reflect-metadata": "^0.1.8",
+    "rxjs": "5.0.0-beta.12",
+    "systemjs": "0.19.39",
+    "zone.js": "^0.6.25"
   },
   "devDependencies": {
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "concurrently": "^3.0.0",
+    "lite-server": "^2.2.2",
+    "typescript": "^2.0.3",
+    "typings":"^1.4.0"
   }
 }

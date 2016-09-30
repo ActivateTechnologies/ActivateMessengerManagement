@@ -11,10 +11,21 @@
     <title>Activate | <%=s.company.name%></title>
 
     <script src="js/moment.js"></script>
-		<script src="js/angular.min.js"></script>
+		<!-- <script src="js/angular.min.js"></script> -->
     <script src="js/jquery.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dashboardCoded.css" rel="stylesheet">
+
+		<script src="js/angular/shim.min.js"></script>
+    <script src="js/angular/zone.js"></script>
+    <script src="js/angular/Reflect.js"></script>
+    <script src="js/angular/system.src.js"></script>
+
+
+		<script src="js/angular/systemjs.config.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -26,7 +37,7 @@
     </script>
 	</head>
 
-	<body ng-app="sortTable" ng-controller="usersCtrl">
+	<body>
 		<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -52,11 +63,12 @@
 
 		<div class="container">
 			<h1>Users</h1>
+			<my-app>Loading...</my-app>
       <a class="btn btn-primary" id="btn1">Download as CSV</a>
 			<!-- <ul>
 				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
 			</ul> -->
-			<div class="table-responsive">
+			<!-- <div class="table-responsive">
 	            <table class="table table-striped">
 	              <thead>
 	                <tr>
@@ -72,9 +84,9 @@
                     <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
                     <th ng-click="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
                     <th ng-click="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==10 && isReversed==true"></span></th>
+                    <th ng-click="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==10 && isReversed==true"></span></th> -->
 	                  <!-- <th>Select</th> -->
-	                </tr>
+	                <!-- </tr>
 	              </thead>
 	              <tbody id="usersTBody">
 	              	<tr ng-repeat="user in users | orderBy:orderField:isReversed">
@@ -90,208 +102,208 @@
                     <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
 	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
                     <td style="background-color:{{getColorAndTime(user.interactionTime, user.receivedTime)[0]}}">{{getColorAndTime(user.interactionTime, user.receivedTime)[1]}}</td>
-                    <td>{{user._id}}</td>
+                    <td>{{user._id}}</td> -->
 	              		<!-- <td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
-	              	</tr>
+	              	<!-- </tr>
 	              </tbody>
 	            </table>
-        	</div>
+        	</div> -->
 		</div>
 
     <script type="text/javascript">
-    var app = angular.module('sortTable' , []);
+    // var app = angular.module('sortTable' , []);
+		//
+    // app.controller('usersCtrl', ['$scope', '$http' , function($scope, $http) {
+    //   $http.get('/userAnalyticsData.<%= s.company.code %>').success(function(response) {
+    //     $scope.users = response.users;
+    //     var hashtable = {
+    //       "phoneNumber": 1,
+    //       "email":2
+    //     }
+    //     hashtable[user.extras]
+    //   })
+		//
+    //   $scope.currentHead = -1;
+		//
+    //   $scope.isDisplayed = function(head) {
+    //     for(i = 0; i < $scope.users.length; i++) {
+    //       switch(head) {
+    //         case 2:
+    //           if($scope.users[i].phoneNumber != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 3:
+    //           if($scope.users[i].email != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 4:
+    //           if($scope.users[i].preferredPosition != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 5:
+    //           if($scope.users[i].backupPosition != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 6:
+    //           if($scope.users[i].level != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 7:
+    //           if($scope.users[i].type != null) {
+    //             return true;
+    //           }
+    //           break;
+    //       }
+    //     }
+    //     return false;
+    //   }
+		//
+    //   $scope.headingClicked = function(head) {
+    //     if($scope.currentHead == head) {
+    //       $scope.isReversed = !$scope.isReversed;
+    //     } else {
+    //       $scope.isReversed = false;
+    //     }
+		//
+    //     $scope.currentHead = head;
+		//
+    //     switch(head) {
+    //       case 0:
+    //         $scope.orderField = ['firstName','lastName'];
+    //         break;
+    //       case 1:
+    //         $scope.orderField = 'gender';
+    //         break;
+    //       case 2:
+    //         $scope.orderField = 'phoneNumber';
+    //         break;
+    //       case 3:
+    //         $scope.orderField = 'email';
+    //         break;
+    //       case 4:
+    //         $scope.orderField = 'preferredPosition';
+    //         break;
+    //       case 5:
+    //         $scope.orderField = 'backupPosition';
+    //         break;
+    //       case 6:
+    //         $scope.orderField = 'level';
+    //         break;
+    //       case 7:
+    //         $scope.orderField = 'type';
+    //         break;
+    //       case 8:
+    //         $scope.orderField = 'signedUpDate';
+    //         break;
+    //       case 9:
+    //         $scope.orderField = 'interactionTime';
+    //         break;
+    //       case 10:
+    //         $scope.orderField = '_id';
+    //         break;
+    //     }
+    //   }
+		//
+    //   $scope.getFormattedDate = function(date) {
+    //     return moment(date).format('DD/MM/YY HH:mm');
+    //   }
+		//
+    //   $scope.selectedItems = [];
+		//
+		// 	$scope.getColorAndTime = function(interactionTime, receivedTime){
+		// 		var it = moment(interactionTime);
+		// 		var rt = moment(receivedTime);
+		// 		var now = moment();
+    //     var endOfWindow = moment(interactionTime);
+    //     endOfWindow.add(24, 'hours');
+		//
+		// 		if(endOfWindow.isAfter(now)){
+    //       var duration = moment.duration(endOfWindow.diff(now));
+		// 			return ["green", formatDuration(duration)];
+		// 		}
+		// 		else if(rt.isBefore(it) || receivedTime == null){
+    //       var duration = moment.duration(it.diff(now));
+		// 			return ["orange", formatDuration(duration)];
+		// 		}
+		// 		else {
+    //       var duration = moment.duration(it.diff(now));
+		// 			return ["red", formatDuration(duration)];
+		// 		}
+		// 	}
+		//
+    //   var formatDuration = function(duration) {
+    //     var hrs = String(duration.asHours()).split(".")[0];
+    //     if(parseInt(hrs) < 0) {
+    //       return duration.humanize(true);
+    //     }
+    //     var mins = Math.abs(duration.minutes());
+    //     if (mins < 10) {
+    //       var ph = "0";
+    //     } else {
+    //       var ph = "";
+    //     }
+    //     return hrs + "h" + ph + mins + "m to go";
+    //   }
+		//
+    //   $scope.updateSelectedItems = function(id) {
+    //     console.log(id);
+    //     var index = JSON.stringify($scope.selectedItems).indexOf(id);
+    //     if(index < 0) {
+    //       $scope.users.forEach(function(user) {
+    //         if (user._id == id) {
+    //           $scope.selectedItems.push(user);
+    //         }
+    //       });
+    //     } else {
+    //       for(i = 0; i < $scope.selectedItems.length; i++) {
+    //         if($scope.selectedItems[i]._id == id) {
+    //           $scope.selectedItems.splice(i, 1);
+    //         }
+    //       }
+    //     }
+    //     console.log($scope.selectedItems);
+    //   }
+    // }]);
+		//
+    // app.filter('phone', function() {
+    //   return function(input) {
+    //     return (!!input) ? '+44' + input : '-';
+    //   }
+    // });
+		//
+    // app.filter('capitaliseFirst', function() {
+    //   return function(input) {
+    //     return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '-';
+    //   }
+    // });
 
-    app.controller('usersCtrl', ['$scope', '$http' , function($scope, $http) {
-      $http.get('/userAnalyticsData.<%= s.company.code %>').success(function(response) {
-        $scope.users = response.users;
-        var hashtable = {
-          "phoneNumber": 1,
-          "email":2
-        }
-        hashtable[user.extras]
-      })
-
-      $scope.currentHead = -1;
-
-      $scope.isDisplayed = function(head) {
-        for(i = 0; i < $scope.users.length; i++) {
-          switch(head) {
-            case 2:
-              if($scope.users[i].phoneNumber != null) {
-                return true;
-              }
-              break;
-            case 3:
-              if($scope.users[i].email != null) {
-                return true;
-              }
-              break;
-            case 4:
-              if($scope.users[i].preferredPosition != null) {
-                return true;
-              }
-              break;
-            case 5:
-              if($scope.users[i].backupPosition != null) {
-                return true;
-              }
-              break;
-            case 6:
-              if($scope.users[i].level != null) {
-                return true;
-              }
-              break;
-            case 7:
-              if($scope.users[i].type != null) {
-                return true;
-              }
-              break;
-          }
-        }
-        return false;
-      }
-
-      $scope.headingClicked = function(head) {
-        if($scope.currentHead == head) {
-          $scope.isReversed = !$scope.isReversed;
-        } else {
-          $scope.isReversed = false;
-        }
-
-        $scope.currentHead = head;
-
-        switch(head) {
-          case 0:
-            $scope.orderField = ['firstName','lastName'];
-            break;
-          case 1:
-            $scope.orderField = 'gender';
-            break;
-          case 2:
-            $scope.orderField = 'phoneNumber';
-            break;
-          case 3:
-            $scope.orderField = 'email';
-            break;
-          case 4:
-            $scope.orderField = 'preferredPosition';
-            break;
-          case 5:
-            $scope.orderField = 'backupPosition';
-            break;
-          case 6:
-            $scope.orderField = 'level';
-            break;
-          case 7:
-            $scope.orderField = 'type';
-            break;
-          case 8:
-            $scope.orderField = 'signedUpDate';
-            break;
-          case 9:
-            $scope.orderField = 'interactionTime';
-            break;
-          case 10:
-            $scope.orderField = '_id';
-            break;
-        }
-      }
-
-      $scope.getFormattedDate = function(date) {
-        return moment(date).format('DD/MM/YY HH:mm');
-      }
-
-      $scope.selectedItems = [];
-
-			$scope.getColorAndTime = function(interactionTime, receivedTime){
-				var it = moment(interactionTime);
-				var rt = moment(receivedTime);
-				var now = moment();
-        var endOfWindow = moment(interactionTime);
-        endOfWindow.add(24, 'hours');
-
-				if(endOfWindow.isAfter(now)){
-          var duration = moment.duration(endOfWindow.diff(now));
-					return ["green", formatDuration(duration)];
-				}
-				else if(rt.isBefore(it) || receivedTime == null){
-          var duration = moment.duration(it.diff(now));
-					return ["orange", formatDuration(duration)];
-				}
-				else {
-          var duration = moment.duration(it.diff(now));
-					return ["red", formatDuration(duration)];
-				}
-			}
-
-      var formatDuration = function(duration) {
-        var hrs = String(duration.asHours()).split(".")[0];
-        if(parseInt(hrs) < 0) {
-          return duration.humanize(true);
-        }
-        var mins = Math.abs(duration.minutes());
-        if (mins < 10) {
-          var ph = "0";
-        } else {
-          var ph = "";
-        }
-        return hrs + "h" + ph + mins + "m to go";
-      }
-
-      $scope.updateSelectedItems = function(id) {
-        console.log(id);
-        var index = JSON.stringify($scope.selectedItems).indexOf(id);
-        if(index < 0) {
-          $scope.users.forEach(function(user) {
-            if (user._id == id) {
-              $scope.selectedItems.push(user);
-            }
-          });
-        } else {
-          for(i = 0; i < $scope.selectedItems.length; i++) {
-            if($scope.selectedItems[i]._id == id) {
-              $scope.selectedItems.splice(i, 1);
-            }
-          }
-        }
-        console.log($scope.selectedItems);
-      }
-    }]);
-
-    app.filter('phone', function() {
-      return function(input) {
-        return (!!input) ? '+44' + input : '-';
-      }
-    });
-
-    app.filter('capitaliseFirst', function() {
-      return function(input) {
-        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '-';
-      }
-    });
-
-    $(document).ready(function() {
-      // Function to create CSV string
-      $("#btn1").click(function() {
-        var csvStr = '';
-        // Getting data from the rows
-        var rows = $("tr");
-        for(y = 0; y < rows.length; y++) {
-          var cols = $(rows[y]).children();
-          for(x = 2; x < cols.length; x++) { // starts at third column
-            csvStr += $(cols[x]).text() + ',';
-          }
-          csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
-          csvStr += '\r\n';
-        }
-
-				var formBlob = new Blob([csvStr], { type: 'text/csv' });
-				var link = document.createElement("a");
-				link.href = window.URL.createObjectURL(formBlob);
-				link.setAttribute("download", "my_data.csv");
-				link.click();
-      })
-    })
+    // $(document).ready(function() {
+    //   // Function to create CSV string
+    //   $("#btn1").click(function() {
+    //     var csvStr = '';
+    //     // Getting data from the rows
+    //     var rows = $("tr");
+    //     for(y = 0; y < rows.length; y++) {
+    //       var cols = $(rows[y]).children();
+    //       for(x = 2; x < cols.length; x++) { // starts at third column
+    //         csvStr += $(cols[x]).text() + ',';
+    //       }
+    //       csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
+    //       csvStr += '\r\n';
+    //     }
+		//
+		// 		var formBlob = new Blob([csvStr], { type: 'text/csv' });
+		// 		var link = document.createElement("a");
+		// 		link.href = window.URL.createObjectURL(formBlob);
+		// 		link.setAttribute("download", "my_data.csv");
+		// 		link.click();
+    //   })
+    // })
 
     </script>
 	</body>
