@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody id="usersTBody">
-    	<tr *ngFor="let user of users; let i = index">
+    	<tr *ngFor="let user of users | orderBy:orderField:isReversed; let i = index">
     		<td>{{i + 1}}</td>
     		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
     		<td>{{user.firstName + " " + user.lastName}}</td>
