@@ -378,6 +378,12 @@ module.exports = function(code){
     if(code === 'kickabout' || code === 'uwe'){
       Send.allEvents(uid, "Awesome! Here are some games for you to join: ")
     }
+    else if(code === 'ssees'){
+      Send.allEvents(uid, "Thanks for providing us with that information, feel free to post any further questions in the SSEES AFC Group (https://www.facebook.com/groups/177053909147185/). In the meantime, do book yourself onto one of our events below: ")
+    }
+    else if(code === 'entrepreneurs'){
+      Send.allEvents(uid, "Awesome! Here are some events for you to join: ")
+    }
     else {
       Send.allEvents(uid, "Thanks for providing us with that information, do book yourself onto one of our events below: ");
     }
