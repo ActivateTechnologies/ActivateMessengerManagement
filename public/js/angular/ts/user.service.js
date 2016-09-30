@@ -14,10 +14,10 @@ var Observable_1 = require('rxjs/Observable');
 var UserService = (function () {
     function UserService(http) {
         this.http = http;
-        this.userUrl = '/userAnalyticsData.uwe'; // URL to web API
+        this.userUrl = '/userAnalyticsData.'; // URL to web API
     }
-    UserService.prototype.getUsers = function () {
-        return this.http.get(this.userUrl)
+    UserService.prototype.getUsers = function (companyCode) {
+        return this.http.get(this.userUrl + companyCode)
             .map(this.extractData)
             .catch(this.handleError);
     };

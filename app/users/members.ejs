@@ -64,7 +64,7 @@
 		<div class="container">
 			<h1>Users</h1>
       <a class="btn btn-primary" id="btn1">Download as CSV</a>
-      <my-table>Loading...</my-table>
+      <my-table [companycode]="<%=s.company.code%>">Loading...</my-table>
 			<!-- <ul>
 				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
 			</ul> -->

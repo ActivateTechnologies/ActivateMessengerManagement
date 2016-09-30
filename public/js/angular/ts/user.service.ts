@@ -6,12 +6,12 @@ import { Observable }     from 'rxjs/Observable';
 @Injectable()
 
 export class UserService {
-  private userUrl = '/userAnalyticsData.uwe';  // URL to web API
+  private userUrl = '/userAnalyticsData.';  // URL to web API
 
   constructor (private http: Http) {}
 
-  getUsers (): Observable<User[]> {
-    return this.http.get(this.userUrl)
+  getUsers (companyCode: string): Observable<User[]> {
+    return this.http.get(this.userUrl + companyCode)
                     .map(this.extractData)
                     .catch(this.handleError);
   }

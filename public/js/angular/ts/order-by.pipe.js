@@ -38,7 +38,7 @@ var OrderByPipe = (function () {
         return array;
     };
     OrderByPipe = __decorate([
-        core_1.Pipe({ name: 'exponentialStrength' }), 
+        core_1.Pipe({ name: 'orderBy' }), 
         __metadata('design:paramtypes', [])
     ], OrderByPipe);
     return OrderByPipe;

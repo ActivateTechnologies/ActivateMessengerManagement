@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { User } from './user';
 import { UserService } from './user.service';
 
@@ -13,18 +13,20 @@ export class AppComponent {
 	orderField: string;
 	users : User[] = [];
 	displayedCols : boolean[] = [];
+	companyCode: string;
 
-	constructor (private userService: UserService) {}
+	constructor (private userService: UserService, private elementRef: ElementRef) {
+		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
+	}
 
 	ngOnInit() {
 		this.currentHead = -1;
 		this.orderField = '';
 		this.getUsers();
-		this.populateDisplayedCols();
 	}
 
 	getUsers() {
-		this.userService.getUsers()
+		this.userService.getUsers(this.companyCode)
 							.subscribe(
 								users => this.users = users);
 	}
@@ -76,40 +78,70 @@ export class AppComponent {
 
 	}
 
-	populateDisplayedCols() {
-		console.log("In Populate Displayed Cols");
-		for(var _i = 0; _i < 10; _i++) {
-			this.displayedCols[_i] = false;
+	isColDisplayed(head: number) {
+		for(var _i = 0; _i < this.users.length; _i++) {
+
+			switch(head) {
+				case 2:
+					if(this.users[_i].phoneNumber != null) {
+		            	return true;
+		        	}
+		        	break;
+		        case 3:
+					if(this.users[_i].email != null) {
+		            	return true;
+		        	}
+		        	break;
+		        case 4:
+					if(this.users[_i].preferredPosition != null) {
+		            	return true;
+		        	}
+		        	break;
+		        case 5:
+					if(this.users[_i].backupPosition != null) {
+		            	return true;
+		        	}
+		        	break;
+		        case 6:
+					if(this.users[_i].level != null) {
+		            	return true;
+		        	}
+		        	break;
+		        case 7:
+					if(this.users[_i].type != null) {
+		            	return true;
+		        	}
+		        	break;
+			}
 		}
+		return false;
 
-		console.log(this.users.length);
+		// for(let user of this.users) {
+		// 	//console.log(user.firstName);
+		// 	if(user.phoneNumber != null) {
+  //           	this.displayedCols[2] = true;
+  //       	}
 
-		for(let user of this.users) {
-			//console.log(user.firstName);
-			if(user.phoneNumber != null) {
-            	this.displayedCols[2] = true;
-        	}
+  //       	if(user.email != null) {
+  //           	this.displayedCols[3] = true;
+  //       	}
 
-        	if(user.email != null) {
-            	this.displayedCols[3] = true;
-        	}
+  //       	if(user.preferredPosition != null) {
+  //       		this.displayedCols[4];
+  //       	}
 
-        	if(user.preferredPosition != null) {
-        		this.displayedCols[4];
-        	}
+  //       	if(user.backupPosition != null) {
+  //       		this.displayedCols[5];
+  //       	}
 
-        	if(user.backupPosition != null) {
-        		this.displayedCols[5];
-        	}
+  //       	if(user.level != null) {
+  //       		this.displayedCols[6];
+  //       	}
 
-        	if(user.level != null) {
-        		this.displayedCols[6];
-        	}
-
-        	if(user.type != null) {
-        		this.displayedCols[7];
-        	}
-		}
+  //       	if(user.type != null) {
+  //       		this.displayedCols[7];
+  //       	}
+		// }
 	}
 
 	// $scope.isDisplayed = function(head) {

@@ -1,6 +1,6 @@
 import { Pipe } from '@angular/core';
 
-@Pipe({name: 'exponentialStrength'})
+@Pipe({name: 'orderBy'})
 
 export class OrderByPipe {
 	transform(array: any[], key: string, desc: boolean): any[] {
