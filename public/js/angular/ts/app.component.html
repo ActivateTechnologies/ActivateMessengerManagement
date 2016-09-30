@@ -6,12 +6,12 @@
         <th></th>
         <th (click)="headingClicked(0)">Name<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==0 && isReversed==true"></span></th>
         <th (click)="headingClicked(1)">Gender<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==1 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[2]" (click)="headingClicked(2)">Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[3]" (click)="headingClicked(3)">Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[4]" (click)="headingClicked(4)">Preferred Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==4 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[5]" (click)="headingClicked(5)">Backup Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==5 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[6]" (click)="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==6 && isReversed==true"></span></th>
-        <th *ngIf="displayedCols[7]" (click)="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==7 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(2)" (click)="headingClicked(2)">Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(3)" (click)="headingClicked(3)">Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(4)" (click)="headingClicked(4)">Preferred Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==4 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(5)" (click)="headingClicked(5)">Backup Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==5 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(6)" (click)="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==6 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(7)" (click)="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==7 && isReversed==true"></span></th>
         <th (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></th>
         <th (click)="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></th>
         <th (click)="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></th>
@@ -23,13 +23,13 @@
     		<td>{{i + 1}}</td>
     		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
     		<td>{{user.firstName + " " + user.lastName}}</td>
-    		<td>{{user.gender}}</td>
-    		<td *ngIf="displayedCols[2]">{{user.phoneNumber}}</td>
-        <td *ngIf="displayedCols[3]">{{user.email || '-'}}</td>
-        <td *ngIf="displayedCols[4]">{{user.preferredPosition || '-'}}</td>
-        <td *ngIf="displayedCols[5]">{{user.backupPosition || '-'}}</td>
-        <td *ngIf="displayedCols[6]">{{user.level || '-'}}</td>
-        <td *ngIf="displayedCols[7]">{{user.type || '-'}}</td>
+    		<td>{{user.gender || '-'}}</td>
+    		<td *ngIf="isColDisplayed(2)">{{user.phoneNumber || '-'}}</td>
+        <td *ngIf="isColDisplayed(3)">{{user.email || '-'}}</td>
+        <td *ngIf="isColDisplayed(4)">{{user.preferredPosition || '-'}}</td>
+        <td *ngIf="isColDisplayed(5)">{{user.backupPosition || '-'}}</td>
+        <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
+        <td *ngIf="isColDisplayed(7)">{{user.type || '-'}}</td>
     		<td>{{'-'}}</td>
         <td>{{'Timer'}}</td>
         <td>{{user._id}}</td>
