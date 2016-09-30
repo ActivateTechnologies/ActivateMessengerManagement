@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderByPipe } from './order-by.pipe.ts'
+import { User } from './user';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'my-table',
-  templateUrl: './app.component.html',
-  pipes: [ 'OrderByPipe' ]
+  templateUrl: 'js/angular/ts/app.component.html'
 })
 
 export class AppComponent {
 	currentHead: number;
 	isReversed: boolean;
 	orderField: string;
+	users : User[] = [];
+	displayedCols : boolean[] = [];
 
 	constructor (private userService: UserService) {}
 
@@ -18,60 +20,135 @@ export class AppComponent {
 		this.currentHead = -1;
 		this.orderField = '';
 		this.getUsers();
+		this.populateDisplayedCols();
 	}
 
 	getUsers() {
 		this.userService.getUsers()
 							.subscribe(
-								users => this.users = users,
-                       			error =>  this.errorMessage = <any>error);
+								users => this.users = users);
 	}
 
 	headingClicked(head: number) {
-		if(currentHead === head) {
-          isReversed = !isReversed;
+		if(this.currentHead === head) {
+          this.isReversed = !this.isReversed;
         } else {
-          isReversed = false;
+          this.isReversed = false;
         }
 		
-		currentHead = head;
+		this.currentHead = head;
 
         switch(head) {
           case 0:
-            orderField = ['firstName','lastName'];
+            this.orderField = 'firstName';
             break;
           case 1:
-            orderField = 'gender';
+            this.orderField = 'gender';
             break;
           case 2:
-            orderField = 'phoneNumber';
+            this.orderField = 'phoneNumber';
             break;
           case 3:
-            orderField = 'email';
+            this.orderField = 'email';
             break;
           case 4:
-            orderField = 'preferredPosition';
+            this.orderField = 'preferredPosition';
             break;
           case 5:
-            orderField = 'backupPosition';
+            this.orderField = 'backupPosition';
             break;
           case 6:
-            orderField = 'level';
+            this.orderField = 'level';
             break;
           case 7:
-            orderField = 'type';
+            this.orderField = 'type';
             break;
           case 8:
-            orderField = 'signedUpDate';
+            this.orderField = 'signedUpDate';
             break;
           case 9:
-            orderField = 'interactionTime';
+            this.orderField = 'interactionTime';
             break;
           case 10:
-            orderField = '_id';
+            this.orderField = '_id';
             break;
         }
 
 	}
+
+	populateDisplayedCols() {
+		console.log("In Populate Displayed Cols");
+		for(var _i = 0; _i < 10; _i++) {
+			this.displayedCols[_i] = false;
+		}
+
+		console.log(this.users.length);
+
+		for(let user of this.users) {
+			//console.log(user.firstName);
+			if(user.phoneNumber != null) {
+            	this.displayedCols[2] = true;
+        	}
+
+        	if(user.email != null) {
+            	this.displayedCols[3] = true;
+        	}
+
+        	if(user.preferredPosition != null) {
+        		this.displayedCols[4];
+        	}
+
+        	if(user.backupPosition != null) {
+        		this.displayedCols[5];
+        	}
+
+        	if(user.level != null) {
+        		this.displayedCols[6];
+        	}
+
+        	if(user.type != null) {
+        		this.displayedCols[7];
+        	}
+		}
+	}
+
+	// $scope.isDisplayed = function(head) {
+    //     for(i = 0; i < $scope.users.length; i++) {
+    //       switch(head) {
+    //         case 2:
+    //           if($scope.users[i].phoneNumber != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 3:
+    //           if($scope.users[i].email != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 4:
+    //           if($scope.users[i].preferredPosition != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 5:
+    //           if($scope.users[i].backupPosition != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 6:
+    //           if($scope.users[i].level != null) {
+    //             return true;
+    //           }
+    //           break;
+    //         case 7:
+    //           if($scope.users[i].type != null) {
+    //             return true;
+    //           }
+    //           break;
+    //       }
+    //     }
+    //     return false;
+    //   }
+    // }
 
 }
