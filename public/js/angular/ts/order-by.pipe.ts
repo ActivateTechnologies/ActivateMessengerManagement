@@ -10,9 +10,20 @@ export class OrderByPipe {
 	      	} else if (a[key] > b[key]) {
 	        	return 1;
 	      	} else {
+	      		if(key === 'firstName') {
+	      			if (a['lastName'] < b['lastName']) {
+			        	return -1;
+			      	} else if (a['lastName'] > b['lastName']) {
+			        	return 1;
+			      	}
+			    }
 	        	return 0;
 	      	}
 	    });
+
+	    if(desc) {
+	    	return array.reverse();
+	    }
     	return array;
 	}
 }

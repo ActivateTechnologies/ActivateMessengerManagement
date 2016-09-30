@@ -8,16 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+require('./rxjs-extensions');
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var app_component_1 = require('./app.component');
+var http_1 = require('@angular/http');
+var order_by_pipe_1 = require('./order-by.pipe');
+var user_service_1 = require('./user.service');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule],
-            declarations: [app_component_1.AppComponent],
+            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule],
+            declarations: [app_component_1.AppComponent, order_by_pipe_1.OrderByPipe],
+            providers: [user_service_1.UserService],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
