@@ -379,7 +379,7 @@ module.exports = function(code){
       Send.allEvents(uid, "Awesome! Here are some games for you to join: ")
     }
     else if(code === 'ssees'){
-      Send.allEvents(uid, "Thanks for providing us with that information, feel free to post any further questions in the SSEES AFC Group (https://www.facebook.com/groups/177053909147185/). In the meantime, do book yourself onto one of our events below: ")
+      Send.allEvents(uid, "Thanks for providing us with that information. Please give our page a like https://www.facebook.com/UCLU-SSEES-AFC-1285241621487966/?fref=ts and feel free to ask any other questions on our group  (https://www.facebook.com/groups/177053909147185/). In the meantime, do book yourself onto one of our events below:")
     }
     else {
       Send.allEvents(uid, "Thanks for providing us with that information, do book yourself onto one of our events below: ");
