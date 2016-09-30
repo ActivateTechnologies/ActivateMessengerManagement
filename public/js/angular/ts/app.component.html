@@ -1,0 +1,40 @@
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th (click)="headingClicked(0)">Name<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==0 && isReversed==true"></span></th>
+        <th (click)="headingClicked(1)">Gender<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==1 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(2)" (click)="headingClicked(2)">Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(3)" (click)="headingClicked(3)">Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(4)" (click)="headingClicked(4)">Preferred Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==4 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(5)" (click)="headingClicked(5)">Backup Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==5 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(6)" (click)="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==6 && isReversed==true"></span></th>
+        <th *ngIf="isDisplayed(7)" (click)="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==7 && isReversed==true"></span></th>
+        <th (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></th>
+        <th (click)="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></th>
+        <th (click)="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></th> -->
+        <!-- <th>Select</th> -->
+      </tr>
+    </thead>
+    <tbody id="usersTBody">
+    	<tr *ngFor="let user of users; let i = index">
+    		<td>{{i + 1}}</td>
+    		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
+    		<td>{{user.firstName + " " + user.lastName}}</td>
+    		<td>{{user.gender | capitaliseFirst}}</td>
+    		<td *ngIf="isDisplayed(2)">{{user.phoneNumber | phone}}</td>
+        <td *ngIf="isDisplayed(3)">{{user.email || '-'}}</td>
+        <td *ngIf="isDisplayed(4)">{{user.preferredPosition || '-'}}</td>
+        <td *ngIf="isDisplayed(5)">{{user.backupPosition || '-'}}</td>
+        <td *ngIf="isDisplayed(6)">{{user.level || '-'}}</td>
+        <td *ngIf="isDisplayed(7)">{{user.type || '-'}}</td>
+    		<td>{{getFormattedDate(user.signedUpDate)}}</td>
+        <td style="background-color:{{getColorAndTime(user.interactionTime, user.receivedTime)[0]}}">{{getColorAndTime(user.interactionTime, user.receivedTime)[1]}}</td>
+        <td>{{user._id}}</td> -->
+    		<!--<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
+    	</tr>
+    </tbody>
+  </table>
+</div>

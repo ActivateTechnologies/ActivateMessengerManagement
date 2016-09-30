@@ -63,8 +63,8 @@
 
 		<div class="container">
 			<h1>Users</h1>
-			<my-app>Loading...</my-app>
       <a class="btn btn-primary" id="btn1">Download as CSV</a>
+      <my-table>Loading...</my-table>
 			<!-- <ul>
 				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
 			</ul> -->
@@ -282,28 +282,28 @@
     //   }
     // });
 
-    // $(document).ready(function() {
-    //   // Function to create CSV string
-    //   $("#btn1").click(function() {
-    //     var csvStr = '';
-    //     // Getting data from the rows
-    //     var rows = $("tr");
-    //     for(y = 0; y < rows.length; y++) {
-    //       var cols = $(rows[y]).children();
-    //       for(x = 2; x < cols.length; x++) { // starts at third column
-    //         csvStr += $(cols[x]).text() + ',';
-    //       }
-    //       csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
-    //       csvStr += '\r\n';
-    //     }
-		//
-		// 		var formBlob = new Blob([csvStr], { type: 'text/csv' });
-		// 		var link = document.createElement("a");
-		// 		link.href = window.URL.createObjectURL(formBlob);
-		// 		link.setAttribute("download", "my_data.csv");
-		// 		link.click();
-    //   })
-    // })
+    $(document).ready(function() {
+      // Function to create CSV string
+      $("#btn1").click(function() {
+        var csvStr = '';
+        // Getting data from the rows
+        var rows = $("tr");
+        for(y = 0; y < rows.length; y++) {
+          var cols = $(rows[y]).children();
+          for(x = 2; x < cols.length; x++) { // starts at third column
+            csvStr += $(cols[x]).text() + ',';
+          }
+          csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
+          csvStr += '\r\n';
+        }
+		
+				var formBlob = new Blob([csvStr], { type: 'text/csv' });
+				var link = document.createElement("a");
+				link.href = window.URL.createObjectURL(formBlob);
+				link.setAttribute("download", "my_data.csv");
+				link.click();
+      })
+    })
 
     </script>
 	</body>
