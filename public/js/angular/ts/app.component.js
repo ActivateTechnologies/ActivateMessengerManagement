@@ -11,10 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var user_service_1 = require('./user.service');
 var AppComponent = (function () {
-    function AppComponent(userService) {
+    function AppComponent(userService, elementRef) {
         this.userService = userService;
+        this.elementRef = elementRef;
         this.users = [];
         this.displayedCols = [];
+        this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
     AppComponent.prototype.ngOnInit = function () {
         this.currentHead = -1;
@@ -24,7 +26,7 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.getUsers = function () {
         var _this = this;
-        this.userService.getUsers()
+        this.userService.getUsers(this.companyCode)
             .subscribe(function (users) { return _this.users = users; });
     };
     AppComponent.prototype.headingClicked = function (head) {
@@ -105,7 +107,7 @@ var AppComponent = (function () {
             selector: 'my-table',
             templateUrl: 'js/angular/ts/app.component.html'
         }), 
-        __metadata('design:paramtypes', [user_service_1.UserService])
+        __metadata('design:paramtypes', [user_service_1.UserService, core_1.ElementRef])
     ], AppComponent);
     return AppComponent;
 }());

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { User } from './user';
 import { UserService } from './user.service';
 
@@ -13,8 +13,11 @@ export class AppComponent {
 	orderField: string;
 	users : User[] = [];
 	displayedCols : boolean[] = [];
+	companyCode: string;
 
-	constructor (private userService: UserService) {}
+	constructor (private userService: UserService, private elementRef: ElementRef) {
+		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
+	}
 
 	ngOnInit() {
 		this.currentHead = -1;
@@ -24,7 +27,7 @@ export class AppComponent {
 	}
 
 	getUsers() {
-		this.userService.getUsers()
+		this.userService.getUsers(this.companyCode)
 							.subscribe(
 								users => this.users = users);
 	}
