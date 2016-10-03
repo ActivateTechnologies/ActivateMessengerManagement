@@ -22,7 +22,6 @@ export class AppComponent {
 	}
 
 	getFormattedDate(date: string) {
-		// return new moment().format('HH:mm');
 		var d: string;
 		d = new moment(date).format('DD/MM/YY HH:mm');
 		return d;

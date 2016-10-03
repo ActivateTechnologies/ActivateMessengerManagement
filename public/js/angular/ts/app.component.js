@@ -19,7 +19,6 @@ var AppComponent = (function () {
         this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
     AppComponent.prototype.getFormattedDate = function (date) {
-        // return new moment().format('HH:mm');
         var d;
         d = new moment(date).format('DD/MM/YY HH:mm');
         return d;

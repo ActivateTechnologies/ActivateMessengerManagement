@@ -23,13 +23,13 @@
     		<td>{{i + 1}}</td>
     		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
     		<td>{{user.firstName + " " + user.lastName}}</td>
-    		<td>{{user.gender || '-'}}</td>
-    		<td *ngIf="isColDisplayed(2)">{{user.phoneNumber || '-'}}</td>
+    		<td>{{user.gender | capitaliseFirst}}</td>
+    		<td *ngIf="isColDisplayed(2)">{{user.phoneNumber | phoneNumber}}</td>
         <td *ngIf="isColDisplayed(3)">{{user.email || '-'}}</td>
         <td *ngIf="isColDisplayed(4)">{{user.preferredPosition || '-'}}</td>
         <td *ngIf="isColDisplayed(5)">{{user.backupPosition || '-'}}</td>
         <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
-        <td *ngIf="isColDisplayed(7)">{{user.type || '-'}}</td>
+        <td *ngIf="isColDisplayed(7)">{{user.type | capitaliseFirst}}</td>
     		<td>{{getFormattedDate(user.signedUpDate)}}</td>
         <td [style.background-color]="getColour(user.interactionTime, user.receivedTime)">{{getTimer(user.interactionTime, user.receivedTime)}}</td>
         <td>{{user._id}}</td>
