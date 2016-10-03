@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, enableProdMode } from '@angular/core';
 import { User } from './user';
 import { UserService } from './user.service';
 
 declare var moment: any;
+enableProdMode();
 
 @Component({
   selector: 'my-table',

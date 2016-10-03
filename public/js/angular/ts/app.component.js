@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var user_service_1 = require('./user.service');
+core_1.enableProdMode();
 var AppComponent = (function () {
     function AppComponent(userService, elementRef) {
         this.userService = userService;
