@@ -323,6 +323,7 @@ module.exports = function(code){
         {_id:uid._id},
         {"email": email},
         (error, user) => {
+          if (error) console.log(error);
           console.log("added email");
           executeTreeNode(uid, conversationName, node.next[0], null, user);
         });
