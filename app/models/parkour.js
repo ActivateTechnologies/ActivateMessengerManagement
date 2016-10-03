@@ -19,6 +19,8 @@ let schema = function(connection){
     interactionTime: Date,
     receivedTime: Date,
 
+    email: String,
+
     events: Array,
     conversationLocation: {
       conversationName: String,
