@@ -17,12 +17,30 @@ export class AppComponent {
 	users : User[] = [];
 	displayedCols : boolean[] = [];
 	companyCode: string;
+	playerPositions: string[];
+	playerLevels: string[];
+	playerTypes: string[];
+	filters: string[];
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
 		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
 	}
 
-	getFormattedDate(date: string) {
+	ngOnInit() {
+		this.currentHead = -1;
+		this.orderField = '';
+		this.getUsers();
+		this.playerPositions = ['', 'Center Back', 'Center Mid', 'Full Back', 'Keeper', 'Striker', 'Winger'];
+		this.playerLevels = ['', 'Amateur', 'Pro', 'School/Uni', 'Semi Pro'];
+		this.playerTypes = ['', 'New', 'Returning'];
+		this.filters = ['', '', '', ''];
+	}
+
+	onChange(value: string, index: number) {
+		this.filters[index] = value;
+	}
+
+	getFormattedDate(date: string): string {
 		var d: string;
 		d = new moment(date).format('DD/MM/YY HH:mm');
 		return d;
@@ -76,26 +94,6 @@ export class AppComponent {
 		} else {
 			return "red";
 		}
-	}
-
-	     //  var formatDuration = function(duration) {
-      //   var hrs = String(duration.asHours()).split(".")[0];
-      //   if(parseInt(hrs) < 0) {
-      //     return duration.humanize(true);
-      //   }
-      //   var mins = Math.abs(duration.minutes());
-      //   if (mins < 10) {
-      //     var ph = "0";
-      //   } else {
-      //     var ph = "";
-      //   }
-      //   return hrs + "h" + ph + mins + "m to go";
-      // }
-
-	ngOnInit() {
-		this.currentHead = -1;
-		this.orderField = '';
-		this.getUsers();
 	}
 
 	getUsers() {

@@ -19,6 +19,18 @@ var AppComponent = (function () {
         this.displayedCols = [];
         this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
+    AppComponent.prototype.ngOnInit = function () {
+        this.currentHead = -1;
+        this.orderField = '';
+        this.getUsers();
+        this.playerPositions = ['', 'Center Back', 'Center Mid', 'Full Back', 'Keeper', 'Striker', 'Winger'];
+        this.playerLevels = ['', 'Amateur', 'Pro', 'School/Uni', 'Semi Pro'];
+        this.playerTypes = ['', 'New', 'Returning'];
+        this.filters = ['', '', '', ''];
+    };
+    AppComponent.prototype.onChange = function (value, index) {
+        this.filters[index] = value;
+    };
     AppComponent.prototype.getFormattedDate = function (date) {
         var d;
         d = new moment(date).format('DD/MM/YY HH:mm');
@@ -70,24 +82,6 @@ var AppComponent = (function () {
         else {
             return "red";
         }
-    };
-    //  var formatDuration = function(duration) {
-    //   var hrs = String(duration.asHours()).split(".")[0];
-    //   if(parseInt(hrs) < 0) {
-    //     return duration.humanize(true);
-    //   }
-    //   var mins = Math.abs(duration.minutes());
-    //   if (mins < 10) {
-    //     var ph = "0";
-    //   } else {
-    //     var ph = "";
-    //   }
-    //   return hrs + "h" + ph + mins + "m to go";
-    // }
-    AppComponent.prototype.ngOnInit = function () {
-        this.currentHead = -1;
-        this.orderField = '';
-        this.getUsers();
     };
     AppComponent.prototype.getUsers = function () {
         var _this = this;

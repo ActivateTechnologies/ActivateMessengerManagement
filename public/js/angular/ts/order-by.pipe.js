@@ -14,7 +14,6 @@ var OrderByPipe = (function () {
     }
     OrderByPipe.prototype.transform = function (array, key, desc) {
         var _this = this;
-        console.log("HELLO FROM ORDER BY");
         array.sort(function (a, b) {
             if (!!a[key] && !b[key]) {
                 return -1;
