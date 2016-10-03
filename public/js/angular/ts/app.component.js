@@ -24,6 +24,66 @@ var AppComponent = (function () {
         d = new moment(date).format('DD/MM/YY HH:mm');
         return d;
     };
+    AppComponent.prototype.getTimer = function (interactionTime, receivedTime) {
+        var it = new moment(interactionTime);
+        var rt = new moment(receivedTime);
+        var now = new moment();
+        var endOfWindow = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+        if (endOfWindow.isAfter(now)) {
+            var duration = moment.duration(endOfWindow.diff(now));
+            return this.formatDuration(duration);
+        }
+        else if (rt.isBefore(it) || receivedTime == null) {
+            var duration = moment.duration(it.diff(now));
+            return this.formatDuration(duration);
+        }
+        else {
+            var duration = moment.duration(it.diff(now));
+            return this.formatDuration(duration);
+        }
+    };
+    AppComponent.prototype.formatDuration = function (duration) {
+        var hrs = String(duration.asHours()).split(".")[0];
+        if (parseInt(hrs) < 0) {
+            return duration.humanize(true);
+        }
+        var mins = Math.abs(duration.minutes());
+        var ph = "";
+        if (mins < 10) {
+            ph = "0";
+        }
+        return hrs + "h" + ph + mins + "m to go";
+    };
+    AppComponent.prototype.getColour = function (interactionTime, receivedTime) {
+        var it = new moment(interactionTime);
+        var rt = new moment(receivedTime);
+        var now = new moment();
+        var endOfWindow = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+        if (endOfWindow.isAfter(now)) {
+            return "green";
+        }
+        else if (rt.isBefore(it) || receivedTime == null) {
+            return "orange";
+        }
+        else {
+            return "red";
+        }
+    };
+    //  var formatDuration = function(duration) {
+    //   var hrs = String(duration.asHours()).split(".")[0];
+    //   if(parseInt(hrs) < 0) {
+    //     return duration.humanize(true);
+    //   }
+    //   var mins = Math.abs(duration.minutes());
+    //   if (mins < 10) {
+    //     var ph = "0";
+    //   } else {
+    //     var ph = "";
+    //   }
+    //   return hrs + "h" + ph + mins + "m to go";
+    // }
     AppComponent.prototype.ngOnInit = function () {
         this.currentHead = -1;
         this.orderField = '';

@@ -28,6 +28,70 @@ export class AppComponent {
 		return d;
 	}
 
+	getTimer(interactionTime: string, receivedTime: string): string {
+		var it: any = new moment(interactionTime);
+		var rt: any = new moment(receivedTime);
+		var now: any = new moment();
+
+		var endOfWindow: any = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+
+        if (endOfWindow.isAfter(now)){
+          	var duration: any = moment.duration(endOfWindow.diff(now));
+			return this.formatDuration(duration);
+		} else if (rt.isBefore(it) || receivedTime == null) {
+			var duration: any = moment.duration(it.diff(now));
+			return this.formatDuration(duration);
+		} else {
+			var duration: any = moment.duration(it.diff(now));
+			return this.formatDuration(duration);
+		}
+	}
+
+	private formatDuration(duration: any): string {
+		var hrs: string = String(duration.asHours()).split(".")[0];
+		if(parseInt(hrs) < 0) {
+			return duration.humanize(true);
+		}
+		var mins: number = Math.abs(duration.minutes());
+		var ph: string = "";
+		if (mins < 10) {
+			ph = "0";
+		}
+		return hrs + "h" + ph + mins + "m to go";
+	}
+
+	getColour(interactionTime: string, receivedTime: string): string {
+		var it: any = new moment(interactionTime);
+		var rt: any = new moment(receivedTime);
+		var now: any = new moment();
+
+		var endOfWindow: any = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+
+        if (endOfWindow.isAfter(now)){
+          	return "green";
+		} else if (rt.isBefore(it) || receivedTime == null) {
+			return "orange";
+		} else {
+			return "red";
+		}
+	}
+
+	     //  var formatDuration = function(duration) {
+      //   var hrs = String(duration.asHours()).split(".")[0];
+      //   if(parseInt(hrs) < 0) {
+      //     return duration.humanize(true);
+      //   }
+      //   var mins = Math.abs(duration.minutes());
+      //   if (mins < 10) {
+      //     var ph = "0";
+      //   } else {
+      //     var ph = "";
+      //   }
+      //   return hrs + "h" + ph + mins + "m to go";
+      // }
+
 	ngOnInit() {
 		this.currentHead = -1;
 		this.orderField = '';

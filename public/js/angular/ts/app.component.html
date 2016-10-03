@@ -31,7 +31,7 @@
         <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
         <td *ngIf="isColDisplayed(7)">{{user.type || '-'}}</td>
     		<td>{{getFormattedDate(user.signedUpDate)}}</td>
-        <td>{{'Timer'}}</td>
+        <td [style.background-color]="getColour(user.interactionTime, user.receivedTime)">{{getTimer(user.interactionTime, user.receivedTime)}}</td>
         <td>{{user._id}}</td>
     		<!--<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
     	</tr>
