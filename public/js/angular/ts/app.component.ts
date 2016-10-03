@@ -2,6 +2,8 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { User } from './user';
 import { UserService } from './user.service';
 
+declare var moment: any;
+
 @Component({
   selector: 'my-table',
   templateUrl: 'js/angular/ts/app.component.html'
@@ -17,6 +19,13 @@ export class AppComponent {
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
 		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
+	}
+
+	getFormattedDate(date: string) {
+		// return new moment().format('HH:mm');
+		var d: string;
+		d = new moment(date).format('DD/MM/YY HH:mm');
+		return d;
 	}
 
 	ngOnInit() {

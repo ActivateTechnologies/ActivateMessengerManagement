@@ -30,7 +30,7 @@
         <td *ngIf="isColDisplayed(5)">{{user.backupPosition || '-'}}</td>
         <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
         <td *ngIf="isColDisplayed(7)">{{user.type || '-'}}</td>
-    		<td>{{'-'}}</td>
+    		<td>{{getFormattedDate(user.signedUpDate)}}</td>
         <td>{{'Timer'}}</td>
         <td>{{user._id}}</td>
     		<!--<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
