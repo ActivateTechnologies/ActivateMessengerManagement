@@ -18,6 +18,12 @@ var AppComponent = (function () {
         this.displayedCols = [];
         this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
+    AppComponent.prototype.getFormattedDate = function (date) {
+        // return new moment().format('HH:mm');
+        var d;
+        d = new moment(date).format('DD/MM/YY HH:mm');
+        return d;
+    };
     AppComponent.prototype.ngOnInit = function () {
         this.currentHead = -1;
         this.orderField = '';
@@ -108,27 +114,6 @@ var AppComponent = (function () {
             }
         }
         return false;
-        // for(let user of this.users) {
-        // 	//console.log(user.firstName);
-        // 	if(user.phoneNumber != null) {
-        //           	this.displayedCols[2] = true;
-        //       	}
-        //       	if(user.email != null) {
-        //           	this.displayedCols[3] = true;
-        //       	}
-        //       	if(user.preferredPosition != null) {
-        //       		this.displayedCols[4];
-        //       	}
-        //       	if(user.backupPosition != null) {
-        //       		this.displayedCols[5];
-        //       	}
-        //       	if(user.level != null) {
-        //       		this.displayedCols[6];
-        //       	}
-        //       	if(user.type != null) {
-        //       		this.displayedCols[7];
-        //       	}
-        // }
     };
     AppComponent = __decorate([
         core_1.Component({
