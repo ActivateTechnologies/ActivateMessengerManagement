@@ -26,7 +26,9 @@ var AppComponent = (function () {
         this.playerPositions = ['', 'Center Back', 'Center Mid', 'Full Back', 'Keeper', 'Striker', 'Winger'];
         this.playerLevels = ['', 'Amateur', 'Pro', 'School/Uni', 'Semi Pro'];
         this.playerTypes = ['', 'New', 'Returning'];
-        this.filters = ['', '', '', ''];
+        this.playerGenders = ['', 'Male', 'Female'];
+        this.filters = ['', '', '', '', ''];
+        this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
     };
     AppComponent.prototype.onChange = function (value, index) {
         this.filters[index] = value;

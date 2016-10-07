@@ -20,7 +20,9 @@ export class AppComponent {
 	playerPositions: string[];
 	playerLevels: string[];
 	playerTypes: string[];
+	playerGenders: string[];
 	filters: string[];
+	fields: string[];
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
 		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
@@ -33,7 +35,9 @@ export class AppComponent {
 		this.playerPositions = ['', 'Center Back', 'Center Mid', 'Full Back', 'Keeper', 'Striker', 'Winger'];
 		this.playerLevels = ['', 'Amateur', 'Pro', 'School/Uni', 'Semi Pro'];
 		this.playerTypes = ['', 'New', 'Returning'];
-		this.filters = ['', '', '', ''];
+		this.playerGenders = ['', 'Male', 'Female'];
+		this.filters = ['', '', '', '', ''];
+		this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
 	}
 
 	onChange(value: string, index: number) {
