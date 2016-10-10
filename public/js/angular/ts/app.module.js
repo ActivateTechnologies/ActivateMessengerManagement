@@ -17,14 +17,16 @@ var order_by_pipe_1 = require('./order-by.pipe');
 var capitalise_first_pipe_1 = require('./capitalise-first.pipe');
 var phone_number_pipe_1 = require('./phone-number.pipe');
 var filter_pipe_1 = require('./filter.pipe');
+var filterDate_pipe_1 = require('./filterDate.pipe');
 var user_service_1 = require('./user.service');
+var forms_1 = require('@angular/forms');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule],
-            declarations: [app_component_1.AppComponent, order_by_pipe_1.OrderByPipe, capitalise_first_pipe_1.CapitaliseFirstPipe, phone_number_pipe_1.PhoneNumberPipe, filter_pipe_1.FilterPipe],
+            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule, forms_1.FormsModule],
+            declarations: [app_component_1.AppComponent, order_by_pipe_1.OrderByPipe, capitalise_first_pipe_1.CapitaliseFirstPipe, phone_number_pipe_1.PhoneNumberPipe, filter_pipe_1.FilterPipe, filterDate_pipe_1.FilterDatePipe],
             providers: [user_service_1.UserService],
             bootstrap: [app_component_1.AppComponent]
         }), 

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var user_service_1 = require('./user.service');
+// declare var daterangepicker: any;
 core_1.enableProdMode();
 var AppComponent = (function () {
     function AppComponent(userService, elementRef) {
@@ -28,7 +29,29 @@ var AppComponent = (function () {
         this.playerTypes = ['', 'New', 'Returning'];
         this.playerGenders = ['', 'Male', 'Female'];
         this.filters = ['', '', '', '', ''];
+        this.dateFilter = '';
         this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
+    };
+    AppComponent.prototype.ngAfterViewInit = function () {
+        var that = this;
+        $('input[name="daterange"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: "DD/MM/YYYY",
+                cancelLabel: 'Clear'
+            }
+        });
+        $('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            that.dateFilter = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+        });
+        $('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            that.dateFilter = '';
+        });
+    };
+    AppComponent.prototype.setDateFilters = function (val) {
+        this.dateFilter = val;
     };
     AppComponent.prototype.onChange = function (value, index) {
         this.filters[index] = value;

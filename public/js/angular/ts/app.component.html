@@ -28,8 +28,8 @@
         <th *ngIf="isColDisplayed(6)">
         	<p (click)="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==6 && isReversed==true"></span></p>
         	<select (change)="onChange($event.target.value, 2)">
-					  <option *ngFor="let level of playerLevels">{{level}}</option>
-					</select>
+                <option *ngFor="let level of playerLevels">{{level}}</option>
+			</select>
         </th>
         <th *ngIf="isColDisplayed(7)">
         	<p (click)="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==7 && isReversed==true"></span></p>
@@ -37,14 +37,17 @@
 					  <option *ngFor="let type of playerTypes">{{type}}</option>
 					</select>
         </th>
-        <th (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></th>
+        <th>
+            <p (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></p>
+            <input (change)="setDateFilter($event.target.value)" name="daterange" value=""/>
+        </th>
         <th (click)="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></th>
         <th (click)="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></th>
         <!-- <th>Select</th> -->
       </tr>
     </thead>
     <tbody id="usersTBody">
-    	<tr *ngFor="let user of users | filter:fields:filters | orderBy:orderField:isReversed; let i = index">
+    	<tr *ngFor="let user of users | filter:fields:filters | filterdate:dateFilter | orderBy:orderField:isReversed; let i = index">
     		<td>{{i + 1}}</td>
     		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
     		<td>{{user.firstName + " " + user.lastName}}</td>

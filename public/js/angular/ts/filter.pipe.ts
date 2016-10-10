@@ -22,11 +22,6 @@ export class FilterPipe {
 				}
 			}
 			return returnUser;
-			// return (eachItem['preferredPosition'] ? eachItem['preferredPosition'].toLowerCase().includes(filters[0].toLowerCase()) : false) &&
-			// 	   (eachItem['backupPosition'] ? eachItem['backupPosition'].toLowerCase().includes(filters[1].toLowerCase()) : false) &&
-			// 	   (eachItem['level'] ? (filters[2] === '' ? eachItem['level'].toLowerCase().includes(filters[2].toLowerCase()) : eachItem['level'].toLowerCase() === (filters[2].toLowerCase())) : false) &&
-			// 	   (eachItem['type'] ? eachItem['type'].toLowerCase().includes(filters[3].toLowerCase()) : false) &&
-			// 	   (eachItem['gender'] ? (filters[4] === '' ? eachItem['gender'].toLowerCase().includes(filters[4].toLowerCase()) : eachItem['gender'].toLowerCase() === (filters[4].toLowerCase())) : false);
 		});
 	}
 }

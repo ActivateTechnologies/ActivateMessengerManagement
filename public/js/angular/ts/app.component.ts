@@ -1,8 +1,11 @@
-import { Component, OnInit, Input, ElementRef, enableProdMode } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, enableProdMode, AfterViewInit } from '@angular/core';
 import { User } from './user';
 import { UserService } from './user.service';
 
 declare var moment: any;
+declare var $: any;
+// declare var daterangepicker: any;
+
 enableProdMode();
 
 @Component({
@@ -22,6 +25,7 @@ export class AppComponent {
 	playerTypes: string[];
 	playerGenders: string[];
 	filters: string[];
+	dateFilter: string;
 	fields: string[];
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
@@ -37,7 +41,34 @@ export class AppComponent {
 		this.playerTypes = ['', 'New', 'Returning'];
 		this.playerGenders = ['', 'Male', 'Female'];
 		this.filters = ['', '', '', '', ''];
+		this.dateFilter = '';
 		this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
+	}
+
+	ngAfterViewInit() {
+		var that = this;
+		$('input[name="daterange"]').daterangepicker(
+		{
+			autoUpdateInput: false,
+			locale: {
+				format: "DD/MM/YYYY",
+				cancelLabel: 'Clear'
+			}
+		});
+
+		$('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+			$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+			that.dateFilter = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+		});
+
+		$('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+		    $(this).val('');
+		    that.dateFilter = '';
+		});
+	}
+
+	setDateFilters(val: string) {
+		this.dateFilter = val;
 	}
 
 	onChange(value: string, index: number) {

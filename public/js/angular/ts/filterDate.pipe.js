@@ -9,36 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var FilterPipe = (function () {
-    function FilterPipe() {
+var FilterDatePipe = (function () {
+    function FilterDatePipe() {
     }
-    FilterPipe.prototype.transform = function (arr, fields, filters) {
-        if (filters[0] === '' && filters[1] === '' && filters[2] === '' && filters[3] === '' && filters[4] === '') {
+    FilterDatePipe.prototype.transform = function (arr, date) {
+        if (date === '') {
             return arr;
         }
+        var dates = date.split(" - ");
+        console.log("ALRIGHT LADS!!");
         return arr.filter(function (eachItem) {
-            var returnUser = true;
-            for (var i = 0; i < filters.length; i++) {
-                if (filters[i] !== '') {
-                    if (eachItem[fields[i]]) {
-                        returnUser = returnUser && (eachItem[fields[i]].toLowerCase() === filters[i].toLowerCase());
-                    }
-                    else {
-                        return false;
-                    }
-                }
+            var start = moment(dates[0], "DD/MM/YYYY");
+            var end = moment(dates[1], "DD/MM/YYYY");
+            var userDate = moment(eachItem.signedUpDate).startOf('day');
+            if ((userDate.isAfter(start) || userDate.isSame(start)) && (userDate.isBefore(end) || userDate.isSame(end))) {
+                return true;
             }
-            return returnUser;
+            else {
+                return false;
+            }
         });
     };
-    FilterPipe = __decorate([
+    FilterDatePipe = __decorate([
         core_1.Pipe({
-            name: 'filter',
+            name: 'filterdate',
             pure: false
         }), 
         __metadata('design:paramtypes', [])
-    ], FilterPipe);
-    return FilterPipe;
+    ], FilterDatePipe);
+    return FilterDatePipe;
 }());
-exports.FilterPipe = FilterPipe;
-//# sourceMappingURL=filter.pipe.js.map
+exports.FilterDatePipe = FilterDatePipe;
+//# sourceMappingURL=filterDate.pipe.js.map
