@@ -4,15 +4,15 @@
       <tr>
         <th></th>
         <th></th>
-        <th (click)="headingClicked(0)">Name<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==0 && isReversed==true"></span></th>
+        <th (click)="headingClicked(0)"><p>Name<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==0 && isReversed==true"></span></p></th>
         <th>
         	<p (click)="headingClicked(1)">Gender<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==1 && isReversed==true"></span></p>
         	<select (change)="onChange($event.target.value, 4)">
 					  <option *ngFor="let gender of playerGenders">{{gender}}</option>
 					</select>
         </th>
-        <th *ngIf="isColDisplayed(2)" (click)="headingClicked(2)">Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></th>
-        <th *ngIf="isColDisplayed(3)" (click)="headingClicked(3)">Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></th>
+        <th *ngIf="isColDisplayed(2)" (click)="headingClicked(2)"><p>Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></p></th>
+        <th *ngIf="isColDisplayed(3)" (click)="headingClicked(3)"><p>Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></p></th>
         <th *ngIf="isColDisplayed(4)">
         	<p (click)="headingClicked(4)">Preferred Position<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==4 && isReversed==true"></span></p>
 	        <select (change)="onChange($event.target.value, 0)">
@@ -41,8 +41,8 @@
             <p (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></p>
             <input (change)="setDateFilter($event.target.value)" name="daterange" value=""/>
         </th>
-        <th (click)="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></th>
-        <th (click)="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></th>
+        <th (click)="headingClicked(9)"><p>Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></p></th>
+        <th (click)="headingClicked(10)"><p>User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></p></th>
         <!-- <th>Select</th> -->
       </tr>
     </thead>

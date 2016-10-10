@@ -82,7 +82,11 @@
         for(y = 0; y < rows.length; y++) {
           var cols = $(rows[y]).children();
           for(x = 2; x < cols.length; x++) { // starts at third column
-            csvStr += $(cols[x]).text() + ',';
+            if(y === 0) {
+                csvStr += $(cols[x]).find("p").text() + ',';                
+            } else {
+                csvStr += $(cols[x]).text() + ',';
+            }
           }
           csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
           csvStr += '\r\n';
