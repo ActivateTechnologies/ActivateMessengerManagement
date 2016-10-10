@@ -17,11 +17,10 @@ var FilterDatePipe = (function () {
             return arr;
         }
         var dates = date.split(" - ");
-        console.log("ALRIGHT LADS!!");
         return arr.filter(function (eachItem) {
-            var start = moment(dates[0], "DD/MM/YYYY");
-            var end = moment(dates[1], "DD/MM/YYYY");
-            var userDate = moment(eachItem.signedUpDate).startOf('day');
+            var start = moment(dates[0], "DD/MM/YYYY HH:mm");
+            var end = moment(dates[1], "DD/MM/YYYY HH:mm");
+            var userDate = moment(eachItem.signedUpDate);
             if ((userDate.isAfter(start) || userDate.isSame(start)) && (userDate.isBefore(end) || userDate.isSame(end))) {
                 return true;
             }

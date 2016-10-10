@@ -36,14 +36,16 @@ var AppComponent = (function () {
         var that = this;
         $('input[name="daterange"]').daterangepicker({
             autoUpdateInput: false,
+            timePicker: true,
+            timePickerIncrement: 15,
             locale: {
                 format: "DD/MM/YYYY",
                 cancelLabel: 'Clear'
             }
         });
         $('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-            that.dateFilter = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+            $(this).val(picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm'));
+            that.dateFilter = picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm');
         });
         $('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');

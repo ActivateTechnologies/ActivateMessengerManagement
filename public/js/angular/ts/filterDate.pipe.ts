@@ -13,9 +13,9 @@ export class FilterDatePipe {
 		}
 		var dates: string[] = date.split(" - ");
 		return arr.filter((eachItem: any) => {
-			var start = moment(dates[0], "DD/MM/YYYY");
-			var end = moment(dates[1], "DD/MM/YYYY");
-			var userDate = moment(eachItem.signedUpDate).startOf('day');
+			var start = moment(dates[0], "DD/MM/YYYY HH:mm");
+			var end = moment(dates[1], "DD/MM/YYYY HH:mm");
+			var userDate = moment(eachItem.signedUpDate);
 			if((userDate.isAfter(start) || userDate.isSame(start)) && (userDate.isBefore(end) || userDate.isSame(end))) {
 				return true;
 			} else {
