@@ -37,7 +37,7 @@ var AppComponent = (function () {
         $('input[name="daterange"]').daterangepicker({
             autoUpdateInput: false,
             timePicker: true,
-            timePickerIncrement: 15,
+            timePickerIncrement: 1,
             locale: {
                 format: "DD/MM/YYYY",
                 cancelLabel: 'Clear'
