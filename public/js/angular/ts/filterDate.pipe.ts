@@ -12,8 +12,6 @@ export class FilterDatePipe {
 			return arr;
 		}
 		var dates: string[] = date.split(" - ");
-		
-		console.log("ALRIGHT LADS!!");
 		return arr.filter((eachItem: any) => {
 			var start = moment(dates[0], "DD/MM/YYYY");
 			var end = moment(dates[1], "DD/MM/YYYY");
