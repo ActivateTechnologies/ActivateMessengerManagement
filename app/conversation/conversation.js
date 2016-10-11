@@ -323,6 +323,7 @@ module.exports = function(code){
         {_id:uid._id},
         {"email": email},
         (error, user) => {
+          if (error) console.log(error);
           console.log("added email");
           executeTreeNode(uid, conversationName, node.next[0], null, user);
         });
@@ -377,6 +378,9 @@ module.exports = function(code){
   var showEvents = function(uid, conversationName, node, message, user) {
     if(code === 'kickabout' || code === 'uwe'){
       Send.allEvents(uid, "Awesome! Here are some games for you to join: ")
+    }
+    else if(code === 'ssees'){
+      Send.allEvents(uid, "Thanks for providing us with that information. Please give our page a like https://www.facebook.com/UCLU-SSEES-AFC-1285241621487966/?fref=ts and feel free to ask any other questions on our group  (https://www.facebook.com/groups/177053909147185/). In the meantime, do book yourself onto one of our events below:")
     }
     else {
       Send.allEvents(uid, "Thanks for providing us with that information, do book yourself onto one of our events below: ");

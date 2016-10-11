@@ -183,12 +183,65 @@ module.exports = function(code){
   }
 
   else if (code === 'entrepreneurs'){
-    s.company = {
-      name: "UCL Entrepreneurs",
-      website: "www.kickabout.football",
-      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
-      botURL: "http://m.me/kickaboutapp",
-      code: 'entrepreneurs'
+
+    s = {
+      company: {
+        name: "UCL Entrepreneurs",
+        website: "www.kickabout.football",
+        address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+        botURL: "http://m.me/kickaboutapp",
+        code: 'entrepreneurs'
+      },
+
+      bot: {
+        allEventsDefault: "Here are some upcoming events to join. ",
+        allEventsAfterCancel: "Looking for other events? Here are a few upcoming ones:",
+        menu: {
+          text: "Hi there, what do you want to do?",
+          showEventsText: "Show Events",
+          myEventsText: "My Events",
+          notificationsText: "Notifications",
+          notifications: {
+            text: "Do you want to receive weekly events updates?",
+            notificationsOnText: "Yes",
+            notificationsOffText: "No",
+            onConfirmationText: "You will receive weekly notifications",
+            offConfirmationText: "You won't receive weekly notifications",
+          }
+        },
+        booking: {
+          freeEventBookedConfirmation: "Thanks for booking. Do you want to"
+            + " continue looking?",
+          quickReply: "Yes"
+        },
+        eventCard: {
+          buttonDirections: "Directions",
+          buttonShareCardMoreInfo: "More Info",
+          buttonMoreInfo: "More Info",
+          buttonCancelBooking: "Cancel Booking",
+          buttonBook: "Get Ticket",
+          buttonKeepLooking: "Keep Looking",
+          buttonShare: "Share"
+        },
+        shareInstruction: "If you're on your phone, forward the following"
+          + " message to a friend or group!",
+        bookingCancelled: "Your booking has been cancelled",
+        publicLinkEvent: "Here is your event: ",
+        publicLinkEventFinished: "That event has finished",
+        myEventsHaventJoined: "You haven't joined any events.",
+        yourEvents: "Here are the events you've joined: "
+      },
+      payment: {
+        eventNotFound: "The game you are looking for does not exist.",
+        alreadyAttending: "You are already attending this event.",
+        bookingSuccessFreeSms: "Booking successful! We\'ve sent you a confirmation text"
+          + " to " + h + "phoneNumber.",
+        bookingSuccessFreeMessenger: "Booking successful! You should get a"
+          + " confirmation in your Facebook Messenger shortly.",
+        bookingSuccessPaidMessenger: "Your payment has gone through. You should get a"
+          + " receipt in your Facebook Messenger shortly.",
+        paymentError: "Your payment did not go through, please try again."
+      }
     }
   }
 
