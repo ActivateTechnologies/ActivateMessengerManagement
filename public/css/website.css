@@ -221,6 +221,7 @@ a { color: inherit; }
 .activateLogoHeader {
   height: 38px;
   margin-top: 10px;
+  margin-left: 10px;
 }
 
 .activateLogoMainCentre {
@@ -253,6 +254,17 @@ a { color: inherit; }
   width: 130px;
 }
 
+.botMessageUsFooter {
+  width: 100px;
+  margin-right: 10px;
+}
+
+.findFacebookFooter {
+  width: 100px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
 .botAdContainer {
   text-align: center;
 }
@@ -269,6 +281,11 @@ a { color: inherit; }
 
 .navbar {
  background: rgba(34, 34, 34, 0.5);
+ max-width: 100vw !important;
+}
+
+.navbar-inverse .navbar-toggle {
+  margin-right: 20px;
 }
 
 .navbar:hover {
@@ -353,7 +370,8 @@ button {
 }
 
 .toBots {
-  width: 800px;
+  width: 95%;
+  padding-bottom: 20px;
 }
 
 .lowerRowOfBots {
@@ -367,4 +385,27 @@ button {
 
 .botTitle {
   margin-bottom: 0px;
+}
+
+.botsVideo {
+  height: 363px;
+}
+
+.botsVideoContainer {
+  height: 367px;
+}
+
+@media screen and (max-width: 736px) and (orientation: landscape)
+#header .image {
+    font-size: 0.8em;
+    width: 13em !important;
+    min-widt: 13em !important;
+}
+
+.phoneContainer {
+  margin-top: 40px !important;
+}
+
+.FBSocialLinks {
+  text-align: center;
 }
