@@ -51,6 +51,7 @@ export class AppComponent {
 		var that = this;
 		$('input[name="daterange"]').daterangepicker(
 		{
+			timePicker24Hour: true,
 			autoUpdateInput: false,
 			timePicker: true,
         	timePickerIncrement: 1,
