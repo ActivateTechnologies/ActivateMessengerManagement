@@ -41,13 +41,19 @@
             <p (click)="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==8 && isReversed==true"></span></p>
             <input (change)="setDateFilter($event.target.value)" name="daterange" value=""/>
         </th>
-        <th (click)="headingClicked(9)"><p>Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></p></th>
+        <th>
+            <p (click)="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==9 && isReversed==true"></span></p>
+            <p><input type="checkbox" [(ngModel)]="timerFilters[0]"> Green</p>
+            <p><input type="checkbox" [(ngModel)]="timerFilters[1]"> Amber</p>
+            <p><input type="checkbox" [(ngModel)]="timerFilters[2]"> Red</p>
+
+        </th>
         <th (click)="headingClicked(10)"><p>User ID<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==10 && isReversed==true"></span></p></th>
         <!-- <th>Select</th> -->
       </tr>
     </thead>
     <tbody id="usersTBody">
-    	<tr *ngFor="let user of users | filter:fields:filters | filterdate:dateFilter | orderBy:orderField:isReversed; let i = index">
+    	<tr *ngFor="let user of users | filter:fields:filters | filterdate:dateFilter | filtertimer:timerFilters | orderBy:orderField:isReversed; let i = index">
     		<td>{{i + 1}}</td>
     		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
     		<td>{{user.firstName + " " + user.lastName}}</td>

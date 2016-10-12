@@ -27,6 +27,7 @@ export class AppComponent {
 	filters: string[];
 	dateFilter: string;
 	fields: string[];
+	timerFilters: boolean[];
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
 		this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
@@ -42,6 +43,7 @@ export class AppComponent {
 		this.playerGenders = ['', 'Male', 'Female'];
 		this.filters = ['', '', '', '', ''];
 		this.dateFilter = '';
+		this.timerFilters = [true, true, true];
 		this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
 	}
 

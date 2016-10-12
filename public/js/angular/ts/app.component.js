@@ -30,6 +30,7 @@ var AppComponent = (function () {
         this.playerGenders = ['', 'Male', 'Female'];
         this.filters = ['', '', '', '', ''];
         this.dateFilter = '';
+        this.timerFilters = [true, true, true];
         this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
     };
     AppComponent.prototype.ngAfterViewInit = function () {
