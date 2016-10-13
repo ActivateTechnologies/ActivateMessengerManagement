@@ -2362,7 +2362,6 @@
 			box-shadow: none;
 			border-radius: 0;
 			margin: 0 0 3em 0;
-			width: 13em;
 		}
 
 			.image.phone img {
@@ -3552,7 +3551,6 @@
 
 			.wrapper.style3 a {
 				color: inherit;
-				border-bottom-color: #c6c6c6;
 			}
 
 				.wrapper.style3 a:hover {
@@ -3971,7 +3969,6 @@
 				#header .image {
 					font-size: 0.8em;
 					width: 15em;
-					max-width: 20vw;
 				}
 
 					#header .image .inner, #header .image:before, #header .image:after {

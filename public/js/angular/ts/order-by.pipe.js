@@ -13,11 +13,21 @@ var OrderByPipe = (function () {
     function OrderByPipe() {
     }
     OrderByPipe.prototype.transform = function (array, key, desc) {
+        var _this = this;
         array.sort(function (a, b) {
-            if (a[key] < b[key]) {
+            if (!!a[key] && !b[key]) {
                 return -1;
             }
-            else if (a[key] > b[key]) {
+            else if (!a[key] && !!b[key]) {
+                return 1;
+            }
+            else if (!a[key] && !b[key]) {
+                return 0;
+            }
+            if (_this.safeToLower(a[key]) < _this.safeToLower(b[key])) {
+                return -1;
+            }
+            else if (_this.safeToLower(a[key]) > _this.safeToLower(b[key])) {
                 return 1;
             }
             else {
@@ -36,6 +46,14 @@ var OrderByPipe = (function () {
             return array.reverse();
         }
         return array;
+    };
+    OrderByPipe.prototype.safeToLower = function (input) {
+        if (typeof input === 'string') {
+            return input.toLowerCase();
+        }
+        else {
+            return input;
+        }
     };
     OrderByPipe = __decorate([
         core_1.Pipe({ name: 'orderBy' }), 

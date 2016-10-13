@@ -34,6 +34,24 @@
     </script>
   </head>
   <body id="top">
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : 'your-app-id',
+        xfbml      : true,
+        version    : 'v2.8'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -44,7 +62,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <img class="activateLogoHeader" src="img/ALogo.png">
+            <img class="activateLogoHeader" src="img/ALogo.png">
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="/login" method="post">
@@ -64,21 +82,30 @@
       <header id="header">
         <div class="content">
           <img class="activateLogoMainCentre" src="img/logoVectorNoBackground.png">
-          <p id="formFeedback">Helping you create and manage bots.</p>
+          <p id="formFeedback">We create and manage your bots.</p>
           <ul class="actions">
             <li><a href="#one" class="button icon fa-chevron-down scrolly">Learn More</a></li>
-            <li type="button" data-toggle="modal" data-target="#myModal"> <a class="button special">Sign Up</a>
+            <li type="button" data-toggle="modal" data-target="#myModal"> <a class="button special">Quotation</a>
             </li>
           </ul>
         </div>
-        <div class="image phone">
-          <div class="inner" style="height:367px;">
-            <video style="" height="363px" loop autoplay muted>
+        <!--
+        <div class="fb-send-to-messenger" 
+            messenger_app_id="144481079297226" 
+            page_id="1625739117677522"
+            color="blue"
+            size="large" >
+        </div>
+        -->
+        <div class="image phone phoneContainer">
+          <div class="inner botsVideoContainer">
+            <video class="botsVideo" loop autoplay muted>
               <source src="video/bots.mp4" type="video/mp4">
-              <source src="movie.ogg" type="video/ogg">
+              <!--<source src="movie.ogg" type="video/ogg">-->
                 Your browser does not support the video tag.
             </video>
-        </div></div>
+          </div>
+        </div>
       </header>
 
       <!-- Modal -->
@@ -87,7 +114,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">Sign Up</h4>
+              <h4 class="modal-title">Quotation</h4>
             </div>
             <div class="modal-body">
               <form id="registerForm">
@@ -125,10 +152,10 @@
 
     <div class="container">
       <!-- Example row of columns -->
-      <h3 class="websiteTitleBots">See who else is using Activate</h3>
+      <h3 class="websiteTitleBots">Featured Bots</h3>
       <div class="row">
 
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="www.facebook.com/kickaboutapp" target="blank">
             <img src="img/kickaboutLogoFB.png" class="botImageAd">
             <h2 class="botTitle">Kickabout</h2>
@@ -139,7 +166,7 @@
           </a>
         </div>
 
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="https://www.facebook.com/WickedStudentNights" target="blank">
             <img src="img/WSNlogo.jpg" class="botImageAd">
             <h2 class="botTitle">Wicked Student Nights</h2>
@@ -150,35 +177,13 @@
           </a>
        </div>
 
-        <div class="col-md-4 botAdContainer">
-          <a href="https://www.facebook.com/UWEFootballcommunity" target="blank">
-            <img src="img/UWEFootballLogo.jpg" class="botImageAd">
-            <h2 class="botTitle">UWE Football</h2>
-          </a>
-          <p class="botInfoText">University Football Society Bot</p>
-          <a href="http://m.me/UWEFootballcommunity" target="blank">
-            <img class="botMessageUs" src="img/messsage-blue.png">
-          </a>
-        </div>
-
       </div>
 
 
 
       <div class="row lowerRowOfBots">
 
-        <div class="col-md-4 botAdContainer">
-          <a href="https://www.facebook.com/uclentrepreneur" target="blank">
-            <img src="img/UCLE.png" class="botImageAd">
-            <h2 class="botTitle">UCL Entrepreneurs</h2>
-          </a>
-          <p class="botInfoText">University Society Bot</p>
-          <a href="http://m.me/uclentrepreneur" target="blank">
-            <img class="botMessageUs" src="img/messsage-blue.png">
-          </a>
-        </div>
-
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="https://www.facebook.com/UCLULacrosse" target="blank">
             <img src="img/UCLULacrosse.png" class="botImageAd">
             <h2 class="botTitle">UCL Lacrosse</h2>
@@ -189,7 +194,7 @@
           </a>
        </div>
 
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="https://www.facebook.com/uclufc" target="blank">
             <img src="img/UCLUFootball.png" class="botImageAd">
             <h2 class="botTitle">UCL Football</h2>
@@ -206,7 +211,7 @@
 
       <div class="row lowerRowOfBots">
 
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="https://www.facebook.com/UniversityOfSalfordWomensFootballClub" target="blank">
             <img src="img/salfordWomens.jpg" class="botImageAd">
             <h2 class="botTitle">Salford Uni Women's</h2>
@@ -217,7 +222,7 @@
           </a>
         </div>
 
-        <div class="col-md-4 botAdContainer">
+        <div class="col-xs-6 col-md-6 botAdContainer">
           <a href="https://www.facebook.com/UoLFootball" target="blank">
             <img src="img/liverpool.jpg" class="botImageAd">
             <h2 class="botTitle">Liverpool Uni</h2>
@@ -228,22 +233,19 @@
           </a>
        </div>
 
-        <div class="col-md-4 botAdContainer">
-          <a href="https://www.facebook.com/KCLFootballClub" target="blank">
-            <img src="img/kings.jpg" class="botImageAd">
-            <h2 class="botTitle">Kings College</h2>
-          </a>
-          <p class="botInfoText">University Football Society Bot</p>
-          <a href="http://m.me/KCLFootballClub" target="blank">
-            <img class="botMessageUs" src="img/messsage-blue.png">
-          </a>
-        </div>
-
       </div>
 
       <hr>
 
       <footer>
+        <div class="FBSocialLinks">
+          <a href="http://m.me/activateai" target="blank">
+            <img class="botMessageUsFooter" src="img/messsage-blue.png">
+          </a>
+          <a href="https://www.facebook.com/activateai/" target="blank">
+            <img class="findFacebookFooter" src="img/findFacebook.png">
+          </a>
+        </div>
         <p class="footerText">&copy; 2016 Activate Technologies Ltd | alex@activatetechnologies.co.uk | 07825 542533 | 103c Camley St, London N1C 4PF</p>
       </footer>
     </div> <!-- /container -->

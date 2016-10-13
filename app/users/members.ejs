@@ -21,8 +21,11 @@
     <script src="js/angular/Reflect.js"></script>
     <script src="js/angular/system.src.js"></script>
 
+    <!-- Bootstrap Date Range Picker -->
+    <script src="js/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/daterangepicker.css">
 
-		<script src="js/angular/systemjs.config.js"></script>
+	<script src="js/angular/systemjs.config.js"></script>
     <script>
       System.import('app').catch(function(err){ console.error(err); });
     </script>
@@ -65,222 +68,10 @@
 			<h1>Users</h1>
       <a class="btn btn-primary" id="btn1">Download as CSV</a>
       <my-table [companycode]="<%=s.company.code%>">Loading...</my-table>
-			<!-- <ul>
-				<li ng-repeat="user in selectedItems">{{user.firstName + " " + user.lastName}}</li>
-			</ul> -->
-			<!-- <div class="table-responsive">
-	            <table class="table table-striped">
-	              <thead>
-	                <tr>
-	                  <th></th>
-	                  <th></th>
-	                  <th ng-click="headingClicked(0)">Name<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==0 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==0 && isReversed==true"></span></th>
-	                  <th ng-click="headingClicked(1)">Gender<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==1 && isReversed==true"></span></th>
-	                  <th ng-if="isDisplayed(2)" ng-click="headingClicked(2)">Phone Number<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==2 && isReversed==true"></span></th>
-                    <th ng-if="isDisplayed(3)" ng-click="headingClicked(3)">Email<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==3 && isReversed==true"></span></th>
-                    <th ng-if="isDisplayed(4)" ng-click="headingClicked(4)">Preferred Position<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==4 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==4 && isReversed==true"></span></th>
-                    <th ng-if="isDisplayed(5)" ng-click="headingClicked(5)">Backup Position<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==5 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==5 && isReversed==true"></span></th>
-                    <th ng-if="isDisplayed(6)" ng-click="headingClicked(6)">Level<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==6 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==6 && isReversed==true"></span></th>
-                    <th ng-if="isDisplayed(7)" ng-click="headingClicked(7)">New/Returning<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==7 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==7 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(8)">Signed Up Date<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==8 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==8 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(9)">Timer<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==9 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==9 && isReversed==true"></span></th>
-                    <th ng-click="headingClicked(10)">User ID<span class="glyphicon glyphicon-sort-by-attributes" ng-if="currentHead==10 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" ng-if="currentHead==10 && isReversed==true"></span></th> -->
-	                  <!-- <th>Select</th> -->
-	                <!-- </tr>
-	              </thead>
-	              <tbody id="usersTBody">
-	              	<tr ng-repeat="user in users | orderBy:orderField:isReversed">
-	              		<td>{{$index + 1}}</td>
-	              		<td><img style="height:50px;" src="{{user.profilePic}}" /></td>
-	              		<td>{{user.firstName + " " + user.lastName}}</td>
-	              		<td>{{user.gender | capitaliseFirst}}</td>
-	              		<td ng-if="isDisplayed(2)">{{user.phoneNumber | phone}}</td>
-                    <td ng-if="isDisplayed(3)">{{user.email || '-'}}</td>
-                    <td ng-if="isDisplayed(4)">{{user.preferredPosition || '-'}}</td>
-                    <td ng-if="isDisplayed(5)">{{user.backupPosition || '-'}}</td>
-                    <td ng-if="isDisplayed(6)">{{user.level || '-'}}</td>
-                    <td ng-if="isDisplayed(7)">{{user.type || '-'}}</td>
-	              		<td>{{getFormattedDate(user.signedUpDate)}}</td>
-                    <td style="background-color:{{getColorAndTime(user.interactionTime, user.receivedTime)[0]}}">{{getColorAndTime(user.interactionTime, user.receivedTime)[1]}}</td>
-                    <td>{{user._id}}</td> -->
-	              		<!-- <td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
-	              	<!-- </tr>
-	              </tbody>
-	            </table>
-        	</div> -->
+			
 		</div>
 
     <script type="text/javascript">
-    // var app = angular.module('sortTable' , []);
-		//
-    // app.controller('usersCtrl', ['$scope', '$http' , function($scope, $http) {
-    //   $http.get('/userAnalyticsData.<%= s.company.code %>').success(function(response) {
-    //     $scope.users = response.users;
-    //     var hashtable = {
-    //       "phoneNumber": 1,
-    //       "email":2
-    //     }
-    //     hashtable[user.extras]
-    //   })
-		//
-    //   $scope.currentHead = -1;
-		//
-    //   $scope.isDisplayed = function(head) {
-    //     for(i = 0; i < $scope.users.length; i++) {
-    //       switch(head) {
-    //         case 2:
-    //           if($scope.users[i].phoneNumber != null) {
-    //             return true;
-    //           }
-    //           break;
-    //         case 3:
-    //           if($scope.users[i].email != null) {
-    //             return true;
-    //           }
-    //           break;
-    //         case 4:
-    //           if($scope.users[i].preferredPosition != null) {
-    //             return true;
-    //           }
-    //           break;
-    //         case 5:
-    //           if($scope.users[i].backupPosition != null) {
-    //             return true;
-    //           }
-    //           break;
-    //         case 6:
-    //           if($scope.users[i].level != null) {
-    //             return true;
-    //           }
-    //           break;
-    //         case 7:
-    //           if($scope.users[i].type != null) {
-    //             return true;
-    //           }
-    //           break;
-    //       }
-    //     }
-    //     return false;
-    //   }
-		//
-    //   $scope.headingClicked = function(head) {
-    //     if($scope.currentHead == head) {
-    //       $scope.isReversed = !$scope.isReversed;
-    //     } else {
-    //       $scope.isReversed = false;
-    //     }
-		//
-    //     $scope.currentHead = head;
-		//
-    //     switch(head) {
-    //       case 0:
-    //         $scope.orderField = ['firstName','lastName'];
-    //         break;
-    //       case 1:
-    //         $scope.orderField = 'gender';
-    //         break;
-    //       case 2:
-    //         $scope.orderField = 'phoneNumber';
-    //         break;
-    //       case 3:
-    //         $scope.orderField = 'email';
-    //         break;
-    //       case 4:
-    //         $scope.orderField = 'preferredPosition';
-    //         break;
-    //       case 5:
-    //         $scope.orderField = 'backupPosition';
-    //         break;
-    //       case 6:
-    //         $scope.orderField = 'level';
-    //         break;
-    //       case 7:
-    //         $scope.orderField = 'type';
-    //         break;
-    //       case 8:
-    //         $scope.orderField = 'signedUpDate';
-    //         break;
-    //       case 9:
-    //         $scope.orderField = 'interactionTime';
-    //         break;
-    //       case 10:
-    //         $scope.orderField = '_id';
-    //         break;
-    //     }
-    //   }
-		//
-    //   $scope.getFormattedDate = function(date) {
-    //     return moment(date).format('DD/MM/YY HH:mm');
-    //   }
-		//
-    //   $scope.selectedItems = [];
-		//
-		// 	$scope.getColorAndTime = function(interactionTime, receivedTime){
-		// 		var it = moment(interactionTime);
-		// 		var rt = moment(receivedTime);
-		// 		var now = moment();
-    //     var endOfWindow = moment(interactionTime);
-    //     endOfWindow.add(24, 'hours');
-		//
-		// 		if(endOfWindow.isAfter(now)){
-    //       var duration = moment.duration(endOfWindow.diff(now));
-		// 			return ["green", formatDuration(duration)];
-		// 		}
-		// 		else if(rt.isBefore(it) || receivedTime == null){
-    //       var duration = moment.duration(it.diff(now));
-		// 			return ["orange", formatDuration(duration)];
-		// 		}
-		// 		else {
-    //       var duration = moment.duration(it.diff(now));
-		// 			return ["red", formatDuration(duration)];
-		// 		}
-		// 	}
-		//
-    //   var formatDuration = function(duration) {
-    //     var hrs = String(duration.asHours()).split(".")[0];
-    //     if(parseInt(hrs) < 0) {
-    //       return duration.humanize(true);
-    //     }
-    //     var mins = Math.abs(duration.minutes());
-    //     if (mins < 10) {
-    //       var ph = "0";
-    //     } else {
-    //       var ph = "";
-    //     }
-    //     return hrs + "h" + ph + mins + "m to go";
-    //   }
-		//
-    //   $scope.updateSelectedItems = function(id) {
-    //     console.log(id);
-    //     var index = JSON.stringify($scope.selectedItems).indexOf(id);
-    //     if(index < 0) {
-    //       $scope.users.forEach(function(user) {
-    //         if (user._id == id) {
-    //           $scope.selectedItems.push(user);
-    //         }
-    //       });
-    //     } else {
-    //       for(i = 0; i < $scope.selectedItems.length; i++) {
-    //         if($scope.selectedItems[i]._id == id) {
-    //           $scope.selectedItems.splice(i, 1);
-    //         }
-    //       }
-    //     }
-    //     console.log($scope.selectedItems);
-    //   }
-    // }]);
-		//
-    // app.filter('phone', function() {
-    //   return function(input) {
-    //     return (!!input) ? '+44' + input : '-';
-    //   }
-    // });
-		//
-    // app.filter('capitaliseFirst', function() {
-    //   return function(input) {
-    //     return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '-';
-    //   }
-    // });
 
     $(document).ready(function() {
       // Function to create CSV string
@@ -291,7 +82,11 @@
         for(y = 0; y < rows.length; y++) {
           var cols = $(rows[y]).children();
           for(x = 2; x < cols.length; x++) { // starts at third column
-            csvStr += $(cols[x]).text() + ',';
+            if(y === 0) {
+                csvStr += $(cols[x]).find("p").text() + ',';                
+            } else {
+                csvStr += $(cols[x]).text() + ',';
+            }
           }
           csvStr = csvStr.substr(0, csvStr.length - 1); // trims the last comma from the row
           csvStr += '\r\n';

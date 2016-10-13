@@ -10,6 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var user_service_1 = require('./user.service');
+// declare var daterangepicker: any;
+core_1.enableProdMode();
 var AppComponent = (function () {
     function AppComponent(userService, elementRef) {
         this.userService = userService;
@@ -18,16 +20,97 @@ var AppComponent = (function () {
         this.displayedCols = [];
         this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
-    AppComponent.prototype.getFormattedDate = function (date) {
-        // return new moment().format('HH:mm');
-        var d;
-        d = new moment(date).format('DD/MM/YY HH:mm');
-        return d;
-    };
     AppComponent.prototype.ngOnInit = function () {
         this.currentHead = -1;
         this.orderField = '';
         this.getUsers();
+        this.playerPositions = ['', 'Center Back', 'Center Mid', 'Full Back', 'Keeper', 'Striker', 'Winger'];
+        this.playerLevels = ['', 'Amateur', 'Pro', 'School/Uni', 'Semi Pro'];
+        this.playerTypes = ['', 'New', 'Returning'];
+        this.playerGenders = ['', 'Male', 'Female'];
+        this.filters = ['', '', '', '', ''];
+        this.dateFilter = '';
+        this.timerFilters = [true, true, true];
+        this.fields = ['preferredPosition', 'backupPosition', 'level', 'type', 'gender'];
+    };
+    AppComponent.prototype.ngAfterViewInit = function () {
+        var that = this;
+        $('input[name="daterange"]').daterangepicker({
+            timePicker24Hour: true,
+            autoUpdateInput: false,
+            timePicker: true,
+            timePickerIncrement: 1,
+            locale: {
+                format: "DD/MM/YYYY",
+                cancelLabel: 'Clear'
+            }
+        });
+        $('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm'));
+            that.dateFilter = picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm');
+        });
+        $('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            that.dateFilter = '';
+        });
+    };
+    AppComponent.prototype.setDateFilters = function (val) {
+        this.dateFilter = val;
+    };
+    AppComponent.prototype.onChange = function (value, index) {
+        this.filters[index] = value;
+    };
+    AppComponent.prototype.getFormattedDate = function (date) {
+        var d;
+        d = new moment(date).format('DD/MM/YY HH:mm');
+        return d;
+    };
+    AppComponent.prototype.getTimer = function (interactionTime, receivedTime) {
+        var it = new moment(interactionTime);
+        var rt = new moment(receivedTime);
+        var now = new moment();
+        var endOfWindow = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+        if (endOfWindow.isAfter(now)) {
+            var duration = moment.duration(endOfWindow.diff(now));
+            return this.formatDuration(duration);
+        }
+        else if (rt.isBefore(it) || receivedTime == null) {
+            var duration = moment.duration(it.diff(now));
+            return this.formatDuration(duration);
+        }
+        else {
+            var duration = moment.duration(it.diff(now));
+            return this.formatDuration(duration);
+        }
+    };
+    AppComponent.prototype.formatDuration = function (duration) {
+        var hrs = String(duration.asHours()).split(".")[0];
+        if (parseInt(hrs) < 0) {
+            return duration.humanize(true);
+        }
+        var mins = Math.abs(duration.minutes());
+        var ph = "";
+        if (mins < 10) {
+            ph = "0";
+        }
+        return hrs + "h" + ph + mins + "m to go";
+    };
+    AppComponent.prototype.getColour = function (interactionTime, receivedTime) {
+        var it = new moment(interactionTime);
+        var rt = new moment(receivedTime);
+        var now = new moment();
+        var endOfWindow = new moment(interactionTime);
+        endOfWindow.add(24, 'hours');
+        if (endOfWindow.isAfter(now)) {
+            return "green";
+        }
+        else if (rt.isBefore(it) || receivedTime == null) {
+            return "orange";
+        }
+        else {
+            return "red";
+        }
     };
     AppComponent.prototype.getUsers = function () {
         var _this = this;
