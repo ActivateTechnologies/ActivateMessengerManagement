@@ -231,23 +231,26 @@ export class AppComponent {
 		return false;
 	}
 
-	updateSelectedItems(id: string) {
-		var match = $.grep(this.users, function(u){ return u._id === id; });
-		if (!match[0].selected) {
-			this.selectedItems.push(match[0]);
-			console.log(match[0].firstName + " " + match[0].lastName + " added to selected items");
-		} else {
-			var index = JSON.stringify(this.selectedItems).indexOf(id);
-			if(index < 0) {
-				console.log("Error: item was not currently in selected items");
-			} else {
-				this.selectedItems = this.selectedItems.filter(function(el: User) {
-					return el._id !== id;
-				})
-				console.log("Item removed from selected items");
-			}
-		}
-		console.log(this.selectedItems);
+	// updateSelectedItems(id: string) {
+	// 	var match = $.grep(this.users, function(u){ return u._id === id; });
+	// 	if (!match[0].selected) {
+	// 		this.selectedItems.push(match[0]);
+	// 		console.log(match[0].firstName + " " + match[0].lastName + " added to selected items");
+	// 	} else {
+	// 		var index = JSON.stringify(this.selectedItems).indexOf(id);
+	// 		if(index < 0) {
+	// 			console.log("Error: item was not currently in selected items");
+	// 		} else {
+	// 			this.selectedItems = this.selectedItems.filter(function(el: User) {
+	// 				return el._id !== id;
+	// 			})
+	// 			console.log("Item removed from selected items");
+	// 		}
+	// 	}
+	// 	console.log(this.selectedItems);
+	// }
+	onManualSelect(u: any) {
+		u.manuallySelected = !u.manuallySelected;
 	}
 
 	createGroup() {

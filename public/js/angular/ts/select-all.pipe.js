@@ -14,12 +14,7 @@ var SelectAllPipe = (function () {
     }
     SelectAllPipe.prototype.transform = function (arr, checked) {
         arr.forEach(function (el) {
-            if (checked) {
-                el.selected = true;
-            }
-            else {
-                el.selected = false || el.selected;
-            }
+            el.selected = checked || el.selected;
         });
         return arr;
     };
