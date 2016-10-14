@@ -12,4 +12,6 @@ export class User {
   signedUpDate: string;
   interactionTime: string;
   receivedTime: string;
+  _id: string;
+  mid: string;
 }

@@ -18,6 +18,7 @@ var AppComponent = (function () {
         this.elementRef = elementRef;
         this.users = [];
         this.displayedCols = [];
+        this.selectedItems = [];
         this.companyCode = elementRef.nativeElement.getAttribute('[companycode]');
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -197,6 +198,36 @@ var AppComponent = (function () {
             }
         }
         return false;
+    };
+    AppComponent.prototype.updateSelectedItems = function (id) {
+        var match = $.grep(this.users, function (u) { return u._id === id; });
+        if (!match[0].selected) {
+            this.selectedItems.push(match[0]);
+            console.log(match[0].firstName + " " + match[0].lastName + " added to selected items");
+        }
+        else {
+            var index = JSON.stringify(this.selectedItems).indexOf(id);
+            if (index < 0) {
+                console.log("Error: item was not currently in selected items");
+            }
+            else {
+                this.selectedItems = this.selectedItems.filter(function (el) {
+                    return el._id !== id;
+                });
+                console.log("Item removed from selected items");
+            }
+        }
+        console.log(this.selectedItems);
+    };
+    AppComponent.prototype.createGroup = function () {
+        this.selectedItems = [];
+        var that = this;
+        this.users.forEach(function (u) {
+            if (u.selected) {
+                that.selectedItems.push(u);
+            }
+        });
+        console.log(this.selectedItems);
     };
     AppComponent = __decorate([
         core_1.Component({

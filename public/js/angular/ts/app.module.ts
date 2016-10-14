@@ -9,12 +9,13 @@ import { PhoneNumberPipe } from './phone-number.pipe'
 import { FilterPipe } from './filter.pipe';
 import { FilterDatePipe } from './filterDate.pipe';
 import { FilterTimerPipe } from './filter-timer.pipe';
+import { SelectAllPipe } from './select-all.pipe';
 import { UserService } from './user.service';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports:      [ BrowserModule, HttpModule, JsonpModule, FormsModule ],
-  declarations: [ AppComponent, OrderByPipe, CapitaliseFirstPipe, PhoneNumberPipe, FilterPipe, FilterDatePipe, FilterTimerPipe ],
+  declarations: [ AppComponent, OrderByPipe, CapitaliseFirstPipe, PhoneNumberPipe, FilterPipe, FilterDatePipe, FilterTimerPipe, SelectAllPipe ],
   providers:    [ UserService ],
   bootstrap:    [ AppComponent ]
 })
