@@ -64,14 +64,6 @@ let schema = function(connection){
     next: Array
   })
 
-  let registerSchema = new Schema({
-    name: String,
-    phoneNumber: String,
-    email: String,
-    fbPageURL: String,
-    description: String
-  })
-
   if (!connection.models.User) {
     console.log("user");
     connection.model('User', userSchema);

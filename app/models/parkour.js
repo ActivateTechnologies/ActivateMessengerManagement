@@ -19,6 +19,8 @@ let schema = function(connection){
     interactionTime: Date,
     receivedTime: Date,
 
+    email: String,
+
     events: Array,
     conversationLocation: {
       conversationName: String,
@@ -58,14 +60,6 @@ let schema = function(connection){
   let conversationsSchema = new Schema({
     name: String,
     next: Array
-  })
-
-  let registerSchema = new Schema({
-    name: String,
-    phoneNumber: String,
-    email: String,
-    fbPageURL: String,
-    description: String
   })
 
   if (!connection.models.User) {
