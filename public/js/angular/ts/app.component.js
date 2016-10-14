@@ -223,11 +223,20 @@ var AppComponent = (function () {
     AppComponent.prototype.createGroup = function () {
         this.selectedItems = [];
         var that = this;
-        this.users.forEach(function (u) {
-            if (u.selected) {
-                that.selectedItems.push(u);
-            }
-        });
+        if (this.selectAll) {
+            this.users.forEach(function (u) {
+                if (u.selected) {
+                    that.selectedItems.push(u);
+                }
+            });
+        }
+        else {
+            this.users.forEach(function (u) {
+                if (u.manuallySelected) {
+                    that.selectedItems.push(u);
+                }
+            });
+        }
         console.log(this.selectedItems);
     };
     AppComponent = __decorate([
