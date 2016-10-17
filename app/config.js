@@ -88,6 +88,21 @@ module.exports = function(code){
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
+	else if(code === 'birmingham'){
+		VERIFICATION_TOKEN = "EAAZA6iwin4KgBAFNz9s7nslfO8BUqNReUSIqrBOHzDV18cZBxV5vEMDJIHQGZBnmbjuz8R9LZBfyfwbWqRh6lfBJ4L83FZBeVLqPZBZBjBLk1lRgOpeVp0J3YVcNjU6r3Dtn30G8USuFtrUyyCl4N3C1Ksmvl39cY1THbipfLVb2wZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
+	else if(code === 'birmingham_basketball'){
+		VERIFICATION_TOKEN = "EAAZAfg4qX41oBAEmj82oApLKGYT4gIPvx8FTVjMra399JS9YozvA5KKHTDRPmXnDCdXKyc4JN3Y4HaveAaxqgfoZApm190ZB2piDqrXgDZCdGDF0EZA4fXkU7zzQyjE9cspZAUsL7quaRU1tuGvqF9PdL6Q3yzs4dfGSnVZBfXIFwZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
+	else if(code === 'hull'){
+		VERIFICATION_TOKEN = "EAASRxicK1BEBAG7YxskIO25jv65u4OE1TeMEgBPlRUxuSQkVdQT8CDrtljQavSTZCI9eFHFdGJqIuXeuvHW2VryYCaJeoJDvyV7krrops9o1ZAwuxYQ1gp6apcrYK2p2ZAw8220hvhwqmSmMZAg3mR33vrqNWekZAIShokzHE8gZDZD";
+		ROOT_URL = "http://www.activatetechnologies.co.uk";
+	}
+
 	else if(code === 'bot15'){
 		VERIFICATION_TOKEN = "EAASRxicK1BEBABVSZCXjCNU88PuTQZBFIbDrckZCoT6YxQZCM5qCopl1bG1ZBu6bfeL6wwZAWQbZCrug4hHJiS4g9mvvYa98DXia9wO6mxZAUd195Grib20HOAR65ltZBryCUtOLOOczzP2qTtVwfETojWgE3oBqkBH5bzoIT9TUgXAZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
@@ -162,7 +177,7 @@ module.exports = function(code){
 //       "payload":"notifications"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACBLyO7Q4wBAG8LdfNTBMG224iphXt9VrAWgMzZB7QqI2VAgOcBKYosGZBkB7Ko5ZA3YxDCdpWyOxZAAI9xQ61WexKeiIflKNlLjQGUylCsHUT60LquRy2oq2qYimivq5OPt0eogKrdO1EJah1h5LpPpGHhzVLZABHBVVz64oAZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAASRxicK1BEBAG7YxskIO25jv65u4OE1TeMEgBPlRUxuSQkVdQT8CDrtljQavSTZCI9eFHFdGJqIuXeuvHW2VryYCaJeoJDvyV7krrops9o1ZAwuxYQ1gp6apcrYK2p2ZAw8220hvhwqmSmMZAg3mR33vrqNWekZAIShokzHE8gZDZD"
 
 // For setting up Get Started Button
 
@@ -174,4 +189,4 @@ module.exports = function(code){
 //       "payload":"yep"
 //     }
 //   ]
-// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAACBLyO7Q4wBAG8LdfNTBMG224iphXt9VrAWgMzZB7QqI2VAgOcBKYosGZBkB7Ko5ZA3YxDCdpWyOxZAAI9xQ61WexKeiIflKNlLjQGUylCsHUT60LquRy2oq2qYimivq5OPt0eogKrdO1EJah1h5LpPpGHhzVLZABHBVVz64oAZDZD"
+// }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAASRxicK1BEBAG7YxskIO25jv65u4OE1TeMEgBPlRUxuSQkVdQT8CDrtljQavSTZCI9eFHFdGJqIuXeuvHW2VryYCaJeoJDvyV7krrops9o1ZAwuxYQ1gp6apcrYK2p2ZAw8220hvhwqmSmMZAg3mR33vrqNWekZAIShokzHE8gZDZD"
