@@ -265,6 +265,36 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'birmingham'){
+    s.company = {
+      name: "UoB Informal Football",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'birmingham'
+    }
+  }
+
+  else if (code === 'birmingham_basketball'){
+    s.company = {
+      name: "University of Birmingham - Everything Basketball",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'birmingham_basketball'
+    }
+  }
+
+  else if (code === 'hull'){
+    s.company = {
+      name: "University of Hull",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'hull'
+    }
+  }
+
   else {
     s.company = {
       name: "Ani",
