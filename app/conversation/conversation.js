@@ -376,7 +376,7 @@ module.exports = function(code){
 
   /* Calls send.allEvents */
   var showEvents = function(uid, conversationName, node, message, user) {
-    if(code === 'kickabout' || code === 'uwe'){
+    if(code === 'kickabout' || code === 'uwe' || code === 'hull'){
       Send.allEvents(uid, "Awesome! Here are some games for you to join: ")
     }
     else if(code === 'ssees'){
