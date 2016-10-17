@@ -76,11 +76,25 @@ export class AppComponent {
 	}
 
 	setDateFilters(val: string) {
+		this.clearSelection();
 		this.dateFilter = val;
 	}
 
 	onChange(value: string, index: number) {
+		this.clearSelection();
 		this.filters[index] = value;
+	}
+
+	onTimerChange() {
+		this.clearSelection();
+	}
+
+	private clearSelection() {
+		this.selectAll = false;
+		this.users.forEach(function(u: any) {
+			u.manuallySelected = false;
+			u.selected = false;
+		});
 	}
 
 	getFormattedDate(date: string): string {

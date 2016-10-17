@@ -8,7 +8,7 @@ import { Pipe } from '@angular/core';
 export class SelectAllPipe {
 	transform(arr: any[], checked: boolean): any[] {
 		arr.forEach(function(el: any) {
-			el.selected = checked || el.selected;
+			el.selected = checked;
 		});
 		return arr;
 	}

@@ -56,10 +56,22 @@ var AppComponent = (function () {
         });
     };
     AppComponent.prototype.setDateFilters = function (val) {
+        this.clearSelection();
         this.dateFilter = val;
     };
     AppComponent.prototype.onChange = function (value, index) {
+        this.clearSelection();
         this.filters[index] = value;
+    };
+    AppComponent.prototype.onTimerChange = function () {
+        this.clearSelection();
+    };
+    AppComponent.prototype.clearSelection = function () {
+        this.selectAll = false;
+        this.users.forEach(function (u) {
+            u.manuallySelected = false;
+            u.selected = false;
+        });
     };
     AppComponent.prototype.getFormattedDate = function (date) {
         var d;
