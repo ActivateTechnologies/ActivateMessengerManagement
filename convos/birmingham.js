@@ -106,9 +106,9 @@
                                                                                                 "quickReplies": [
                                                                                                   "White",
                                                                                                   "Mixed",
-                                                                                                  "Asian / Asian British",
-                                                                                                  "Black / African / Caribbean / Black British",
-                                                                                                  "Other Ethnic Group incl Arab"
+                                                                                                  "Asian/British",
+                                                                                                  "Black/British",
+                                                                                                  "Other/Arab"
                                                                                                 ],
                                                                                                 "next": [
                                                                                                     {
