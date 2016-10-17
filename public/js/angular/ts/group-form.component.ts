@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+declare var $: any;
+
 @Component({
   moduleId: module.id,
   selector: 'group-form',
@@ -14,9 +16,9 @@ export class GroupFormComponent {
   submitted = false;
 
   onSubmit() { 
-    console.log("OI OI");
+    
     this.submitted = true;
-    this.dataDismiss = "modal";
+    $('#myModal').modal('hide');
   }
 
 }

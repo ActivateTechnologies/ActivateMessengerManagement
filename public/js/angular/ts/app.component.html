@@ -1,12 +1,24 @@
-<button class="btn btn-primary" (click)="createGroup()" data-toggle="modal" data-target="#myModal">Create messenger group</button>
+<!-- <button class="btn btn-primary" (click)="createGroup()" data-toggle="modal" data-target="#myModal">Create messenger group</button> -->
+<button class="btn btn-primary" (click)="createGroup()">Create messenger group</button>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <group-form [groupitems]="selectedItems">Loading...</group-form>
+<div id="errorModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>You need to select at least one user to make a group.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+      </div>
     </div>
+
+  </div>
 </div>
 
+<group-form [groupitems]="selectedItems">Loading...</group-form>
 
 <div class="table-responsive">
   <table class="table table-striped">
@@ -18,8 +30,8 @@
         <th>
         	<p (click)="headingClicked(1)">Gender<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==1 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==1 && isReversed==true"></span></p>
         	<select (change)="onChange($event.target.value, 4)">
-					  <option *ngFor="let gender of playerGenders">{{gender}}</option>
-					</select>
+				<option *ngFor="let gender of playerGenders">{{gender}}</option>
+			</select>
         </th>
         <th *ngIf="isColDisplayed(2)" (click)="headingClicked(2)"><p>Phone Number<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==2 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==2 && isReversed==true"></span></p></th>
         <th *ngIf="isColDisplayed(3)" (click)="headingClicked(3)"><p>Email<span class="glyphicon glyphicon-sort-by-attributes" *ngIf="currentHead==3 && isReversed==false"></span><span class="glyphicon glyphicon-sort-by-attributes-alt" *ngIf="currentHead==3 && isReversed==true"></span></p></th>

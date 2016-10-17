@@ -16,9 +16,8 @@ var GroupFormComponent = (function () {
         this.submitted = false;
     }
     GroupFormComponent.prototype.onSubmit = function () {
-        console.log("OI OI");
         this.submitted = true;
-        this.dataDismiss = "modal";
+        $('#myModal').modal('hide');
     };
     __decorate([
         core_1.Input(), 
