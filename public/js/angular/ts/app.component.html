@@ -1,4 +1,13 @@
-<button class="btn btn-primary" (click)="createGroup()">Create messenger group</button>
+<button class="btn btn-primary" (click)="createGroup()" data-toggle="modal" data-target="#myModal">Create messenger group</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <group-form [groupitems]="selectedItems">Loading...</group-form>
+    </div>
+</div>
+
+
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>

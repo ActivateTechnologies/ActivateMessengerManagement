@@ -28,8 +28,7 @@ export class AppComponent {
 	dateFilter: string;
 	fields: string[];
 	timerFilters: boolean[];
-	selectedItems: User[] = [];
-	// selection: any = {};
+	public selectedItems: User[] = [];
 	selectAll: boolean;
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
