@@ -49,10 +49,12 @@ var AppComponent = (function () {
         $('input[name="daterange"]').on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm'));
             that.dateFilter = picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm');
+            that.clearSelection();
         });
         $('input[name="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
             that.dateFilter = '';
+            that.clearSelection();
         });
     };
     AppComponent.prototype.setDateFilters = function (val) {
