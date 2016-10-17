@@ -280,14 +280,58 @@ a { color: inherit; }
 }
 
 .eventTable {
-
+  max-width: 250px !important;
 }
 
 .eventTableDiv {
-  width: 250px;
+  max-width: 250px !important;
 
   margin-right: auto;
   margin-left: auto;
   display: block;
 }
+
+.maxWidth {
+  max-width: 160px !important;
+}
+
+.messagingDiv {
+  width: 500px;
+}
+
+.tabMessage {
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  height: 40px;
+}
+
+.messageGroupContainer {
+  border: 1px solid #CCCCCC;
+  height: 80px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 99%;
+}
+
+.groupName {
+  font-weight: 500;
+  padding-left: 5px;
+  font-size: 18px;
+}
+
+.messageContainerInfo {
+  width: 32%;
+  display: inline-block;
+  text-align: center;
+}
+
+.groupsContainer {
+  height: 305px !important;
+  overflow: scroll;
+}
+
+.downloadCSVButton {
+  float: right;
+}
+
 
