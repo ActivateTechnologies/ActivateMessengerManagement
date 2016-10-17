@@ -76,11 +76,25 @@ export class AppComponent {
 	}
 
 	setDateFilters(val: string) {
+		this.clearSelection();
 		this.dateFilter = val;
 	}
 
 	onChange(value: string, index: number) {
+		this.clearSelection();
 		this.filters[index] = value;
+	}
+
+	onTimerChange() {
+		this.clearSelection();
+	}
+
+	private clearSelection() {
+		this.selectAll = false;
+		this.users.forEach(function(u: any) {
+			u.manuallySelected = false;
+			u.selected = false;
+		});
 	}
 
 	getFormattedDate(date: string): string {
@@ -256,11 +270,20 @@ export class AppComponent {
 	createGroup() {
 		this.selectedItems = [];
 		var that = this;
-		this.users.forEach(function(u: any) {
-			if(u.selected) {
-				that.selectedItems.push(u);
-			}
-		});
+		if(this.selectAll) {
+			this.users.forEach(function(u: any) {
+				if(u.selected) {
+					that.selectedItems.push(u);
+				}
+			});
+		} else {
+			this.users.forEach(function(u: any) {
+				if(u.manuallySelected) {
+					that.selectedItems.push(u);
+				}
+			});
+		}
+		
 		console.log(this.selectedItems);
 	}
 }

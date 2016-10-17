@@ -14,7 +14,7 @@ var SelectAllPipe = (function () {
     }
     SelectAllPipe.prototype.transform = function (arr, checked) {
         arr.forEach(function (el) {
-            el.selected = checked || el.selected;
+            el.selected = checked;
         });
         return arr;
     };

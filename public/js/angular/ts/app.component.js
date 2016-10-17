@@ -56,10 +56,22 @@ var AppComponent = (function () {
         });
     };
     AppComponent.prototype.setDateFilters = function (val) {
+        this.clearSelection();
         this.dateFilter = val;
     };
     AppComponent.prototype.onChange = function (value, index) {
+        this.clearSelection();
         this.filters[index] = value;
+    };
+    AppComponent.prototype.onTimerChange = function () {
+        this.clearSelection();
+    };
+    AppComponent.prototype.clearSelection = function () {
+        this.selectAll = false;
+        this.users.forEach(function (u) {
+            u.manuallySelected = false;
+            u.selected = false;
+        });
     };
     AppComponent.prototype.getFormattedDate = function (date) {
         var d;
@@ -223,11 +235,20 @@ var AppComponent = (function () {
     AppComponent.prototype.createGroup = function () {
         this.selectedItems = [];
         var that = this;
-        this.users.forEach(function (u) {
-            if (u.selected) {
-                that.selectedItems.push(u);
-            }
-        });
+        if (this.selectAll) {
+            this.users.forEach(function (u) {
+                if (u.selected) {
+                    that.selectedItems.push(u);
+                }
+            });
+        }
+        else {
+            this.users.forEach(function (u) {
+                if (u.manuallySelected) {
+                    that.selectedItems.push(u);
+                }
+            });
+        }
         console.log(this.selectedItems);
     };
     AppComponent = __decorate([
