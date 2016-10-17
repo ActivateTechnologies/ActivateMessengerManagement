@@ -66,10 +66,20 @@
     </nav>
 
 
-		<div class="container">
-			<h1>Users</h1>
-      <a class="btn btn-primary" id="btn1">Download as CSV</a>
-      <my-table [companycode]="<%=s.company.code%>">Loading...</my-table>
+		<div class="container-fluid">
+      <div class="row">
+        <div class="main">
+          <h1 class="page-header"><%=s.company.name%></h1>
+
+          <div class="col-md-12">
+            <h2 class="sub-header">Members <a class="btn btn-primary downloadCSVButton" id="btn1">Download as CSV</a></h2>
+            
+            <my-table [companycode]="<%=s.company.code%>">Loading...</my-table>
+          </div>
+
+        </div>
+      </div>
+    </div>
 			
 		</div>
 
