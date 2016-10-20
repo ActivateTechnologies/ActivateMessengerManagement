@@ -727,6 +727,17 @@ p {
   display: inline-block;
 }
 
+.createMessageGroup {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+  text-align: center;
+}
+
+.eventTableDiv {
+  max-width: 200px !important;
+}
 
 
 

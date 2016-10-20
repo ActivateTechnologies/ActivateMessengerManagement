@@ -251,6 +251,12 @@ var AppComponent = (function () {
                 }
             });
         }
+        if (this.selectedItems.length === 0) {
+            $('#errorModal').modal('show');
+        }
+        else {
+            $('#myModal').modal('show');
+        }
         console.log(this.selectedItems);
     };
     AppComponent = __decorate([

@@ -2,6 +2,7 @@ import './rxjs-extensions';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent }   from './app.component';
+import { GroupFormComponent } from './group-form.component';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { OrderByPipe } from './order-by.pipe';
 import { CapitaliseFirstPipe } from './capitalise-first.pipe';
@@ -15,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports:      [ BrowserModule, HttpModule, JsonpModule, FormsModule ],
-  declarations: [ AppComponent, OrderByPipe, CapitaliseFirstPipe, PhoneNumberPipe, FilterPipe, FilterDatePipe, FilterTimerPipe, SelectAllPipe ],
+  declarations: [ AppComponent, GroupFormComponent, OrderByPipe, CapitaliseFirstPipe, PhoneNumberPipe, FilterPipe, FilterDatePipe, FilterTimerPipe, SelectAllPipe ],
   providers:    [ UserService ],
   bootstrap:    [ AppComponent ]
 })

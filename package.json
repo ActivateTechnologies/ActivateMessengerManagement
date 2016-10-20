@@ -36,6 +36,7 @@
     "moment": "^2.15.1",
     "mongoose": "^4.5.0",
     "multer": "^1.1.0",
+    "ng2-bs3-modal": "^0.10.4",
     "ng2-daterangepicker": "github:simpulton/ng2-daterangepicker",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

@@ -28,8 +28,7 @@ export class AppComponent {
 	dateFilter: string;
 	fields: string[];
 	timerFilters: boolean[];
-	selectedItems: User[] = [];
-	// selection: any = {};
+	public selectedItems: User[] = [];
 	selectAll: boolean;
 
 	constructor (private userService: UserService, private elementRef: ElementRef) {
@@ -157,8 +156,8 @@ export class AppComponent {
 
 	getUsers() {
 		this.userService.getUsers(this.companyCode)
-							.subscribe(
-								users => this.users = users);
+						.subscribe(
+							users => this.users = users);
 	}
 
 	headingClicked(head: number) {
@@ -284,6 +283,12 @@ export class AppComponent {
 					that.selectedItems.push(u);
 				}
 			});
+		}
+
+		if(this.selectedItems.length === 0) {
+			$('#errorModal').modal('show');
+		} else {
+			$('#myModal').modal('show');
 		}
 		
 		console.log(this.selectedItems);
