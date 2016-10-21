@@ -32,10 +32,10 @@ router.get('/users.:code', isLoggedIn, (req, res) => {
 router.post('/addGroup.:code', (req, res) => {
 
   const code = req.params.code;
-  const M = require('./../models' + code);
+  const M = require('./../models/' + code);
 
-  const name = req.params.name;
-  const list = req.params.list;
+  let name = req.query.name;
+  let list = req.query.list;
 
   list = list.split(',')
 
@@ -59,7 +59,7 @@ router.post('/addGroup.:code', (req, res) => {
 router.get('/getGroups.:code', (req, res) => {
 
   const code = req.params.code;
-  const M = require('./../models' + code);
+  const M = require('./../models/' + code);
 
   M.Group.find({}, function(err, result){
     if (err) console.log(err);
