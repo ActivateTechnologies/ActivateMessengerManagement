@@ -1,10 +1,10 @@
-<div class="messageGroupContainer">
+<div *ngFor="let group of groups" class="messageGroupContainer">
     <div class="upperContainerMessageGroup">
-      <p class="groupName">Group Name: 923814756</p>
+      <p class="groupName">Group Name: {{group.name}}</p>
     </div>
     <div class="lowerContainerMessageGroup">
-      <p class="messageContainerInfo">Members <br> 24 </p> 
-      <p class="messageContainerInfo">Open rate <br> 75 </p>  
-      <p class="messageContainerInfo">Messages <br> 34</p>
+      <p class="messageContainerInfo">Members <br> {{group.list.length}} </p> 
+      <p class="messageContainerInfo">Open rate <br> {{group.openRate || '-'}} </p>  
+      <p class="messageContainerInfo">Messages <br> {{group.messages || '-'}}</p>
     </div>
 </div>
