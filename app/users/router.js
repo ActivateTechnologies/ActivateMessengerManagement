@@ -29,7 +29,7 @@ router.get('/users.:code', isLoggedIn, (req, res) => {
 
 });
 
-router.get('/addGroup.:code', (req, res) => {
+router.post('/addGroup.:code', (req, res) => {
 
   const code = req.params.code;
   const M = require('./../models' + code);
