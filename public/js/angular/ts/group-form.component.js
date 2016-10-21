@@ -16,6 +16,20 @@ var GroupFormComponent = (function () {
         this.submitted = false;
     }
     GroupFormComponent.prototype.onSubmit = function () {
+        var list = _.pluck(this.groupitems, "_id");
+        var group = {
+            "name": this.groupName,
+            "list": list.toString()
+        };
+        $.post('/addGroup.' + this.companyCode + '?name=' + group.name + '&list=' + group.list, function (data) {
+            console.log(data);
+            if (data.status === "success") {
+                console.log("Group added");
+            }
+            else {
+                console.log("Error: group not added");
+            }
+        });
         this.submitted = true;
         $('#myModal').modal('hide');
     };
@@ -23,6 +37,10 @@ var GroupFormComponent = (function () {
         core_1.Input(), 
         __metadata('design:type', Array)
     ], GroupFormComponent.prototype, "groupitems", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', String)
+    ], GroupFormComponent.prototype, "companyCode", void 0);
     GroupFormComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
