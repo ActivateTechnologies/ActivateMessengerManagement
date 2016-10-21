@@ -29,6 +29,46 @@ router.get('/users.:code', isLoggedIn, (req, res) => {
 
 });
 
+router.get('/addGroup.:code', (req, res) => {
+
+  const code = req.params.code;
+  const M = require('./../models' + code);
+
+  const name = req.params.name;
+  const list = req.params.list;
+
+  list = list.split(',')
+
+  let group = M.Group({
+    name: name,
+    list: list
+  })
+
+  group.save((err)=>{
+    if (err){
+      res.json({status: "error"})
+    }
+    else {
+      res.json({status: "success"})
+    }
+  })
+
+});
+
+
+router.get('/getGroups.:code', (req, res) => {
+
+  const code = req.params.code;
+  const M = require('./../models' + code);
+
+  M.Group.find({}, function(err, result){
+    if (err) console.log(err);
+    res.send(result)
+  })
+
+});
+
+
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {

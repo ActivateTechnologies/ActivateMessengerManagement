@@ -58,6 +58,11 @@ let schema = function(connection){
     next: Array
   })
 
+  let groupSchema = new Schema({
+    name: String,
+    list: Array
+  })
+
   let registerSchema = new Schema({
     name: String,
     phoneNumber: String,
@@ -87,12 +92,18 @@ let schema = function(connection){
     connection.model('Register', registerSchema)
   }
 
+  if (!connection.models.Group) {
+    console.log("group");
+    connection.model('Group', groupSchema)
+  }
+
   return {
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
     Conversations: connection.models.Conversations,
-    Register: connection.models.Register
+    Register: connection.models.Register,
+    Group: connection.models.Group
   };
 }
 
