@@ -57,6 +57,11 @@ module.exports = function(connection){
     }]
   })
 
+  let groupSchema = new Schema({
+    name: String,
+    list: Array
+  })
+
   let conversationsSchema = new Schema({
     name: String,
     next: Array
@@ -74,6 +79,10 @@ module.exports = function(connection){
     console.log("analytics");
     connection.model('Analytics', analyticsSchema)
   }
+  if (!connection.models.Group) {
+    console.log("group");
+    connection.model('Group', groupSchema)
+  }
   if (!connection.models.Conversation) {
     console.log("convo");
     connection.model('Conversations', conversationsSchema)
@@ -83,6 +92,7 @@ module.exports = function(connection){
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
-    Conversations: connection.models.Conversations
+    Conversations: connection.models.Conversations,
+    Group: connection.models.Group
   };
 }
