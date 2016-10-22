@@ -14,6 +14,16 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dashboardCoded.css" rel="stylesheet">
 
+    <script src="js/angular/shim.min.js"></script>
+    <script src="js/angular/zone.js"></script>
+    <script src="js/angular/Reflect.js"></script>
+    <script src="js/angular/system.src.js"></script>
+
+    <script src="js/angular/systemjs.config2.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
+
      <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -135,7 +145,7 @@
             <h2 class="sub-header">Message Groups</h2>
 
             <div class="groupsContainer">
-              <div class="messageGroupContainer">
+              <!-- <div class="messageGroupContainer">
                 <div class="upperContainerMessageGroup">
                   <p class="groupName">Group Name: 923814756</p>
                 </div>
@@ -177,7 +187,8 @@
                   <p class="messageContainerInfo">Open rate <br> 75 </p>  
                   <p class="messageContainerInfo">Messages <br> 34</p>
                 </div>
-              </div>
+              </div> -->
+              <my-groups [companyCode]="<%=s.company.code%>">Loading...</my-groups>
             </div>
 
           </div>
