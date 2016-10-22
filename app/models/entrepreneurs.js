@@ -62,6 +62,11 @@ let schema = function(connection){
     next: Array
   })
 
+  let groupSchema = new Schema({
+    name: String,
+    list: Array
+  })
+
   if (!connection.models.User) {
     console.log("user");
     connection.model('User', userSchema);
@@ -78,12 +83,17 @@ let schema = function(connection){
     console.log("convo");
     connection.model('Conversations', conversationsSchema)
   }
+  if (!connection.models.Group) {
+    console.log("group");
+    connection.model('Group', groupSchema)
+  }
 
   return {
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
-    Conversations: connection.models.Conversations
+    Conversations: connection.models.Conversations,
+    Group: connection.models.Group
   };
 }
 

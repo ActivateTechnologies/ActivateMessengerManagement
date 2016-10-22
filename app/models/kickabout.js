@@ -91,7 +91,6 @@ let schema = function(connection){
     console.log("register");
     connection.model('Register', registerSchema)
   }
-
   if (!connection.models.Group) {
     console.log("group");
     connection.model('Group', groupSchema)
