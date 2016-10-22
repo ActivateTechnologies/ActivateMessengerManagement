@@ -166,7 +166,7 @@ export class AppComponent {
         } else {
           this.isReversed = false;
         }
-		
+
 		this.currentHead = head;
 
         switch(head) {
@@ -290,7 +290,7 @@ export class AppComponent {
 		} else {
 			$('#myModal').modal('show');
 		}
-		
+
 		console.log(this.selectedItems);
 	}
 }
