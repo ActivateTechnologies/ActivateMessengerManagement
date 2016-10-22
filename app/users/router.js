@@ -39,17 +39,27 @@ router.post('/addGroup.:code', (req, res) => {
 
   list = list.split(',')
 
-  let group = M.Group({
-    name: name,
-    list: list
-  })
+  M.Group.findOne({"name":name}, (err, result)=>{
+    if (err) console.log(err);
 
-  group.save((err)=>{
-    if (err){
+    if (result){
       res.json({status: "error"})
     }
+
     else {
-      res.json({status: "success"})
+      let group = M.Group({
+        name: name,
+        list: list
+      })
+
+      group.save((er)=>{
+        if (er){
+          res.json({status: "error"})
+        }
+        else {
+          res.json({status: "success"})
+        }
+      })
     }
   })
 
