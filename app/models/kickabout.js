@@ -89,7 +89,7 @@ let schema = function(connection){
     console.log("analytics");
     connection.model('Analytics', analyticsSchema)
   }
-  if (!connection.models.Interactions) {
+  if (!connection.models.Interaction) {
     console.log("interactions");
     connection.model('Interactions', interactionsSchema)
   }
@@ -112,7 +112,8 @@ let schema = function(connection){
     Analytics: connection.models.Analytics,
     Conversations: connection.models.Conversations,
     Register: connection.models.Register,
-    Group: connection.models.Group
+    Group: connection.models.Group,
+    Interaction: connection.models.Interaction
   };
 }
 
