@@ -184,15 +184,15 @@
     <script src="js/Chart.min.js"></script>
     <script>
 
-
-      let dayLabels = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+      // need to change day labels
+      let dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
       let monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       let weekLabels = [];
       let modifiedMonthLabels = [];
 
 
       $(document).ready(() => {
-          initMonthAndWeekLabels();
+          initLabels();
           $.get('/dashboardData.<%= s.company.code %>?requiredData=getTicketsSoldOverTime',
            (data, status) => {
             console.log('getTicketsSoldOverTime', data);
@@ -217,6 +217,7 @@
             initChart('buttonsHitsMonth', data.monthsArray, modifiedMonthLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
           });
       });
+
 
       function initChart (divId, data, labels, backgroundColor,
         borderColor, highlightFill, highlightStroke) {
@@ -244,7 +245,14 @@
         });
       }
 
-      function initMonthAndWeekLabels () {
+
+      function initLabels () {
+
+          //Day Labels
+          let newDayLabels = dayLabels.slice((new Date()).getDay())
+                .concat(dayLabels.slice(0, (new Date()).getDay()))
+          dayLabels = newDayLabels
+
           //Month Labels
           let currentMonth = (new Date()).getMonth();
           modifiedMonthLabels = monthLabels.slice(currentMonth+1)
@@ -257,11 +265,12 @@
             now.setDate(now.getDate()-7);
             label += ' - ' + now.getDate() + '/' + (now.getMonth() + 1);
             weekLabels.push(label)
-            
+
             now.setDate(now.getDate()-1);
           }
           weekLabels.reverse()
       }
+
 
     </script>
   </body>

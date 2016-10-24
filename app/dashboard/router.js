@@ -237,72 +237,86 @@ router.get('/dashboardData.:code', (req, res) => {
 
       else if (requiredData == 'getButtonHitsOverTime') {
 
+        let go = false;
+
         let now = new Date();
-        let aYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-        let dayMs = 86400 * 1000;
-        let noOfDays = 367 + now.getDate();
-        let count = 0;
-        let startDate = new Date(aYearAgo.getTime() - now.getDate() * dayMs);
-        let daysArray = [], weeksArray = [], monthsArray = [];
+        //Month data
+        let monthArray = [];
+        for(i=0, i<12, i++){
+          M.Interactions.count({time: {
+              $gt:new Date(now.getFullYear(), now.getMonth()-i, 1),
+              $lt: now
+            }},
+            function(err, count){
+              if (err) console.log(err);
+              monthArray.push(count)
+              now.setMonth(now.getMonth()-1)
+              now.setDate(1)
+              go = true;
+            })
 
-        //Create daysArray
-        for (let i = 0; i < noOfDays; i++) {
-          activity.forEach((item) => {
-            if (item.time > new Date(startDate.getTime() + i * dayMs) &&
-                item.time < new Date(startDate.getTime() + (i + 1) * dayMs)) {
-              count ++;
-            }
-          });
-          daysArray.push(count);
-          count = 0;
+          while(!go) {}
+          go = false
         }
 
-        //Create weeksArray
-        count = 0;
-        startDate = new Date(now.getTime() - 12 * 7 * dayMs - dayMs);
-        let startDayIndex = noOfDays - (12 * 7 + now.getDay());
-        for (let i = startDayIndex; i < daysArray.length; i++) {
-          count += daysArray[i];
-          if ((i - startDayIndex) % 7 == 6) {
-            weeksArray.push(count);
-            count = 0;
-          }
-        }
-        weeksArray.push(count); //this week
+        now = new Date();
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-        //Create monthArray
-        let dateOfMonth = 0;
-        let monthDayCount = ((now.getMonth() > 1 && (now.getFullYear() % 4 == 0))
-          || (aYearAgo.getFullYear() % 4 == 0))
-          ? [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] //Leap year
-          : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; //Non leap year
-        count = 0;
-        for (let i = 0; i < noOfDays; i++) {
-          dateOfMonth++;
-          count += daysArray[i];
-          if (dateOfMonth
-           == monthDayCount[(now.getMonth() + monthsArray.length) % 12]) {
-            dateOfMonth = 0;
-            monthsArray.push(count);
-            count = 0;
-          }
-        }
-        monthsArray.push(count);
-        let daysArrayModified = [];
-        let day = now.getDay();
-        for (let i = 0; i < 7; i++) {
-          if (i <= day) {
-            daysArrayModified.push(daysArray[daysArray.length - day + i]);
-          } else {
-            daysArrayModified.push(0);
-          }
+        //Weeks Labels
+        let weeksArray = [];
+
+        for(i = 0; i < 12; i++){
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-7);
+
+          M.Interactions.count(
+            {time: {
+              $gt: temp,
+              $lt: now
+            }},
+            function(err, count){
+              if (err) console.log(err);
+              weeksArray.push(count)
+              now = temp
+              go = true
+            })
+
+          while(!go) {}
+          go = false
         }
 
-        resolve({
-          daysArray: daysArrayModified,
-          weeksArray: weeksArray.slice(-12),
-          monthsArray: monthsArray.slice(-12)
+        now = new Date();
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+        //Days Labels
+        let daysArray = [];
+
+        for(i = 0; i < 12; i++){
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-1);
+
+          M.Interactions.count(
+            {time: {
+              $gt: temp,
+              $lt: now
+            }},
+            function(err, count){
+              if (err) console.log(err);
+              daysArray.push(count)
+              now = temp
+              go = true
+            })
+
+          while(!go) {}
+          go = false
+        }
+
+        res.send({
+          daysArray: daysArray.reverse(),
+          weeksArray: weeksArray.reverse(),
+          monthsArray: monthsArray.reverse()
         });
 
       }
