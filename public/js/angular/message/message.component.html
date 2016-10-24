@@ -1,0 +1,61 @@
+<div class="tab-content">
+  <div id="text" class="tab-pane fade in active">
+    <form action="/message.<%= s.company.code %>" method="POST">
+      <input style="display:none" type="text" name="formType" value="message">
+      <div class="form-group">
+        <label>Group</label>
+        <select>
+          <option *ngFor="let group of groups">{{group.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="textarea_message">
+          Message Text (000/250)
+        </label>
+        <textarea class="form-control" rows="3" placeholder="Message Text"
+         name="message"></textarea>
+        <br/>
+        <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
+         name="ids"></textarea>
+      </div>
+      <input type="submit" class="btn btn-success btn-block" value="Send"/>
+    </form>
+  </div>
+
+  <div id="allEvents" class="tab-pane fade">
+    <form action="/message.<%= s.company.code %>" method="POST">
+      <input style="display:none" type="text" name="formType" value="events">
+      <div class="form-group">
+        <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
+         name="ids"></textarea>
+      </div>
+      <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(events)"/>
+    </form>
+  </div>
+
+  <div id="featuredEvent" class="tab-pane fade">
+    <form action="/message.<%= s.company.code %>" method="POST">
+      <input style="display:none" type="text" name="formType" value="featured">
+      <div class="form-group">
+        <!-- <select name="eid">
+          <% events.forEach(function(item){ %>
+            <option value="<%=item._id%>"><%= item.name %></option>
+          <% }) %>
+        </select> -->
+        <br>
+        <br>
+        <label for="textarea_message">
+          Subtitle Text (00/50)
+        </label>
+        <textarea class="form-control" rows="3" placeholder="Subtitle Text"
+         name="subtitle"></textarea>
+        <br/>
+        <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
+         name="ids"></textarea>
+      </div>
+      <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(featured)"/>
+    </form>
+  </div>
+</div>
+
+

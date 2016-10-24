@@ -1,17 +1,17 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { Group } from './group';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { GroupService } from './group.service';
+import { Group } from './group';
 
 @Component({
-  selector: 'my-groups',
+  selector: 'message-app',
   templateUrl: 'js/angular/message/app.component.html'
 })
 
 export class AppComponent {
-	groups: Group[];
 	companyCode: string;
+	groups: Group[] = [];
 
-	constructor (private groupService: GroupService, private elementRef: ElementRef) {
+	constructor (private elementRef: ElementRef, private groupService: GroupService) {
 		this.companyCode = elementRef.nativeElement.getAttribute('[companyCode]');
 	}
 

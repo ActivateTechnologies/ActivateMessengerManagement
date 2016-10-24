@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app/index.js",
-    "test": "tsc && concurrently \"tsc -w\" ",
+    "start": "tsc && node app/index.js",
+    "test": "tsc && concurrently",
     "lite": "lite-server",
     "postinstall": "typings install",
     "tsc": "tsc",

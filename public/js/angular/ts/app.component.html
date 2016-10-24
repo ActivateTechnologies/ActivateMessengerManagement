@@ -81,15 +81,14 @@
     		<td>{{user.firstName + " " + user.lastName}}</td>
     		<td>{{user.gender | capitaliseFirst}}</td>
     		<td *ngIf="isColDisplayed(2)">{{user.phoneNumber | phoneNumber}}</td>
-        <td *ngIf="isColDisplayed(3)">{{user.email || '-'}}</td>
-        <td *ngIf="isColDisplayed(4)">{{user.preferredPosition || '-'}}</td>
-        <td *ngIf="isColDisplayed(5)">{{user.backupPosition || '-'}}</td>
-        <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
-        <td *ngIf="isColDisplayed(7)">{{user.type | capitaliseFirst}}</td>
+            <td *ngIf="isColDisplayed(3)">{{user.email || '-'}}</td>
+            <td *ngIf="isColDisplayed(4)">{{user.preferredPosition || '-'}}</td>
+            <td *ngIf="isColDisplayed(5)">{{user.backupPosition || '-'}}</td>
+            <td *ngIf="isColDisplayed(6)">{{user.level || '-'}}</td>
+            <td *ngIf="isColDisplayed(7)">{{user.type | capitaliseFirst}}</td>
     		<td>{{getFormattedDate(user.signedUpDate)}}</td>
-        <td [style.background-color]="getColour(user.interactionTime, user.receivedTime)">{{getTimer(user.interactionTime, user.receivedTime)}}</td>
-        <td>{{user._id}}</td>
-    		<!--<td><input type="checkbox" ng-model="selection" ng-change="updateSelectedItems(user._id)"></td> -->
+            <td [style.background-color]="getColour(user.interactionTime, user.receivedTime)">{{getTimer(user.interactionTime, user.receivedTime)}}</td>
+            <td>{{user._id}}</td>
     	</tr>
     </tbody>
   </table>

@@ -1,10 +1,30 @@
-<div *ngFor="let group of groups" class="messageGroupContainer">
-    <div class="upperContainerMessageGroup">
-      <p class="groupName">Group Name: {{group.name}}</p>
-    </div>
-    <div class="lowerContainerMessageGroup">
-      <p class="messageContainerInfo">Members <br> {{group.list.length}} </p> 
-      <p class="messageContainerInfo">Open rate <br> {{group.openRate || '-'}} </p>  
-      <p class="messageContainerInfo">Messages <br> {{group.messages || '-'}}</p>
+<div class="col-md-5">
+	<h2 class="sub-header">Message</h2>
+	<ul class="nav nav-pills nav-justified">
+		<li class="active tabMessage">
+			<a data-toggle="pill" href="#text">Text</a>
+		</li>
+		<li class="tabMessage">
+			<a data-toggle="pill" href="#allEvents">All Events</a>
+		</li>
+		<li class="tabMessage">
+			<a data-toggle="pill" href="#featuredEvent">Event</a>
+		</li>
+	</ul>
+
+	<br/>
+	
+	<my-message [groups]="groups">Loading message...</my-message>
+</div>
+
+<div class="col-md-1">
+
+</div>
+
+<div class="col-md-6">
+    <h2 class="sub-header">Message Groups</h2>
+
+    <div class="groupsContainer">
+        <my-groups [groups]="groups">Fetching groups...</my-groups>
     </div>
 </div>
