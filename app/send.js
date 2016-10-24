@@ -575,10 +575,6 @@ module.exports = function(code){
   }
 
   function cancelBooking (uid, eventId) {
-    M.Analytics.update({name:"Button:Cancel"},
-      {$push: {activity: {uid:uid._id, time: new Date()}}},
-      {upsert: true},
-    (e)=> { if (e) console.log(e);});
 
     M.Event.find({_id:eventId}, (err, result) => {
       if (result.length > 0) {
@@ -597,10 +593,6 @@ module.exports = function(code){
   }
 
   function moreInfo(uid, eventId) {
-    M.Analytics.update({name:"Button:More Info"},
-      {$push: {activity: {uid:uid._id, time: new Date()}}},
-      {upsert: true},
-    (e)=> { if (e) console.log(e);});
 
     M.Event.findOne({_id:eventId}, function(err, result){
       if(err){

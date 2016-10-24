@@ -2,6 +2,8 @@
 
 const request = require('request');
 
+
+
 module.exports = function(code){
 
   const M = require('./../models/' + code);
@@ -9,6 +11,17 @@ module.exports = function(code){
   const Conversation = require('./conversation.js')(code);
   const Config = require('./../config')(code);
   const S = require('./../strings')(code);
+
+  function addInteraction(type, uid){
+    M.Interaction({
+      type: type,
+      uid: uid._id,
+      time: new Date()
+    })
+    .save((err)=>{
+      if (err) console.log(err);
+    })
+  }
 
   function processGetWebhook(req, res) {
     if (req.query['hub.verify_token'] === 'verify_me') {
@@ -44,9 +57,9 @@ module.exports = function(code){
                   if (event.message && event.message.text && event.message.quick_reply) {
                     processQuickReply(event, uid);
                   }
-                  else if (event.message && event.message.text && !event.message.quick_reply) {
-                    // Send.allEvents(uid, S.s.bot.allEventsDefault);
-                  }
+                  // else if (event.message && event.message.text && !event.message.quick_reply) {
+                  //   // Send.allEvents(uid, S.s.bot.allEventsDefault);
+                  // }
                   else if (event.message && event.message.attachments){
                     processAttachment(event, uid);
                   }
@@ -119,10 +132,12 @@ module.exports = function(code){
         break;
 
         case("my events"):
+        addInteraction("QuickReply: My Events", uid);
         Send.myEvents(uid);
         break;
 
         case("my games"):
+        addInteraction("QuickReply: My Events", uid);
         Send.myEvents(uid);
         break;
 
@@ -145,6 +160,7 @@ module.exports = function(code){
     if (event.message.attachments[0].payload.url
       === "https://scontent.xx.fbcdn.net/t39.1997-6/"
       + "851557_369239266556155_759568595_n.png?_nc_ad=z-m"){
+      addInteraction("Like", uid);
       Send.menu(uid);
     }
   }
@@ -152,34 +168,41 @@ module.exports = function(code){
   function processPostback(event, uid) {
     let text = event.postback.payload;
     if (text.substring(0, 4) == "Book") {
-      console.log("Caught book");
+      addInteraction("Button: Book", uid);
       Send.book(uid, text);
     }
     else if(text.substring(0, 6) == "Cancel") {
+      addInteraction("Button: Cancel", uid);
       Send.cancelBooking(uid, text.split('|')[1]);
     }
     else if(text.substring(0, 5) == "Share") {
+      addInteraction("Button: Share", uid);
       Send.shareEvent(uid, text);
     }
     else if(text.substring(0, 9) == "More Info") {
+      addInteraction("Button: More Info", uid);
       Send.moreInfo(uid, text.split('|')[1]);
     }
     else {
       switch(text.toLowerCase()) {
 
         case("my events"):
+        addInteraction("Menu: My Events", uid);
         Send.myEvents(uid);
         break;
 
         case("my games"):
+        addInteraction("Menu: My Events", uid);
         Send.myEvents(uid);
         break;
 
         case("notifications"):
+        addInteraction("Menu: Notifications", uid);
         Send.notifications(uid);
         break;
 
         default:
+        addInteraction("Menu: Show Games", uid);
         Send.allEvents(uid, S.s.bot.allEventsDefault);
       }
     }
