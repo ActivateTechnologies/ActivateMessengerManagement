@@ -6,10 +6,10 @@ import { AppComponent }   from './app.component';
 import { GroupComponent } from './group.component';
 import { MessageComponent } from './message.component';
 import { GroupService } from './group.service';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  imports:      [ BrowserModule, HttpModule, JsonpModule ],
+  imports:      [ BrowserModule, HttpModule, JsonpModule, FormsModule ],
   declarations: [ AppComponent, GroupComponent, MessageComponent ],
   providers:    [ GroupService ],
   bootstrap:    [ AppComponent ]

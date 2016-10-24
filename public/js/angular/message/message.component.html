@@ -4,19 +4,20 @@
       <input style="display:none" type="text" name="formType" value="message">
       <div class="form-group">
         <label>Group</label>
-        <select>
-          <option *ngFor="let group of groups">{{group.name}}</option>
+        <select (change)="onChange($event.target.selectedIndex)">
+          <option [ngValue]=""></option>
+          <option [ngValue]="group.id" *ngFor="let group of groups">{{group.name}}</option>
         </select>
       </div>
       <div class="form-group">
         <label for="textarea_message">
-          Message Text (000/250)
+          Message Text ({{messageText ? messageText.length : '0'}}/250)
         </label>
         <textarea class="form-control" rows="3" placeholder="Message Text"
-         name="message"></textarea>
+         name="message" [(ngModel)]="messageText" [ngModelOptions]="{standalone: true}"></textarea>
         <br/>
         <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
-         name="ids"></textarea>
+         name="ids">{{selectedId}}</textarea>
       </div>
       <input type="submit" class="btn btn-success btn-block" value="Send"/>
     </form>

@@ -11,7 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var MessageComponent = (function () {
     function MessageComponent() {
+        this.selectedId = '';
     }
+    MessageComponent.prototype.onChange = function (i) {
+        if (i == 0) {
+            this.selectedId = '';
+        }
+        else {
+            this.selectedId = this.groups[i - 1]._id;
+        }
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Array)

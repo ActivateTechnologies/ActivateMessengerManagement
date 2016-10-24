@@ -16,12 +16,13 @@ var app_component_1 = require('./app.component');
 var group_component_1 = require('./group.component');
 var message_component_1 = require('./message.component');
 var group_service_1 = require('./group.service');
+var forms_1 = require('@angular/forms');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule],
+            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, http_1.JsonpModule, forms_1.FormsModule],
             declarations: [app_component_1.AppComponent, group_component_1.GroupComponent, message_component_1.MessageComponent],
             providers: [group_service_1.GroupService],
             bootstrap: [app_component_1.AppComponent]

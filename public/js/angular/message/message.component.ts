@@ -10,5 +10,14 @@ import { Group } from './group';
 export class MessageComponent {
 	@Input()
 	groups: Group[];
+	selectedId: string = '';
+
+	onChange(i: number) {
+		if(i == 0) {
+			this.selectedId = '';
+		} else {
+			this.selectedId = this.groups[i - 1]._id;
+		}
+	}
 
 }
