@@ -107,7 +107,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
   // if they aren't redirect them to login
-  res.redirect('/login');
+  res.redirect('/');
 }
 
 module.exports = router
