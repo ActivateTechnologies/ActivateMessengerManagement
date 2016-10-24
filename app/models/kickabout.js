@@ -53,6 +53,12 @@ let schema = function(connection){
     }]
   })
 
+  let interactionsSchema = new Schema({
+    type: String,
+    uid: String,
+    time: Date
+  })
+
   let conversationsSchema = new Schema({
     name: String,
     next: Array
@@ -82,6 +88,10 @@ let schema = function(connection){
   if (!connection.models.Analytics) {
     console.log("analytics");
     connection.model('Analytics', analyticsSchema)
+  }
+  if (!connection.models.Interactions) {
+    console.log("interactions");
+    connection.model('Interactions', interactionsSchema)
   }
   if (!connection.models.Conversation) {
     console.log("convo");
