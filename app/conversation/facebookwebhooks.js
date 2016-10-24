@@ -13,12 +13,12 @@ module.exports = function(code){
   const S = require('./../strings')(code);
 
   function addInteraction(type, uid){
-    M.Interaction({
+    let interaction = M.Interaction({
       type: type,
       uid: uid._id,
       time: new Date()
     })
-    .save((err)=>{
+    interaction.save((err)=>{
       if (err) console.log(err);
     })
   }

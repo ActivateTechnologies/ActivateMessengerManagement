@@ -91,7 +91,7 @@ let schema = function(connection){
   }
   if (!connection.models.Interaction) {
     console.log("interactions");
-    connection.model('Interactions', interactionsSchema)
+    connection.model('Interaction', interactionsSchema)
   }
   if (!connection.models.Conversation) {
     console.log("convo");
