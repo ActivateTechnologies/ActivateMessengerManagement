@@ -237,28 +237,24 @@ router.get('/dashboardData.:code', (req, res) => {
 
       else if (requiredData == 'getButtonHitsOverTime') {
 
-        let go = false;
-
         let now = new Date();
         now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
         //Month data
-        let monthArray = [];
-        for(i=0, i<12, i++){
-          M.Interactions.count({time: {
+        let monthsArray = [];
+        for(let i=0; i<12; i++){
+          M.Interaction.count({time: {
               $gt:new Date(now.getFullYear(), now.getMonth()-i, 1),
               $lt: now
             }},
             function(err, count){
+              console.log(111);
               if (err) console.log(err);
-              monthArray.push(count)
+              monthsArray.push(count)
               now.setMonth(now.getMonth()-1)
               now.setDate(1)
               go = true;
             })
-
-          while(!go) {}
-          go = false
         }
 
         now = new Date();
@@ -267,24 +263,22 @@ router.get('/dashboardData.:code', (req, res) => {
         //Weeks Labels
         let weeksArray = [];
 
-        for(i = 0; i < 12; i++){
+        for(let i = 0; i < 12; i++){
           let temp = new Date(now);
           temp.setDate(now.getDate()-7);
 
-          M.Interactions.count(
+          M.Interaction.count(
             {time: {
               $gt: temp,
               $lt: now
             }},
             function(err, count){
+              console.log(2);
               if (err) console.log(err);
               weeksArray.push(count)
               now = temp
               go = true
             })
-
-          while(!go) {}
-          go = false
         }
 
         now = new Date();
@@ -293,25 +287,27 @@ router.get('/dashboardData.:code', (req, res) => {
         //Days Labels
         let daysArray = [];
 
-        for(i = 0; i < 12; i++){
+        for(let i = 0; i < 12; i++){
           let temp = new Date(now);
           temp.setDate(now.getDate()-1);
 
-          M.Interactions.count(
+          M.Interaction.count(
             {time: {
               $gt: temp,
               $lt: now
             }},
             function(err, count){
+              console.log(3);
               if (err) console.log(err);
               daysArray.push(count)
               now = temp
               go = true
             })
-
-          while(!go) {}
-          go = false
         }
+
+        console.log(daysArray);
+        console.log(weeksArray);
+        console.log(monthsArray);
 
         res.send({
           daysArray: daysArray.reverse(),
