@@ -124,9 +124,10 @@ module.exports = function(code){
 	}
 
 	else if (code == 'ani') {
-		VERIFICATION_TOKEN = "EAAIL6dc0iLsBAGZCZAl7lUMfe6X70T1Nvoj9g5ioMZAVDivJDZCZBM1aWYZBjNLjBWWlQxafiU4TU3IIHYaoh8zEHFlqdSMrDLdx1adySu9Qdfsa7Wy1BUOIdpNpUAZAsUNBhZCEKKyAI0vRqVWx1oSn4WyAhl5H7PZBIrZAx8uZArECwZDZD";
+		VERIFICATION_TOKEN = "EAAIL6dc0iLsBANEl8YmfIIGihJFiNLIQOBq2dQ7Y9IyJZBjRhq1sYTJi12KbJ69XeWJ8rzjhZAvfZAyLpgCuUZCGjPLnJfNedJD02fJC9D4jdMfm7omnBJGwY31MVjUPJaS8JCZABO62GExbtd24pTJ5tHu7T0t0TEY3jC2d5LQZDZD";
 		ROOT_URL = "https://75e17495.ngrok.io";
 	}
+	
 	else {
 		console.log("CODE not provided in config.js");
 	}
