@@ -11,9 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var group_service_1 = require('./group.service');
 var AppComponent = (function () {
-    function AppComponent(groupService, elementRef) {
-        this.groupService = groupService;
+    function AppComponent(elementRef, groupService) {
         this.elementRef = elementRef;
+        this.groupService = groupService;
+        this.groups = [];
         this.companyCode = elementRef.nativeElement.getAttribute('[companyCode]');
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -26,10 +27,10 @@ var AppComponent = (function () {
     };
     AppComponent = __decorate([
         core_1.Component({
-            selector: 'my-groups',
+            selector: 'message-app',
             templateUrl: 'js/angular/message/app.component.html'
         }), 
-        __metadata('design:paramtypes', [group_service_1.GroupService, core_1.ElementRef])
+        __metadata('design:paramtypes', [core_1.ElementRef, group_service_1.GroupService])
     ], AppComponent);
     return AppComponent;
 }());
