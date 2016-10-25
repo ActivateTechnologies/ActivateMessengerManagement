@@ -240,21 +240,31 @@ router.get('/dashboardData.:code', (req, res) => {
         let now = new Date();
         now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
+        function incrementArray(arr, start, end){
+          return new Promise(function(resolve, reject){
+            M.Interaction.count(
+              {time: {
+                $gt: start,
+                $lt: end
+              }},
+              function(err, count){
+                if (err) console.log(err);
+                arr.push(count)
+                resolve()
+              })
+          })
+        }
+
         //Month data
         let monthsArray = [];
+        let temp1 = []
         for(let i=0; i<12; i++){
-          M.Interaction.count({time: {
-              $gt:new Date(now.getFullYear(), now.getMonth()-i, 1),
-              $lt: now
-            }},
-            function(err, count){
-              console.log(111);
-              if (err) console.log(err);
-              monthsArray.push(count)
-              now.setMonth(now.getMonth()-1)
-              now.setDate(1)
-              go = true;
-            })
+          temp1.push(incrementArray(
+            monthsArray,
+            new Date(now.getFullYear(), now.getMonth()-i, 1),
+            now))
+          now.setMonth(now.getMonth()-1)
+          now.setDate(1)
         }
 
         now = new Date();
@@ -262,23 +272,12 @@ router.get('/dashboardData.:code', (req, res) => {
 
         //Weeks Labels
         let weeksArray = [];
-
         for(let i = 0; i < 12; i++){
           let temp = new Date(now);
           temp.setDate(now.getDate()-7);
 
-          M.Interaction.count(
-            {time: {
-              $gt: temp,
-              $lt: now
-            }},
-            function(err, count){
-              console.log(2);
-              if (err) console.log(err);
-              weeksArray.push(count)
-              now = temp
-              go = true
-            })
+          temp1.push(incrementArray(weeksArray, temp, now))
+          now = temp
         }
 
         now = new Date();
@@ -286,34 +285,28 @@ router.get('/dashboardData.:code', (req, res) => {
 
         //Days Labels
         let daysArray = [];
-
         for(let i = 0; i < 12; i++){
           let temp = new Date(now);
           temp.setDate(now.getDate()-1);
 
-          M.Interaction.count(
-            {time: {
-              $gt: temp,
-              $lt: now
-            }},
-            function(err, count){
-              console.log(3);
-              if (err) console.log(err);
-              daysArray.push(count)
-              now = temp
-              go = true
-            })
+          temp1.push(incrementArray(daysArray, temp, now))
+          now = temp
         }
 
-        console.log(daysArray);
-        console.log(weeksArray);
-        console.log(monthsArray);
+        console.log(2222);
+        Promise.all(temp1)
+          .then(([])=>{
+            console.log(111);
+            console.log(daysArray);
+            console.log(weeksArray);
+            console.log(monthsArray);
 
-        res.send({
-          daysArray: daysArray.reverse(),
-          weeksArray: weeksArray.reverse(),
-          monthsArray: monthsArray.reverse()
-        });
+            res.send({
+              daysArray: daysArray.reverse(),
+              weeksArray: weeksArray.reverse(),
+              monthsArray: monthsArray.reverse()
+            });
+          })
 
       }
 
