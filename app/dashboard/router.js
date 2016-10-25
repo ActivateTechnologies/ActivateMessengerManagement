@@ -236,8 +236,78 @@ router.get('/dashboardData.:code', (req, res) => {
       }
 
       else if (requiredData == 'getButtonHitsOverTime') {
-        processAnalyticsDataOverTime(M, "Button:More Info")
-        .then((data)=>{res.send(data);});
+
+        let now = new Date();
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+        function incrementArray(arr, start, end){
+          return new Promise(function(resolve, reject){
+            M.Interaction.count(
+              {time: {
+                $gt: start,
+                $lt: end
+              }},
+              function(err, count){
+                if (err) console.log(err);
+                arr.push(count)
+                resolve()
+              })
+          })
+        }
+
+        let temp1 = []
+
+        //Month data
+        let monthsArray = [];
+        for(let i=0; i<12; i++){
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-30);
+
+          temp1.push(incrementArray(monthsArray, temp, now));
+          now = temp;
+        }
+
+        now = new Date();
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+        //Weeks Labels
+        let weeksArray = [];
+        for(let i = 0; i < 12; i++){
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-7);
+
+          temp1.push(incrementArray(weeksArray, temp, now));
+          now = temp;
+        }
+
+        now = new Date();
+        now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+        //Days Labels
+        let daysArray = [];
+        for(let i = 0; i < 7; i++){
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-1);
+
+          temp1.push(incrementArray(daysArray, temp, now));
+          now = temp;
+        }
+
+        console.log(2222);
+        Promise.all(temp1)
+          .then(([])=>{
+            console.log(111);
+            console.log(daysArray);
+            console.log(weeksArray);
+            console.log(monthsArray);
+
+            res.send({
+              daysArray: daysArray.reverse(),
+              weeksArray: weeksArray.reverse(),
+              monthsArray: monthsArray.reverse()
+            });
+          })
+
       }
 
   }
@@ -251,7 +321,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
   // if they aren't redirect them to login
-  res.redirect('/login');
+  res.redirect('/');
 }
 
 module.exports = router

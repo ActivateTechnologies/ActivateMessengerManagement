@@ -142,36 +142,36 @@
         <div class="row">
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Messages Sent</p>
-            <canvas id="buttonsHitsDay" height="170px;"></canvas>
+            <canvas id="" height="170px;"></canvas>
 
           </div>
 
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Messages Sent</p>
-            <canvas id="buttonsHitsWeek" height="200px;"></canvas>
+            <canvas id="" height="200px;"></canvas>
           </div>
 
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Messages Sent</p>
-            <canvas id="buttonsHitsMonth" height="170px;"></canvas>
+            <canvas id="" height="170px;"></canvas>
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Revenue</p>
-            <canvas id="buttonsHitsDay" height="170px;"></canvas>
+            <canvas id="" height="170px;"></canvas>
 
           </div>
 
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Revenue</p>
-            <canvas id="buttonsHitsWeek" height="200px;"></canvas>
+            <canvas id="" height="200px;"></canvas>
           </div>
 
           <div class="col-xs-4 col-md-4">
             <p class="lead total-text">Revenue</p>
-            <canvas id="buttonsHitsMonth" height="170px;"></canvas>
+            <canvas id="" height="170px;"></canvas>
           </div>
         </div>
 
@@ -184,35 +184,40 @@
     <script src="js/Chart.min.js"></script>
     <script>
 
-      let dayLabels = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-      let monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-       'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      // need to change day labels
+      let dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+      let monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       let weekLabels = [];
       let modifiedMonthLabels = [];
+
+
       $(document).ready(() => {
-        initMonthAndWeekLabels();
-        $.get('/dashboardData.<%= s.company.code %>?requiredData=getTicketsSoldOverTime',
-         (data, status) => {
-          console.log('getTicketsSoldOverTime', data);
-          initChart('ticketsSoldDay', data.daysArray, dayLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
-          initChart('ticketsSoldWeek', data.weeksArray, weekLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
-          initChart('ticketsSoldMonth', data.monthsArray, modifiedMonthLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
-        });
-        $.get('/dashboardData.<%= s.company.code %>?requiredData=getNewMembersOverTime',
-         (data, status) => {
-          console.log('getNewMembersOverTime', data);
-          initChart('newMembersDay', data.daysArray, dayLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-          initChart('newMembersWeek', data.weeksArray, weekLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-          initChart('newMembersMonth', data.monthsArray, modifiedMonthLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-        });
-        $.get('/dashboardData.<%= s.company.code %>?requiredData=getButtonHitsOverTime',
-         (data, status) => {
-          console.log('getButtonHitsOverTime', data);
-          initChart('buttonsHitsDay', data.daysArray, dayLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-          initChart('buttonsHitsWeek', data.weeksArray, weekLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-          initChart('buttonsHitsMonth', data.monthsArray, modifiedMonthLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
-        });
+          initLabels();
+          $.get('/dashboardData.<%= s.company.code %>?requiredData=getTicketsSoldOverTime',
+           (data, status) => {
+            console.log('getTicketsSoldOverTime', data);
+            initChart('ticketsSoldDay', data.daysArray, dayLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+            initChart('ticketsSoldWeek', data.weeksArray, weekLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+            initChart('ticketsSoldMonth', data.monthsArray, modifiedMonthLabels, "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)", "rgb(255, 206, 86)");
+          });
+
+          $.get('/dashboardData.<%= s.company.code %>?requiredData=getNewMembersOverTime',
+           (data, status) => {
+            console.log('getNewMembersOverTime', data);
+            initChart('newMembersDay', data.daysArray, dayLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+            initChart('newMembersWeek', data.weeksArray, weekLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+            initChart('newMembersMonth', data.monthsArray, modifiedMonthLabels, "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          });
+
+          $.get('/dashboardData.<%= s.company.code %>?requiredData=getButtonHitsOverTime',
+           (data, status) => {
+            console.log('getButtonHitsOverTime', data);
+            initChart('buttonsHitsDay', data.daysArray, dayLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+            initChart('buttonsHitsWeek', data.weeksArray, weekLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+            initChart('buttonsHitsMonth', data.monthsArray, modifiedMonthLabels, "rgb(254, 118, 122)", "rgb(54, 162, 235)", "rgb(54, 162, 235)", "rgb(54, 162, 235)");
+          });
       });
+
 
       function initChart (divId, data, labels, backgroundColor,
         borderColor, highlightFill, highlightStroke) {
@@ -231,47 +236,41 @@
           type: 'bar',
           data: chartData,
           options: {
-            legend: {
-              display: false,
-            },
+            legend: {display: false},
             scales: {
-              xAxes: [{
-                gridLines: {
-                  display: false
-                }
-              }],
-              yAxes: [{
-                gridLines: {
-                  display: false
-                }
-              }]
+              xAxes: [{gridLines: {display: false}}],
+              yAxes: [{gridLines: {display: false}}]
             }
           }
         });
       }
 
-      function initMonthAndWeekLabels () {
-        //Month Labels
-        let currentMonth = (new Date()).getMonth();
-        for (let i = currentMonth + 1; modifiedMonthLabels.length < 12; i++) {
-          modifiedMonthLabels.push(monthLabels[i]);
-          if (i == 11) {
-            i = -1;
+
+      function initLabels () {
+
+          //Day Labels
+          let newDayLabels = dayLabels.slice((new Date()).getDay())
+                .concat(dayLabels.slice(0, (new Date()).getDay()))
+          dayLabels = newDayLabels
+
+          //Month Labels
+          let currentMonth = (new Date()).getMonth();
+          modifiedMonthLabels = monthLabels.slice(currentMonth+1)
+              .concat(monthLabels.slice(0, currentMonth+1))
+
+          //Week Labels
+          let now = new Date();
+          for(let i = 0; i < 12; i++){
+            let label = now.getDate() + '/' + (now.getMonth() + 1)
+            now.setDate(now.getDate()-7);
+            label += ' - ' + now.getDate() + '/' + (now.getMonth() + 1);
+            weekLabels.push(label)
+
+            now.setDate(now.getDate()-1);
           }
-        }
-        //Week Labels
-        let msDay = 86400 * 1000;
-        let firstMonday = new Date(); //Now
-        firstMonday = new Date(firstMonday.getTime() //This week's Monday
-          - (firstMonday.getDay() - 1) * msDay);
-        firstMonday = new  Date(firstMonday.getTime() - 11 * 7 * msDay);
-        for (let i = 0; i < 12; i++) {
-          let mon = new Date(firstMonday.getTime() + i * 7 * msDay);
-          let sun = new Date(mon.getTime() + 6 * msDay);
-          weekLabels.push(mon.getDate() + '/' + (mon.getMonth() + 1)
-            + ' - ' + sun.getDate() + '/' + (sun.getMonth() + 1));
-        }
+          weekLabels.reverse()
       }
+
 
     </script>
   </body>

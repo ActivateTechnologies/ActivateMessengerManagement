@@ -8,8 +8,7 @@ const _ = require('underscore')
   Sends given message to user, with events if type is
   "upcomingEvents" */
 router.post('/message.:code', (req, res) => {
-  console.log("posted something");
-
+  
   const code = req.params.code
   const S = require('./../strings')(code);
   const M = require('./../models/' + code);
@@ -107,7 +106,7 @@ function isLoggedIn(req, res, next) {
     return next();
   }
   // if they aren't redirect them to login
-  res.redirect('/login');
+  res.redirect('/');
 }
 
 module.exports = router

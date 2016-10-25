@@ -9,6 +9,17 @@ module.exports = function(code){
   const Config = require('./../config')(code);
   const Send = require('./../send.js')(code);
 
+  function addInteraction(type, uid){
+    let interaction = M.Interaction({
+      type: type,
+      uid: uid._id,
+      time: new Date()
+    })
+    interaction.save((err)=>{
+      if (err) console.log(err);
+    })
+  }
+
   /*
     Retrieves specified conversation from database and starts executing by
     calling executeTreeNode() with the first node */
@@ -281,6 +292,7 @@ module.exports = function(code){
       executeTreeNode(uid, conversationName, node.next[node.next.length - 1], null, user);
     }
     else {
+      addInteraction("Conversation: phoneNumber", uid);
       M.User.findOneAndUpdate(
         {_id:uid._id},
         {"phoneNumber": processedPhoneNumber},
@@ -318,6 +330,7 @@ module.exports = function(code){
 
     //valid email so adding the user to the database
     else {
+      addInteraction("Conversation: email", uid);
 
       M.User.findOneAndUpdate(
         {_id:uid._id},
@@ -361,6 +374,8 @@ module.exports = function(code){
   // Position saving functions
   function saveToExtras(key, value){
     return function(uid, conversationName, node, message, user){
+      addInteraction("Conversation: " + key + "|" + value, uid);
+
       let obj = {};
       obj[key] = value;
       M.User.findOneAndUpdate(
