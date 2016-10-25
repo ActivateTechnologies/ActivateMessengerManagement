@@ -255,16 +255,16 @@ router.get('/dashboardData.:code', (req, res) => {
           })
         }
 
+        let temp1 = []
+
         //Month data
         let monthsArray = [];
-        let temp1 = []
         for(let i=0; i<12; i++){
-          temp1.push(incrementArray(
-            monthsArray,
-            new Date(now.getFullYear(), now.getMonth()-i, 1),
-            now))
-          now.setMonth(now.getMonth()-1)
-          now.setDate(1)
+          let temp = new Date(now);
+          temp.setDate(now.getDate()-30);
+
+          temp1.push(incrementArray(monthsArray, temp, now));
+          now = temp;
         }
 
         now = new Date();
@@ -276,8 +276,8 @@ router.get('/dashboardData.:code', (req, res) => {
           let temp = new Date(now);
           temp.setDate(now.getDate()-7);
 
-          temp1.push(incrementArray(weeksArray, temp, now))
-          now = temp
+          temp1.push(incrementArray(weeksArray, temp, now));
+          now = temp;
         }
 
         now = new Date();
@@ -285,12 +285,12 @@ router.get('/dashboardData.:code', (req, res) => {
 
         //Days Labels
         let daysArray = [];
-        for(let i = 0; i < 12; i++){
+        for(let i = 0; i < 7; i++){
           let temp = new Date(now);
           temp.setDate(now.getDate()-1);
 
-          temp1.push(incrementArray(daysArray, temp, now))
-          now = temp
+          temp1.push(incrementArray(daysArray, temp, now));
+          now = temp;
         }
 
         console.log(2222);
