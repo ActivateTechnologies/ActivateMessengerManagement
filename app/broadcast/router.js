@@ -14,12 +14,13 @@ router.post('/message.:code', (req, res) => {
   const M = require('./../models/' + code);
   const Send = require('./../send.js')(code);
 
+  console.log("HI");
 
-  let type = req.body.formType;
-  let fn;
+  let type = req.query.formType;
+  let fn; 
 
   if (type === "message"){
-    let message = req.body.message;
+    let message = req.query.message;
     fn = function(uid){
       Send.text(uid, message);
     }
@@ -30,8 +31,8 @@ router.post('/message.:code', (req, res) => {
   }
 
   else if (type === "featured"){
-    let eid = req.body.eid;
-    let subtitle = req.body.subtitle;
+    let eid = req.query.eid;
+    let subtitle = req.query.subtitle;
     fn = function(uid){
       Send.eventBroadcast(uid, eid, subtitle);
     }
@@ -39,8 +40,8 @@ router.post('/message.:code', (req, res) => {
 
 
   // if to send to choosen ids
-  if(req.body.ids){
-    let ids = req.body.ids.trim().split(',')
+  if(req.query.ids){
+    let ids = req.query.ids.trim().split(',')
     console.log(ids);
     _.each(ids, (id)=>{
       M.User.findOneAndUpdate(

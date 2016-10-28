@@ -1,14 +1,13 @@
 <div class="tab-content">
   <div id="text" class="tab-pane fade in active">
-    <form action="/message.<%= s.company.code %>" method="POST">
+    <form action="/message.{{companyCode}}" method="POST">
       <input style="display:none" type="text" name="formType" value="message">
-      <div class="form-group">
-        <label>Group</label>
-        <select (change)="onChange($event.target.selectedIndex)">
-          <option [ngValue]=""></option>
-          <option [ngValue]="group.id" *ngFor="let group of groups">{{group.name}}</option>
-        </select>
-      </div>
+      <label>Group</label>
+      <select (change)="onChange($event.target.selectedIndex)">
+        <option [ngValue]=""></option>
+        <option [ngValue]="group.id" *ngFor="let group of groups">{{group.name}}</option>
+      </select>
+      
       <div class="form-group">
         <label for="textarea_message">
           Message Text ({{messageText ? messageText.length : '0'}}/250)
@@ -17,25 +16,26 @@
          name="message" [(ngModel)]="messageText" [ngModelOptions]="{standalone: true}"></textarea>
         <br/>
         <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
-         name="ids">{{selectedId}}</textarea>
+         name="ids" [(ngModel)]="ids" [ngModelOptions]="{standalone: true}"></textarea>
       </div>
-      <input type="submit" class="btn btn-success btn-block" value="Send"/>
+      <!-- <input type="submit" class="btn btn-success btn-block" value="Send"/> -->
+      <input type="submit" class="btn btn-success btn-block" value="Send" (click)="onSubmit('message')"/>
     </form>
   </div>
 
   <div id="allEvents" class="tab-pane fade">
-    <form action="/message.<%= s.company.code %>" method="POST">
+    <form action="/message.{{companyCode}}" method="POST">
       <input style="display:none" type="text" name="formType" value="events">
       <div class="form-group">
         <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
-         name="ids"></textarea>
+         name="ids" [(ngModel)]="ids" [ngModelOptions]="{standalone: true}"></textarea>
       </div>
-      <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(events)"/>
+      <input type="submit" class="btn btn-success btn-block" value="Send" (click)="onSubmit('events')"/>
     </form>
   </div>
 
   <div id="featuredEvent" class="tab-pane fade">
-    <form action="/message.<%= s.company.code %>" method="POST">
+    <form action="/message.{{companyCode}}" method="POST">
       <input style="display:none" type="text" name="formType" value="featured">
       <div class="form-group">
         <!-- <select name="eid">
@@ -43,18 +43,24 @@
             <option value="<%=item._id%>"><%= item.name %></option>
           <% }) %>
         </select> -->
+        <label>Event</label>
+        <select (change)="onChangeEvent($event.target.selectedIndex)">
+          <option></option>
+          <option *ngFor="let event of events">{{event.name}}</option>
+        </select>
+
         <br>
         <br>
         <label for="textarea_message">
-          Subtitle Text (00/50)
+          Subtitle Text ({{subtitle ? subtitle.length : '0'}}/50)
         </label>
         <textarea class="form-control" rows="3" placeholder="Subtitle Text"
-         name="subtitle"></textarea>
+         name="subtitle" [(ngModel)]="subtitle" [ngModelOptions]="{standalone: true}"></textarea>
         <br/>
         <textarea class="form-control" rows="3" placeholder="List of Id's, or Group Id (Leave blank to message everyone)"
-         name="ids"></textarea>
+         name="ids" [(ngModel)]="ids" [ngModelOptions]="{standalone: true}"></textarea>
       </div>
-      <input type="submit" class="btn btn-success btn-block" value="Send" onclick="send(featured)"/>
+      <input type="submit" class="btn btn-success btn-block" value="Send" (click)="onSubmit('featured')"/>
     </form>
   </div>
 </div>
