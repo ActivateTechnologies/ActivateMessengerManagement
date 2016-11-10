@@ -371,9 +371,10 @@ button {
 
 .chatbotsNext {
   text-align: center;
-  padding-top: 30px;
   color: #828282 !important;
   font-size: 26px;
+  padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
 }
 
 .toBots {
@@ -427,3 +428,35 @@ button {
   color: #828282 !important;
   font-size: 22px;
 }
+
+.backgroundBots {
+  background: #FFFFFF;
+}
+
+h2 {
+  padding: 0 !important;
+}
+
+.features {
+  background: #ff524f;
+}
+
+.subTitleFutureText {
+  text-align: center;
+  width: 100%;
+}
+
+.futureTextYo {
+  color: #FFFFFF;
+}
+
+.whiteText {
+  color: #FFFFFF;
+}
+
+.footer { 
+width: 100% !important; }
+
+
+
+
