@@ -295,7 +295,7 @@ router.get('/dashboardData.:code', (req, res) => {
 
         console.log(2222);
         Promise.all(temp1)
-          .then(([])=>{
+          .then((ar)=>{
             console.log(111);
             console.log(daysArray);
             console.log(weeksArray);
