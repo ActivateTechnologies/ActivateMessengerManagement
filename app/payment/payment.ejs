@@ -23,7 +23,11 @@
       ga('send', 'pageview');
     </script>
   </head>
-  <body>
+  <body
+  <% if (s.company.code === 'wegeek'){ %>
+      style="background:black"
+  <% }%>
+    >
     <div class="site-wrapper-payment">
 
       <img src="img/logoUnbinded-white.png" class="logoLead-payment">
@@ -54,7 +58,7 @@
         </div>
       </div>
 
-      <!-- FACEBOOK AUDIENCE NETWORK 
+      <!-- FACEBOOK AUDIENCE NETWORK
       <script>
       window.fbAsyncInit = function() {
         FB.Event.subscribe(
