@@ -301,6 +301,47 @@ module.exports = function(code){
     })
   }
 
+  function shareEvent (uid, text) {
+    let eid = text.split("|")[1];
+    M.Event.find({_id:eid}, function(err, results){
+      if (err || results.length == 0) {
+        console.log('Error getting event to share:' + ((results.length == 0)
+          ? "No events with id " + eid + " found."
+          : JSON.stringify(err)));
+      }
+      if (results.length > 0) {
+        let event = results[0];
+
+        let messageData = {
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "generic",
+              "elements": [{
+                "title": event.name,
+                "subtitle": event.strapline,
+                "image_url": event.image_url,
+                "buttons": [
+                  {
+                    "type":"element_share"
+                  }
+                ]
+              }]
+            }
+          }
+        }
+        textPromise(uid, "Click on 'Share' to send to your friends")
+        .then(()=>{
+          send(uid, messageData);
+        })
+        .catch((e)=>{
+          console.log('Error sending text, ' + e);
+        });
+
+      }
+    })
+  }
+
   function cardForBooking (uid, eventId, description, price, booked) {
       let bookOrCancelButton = {}
 
@@ -346,7 +387,11 @@ module.exports = function(code){
                 "title": S.s.bot.eventCard.buttonKeepLooking,
                 "payload": "No, thanks",
               },
-              {"type":"element_share"}
+              {
+                "type": "postback",
+                "title": S.s.bot.eventCard.buttonShare,
+                "payload": "Share" + "|" + eventId
+              }
             ]
           }
         }
@@ -364,6 +409,25 @@ module.exports = function(code){
 
           let latlong = event.latlong.replace(/\s+/g, '');
           let pl = "More Info" + '|' + event._id;
+          // let directions_link = "http://maps.google.com/?q=" + latlong;
+
+          let bookButton = {};
+          if (parseFloat(event.price) > 0){
+            bookButton = {
+              "type": "web_url",
+              "title": S.s.bot.eventCard.buttonBook,
+              "url": config.ROOT_URL + "/payment." + code + "?eid=" + event._id + "&uid=" + uid._id
+            }
+          }
+
+          // free event so normal button
+          else {
+            bookButton = {
+              "type": "postback",
+              "title": S.s.bot.eventCard.buttonBook,
+              "payload": "Book" + "|" + event._id
+            }
+          }
 
           if (event.joined.length == event.capacity) {
             let template = {
@@ -379,10 +443,11 @@ module.exports = function(code){
               "subtitle": event.strapline,
               "image_url": event.image_url,
               "buttons": [
+                bookButton,
                 {
-                  "type": "postback",
-                  "title": S.s.bot.eventCard.buttonMoreInfo,
-                  "payload": pl
+                "type": "postback",
+                "title": S.s.bot.eventCard.buttonMoreInfo,
+                "payload": pl
                 }
               ]
             }
@@ -560,6 +625,7 @@ module.exports = function(code){
     book: book,
     cancelBooking: cancelBooking,
     moreInfo: moreInfo,
+    shareEvent: shareEvent,
     event: event,
     eventBroadcast: eventBroadcast
   }
