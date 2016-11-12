@@ -23,14 +23,24 @@
       ga('send', 'pageview');
     </script>
   </head>
-  <body
-  <% if (s.company.code === 'wegeek'){ %>
-      style="background:black"
-  <% }%>
+  <body>
+    <div class="site-wrapper-payment"
+      <% if (s.company.code === 'wegeek'){ %>
+          style="background:black"
+      <% } %>
     >
-    <div class="site-wrapper-payment">
 
-      <img src="img/logoUnbinded-white.png" class="logoLead-payment">
+      <img
+
+        <% if (s.company.code === 'wegeek'){ %>
+            src="images/botLogos/wegeek.png"
+        <% } %>
+        <% else { %>
+          src="img/logoUnbinded-white.png"
+        <% } %>
+
+        class="logoLead-payment">
+        
       <br/>
       <!-- event image -->
       <img src="<%= event.image_url %>" class="imageGame">
