@@ -50,19 +50,41 @@
       <div class="cover-container2">
         <div class="inner cover">
           <div class="payWithCardButtonContainer">
+
               <form action="/charge.<%= s.company.code %>?uid=<%=uid%>&eid=<%=eid%>" method="POST">
-                <script
-                  src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
-                  data-key="<%= STRIPE_PUBLIC_KEY %>"
-                  data-amount="<%= event.price*100 %>"
-                  data-name="<%=s.company.name%>"
-                  data-description="<%= event.strapline %>"
-                  data-image="img/logo.png"
-                  data-locale="auto"
-                  data-zip-code="false"
-                  data-currency="gbp">
-                </script>
+
+                <% if (s.company.code === 'wegeek') { %>
+
+                  <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
+                    data-key="<%= STRIPE_PUBLIC_KEY %>"
+                    data-amount="<%= event.price*100 %>"
+                    data-name="<%=s.company.name%>"
+                    data-description="<%= event.strapline %>"
+                    data-image="image/botLogos/wegeek.png"
+                    data-locale="auto"
+                    data-zip-code="false"
+                    data-currency="gbp">
+                  </script>
+
+                <% } else { %>
+
+                  <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button" style="height: 50px;"
+                    data-key="<%= STRIPE_PUBLIC_KEY %>"
+                    data-amount="<%= event.price*100 %>"
+                    data-name="<%=s.company.name%>"
+                    data-description="<%= event.strapline %>"
+                    data-image="img/logo.png"
+                    data-locale="auto"
+                    data-zip-code="false"
+                    data-currency="gbp">
+                  </script>
+
+                <% }%>
+
               </form>
+
           </div>
         </div>
       </div>
