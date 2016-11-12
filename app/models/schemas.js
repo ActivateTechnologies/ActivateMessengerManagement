@@ -67,6 +67,12 @@ module.exports = function(connection){
     next: Array
   })
 
+  let interactionsSchema = new Schema({
+    type: String,
+    uid: String,
+    time: Date
+  })
+
   if (!connection.models.User) {
     console.log("user");
     connection.model('User', userSchema);
@@ -87,12 +93,17 @@ module.exports = function(connection){
     console.log("convo");
     connection.model('Conversations', conversationsSchema)
   }
+  if (!connection.models.Interaction) {
+    console.log("interactions");
+    connection.model('Interaction', interactionsSchema)
+  }
 
   return {
     User: connection.models.User,
     Event: connection.models.Event,
     Analytics: connection.models.Analytics,
     Conversations: connection.models.Conversations,
-    Group: connection.models.Group
+    Group: connection.models.Group,
+    Interaction: connection.models.Interaction
   };
 }
