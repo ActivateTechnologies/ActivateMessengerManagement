@@ -169,18 +169,13 @@ module.exports = function(code){
 //   "call_to_actions":[
 //     {
 //       "type":"postback",
-//       "title":"Show Events",
+//       "title":"Show Events 🗓",
 //       "payload":"play"
 //     },
 //     {
 //       "type":"postback",
-//       "title":"My Events",
+//       "title":"My Events 📝",
 //       "payload":"my events"
-//     },
-// 		{
-//       "type":"postback",
-//       "title":"Notifications",
-//       "payload":"notifications"
 //     }
 //   ]
 // }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAAH7eotDS6EBANGtGQzV3eedtovnzRE2pJfZAjBP9H56A3ZBZBFwmZAQUXF1D9axS1ZCuVqLRdq4aClOn0zyViYoEjrWGZCnKzXZBq6EcAi6sscyIPOL8rudqplb926NtKLSEmBownod79LYwYKrYVNi9FnIS982Ep2buHSnn2hywZDZD"
