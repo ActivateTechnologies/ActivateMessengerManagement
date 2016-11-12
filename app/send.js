@@ -450,10 +450,11 @@ module.exports = function(code){
               "buttons": [
                 bookButton,
                 {
-                "type": "postback",
-                "title": S.s.bot.eventCard.buttonMoreInfo,
-                "payload": pl
-                }
+                  "type": "postback",
+                  "title": S.s.bot.eventCard.buttonMoreInfo,
+                  "payload": pl
+                },
+                {"type":"element_share"} 
               ]
             }
             elements.push(template);
