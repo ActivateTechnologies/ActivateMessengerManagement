@@ -104,7 +104,7 @@ module.exports = function(code){
 	}
 
 	else if(code === 'wegeek'){
-		VERIFICATION_TOKEN = "EAAH7eotDS6EBANGtGQzV3eedtovnzRE2pJfZAjBP9H56A3ZBZBFwmZAQUXF1D9axS1ZCuVqLRdq4aClOn0zyViYoEjrWGZCnKzXZBq6EcAi6sscyIPOL8rudqplb926NtKLSEmBownod79LYwYKrYVNi9FnIS982Ep2buHSnn2hywZDZD";
+		VERIFICATION_TOKEN = "EAAH7eotDS6EBAGdWZCiNUBIPgMc6K2E8WdCbwqir7KKVCkWlgYzUyxBkCcm1O4zgm7nfT5dZC2omQJ9MMUmziniZBvmTZCULKwFW7T8EyN8fQxlKtFDx7f0r6ZArZBqd4jld8nCMaML26dnpmXHrVtlZBmu3OOt1U9xBhu1SlJlPgZDZD";
 		ROOT_URL = "http://www.activatetechnologies.co.uk";
 	}
 
