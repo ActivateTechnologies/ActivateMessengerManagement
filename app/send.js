@@ -325,7 +325,7 @@ module.exports = function(code){
                   {
                     "type": "web_url",
                     "title": S.s.bot.eventCard.buttonDirections,
-                    "url": S.company.botURL
+                    "url": S.s.company.botURL
                   },
                   {"type":"element_share"}
                 ]
