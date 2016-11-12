@@ -365,7 +365,8 @@ module.exports = function(code){
         bookOrCancelButton = {
           "type": "web_url",
           "title": S.s.bot.eventCard.buttonBook,
-          "url": config.ROOT_URL + "/payment." + code + "?eid=" + eventId + "&uid=" + uid._id
+          "url": config.ROOT_URL + "/payment." + code + "?eid=" + eventId + "&uid=" + uid._id,
+          "webview_height_ratio": "tall"
         }
       }
 
@@ -420,7 +421,8 @@ module.exports = function(code){
             bookButton = {
               "type": "web_url",
               "title": S.s.bot.eventCard.buttonBook,
-              "url": config.ROOT_URL + "/payment." + code + "?eid=" + event._id + "&uid=" + uid._id
+              "url": config.ROOT_URL + "/payment." + code + "?eid=" + event._id + "&uid=" + uid._id,
+              "webview_height_ratio": "tall"
             }
           }
 
