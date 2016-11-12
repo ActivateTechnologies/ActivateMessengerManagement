@@ -321,6 +321,7 @@ module.exports = function(code){
                 "title": event.name,
                 "subtitle": event.strapline,
                 "image_url": event.image_url,
+                "item_url": S.s.company.botURL,
                 "buttons": [
                   {
                     "type": "web_url",
