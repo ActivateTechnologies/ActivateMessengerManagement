@@ -323,8 +323,11 @@ module.exports = function(code){
                 "image_url": event.image_url,
                 "buttons": [
                   {
-                    "type":"element_share"
-                  }
+                    "type": "web_url",
+                    "title": S.s.bot.eventCard.buttonDirections,
+                    "url": S.company.botURL
+                  },
+                  {"type":"element_share"}
                 ]
               }]
             }
