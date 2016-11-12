@@ -30,17 +30,16 @@
       <% } %>
     >
 
-      <img
+      <img class="logoLead-payment"
 
-        <% if (s.company.code === 'wegeek'){ %>
+        <% if (s.company.code === 'wegeek') { %>
             src="images/botLogos/wegeek.png"
-        <% } %>
-        <% else { %>
+        <% } else { %>
           src="img/logoUnbinded-white.png"
-        <% } %>
+        <% }%>
 
-        class="logoLead-payment">
-        
+      >
+
       <br/>
       <!-- event image -->
       <img src="<%= event.image_url %>" class="imageGame">
