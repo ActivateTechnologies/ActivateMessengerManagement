@@ -295,6 +295,16 @@ module.exports = function(code){
     }
   }
 
+  else if (code === 'wegeek'){
+    s.company = {
+      name: "WeGeek",
+      website: "www.kickabout.football",
+      address: "Kickabout, Gordon House, 29 Gordon Square, London, WC1H 0PP",
+      botURL: "http://m.me/kickaboutapp",
+      code: 'wegeek'
+    }
+  }
+
   else {
     s.company = {
       name: "Ani",
