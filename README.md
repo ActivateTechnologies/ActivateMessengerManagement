@@ -5,6 +5,8 @@ This is the start of a platform to manage the community generated from a Faceboo
 
 This dashboard was initially designed to manage bots that sell tickets to events, however this could be easily changed to suit other formats. Stripe integration is included to support payments, even outside of the US (where there are native Messenger payments)
 
+To see a sample Messenger Bot created using this platform see: m.me/kickaboutapp
+
 
 ## 1. See key stats 
 ![key stats screenshot](https://snag.gy/DBy8rZ.jpg)
