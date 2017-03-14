@@ -7,4 +7,4 @@ This dashboard was initially designed to manage bots that sell tickets to events
 
 
 ## 1. See key stats 
-(https://snag.gy/DBy8rZ.jpg)
+![key stats screenshot](https://snag.gy/DBy8rZ.jpg)
