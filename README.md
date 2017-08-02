@@ -1,4 +1,3 @@
-(documentation incomplete)
 # Facebook Messenger Bot Management Platform 
 
 This is the start of a platform to manage the community generated from a Facebook Messenger Bot. Please feel free to clone and contribute to building out this project.
