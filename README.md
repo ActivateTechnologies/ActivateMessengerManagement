@@ -2,7 +2,11 @@
 
 This is the start of a platform to manage the community generated from a Facebook Messenger Bot. Please feel free to clone and contribute to building out this project.
 
-This dashboard was initially designed to manage bots that sell tickets to events, however this could be easily changed to suit other formats. Stripe integration is included to support payments, even outside of the US (where there are native Messenger payments)
+This dashboard was initially designed to manage bots that sell tickets to events, however this could be easily changed to suit other formats. Stripe integration is included to support payments, even outside of the US (where there are native Messenger payments).
+
+Here is a [video](https://www.facebook.com/activateai/videos/545521338965961/) showing you what the bot will look like for the user.
+
+The functionality of the management platform is illustrated below.
 
 
 ## 1. See key stats 
